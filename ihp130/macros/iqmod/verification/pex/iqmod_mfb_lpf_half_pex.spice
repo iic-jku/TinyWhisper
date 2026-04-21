@@ -1,0 +1,346 @@
+* PEX produced on Sat Mar 28 09:12:05 PM CET 2026 using /foss/tools/sak/sak-pex.sh with m=1 and s=1
+* NGSPICE file created from iqmod_mfb_lpf_half_pex.ext - technology: ihp-sg13g2
+
+.subckt iqmod_mfb_lpf_half_pex vinp VSS VDD di_filter_en voutn C1_half C2_half
+X0 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b voutn VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X1 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin voutn VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X2 VDD voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X3 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=1.181n ps=1.86236m w=1u l=1u
+X4 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X5 VSS VSS VSS rhigh l=27u w=0.5u
+X6 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X7 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X8 VDD VDD VDD VDD sg13_lv_pmos ad=2.04p pd=12.68u as=0.81233n ps=1.61766m w=6u l=1u
+X9 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_spdt_switch_0.iqmod_mfb_lpf_ota_core_spdt_switch_inv$1_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X10 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout di_filter_en iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X11 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X12 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_spdt_switch_0.iqmod_mfb_lpf_ota_core_spdt_switch_inv$1_0.vout VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X13 vinp iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X14 VDD voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X15 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X16 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout voutn VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X17 C1_half iqmod_mfb_lpf_R1_0.v_b cap_cmim l=8u w=8u
+X18 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X19 VSS voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X20 C1_half iqmod_mfb_lpf_R1_0.v_b cap_cmim l=8u w=8u
+X21 VSS VSS VSS rhigh l=59u w=0.5u
+X22 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X23 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b voutn VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X24 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=0.13u
+X25 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X26 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X27 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X28 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout di_filter_en iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0.19p ps=1.38u w=1u l=0.13u
+X29 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout di_filter_en iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.34p ps=2.68u w=1u l=0.13u
+X30 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout voutn VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X31 VSS voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X32 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout di_filter_en iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X33 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X34 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout voutn VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X35 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin voutn VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X36 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n vinp VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X37 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin voutn VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X38 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout voutn VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X39 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X40 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X41 VDD voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X42 a_13404_3903# iqmod_mfb_lpf_R2_0.v_a VSS rhigh l=59u w=0.5u
+X43 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b voutn VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X44 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin voutn VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X45 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X46 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X47 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X48 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X49 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X50 VDD VDD VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=0 ps=0 w=6u l=1u
+X51 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout di_filter_en iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X52 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X53 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X54 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0 ps=0 w=1u l=1u
+X55 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X56 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_spdt_switch_0.iqmod_mfb_lpf_ota_core_spdt_switch_inv$1_0.vout VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X57 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b voutn VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X58 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=1u
+X59 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin voutn VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X60 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n di_filter_en VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X61 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X62 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin voutn VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X63 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X64 VSS voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X65 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b voutn VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X66 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X67 VDD voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X68 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X69 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout voutn VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X70 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X71 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin voutn VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X72 VSS voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X73 a_13404_3903# a_25290_4203# VSS rhigh l=59u w=0.5u
+X74 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X75 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout voutn VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X76 VDD VDD VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=0 ps=0 w=6u l=1u
+X77 VDD VDD VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=0 ps=0 w=6u l=1u
+X78 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X79 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n VDD VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X80 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a di_filter_en iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X81 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=1u
+X82 VDD VDD VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=0 ps=0 w=6u l=0.13u
+X83 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout voutn VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X84 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin voutn VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X85 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X86 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X87 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=1u
+X88 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin voutn VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X89 VSS VSS VSS rhigh l=31u w=0.5u
+X90 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X91 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=1u
+X92 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X93 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X94 vinp a_25290_4203# VSS rhigh l=59u w=0.5u
+X95 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin voutn VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X96 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X97 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin voutn VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X98 VDD VDD VDD VDD sg13_lv_pmos ad=2.04p pd=12.68u as=0 ps=0 w=6u l=1u
+X99 VDD VDD VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=0 ps=0 w=6u l=1u
+X100 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X101 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X102 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b di_filter_en iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X103 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X104 VDD voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X105 VSS voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X106 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a di_filter_en iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X107 vinp iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VDD sg13_lv_pmos ad=2.04p pd=12.68u as=1.14p ps=6.38u w=6u l=0.13u
+X108 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X109 C1_half iqmod_mfb_lpf_R1_0.v_b cap_cmim l=8u w=8u
+X110 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0 ps=0 w=1u l=1u
+X111 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X112 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X113 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X114 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X115 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n VDD VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X116 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b voutn VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X117 a_6620_3903# iqmod_mfb_lpf_R2_0.v_a VSS rhigh l=31u w=0.5u
+X118 VDD VDD VDD VDD sg13_lv_pmos ad=2.04p pd=12.68u as=0 ps=0 w=6u l=1u
+X119 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout voutn VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X120 VSS VSS VSS rhigh l=59u w=0.5u
+X121 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X122 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X123 VSS voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X124 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X125 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X126 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b di_filter_en iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X127 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout voutn VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X128 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X129 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X130 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X131 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X132 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_spdt_switch_0.iqmod_mfb_lpf_ota_core_spdt_switch_inv$1_0.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VDD sg13_lv_pmos ad=2.04p pd=12.68u as=1.14p ps=6.38u w=6u l=0.13u
+X133 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X134 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout voutn VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X135 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin voutn VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X136 VDD voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X137 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n VDD VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.34p ps=2.68u w=1u l=0.13u
+X138 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0.19p ps=1.38u w=1u l=0.13u
+X139 VDD di_filter_en iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X140 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_spdt_switch_0.iqmod_mfb_lpf_ota_core_spdt_switch_inv$1_0.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X141 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X142 VSS VSS VSS rhigh l=60u w=0.5u
+X143 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout voutn VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X144 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b di_filter_en iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.34p ps=2.68u w=1u l=0.13u
+X145 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a di_filter_en iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0.19p ps=1.38u w=1u l=0.13u
+X146 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_spdt_switch_0.iqmod_mfb_lpf_ota_core_spdt_switch_inv$1_0.vout vinp VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X147 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b voutn VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X148 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X149 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b voutn VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X150 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X151 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X152 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0 ps=0 w=1u l=0.13u
+X153 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X154 VDD VDD VDD VDD sg13_lv_pmos ad=2.04p pd=12.68u as=0 ps=0 w=6u l=1u
+X155 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n di_filter_en VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X156 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X157 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout voutn VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X158 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X159 a_6620_3903# a_12906_4203# VSS rhigh l=31u w=0.5u
+X160 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X161 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0 ps=0 w=1u l=1u
+X162 VSS voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X163 C2_half iqmod_mfb_lpf_R2_0.v_a cap_cmim l=8u w=8u
+X164 iqmod_mfb_lpf_R2_0.v_a a_37874_3903# VSS rhigh l=60u w=0.5u
+X165 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X166 vinp iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_spdt_switch_0.iqmod_mfb_lpf_ota_core_spdt_switch_inv$1_0.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X167 voutn vinp cap_cmim l=8u w=8u
+X168 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X169 VDD VDD VDD VDD sg13_lv_pmos ad=2.04p pd=12.68u as=0 ps=0 w=6u l=0.13u
+X170 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b voutn VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X171 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b voutn VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X172 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b voutn VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X173 VDD voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X174 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X175 VDD VDD VDD VDD sg13_lv_pmos ad=2.04p pd=12.68u as=0 ps=0 w=6u l=1u
+X176 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout voutn VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X177 VSS di_filter_en iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X178 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X179 VDD voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X180 iqmod_mfb_lpf_R1_0.v_b a_12906_4203# VSS rhigh l=31u w=0.5u
+X181 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X182 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout voutn VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X183 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout voutn VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X184 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X185 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X186 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X187 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X188 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b voutn VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X189 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_spdt_switch_0.iqmod_mfb_lpf_ota_core_spdt_switch_inv$1_0.vout VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=2.04p ps=12.68u w=6u l=0.13u
+X190 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VDD sg13_lv_pmos ad=2.04p pd=12.68u as=1.14p ps=6.38u w=6u l=0.13u
+X191 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout voutn VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X192 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X193 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin voutn VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X194 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n vinp VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X195 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X196 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_spdt_switch_0.iqmod_mfb_lpf_ota_core_spdt_switch_inv$1_0.vout vinp VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.34p ps=2.68u w=1u l=0.13u
+X197 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X198 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b voutn VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X199 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=0.13u
+X200 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X201 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X202 VDD VDD VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=0 ps=0 w=6u l=1u
+X203 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin voutn VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X204 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=1u
+X205 VSS VSS VSS rhigh l=27u w=0.5u
+X206 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X207 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b voutn VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X208 a_25788_4203# a_37874_3903# VSS rhigh l=60u w=0.5u
+X209 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X210 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout VDD sg13_lv_pmos ad=2.04p pd=12.68u as=1.14p ps=6.38u w=6u l=0.13u
+X211 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b voutn VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X212 VSS VSS VSS rhigh l=31u w=0.5u
+X213 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X214 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X215 vinp iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_spdt_switch_0.iqmod_mfb_lpf_ota_core_spdt_switch_inv$1_0.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X216 VSS voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X217 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X218 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin voutn VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X219 VDD VDD VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=0 ps=0 w=6u l=1u
+X220 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout voutn VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X221 VDD VDD VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=0 ps=0 w=6u l=0.13u
+X222 VDD VDD VDD VDD sg13_lv_pmos ad=2.04p pd=12.68u as=0 ps=0 w=6u l=0.13u
+X223 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_spdt_switch_0.iqmod_mfb_lpf_ota_core_spdt_switch_inv$1_0.vout VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X224 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b voutn VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X225 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b voutn VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X226 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X227 vinp a_6122_3903# VSS rhigh l=27u w=0.5u
+X228 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X229 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X230 C1_half iqmod_mfb_lpf_R1_0.v_b cap_cmim l=8u w=8u
+X231 a_25788_4203# voutn VSS rhigh l=60u w=0.5u
+X232 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X233 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin voutn VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X234 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout voutn VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X235 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin voutn VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X236 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X237 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X238 C1_half iqmod_mfb_lpf_R1_0.v_b cap_cmim l=8u w=8u
+X239 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin voutn VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X240 VDD VDD VDD VDD sg13_lv_pmos ad=2.04p pd=12.68u as=0 ps=0 w=6u l=1u
+X241 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X242 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X243 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=1u
+X244 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X245 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin voutn VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X246 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X247 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_spdt_switch_0.iqmod_mfb_lpf_ota_core_spdt_switch_inv$1_0.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X248 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n vinp VDD sg13_lv_pmos ad=1.14p pd=6.38u as=2.04p ps=12.68u w=6u l=0.13u
+X249 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VDD sg13_lv_pmos ad=1.14p pd=6.38u as=2.04p ps=12.68u w=6u l=0.13u
+X250 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b voutn VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X251 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X252 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X253 VSS VSS VSS rhigh l=60u w=0.5u
+X254 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X255 VDD voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X256 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0 ps=0 w=1u l=1u
+X257 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_spdt_switch_0.iqmod_mfb_lpf_ota_core_spdt_switch_inv$1_0.vout vinp VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X258 VSS voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X259 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X260 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b voutn VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X261 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X262 C2_half iqmod_mfb_lpf_R2_0.v_a cap_cmim l=8u w=8u
+X263 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X264 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VDD sg13_lv_pmos ad=1.14p pd=6.38u as=2.04p ps=12.68u w=6u l=0.13u
+X265 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b voutn VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X266 C2_half iqmod_mfb_lpf_R2_0.v_a cap_cmim l=8u w=8u
+X267 a_636_4203# a_6122_3903# VSS rhigh l=27u w=0.5u
+X268 vinp iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X269 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X270 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X271 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin voutn VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X272 vinp iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_spdt_switch_0.iqmod_mfb_lpf_ota_core_spdt_switch_inv$1_0.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0.19p ps=1.38u w=1u l=0.13u
+X273 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0 ps=0 w=1u l=1u
+X274 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X275 VDD VDD VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=0 ps=0 w=6u l=1u
+X276 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X277 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X278 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X279 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0 ps=0 w=1u l=0.13u
+X280 VDD VDD VDD VDD sg13_lv_pmos ad=2.04p pd=12.68u as=0 ps=0 w=6u l=1u
+X281 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout voutn VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X282 a_636_4203# iqmod_mfb_lpf_R1_0.v_b VSS rhigh l=27u w=0.5u
+X283 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X284 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X285 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X286 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout voutn VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X287 VSS voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X288 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=1u
+X289 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0 ps=0 w=1u l=1u
+X290 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X291 VDD voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X292 VDD iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_spdt_switch_0.iqmod_mfb_lpf_ota_core_spdt_switch_inv$1_0.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X293 voutn iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=1u
+X294 VSS iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=1u
+X295 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_spdt_switch_0.iqmod_mfb_lpf_ota_core_spdt_switch_inv$1_0.vout iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X296 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout di_filter_en iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+C0 C2_half VSS 5.05436f
+C1 C1_half VSS 8.11636f
+C2 di_filter_en VSS 14.1936f
+C3 vinp VSS 17.35063f
+C4 voutn VSS 94.714f
+C5 VDD VSS 0.17652p
+C6 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_0.vout VSS 40.1164f
+C7 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF6_1.vout VSS 24.0034f
+C8 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_b VSS 59.1911f
+C9 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.v_a VSS 28.434f
+C10 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_inv_NF20_1.vin VSS 64.66669f
+C11 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_spdt_switch_0.iqmod_mfb_lpf_ota_core_spdt_switch_inv$1_0.vout VSS 6.53049f
+C12 iqmod_mfb_lpf_ota_core_hybrid_bm_half_0.iqmod_mfb_lpf_ota_core_tg_0.di_tg_ctrl_n VSS 21.0166f
+C13 a_25874_3603# VSS 7.96743f $ **FLOATING
+C14 a_13490_3603# VSS 7.83464f $ **FLOATING
+C15 a_25874_3903# VSS 7.96743f $ **FLOATING
+C16 a_6706_3603# VSS 4.11651f $ **FLOATING
+C17 a_13490_3903# VSS 7.83464f $ **FLOATING
+C18 a_722_3603# VSS 3.58534f $ **FLOATING
+C19 a_37874_3903# VSS 0.35234f
+C20 a_25874_4203# VSS 7.96743f $ **FLOATING
+C21 iqmod_mfb_lpf_R2_0.v_a VSS 12.5318f
+C22 a_6706_3903# VSS 4.11651f $ **FLOATING
+C23 a_13490_4203# VSS 7.83464f $ **FLOATING
+C24 a_13404_3903# VSS 0.35234f
+C25 a_722_3903# VSS 3.58534f $ **FLOATING
+C26 a_25874_4503# VSS 7.96743f $ **FLOATING
+C27 a_25788_4203# VSS 0.35234f
+C28 a_6706_4203# VSS 4.11651f $ **FLOATING
+C29 a_6620_3903# VSS 0.35234f
+C30 a_25290_4203# VSS 0.35234f
+C31 a_13490_4503# VSS 7.83464f $ **FLOATING
+C32 a_6122_3903# VSS 0.35234f
+C33 a_722_4203# VSS 3.58534f $ **FLOATING
+C34 a_25874_4803# VSS 7.96743f $ **FLOATING
+C35 a_12906_4203# VSS 0.35234f
+C36 a_6706_4503# VSS 4.11651f $ **FLOATING
+C37 a_13490_4803# VSS 7.83464f $ **FLOATING
+C38 iqmod_mfb_lpf_R1_0.v_b VSS 10.1893f
+C39 a_722_4503# VSS 3.58534f $ **FLOATING
+C40 a_636_4203# VSS 0.35234f
+C41 a_6706_4803# VSS 4.11651f $ **FLOATING
+C42 a_722_4803# VSS 3.58534f $ **FLOATING
+.ends
+

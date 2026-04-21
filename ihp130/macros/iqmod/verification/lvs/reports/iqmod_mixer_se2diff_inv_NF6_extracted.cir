@@ -1,0 +1,14 @@
+* Extracted by KLayout with SG13G2 LVS runset on : 28/03/2026 19:03
+
+.SUBCKT iqmod_mixer_se2diff_inv_NF6 VDD VSS vin vout
+M$1 VSS VSS VSS \$5 sg13_lv_nmos L=0.13u W=2u AS=0.53p AD=0.53p PS=4.06u
++ PD=4.06u rfmode=0
+M$2 VSS vin vout \$5 sg13_lv_nmos L=0.13u W=6u AS=1.14p AD=1.14p PS=8.28u
++ PD=8.28u rfmode=0
+R$9 VSS \$5 ptap1 A=5.508p P=36.72u
+M$10 VDD VDD VDD \$I46 sg13_lv_pmos L=0.13u W=6u AS=1.59p AD=1.59p PS=10.06u
++ PD=10.06u rfmode=0
+M$11 VDD vin vout \$I46 sg13_lv_pmos L=0.13u W=18u AS=3.42p AD=3.42p PS=20.28u
++ PD=20.28u rfmode=0
+R$18 VDD \$I46 ntap1 A=6.492p P=43.28u
+.ENDS iqmod_mixer_se2diff_inv_NF6

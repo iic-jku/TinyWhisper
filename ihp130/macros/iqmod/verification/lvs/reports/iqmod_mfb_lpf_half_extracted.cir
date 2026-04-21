@@ -1,0 +1,128 @@
+* Extracted by KLayout with SG13G2 LVS runset on : 28/03/2026 21:11
+
+.SUBCKT iqmod_mfb_lpf_half vinp di_filter_en VSS vinp$1 voutn VDD C1_half
++ C2_half
+X$1 VSS \$3 \$7 vinp iqmod_mfb_lpf_R1
+X$3 VSS VDD voutn \$3 di_filter_en \$28 \$33 vinp$1 \$30 \$27
++ iqmod_mfb_lpf_ota_core_hybrid_bm_half
+X$21 VSS \$3 \$7 \$6 iqmod_mfb_lpf_R2
+X$22 VSS \$3 vinp$1 \$6 iqmod_mfb_lpf_R3
+X$26 VSS \$3 voutn \$6 iqmod_mfb_lpf_R4
+C$1 voutn vinp$1 cap_cmim w=8u l=8u A=64p P=32u m=1
+C$2 C2_half \$6 cap_cmim w=8u l=8u A=64p P=32u m=3
+C$5 C1_half \$7 cap_cmim w=8u l=8u A=64p P=32u m=5
+.ENDS iqmod_mfb_lpf_half
+
+.SUBCKT iqmod_mfb_lpf_R3 VSS \$2 v_b v_a
+R$1 VSS VSS \$2 rhigh w=0.5u l=59u ps=0u b=0 m=2
+R$3 VSS \$2 ptap1 A=42.312p P=282.08u
+R$6 v_a v_b \$2 rhigh w=0.5u l=177u ps=0u b=0 m=1
+.ENDS iqmod_mfb_lpf_R3
+
+.SUBCKT iqmod_mfb_lpf_R4 VSS \$2 v_b v_a
+R$1 VSS VSS \$2 rhigh w=0.5u l=60u ps=0u b=0 m=2
+R$3 VSS \$2 ptap1 A=42.912p P=286.08u
+R$6 v_a v_b \$2 rhigh w=0.5u l=180u ps=0u b=0 m=1
+.ENDS iqmod_mfb_lpf_R4
+
+.SUBCKT iqmod_mfb_lpf_R1 VSS \$2 v_b v_a
+R$1 VSS VSS \$2 rhigh w=0.5u l=27u ps=0u b=0 m=2
+R$3 VSS \$2 ptap1 A=23.112p P=154.08u
+R$6 v_a v_b \$2 rhigh w=0.5u l=81u ps=0u b=0 m=1
+.ENDS iqmod_mfb_lpf_R1
+
+.SUBCKT iqmod_mfb_lpf_R2 VSS \$2 v_b v_a
+R$1 VSS VSS \$2 rhigh w=0.5u l=31u ps=0u b=0 m=2
+R$3 VSS \$2 ptap1 A=25.512p P=170.08u
+R$6 v_a v_b \$2 rhigh w=0.5u l=93u ps=0u b=0 m=1
+.ENDS iqmod_mfb_lpf_R2
+
+.SUBCKT iqmod_mfb_lpf_ota_core_hybrid_bm_half VSS VDD voutn \$5 di_ota_en \$12
++ \$13 vinp \$25 \$27
+X$1 \$11 di_ota_en \$16 vinp VDD \$5 VDD VSS \$3
++ iqmod_mfb_lpf_ota_core_spdt_switch
+X$2 \$5 VSS VDD voutn \$16 \$3 iqmod_mfb_lpf_ota_core_inv_NF20
+X$3 \$5 VSS VDD voutn \$12 \$3 iqmod_mfb_lpf_ota_core_inv_NF20
+X$4 VSS VDD \$12 \$5 \$13 \$3 iqmod_mfb_lpf_ota_core_inv_NF6
+X$5 VSS VDD \$12 \$5 \$27 \$3 iqmod_mfb_lpf_ota_core_inv_NF6
+X$6 VDD VSS \$11 \$25 di_ota_en \$13 \$5 \$3 iqmod_mfb_lpf_ota_core_tg
+X$7 VSS VDD \$13 \$5 \$25 \$3 iqmod_mfb_lpf_ota_core_inv_NF6
+X$8 \$5 VSS VDD \$25 voutn \$3 iqmod_mfb_lpf_ota_core_inv_NF20
+X$9 \$5 VSS VDD \$27 \$16 \$3 iqmod_mfb_lpf_ota_core_inv_NF10
+X$10 VDD VSS \$11 \$27 di_ota_en \$12 \$5 \$3 iqmod_mfb_lpf_ota_core_tg
+.ENDS iqmod_mfb_lpf_ota_core_hybrid_bm_half
+
+.SUBCKT iqmod_mfb_lpf_ota_core_inv_NF6 VSS VDD vout \$4 vin \$I47
+M$1 VSS VSS VSS \$4 sg13_lv_nmos L=1u W=2u AS=0.53p AD=0.53p PS=4.06u PD=4.06u
++ rfmode=0
+M$2 VSS vin vout \$4 sg13_lv_nmos L=1u W=6u AS=1.14p AD=1.14p PS=8.28u PD=8.28u
++ rfmode=0
+R$9 VSS \$4 ptap1 A=9.684p P=64.56u
+M$10 VDD VDD VDD \$I47 sg13_lv_pmos L=1u W=12u AS=3.18p AD=3.18p PS=19.06u
++ PD=19.06u rfmode=0
+M$11 VDD vin vout \$I47 sg13_lv_pmos L=1u W=36u AS=6.84p AD=6.84p PS=38.28u
++ PD=38.28u rfmode=0
+R$18 VDD \$I47 ntap1 A=12.468p P=83.12u
+.ENDS iqmod_mfb_lpf_ota_core_inv_NF6
+
+.SUBCKT iqmod_mfb_lpf_ota_core_tg VDD VSS di_tg_ctrl_n v_a di_tg_ctrl v_b \$7
++ \$I33
+M$1 v_a di_tg_ctrl v_b \$7 sg13_lv_nmos L=0.13u W=6u AS=1.29p AD=1.29p PS=9.58u
++ PD=9.58u rfmode=0
+R$7 VSS \$7 ptap1 A=4.896p P=32.64u
+M$8 v_a di_tg_ctrl_n v_b \$I33 sg13_lv_pmos L=0.13u W=36u AS=7.74p AD=7.74p
++ PS=44.58u PD=44.58u rfmode=0
+R$14 VDD \$I33 ntap1 A=7.68p P=51.2u
+.ENDS iqmod_mfb_lpf_ota_core_tg
+
+.SUBCKT iqmod_mfb_lpf_ota_core_spdt_switch do_spdt_ctrl_n di_spdt_ctrl v_c v_a
++ v_b \$6 VDD VSS \$I13
+M$1 v_b do_spdt_ctrl_n v_c \$6 sg13_lv_nmos L=0.13u W=6u AS=1.29p AD=1.29p
++ PS=9.58u PD=9.58u rfmode=0
+R$7 VSS \$6 ptap1 A=18.36p P=122.4u
+M$8 v_a \$8 v_c \$6 sg13_lv_nmos L=0.13u W=6u AS=1.29p AD=1.29p PS=9.58u
++ PD=9.58u rfmode=0
+M$15 v_b \$8 v_c \$I13 sg13_lv_pmos L=0.13u W=36u AS=7.74p AD=7.74p PS=44.58u
++ PD=44.58u rfmode=0
+R$21 VDD \$I13 ntap1 A=29.496p P=196.64u
+M$22 v_a do_spdt_ctrl_n v_c \$I13 sg13_lv_pmos L=0.13u W=36u AS=7.74p AD=7.74p
++ PS=44.58u PD=44.58u rfmode=0
+M$29 VDD VDD VDD \$I13 sg13_lv_pmos L=0.13u W=24u AS=6.36p AD=6.36p PS=38.12u
++ PD=38.12u rfmode=0
+M$30 VDD do_spdt_ctrl_n \$8 \$I13 sg13_lv_pmos L=0.13u W=12u AS=2.28p AD=2.28p
++ PS=12.76u PD=12.76u rfmode=0
+M$35 VDD di_spdt_ctrl do_spdt_ctrl_n \$I13 sg13_lv_pmos L=0.13u W=12u AS=2.28p
++ AD=2.28p PS=12.76u PD=12.76u rfmode=0
+M$39 VSS VSS VSS \$6 sg13_lv_nmos L=0.13u W=4u AS=1.06p AD=1.06p PS=8.12u
++ PD=8.12u rfmode=0
+M$40 VSS do_spdt_ctrl_n \$8 \$6 sg13_lv_nmos L=0.13u W=2u AS=0.38p AD=0.38p
++ PS=2.76u PD=2.76u rfmode=0
+M$45 VSS di_spdt_ctrl do_spdt_ctrl_n \$6 sg13_lv_nmos L=0.13u W=2u AS=0.38p
++ AD=0.38p PS=2.76u PD=2.76u rfmode=0
+.ENDS iqmod_mfb_lpf_ota_core_spdt_switch
+
+.SUBCKT iqmod_mfb_lpf_ota_core_inv_NF10 \$1 VSS VDD vout vin \$I62
+M$1 VSS VSS VSS \$1 sg13_lv_nmos L=1u W=2u AS=0.53p AD=0.53p PS=4.06u PD=4.06u
++ rfmode=0
+M$2 VSS vin vout \$1 sg13_lv_nmos L=1u W=10u AS=1.9p AD=1.9p PS=13.8u PD=13.8u
++ rfmode=0
+R$13 VSS \$1 ptap1 A=12.996p P=86.64u
+M$14 VDD VDD VDD \$I62 sg13_lv_pmos L=1u W=12u AS=3.18p AD=3.18p PS=19.06u
++ PD=19.06u rfmode=0
+M$15 VDD vin vout \$I62 sg13_lv_pmos L=1u W=60u AS=11.4p AD=11.4p PS=63.8u
++ PD=63.8u rfmode=0
+R$26 VDD \$I62 ntap1 A=15.78p P=105.2u
+.ENDS iqmod_mfb_lpf_ota_core_inv_NF10
+
+.SUBCKT iqmod_mfb_lpf_ota_core_inv_NF20 \$1 VSS VDD vout vin \$I103
+M$1 VSS VSS VSS \$1 sg13_lv_nmos L=1u W=2u AS=0.53p AD=0.53p PS=4.06u PD=4.06u
++ rfmode=0
+M$2 VSS vin vout \$1 sg13_lv_nmos L=1u W=20u AS=3.8p AD=3.8p PS=27.6u PD=27.6u
++ rfmode=0
+R$23 VSS \$1 ptap1 A=21.276p P=141.84u
+M$24 VDD VDD VDD \$I103 sg13_lv_pmos L=1u W=12u AS=3.18p AD=3.18p PS=19.06u
++ PD=19.06u rfmode=0
+M$25 VDD vin vout \$I103 sg13_lv_pmos L=1u W=120u AS=22.8p AD=22.8p PS=127.6u
++ PD=127.6u rfmode=0
+R$46 VDD \$I103 ntap1 A=24.06p P=160.4u
+.ENDS iqmod_mfb_lpf_ota_core_inv_NF20

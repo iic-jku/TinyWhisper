@@ -1,0 +1,25 @@
+{
+    "technology": "",
+    "statements": [
+        {
+            "lib_name": "iqmod_mfb_lpf_ota_core_inv_NF6",
+            "lib_path": "iqmod_mfb_lpf_ota_core_inv_NF6.gds"
+        },
+        {
+            "lib_name": "iqmod_mfb_lpf_ota_core_inv_NF10",
+            "lib_path": "iqmod_mfb_lpf_ota_core_inv_NF10.gds"
+        },
+        {
+            "lib_name": "iqmod_mfb_lpf_ota_core_inv_NF20",
+            "lib_path": "iqmod_mfb_lpf_ota_core_inv_NF20.gds"
+        },
+        {
+            "lib_name": "iqmod_mfb_lpf_ota_core_spdt_switch.klay.gds",
+            "lib_path": "iqmod_mfb_lpf_ota_core_spdt_switch.klay.gds"
+        },
+        {
+            "lib_name": "iqmod_mfb_lpf_ota_core_tg",
+            "lib_path": "iqmod_mfb_lpf_ota_core_tg.gds"
+        }
+    ]
+}

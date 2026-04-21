@@ -1,0 +1,25 @@
+* PEX produced on Sat Mar 28 07:04:05 PM CET 2026 using /foss/tools/sak/sak-pex.sh with m=1 and s=1
+* NGSPICE file created from iqmod_mixer_se2diff_inv_NF6_pex.ext - technology: ihp-sg13g2
+
+.subckt iqmod_mixer_se2diff_inv_NF6_pex vin VDD VSS vout
+X0 vout vin VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X1 VDD vin vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X2 vout vin VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X3 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=18.2773p ps=46.28u w=1u l=0.13u
+X4 vout vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X5 vout vin VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X6 VDD vin vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X7 VSS vin vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X8 vout vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X9 VSS vin vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X10 vout vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X11 VSS vin vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X12 VDD VDD VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=25.3947p ps=60.12u w=3u l=0.13u
+X13 VDD VDD VDD VDD sg13_lv_pmos ad=1.02p pd=6.68u as=0 ps=0 w=3u l=0.13u
+X14 VDD vin vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X15 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=0.13u
+C0 vout VSS 3.61223f
+C1 vin VSS 2.897f
+C2 VDD VSS 6.11006f
+.ends
+

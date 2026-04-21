@@ -1,0 +1,26 @@
+* Extracted by KLayout with SG13G2 LVS runset on : 29/03/2026 03:00
+
+.SUBCKT iqmod_spdt_switch di_spdt_ctrl v_c v_a v_b VDD VSS
+M$1 v_b \$8 v_c \$5 sg13_lv_nmos L=0.13u W=6u AS=1.29p AD=1.29p PS=9.58u
++ PD=9.58u rfmode=0
+R$7 VSS \$5 ptap1 A=18.36p P=122.4u
+M$8 v_a \$7 v_c \$5 sg13_lv_nmos L=0.13u W=6u AS=1.29p AD=1.29p PS=9.58u
++ PD=9.58u rfmode=0
+M$15 v_b \$7 v_c \$I14 sg13_lv_pmos L=0.13u W=36u AS=7.74p AD=7.74p PS=44.58u
++ PD=44.58u rfmode=0
+R$21 VDD \$I14 ntap1 A=29.496p P=196.64u
+M$22 v_a \$8 v_c \$I14 sg13_lv_pmos L=0.13u W=36u AS=7.74p AD=7.74p PS=44.58u
++ PD=44.58u rfmode=0
+M$29 VDD VDD VDD \$I14 sg13_lv_pmos L=0.13u W=24u AS=6.36p AD=6.36p PS=38.12u
++ PD=38.12u rfmode=0
+M$30 VDD di_spdt_ctrl \$8 \$I14 sg13_lv_pmos L=0.13u W=12u AS=2.28p AD=2.28p
++ PS=12.76u PD=12.76u rfmode=0
+M$35 VDD \$8 \$7 \$I14 sg13_lv_pmos L=0.13u W=12u AS=2.28p AD=2.28p PS=12.76u
++ PD=12.76u rfmode=0
+M$39 VSS VSS VSS \$5 sg13_lv_nmos L=0.13u W=4u AS=1.06p AD=1.06p PS=8.12u
++ PD=8.12u rfmode=0
+M$40 VSS di_spdt_ctrl \$8 \$5 sg13_lv_nmos L=0.13u W=2u AS=0.38p AD=0.38p
++ PS=2.76u PD=2.76u rfmode=0
+M$45 VSS \$8 \$7 \$5 sg13_lv_nmos L=0.13u W=2u AS=0.38p AD=0.38p PS=2.76u
++ PD=2.76u rfmode=0
+.ENDS iqmod_spdt_switch

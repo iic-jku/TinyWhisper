@@ -1,0 +1,4 @@
+** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/xschem/iqmod_mixer_se2diff_tg_NF54.sch
+.subckt iqmod_mixer_se2diff_tg_NF54
+
+.ends

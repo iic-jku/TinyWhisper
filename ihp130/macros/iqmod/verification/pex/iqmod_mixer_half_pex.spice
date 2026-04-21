@@ -1,0 +1,598 @@
+* PEX produced on Sat Mar 28 01:57:35 AM CET 2026 using /foss/tools/sak/sak-pex.sh with m=2 and s=1
+* NGSPICE file created from iqmod_mixer_half_pex.ext - technology: ihp-sg13g2
+
+.subckt iqmod_mixer_half_pex VDD VSS vinp_IF vinp_LO voutp_RF
+X0 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=93.24p ps=0.91908m w=3u l=0.13u
+X1 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X2 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X3 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X4 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X5 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X6 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X7 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout vinp_IF VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X8 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X9 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X10 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X11 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X12 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl vinp_LO VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X13 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X14 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X15 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X16 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X17 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X18 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X19 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X20 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X21 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X22 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X23 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X24 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X25 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X26 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n vinp_LO VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X27 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X28 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X29 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X30 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X31 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X32 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n vinp_LO VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X33 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X34 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X35 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X36 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X37 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X38 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X39 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl vinp_LO VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X40 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X41 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X42 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X43 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X44 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X45 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X46 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X47 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X48 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X49 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X50 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0.49326n ps=0.94542m w=1u l=0.13u
+X51 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X52 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X53 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X54 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X55 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X56 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X57 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X58 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X59 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X60 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=0.13u
+X61 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X62 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X63 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X64 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X65 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X66 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X67 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=0 ps=0 w=9u l=0.13u
+X68 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X69 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=0 ps=0 w=9u l=0.13u
+X70 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X71 VDD VDD VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.51014n ps=1.43034m w=3u l=0.13u
+X72 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X73 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X74 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X75 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X76 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl vinp_LO VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X77 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X78 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X79 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X80 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X81 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X82 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X83 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X84 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X85 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=0 ps=0 w=9u l=0.13u
+X86 VDD VDD VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X87 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X88 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0.19p ps=1.38u w=1u l=0.13u
+X89 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X90 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X91 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X92 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X93 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X94 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X95 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X96 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X97 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X98 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X99 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=0 ps=0 w=9u l=0.13u
+X100 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X101 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n vinp_LO VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X102 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X103 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X104 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X105 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X106 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl vinp_LO VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X107 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X108 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X109 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X110 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X111 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=1.02p ps=6.68u w=3u l=0.13u
+X112 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0 ps=0 w=1u l=0.13u
+X113 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X114 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X115 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X116 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0 ps=0 w=1u l=0.13u
+X117 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X118 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X119 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X120 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n vinp_LO VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X121 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X122 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X123 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X124 VDD VDD VDD VDD sg13_lv_pmos ad=1.02p pd=6.68u as=0 ps=0 w=3u l=0.13u
+X125 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X126 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0 ps=0 w=1u l=0.13u
+X127 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X128 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X129 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X130 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X131 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X132 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X133 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0 ps=0 w=1u l=0.13u
+X134 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X135 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X136 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X137 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X138 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X139 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X140 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X141 VDD vinp_IF iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X142 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X143 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0 ps=0 w=1u l=0.13u
+X144 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X145 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl vinp_LO VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X146 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X147 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X148 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X149 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X150 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=1.02p ps=6.68u w=3u l=0.13u
+X151 VDD VDD VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X152 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X153 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X154 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X155 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X156 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X157 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X158 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X159 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X160 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X161 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X162 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n vinp_LO VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X163 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X164 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X165 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X166 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X167 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X168 VDD VDD VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X169 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X170 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X171 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X172 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X173 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X174 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X175 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X176 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl vinp_LO VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X177 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X178 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X179 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X180 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X181 VDD VDD VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X182 VDD VDD VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X183 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X184 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X185 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X186 VDD VDD VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X187 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X188 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X189 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X190 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=0 ps=0 w=9u l=0.13u
+X191 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0 ps=0 w=1u l=0.13u
+X192 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=0 ps=0 w=9u l=0.13u
+X193 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X194 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n vinp_LO VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X195 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=0 ps=0 w=9u l=0.13u
+X196 VDD VDD VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X197 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0 ps=0 w=1u l=0.13u
+X198 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X199 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=3.06p ps=18.68u w=9u l=0.13u
+X200 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X201 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X202 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X203 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl vinp_LO VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X204 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X205 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X206 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X207 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X208 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X209 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X210 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0 ps=0 w=1u l=0.13u
+X211 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X212 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X213 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X214 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X215 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X216 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X217 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0 ps=0 w=1u l=0.13u
+X218 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X219 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X220 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X221 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0 ps=0 w=1u l=0.13u
+X222 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X223 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X224 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X225 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X226 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n vinp_LO VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X227 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=0 ps=0 w=9u l=0.13u
+X228 VDD VDD VDD VDD sg13_lv_pmos ad=1.02p pd=6.68u as=0 ps=0 w=3u l=0.13u
+X229 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X230 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=0 ps=0 w=9u l=0.13u
+X231 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X232 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X233 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X234 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X235 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X236 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X237 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X238 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X239 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X240 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl vinp_LO VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X241 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X242 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X243 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X244 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X245 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout vinp_IF VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X246 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X247 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X248 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X249 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X250 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X251 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X252 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X253 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X254 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X255 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X256 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout vinp_IF VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X257 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X258 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X259 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X260 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X261 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X262 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X263 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n vinp_LO VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X264 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X265 VDD VDD VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X266 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X267 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X268 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X269 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X270 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X271 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X272 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X273 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl vinp_LO VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X274 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X275 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X276 VDD VDD VDD VDD sg13_lv_pmos ad=1.02p pd=6.68u as=0 ps=0 w=3u l=0.13u
+X277 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X278 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X279 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X280 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl vinp_LO VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X281 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X282 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b VDD sg13_lv_pmos ad=1.02p pd=6.68u as=0.57p ps=3.38u w=3u l=0.13u
+X283 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X284 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X285 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X286 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n vinp_LO VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X287 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X288 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X289 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X290 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X291 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X292 VDD vinp_IF iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X293 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X294 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X295 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X296 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X297 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X298 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X299 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X300 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X301 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X302 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X303 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=0.13u
+X304 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X305 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0 ps=0 w=1u l=0.13u
+X306 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X307 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl vinp_LO VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X308 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X309 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X310 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=0.13u
+X311 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X312 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl vinp_LO VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X313 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=0 ps=0 w=1u l=0.13u
+X314 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X315 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X316 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X317 VDD VDD VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X318 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X319 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X320 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=0 ps=0 w=9u l=0.13u
+X321 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X322 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X323 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=0 ps=0 w=9u l=0.13u
+X324 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X325 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X326 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout vinp_IF VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X327 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n vinp_LO VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X328 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X329 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X330 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=0.13u
+X331 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X332 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X333 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X334 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X335 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X336 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X337 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X338 VDD VDD VDD VDD sg13_lv_pmos ad=1.02p pd=6.68u as=0 ps=0 w=3u l=0.13u
+X339 VDD VDD VDD VDD sg13_lv_pmos ad=1.02p pd=6.68u as=0 ps=0 w=3u l=0.13u
+X340 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X341 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X342 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl vinp_LO VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X343 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X344 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X345 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X346 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X347 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X348 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X349 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X350 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X351 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X352 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X353 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X354 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=0 ps=0 w=9u l=0.13u
+X355 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X356 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X357 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=0 ps=0 w=9u l=0.13u
+X358 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X359 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n vinp_LO VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X360 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X361 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=0 ps=0 w=9u l=0.13u
+X362 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X363 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X364 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.34p ps=2.68u w=1u l=0.13u
+X365 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X366 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n vinp_LO VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X367 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X368 VDD VDD VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X369 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X370 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X371 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X372 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X373 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl vinp_LO VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X374 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X375 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X376 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X377 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X378 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X379 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X380 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X381 VSS vinp_IF iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X382 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X383 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X384 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X385 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X386 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X387 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X388 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=0.13u
+X389 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X390 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X391 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X392 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X393 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=0.13u
+X394 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X395 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n vinp_LO VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X396 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X397 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X398 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X399 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n vinp_LO VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X400 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X401 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X402 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X403 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X404 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X405 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl vinp_LO VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X406 VDD VDD VDD VDD sg13_lv_pmos ad=1.02p pd=6.68u as=0 ps=0 w=3u l=0.13u
+X407 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X408 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X409 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X410 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X411 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X412 VDD VDD VDD VDD sg13_lv_pmos ad=1.02p pd=6.68u as=0 ps=0 w=3u l=0.13u
+X413 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X414 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=0.13u
+X415 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X416 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X417 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X418 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X419 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X420 VDD VDD VDD VDD sg13_lv_pmos ad=1.02p pd=6.68u as=0 ps=0 w=3u l=0.13u
+X421 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X422 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X423 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X424 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X425 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X426 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X427 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=0.13u
+X428 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n vinp_LO VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X429 VDD VDD VDD VDD sg13_lv_pmos ad=1.02p pd=6.68u as=0 ps=0 w=3u l=0.13u
+X430 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X431 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X432 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X433 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X434 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X435 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X436 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=0.13u
+X437 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl vinp_LO VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X438 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X439 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X440 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X441 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X442 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X443 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X444 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X445 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X446 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X447 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X448 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=0 ps=0 w=9u l=0.13u
+X449 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X450 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X451 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=0 ps=0 w=9u l=0.13u
+X452 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n vinp_LO VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X453 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X454 VSS vinp_IF iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X455 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X456 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X457 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X458 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X459 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X460 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X461 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X462 VDD VDD VDD VDD sg13_lv_pmos ad=1.02p pd=6.68u as=0 ps=0 w=3u l=0.13u
+X463 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X464 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X465 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=0 ps=0 w=9u l=0.13u
+X466 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X467 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X468 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X469 VDD VDD VDD VDD sg13_lv_pmos ad=1.02p pd=6.68u as=0 ps=0 w=3u l=0.13u
+X470 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X471 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl vinp_LO VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X472 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X473 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=0.13u
+X474 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X475 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X476 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl vinp_LO VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X477 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X478 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X479 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X480 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X481 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X482 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X483 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X484 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X485 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X486 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X487 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n vinp_LO VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X488 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X489 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=0 ps=0 w=9u l=0.13u
+X490 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X491 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X492 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X493 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X494 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X495 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X496 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X497 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X498 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X499 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X500 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X501 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X502 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X503 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X504 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X505 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X506 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X507 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X508 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X509 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X510 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=0.13u
+X511 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X512 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X513 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X514 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X515 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=0.13u
+X516 VDD VDD VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X517 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X518 VDD VDD VDD VDD sg13_lv_pmos ad=1.02p pd=6.68u as=0 ps=0 w=3u l=0.13u
+X519 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=0.13u
+X520 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X521 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X522 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X523 VDD VDD VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0 ps=0 w=3u l=0.13u
+X524 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl_n voutp_RF VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X525 VDD VDD VDD VDD sg13_lv_pmos ad=1.02p pd=6.68u as=0 ps=0 w=3u l=0.13u
+X526 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X527 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X528 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n vinp_LO VDD sg13_lv_pmos ad=1.71p pd=9.38u as=1.71p ps=9.38u w=9u l=0.13u
+X529 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X530 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VDD VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X531 VSS iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X532 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X533 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X534 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+X535 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout iqmod_mixer_tg_0.di_tg_ctrl VDD sg13_lv_pmos ad=0.57p pd=3.38u as=0.57p ps=3.38u w=3u l=0.13u
+C0 vinp_LO iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout 0.01622f
+C1 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout 1.46378f
+C2 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl 7.10581f
+C3 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout 1.42637f
+C4 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout 10.5552f
+C5 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout 13.7248f
+C6 VDD iqmod_mixer_tg_0.di_tg_ctrl_n 67.47729f
+C7 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b 7.58107f
+C8 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout 0.08082f
+C9 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout 12.7564f
+C10 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_tg_0.di_tg_ctrl_n 12.0136f
+C11 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout 1.4633f
+C12 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout 0.01813f
+C13 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout 4.09415f
+C14 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl_n 10.2638f
+C15 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin 1.47119f
+C16 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout vinp_IF 1.03781f
+C17 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout 36.0816f
+C18 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout 12.7564f
+C19 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout 2.73831f
+C20 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VDD 36.066f
+C21 vinp_LO iqmod_mixer_tg_0.di_tg_ctrl_n 8.54337f
+C22 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout 4.09415f
+C23 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout 0.0557f
+C24 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b 4.31403f
+C25 VDD voutp_RF 4.19458f
+C26 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout 0.06987f
+C27 iqmod_mixer_tg_0.di_tg_ctrl_n iqmod_mixer_tg_0.di_tg_ctrl 1.84805f
+C28 voutp_RF iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout 0.03061f
+C29 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout voutp_RF 0.02709f
+C30 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout 13.6009f
+C31 VDD vinp_LO 4.14858f
+C32 VDD iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin 9.23134f
+C33 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout 1.432f
+C34 vinp_LO iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout 0.07736f
+C35 vinp_LO iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout 0.01773f
+C36 VDD vinp_IF 2.06062f
+C37 VDD iqmod_mixer_tg_0.di_tg_ctrl 61.83f
+C38 iqmod_mixer_tg_0.di_tg_ctrl iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout 12.0097f
+C39 vinp_LO voutp_RF 0.13046p
+C40 voutp_RF iqmod_mixer_tg_0.di_tg_ctrl 10.0807f
+C41 vinp_LO VSS 6.08079f
+C42 voutp_RF VSS 4.35398f
+C43 vinp_IF VSS 2.05057f
+C44 VDD VSS 31.6354f
+C45 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF18$1_0.vout VSS 19.2524f
+C46 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_inv_NF6$1_0.vout VSS 6.53472f
+C47 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_tg_0.iqmod_mixer_se2diff_tg_NF6_0.v_b VSS 3.2282f
+C48 iqmod_mixer_tg_0.di_tg_ctrl_n VSS 23.7217f
+C49 iqmod_mixer_tg_0.di_tg_ctrl VSS 26.9159f
+C50 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF18_0.vout VSS 19.2195f
+C51 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_1.vout VSS 6.53472f
+C52 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_1.vout VSS 5.75701f
+C53 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vout VSS 5.85602f
+C54 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF6_2.vin VSS 3.81581f
+C55 iqmod_mixer_se2diff_0.iqmod_mixer_se2diff_half_inv_0.iqmod_mixer_se2diff_inv_NF2_0.vout VSS 5.64114f
+.ends
+

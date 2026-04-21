@@ -1,0 +1,49 @@
+{
+    "technology": "",
+    "statements": [
+        {
+            "lib_name": "iqmod_mfb_lpf_R1",
+            "lib_path": "iqmod_mfb_lpf_R1.gds"
+        },
+        {
+            "lib_name": "iqmod_mfb_lpf_R2",
+            "lib_path": "iqmod_mfb_lpf_R2.gds"
+        },
+        {
+            "lib_name": "iqmod_mfb_lpf_R3",
+            "lib_path": "iqmod_mfb_lpf_R3.gds"
+        },
+        {
+            "lib_name": "iqmod_mfb_lpf_R4",
+            "lib_path": "iqmod_mfb_lpf_R4.gds"
+        },
+        {
+            "lib_name": "iqmod_mfb_lpf_ota_core_hybrid_bm_half",
+            "lib_path": "iqmod_mfb_lpf_ota_core_hybrid_bm_half.klay.gds"
+        },
+        {
+            "lib_name": "iqmod_mfb_lpf_ota_core_hybrid_bm",
+            "lib_path": "iqmod_mfb_lpf_ota_core_hybrid_bm.klay.gds"
+        },
+        {
+            "lib_name": "iqmod_mfb_lpf_C1",
+            "lib_path": "iqmod_mfb_lpf_C1.gds"
+        },
+        {
+            "lib_name": "iqmod_mfb_lpf_C2",
+            "lib_path": "iqmod_mfb_lpf_C2.gds"
+        },
+        {
+            "lib_name": "iqmod_mfb_lpf_C3",
+            "lib_path": "iqmod_mfb_lpf_C3.gds"
+        },
+        {
+            "lib_name": "iqmod_mfb_lpf_Cdec1",
+            "lib_path": "iqmod_mfb_lpf_Cdec1.gds"
+        },
+        {
+            "lib_name": "iqmod_mfb_lpf_Cdec2",
+            "lib_path": "iqmod_mfb_lpf_Cdec2.gds"
+        }
+    ]
+}

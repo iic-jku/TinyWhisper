@@ -1,0 +1,49 @@
+# SPDX-FileCopyrightText: 2026 Harald Pretl
+# SPDX-License-Identifier: Apache-2.0
+#
+# Cocotb Makefile for delta-sigma modulator testbench
+
+SIM ?= icarus
+TOPLEVEL_LANG ?= verilog
+PYTHON_BIN ?= python3
+
+# Source files
+VERILOG_SOURCES = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))/../src/dsmod.v
+
+# Top-level module
+TOPLEVEL = dsmod
+
+# Cocotb test module
+COCOTB_TEST_MODULES = dsmod_cocotb
+
+# Enable waveform dumping
+COCOTB_HDL_TIMEUNIT = 1ns
+COCOTB_HDL_TIMEPRECISION = 100ps
+
+# Icarus Verilog compile flags
+COMPILE_ARGS += -g2012
+
+# Override cocotb defaults so all generated artefacts carry the dsmod_ prefix
+SIM_BUILD = dsmod_sim_build
+export COCOTB_RESULTS_FILE = dsmod_results.xml
+
+include $(shell cocotb-config --makefiles)/Makefile.sim
+
+# PSD test: run only the PSD test, then plot PSD and analog output
+plot:
+	$(MAKE) -f $(firstword $(MAKEFILE_LIST)) sim COCOTB_TEST_FILTER=dsmod_psd_test
+	$(PYTHON_BIN) dsmod_plot_psd.py
+	$(PYTHON_BIN) dsmod_plot_analog.py
+.PHONY: plot
+
+# SNDR sweep: run parallel amplitude sweep, then plot
+sndr:
+	$(PYTHON_BIN) dsmod_sndr_sweep.py
+	$(PYTHON_BIN) dsmod_plot_sndr.py
+.PHONY: sndr
+
+# Ramp test: verify linear interpolation, then plot
+ramp:
+	$(MAKE) -f $(firstword $(MAKEFILE_LIST)) sim COCOTB_TEST_MODULES=dsmod_ramp_cocotb COCOTB_TEST_FILTER=dsmod_ramp_test
+	$(PYTHON_BIN) dsmod_plot_ramp.py
+.PHONY: ramp

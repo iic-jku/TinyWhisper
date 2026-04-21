@@ -1,0 +1,9 @@
+{
+    "technology": "",
+    "statements": [
+        {
+            "lib_name": "iqmod_top_half",
+            "lib_path": "iqmod_top_half.klay.gds"
+        }
+    ]
+}

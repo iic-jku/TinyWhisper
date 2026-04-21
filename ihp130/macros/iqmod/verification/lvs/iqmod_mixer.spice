@@ -1,0 +1,112 @@
+** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/xschem/iqmod_mixer.sch
+.subckt iqmod_mixer vinp_IF vinn_IF voutp_RF vinp_LO vinn_LO VDD VSS voutn_RF
+*.PININFO VDD:B VSS:B vinp_IF:I vinn_IF:I voutp_RF:B vinp_LO:I vinn_LO:I voutn_RF:B
+x2 nwell1 psub VDD vinp_LO_buf VSS voutp_RF vinp_IF vinp_LO_inv iqmod_mixer_tg
+x4 nwell2 psub VDD vinn_LO_buf VSS voutn_RF vinn_IF vinn_LO_inv iqmod_mixer_tg
+x1 nwell1 psub nwell3 VDD vinp_LO vinp_LO_buf VSS vinp_LO_inv iqmod_mixer_se2diff
+x3 nwell2 psub nwell3 VDD vinn_LO vinn_LO_buf VSS vinn_LO_inv iqmod_mixer_se2diff
+.ends
+
+* expanding   symbol:  iqmod_mixer_tg.sym # of pins=8
+** sym_path: xschem/iqmod_mixer_tg.sym
+** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/xschem/iqmod_mixer_tg.sch
+.subckt iqmod_mixer_tg nwell psub VDD di_tg_ctrl VSS v_b v_a di_tg_ctrl_n
+*.PININFO v_a:B v_b:B di_tg_ctrl:I di_tg_ctrl_n:I VDD:B VSS:B nwell:B psub:B
+MM1 v_a di_tg_ctrl v_b psub sg13_lv_nmos w=108.0u l=0.13u ng=36
+MM2 v_a di_tg_ctrl_n v_b nwell sg13_lv_pmos w=324.0u l=0.13u ng=36
+MMdummy2 v_b di_tg_ctrl v_b nwell sg13_lv_pmos w=162.0u l=0.13u ng=18
+MMdummy1 v_b di_tg_ctrl_n v_b psub sg13_lv_nmos w=54.0u l=0.13u ng=18
+RR1 VDD nwell ntap1 A=2.4168e-11 P=0.00016112
+RR2 VSS psub ptap1 A=2.0784e-11 P=0.00013856
+.ends
+
+
+* expanding   symbol:  iqmod_mixer_se2diff.sym # of pins=8
+** sym_path: xschem/iqmod_mixer_se2diff.sym
+** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/xschem/iqmod_mixer_se2diff.sch
+.subckt iqmod_mixer_se2diff nwell1 psub nwell2 VDD vin voutp VSS voutn
+*.PININFO vin:I VDD:B VSS:B voutp:O voutn:O nwell1:B psub:B nwell2:B
+x3 nwell2 psub VDD VDD VSS net2 vse VSS iqmod_mixer_se2diff_tg_NF6
+x8 nwell1 psub VDD vscale1n vscale2p VSS iqmod_mixer_se2diff_inv_NF18
+x5 nwell1 psub VDD vcrossp vcrossn VSS iqmod_mixer_se2diff_inv_NF2
+x6 nwell2 psub VDD vcrossn vcrossp VSS iqmod_mixer_se2diff_inv_NF2
+x2 nwell1 psub VDD net1 vcrossp VSS iqmod_mixer_se2diff_inv_NF6
+x4 nwell2 psub VDD net2 vcrossn VSS iqmod_mixer_se2diff_inv_NF6
+x7 nwell1 psub VDD vcrossp vscale1n VSS iqmod_mixer_se2diff_inv_NF6
+x1 nwell1 psub VDD vse net1 VSS iqmod_mixer_se2diff_inv_NF6
+x9 nwell1 psub VDD vscale2p voutp VSS iqmod_mixer_se2diff_inv_NF54
+x10 nwell2 psub VDD vcrossn vscale1p VSS iqmod_mixer_se2diff_inv_NF6
+x11 nwell2 psub VDD vscale1p vscale2n VSS iqmod_mixer_se2diff_inv_NF18
+x12 nwell2 psub VDD vscale2n voutn VSS iqmod_mixer_se2diff_inv_NF54
+x13 nwell2 psub VDD vin vse VSS iqmod_mixer_se2diff_inv_NF2
+x14 nwell1 psub VDD vin vse VSS iqmod_mixer_se2diff_inv_NF2
+.ends
+
+
+* expanding   symbol:  iqmod_mixer_se2diff_tg_NF6.sym # of pins=8
+** sym_path: xschem/iqmod_mixer_se2diff_tg_NF6.sym
+** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/xschem/iqmod_mixer_se2diff_tg_NF6.sch
+.subckt iqmod_mixer_se2diff_tg_NF6 nwell psub VDD di_tg_ctrl VSS v_b v_a di_tg_ctrl_n
+*.PININFO v_a:B v_b:B VDD:B VSS:B di_tg_ctrl:I di_tg_ctrl_n:I nwell:B psub:B
+MM2 v_a di_tg_ctrl_n v_b nwell sg13_lv_pmos w=18.0u l=0.13u ng=6
+MM1 v_a di_tg_ctrl v_b psub sg13_lv_nmos w=6.0u l=0.13u ng=6
+RR1 VDD nwell ntap1 A=5.88e-12 P=3.92e-05
+RR2 VSS psub ptap1 A=4.896e-12 P=3.264e-05
+.ends
+
+
+* expanding   symbol:  iqmod_mixer_se2diff_inv_NF18.sym # of pins=6
+** sym_path: xschem/iqmod_mixer_se2diff_inv_NF18.sym
+** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/xschem/iqmod_mixer_se2diff_inv_NF18.sch
+.subckt iqmod_mixer_se2diff_inv_NF18 nwell psub VDD vin vout VSS
+*.PININFO vin:I VDD:B VSS:B vout:B nwell:B psub:B
+MM1 vout vin VSS psub sg13_lv_nmos w=18.0u l=0.13u ng=18
+MM2 vout vin VDD nwell sg13_lv_pmos w=54.0u l=0.13u ng=18
+MMdummy1 VSS VSS VSS psub sg13_lv_nmos w=2.0u l=0.13u ng=2
+MMdummy2 VDD VDD VDD nwell sg13_lv_pmos w=6.0u l=0.13u ng=2
+RR1 VDD nwell ntap1 A=1.0164e-11 P=6.776e-05
+RR2 VSS psub ptap1 A=9.18e-12 P=6.12e-05
+.ends
+
+
+* expanding   symbol:  iqmod_mixer_se2diff_inv_NF2.sym # of pins=6
+** sym_path: xschem/iqmod_mixer_se2diff_inv_NF2.sym
+** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/xschem/iqmod_mixer_se2diff_inv_NF2.sch
+.subckt iqmod_mixer_se2diff_inv_NF2 nwell psub VDD vin vout VSS
+*.PININFO vin:I VDD:B VSS:B vout:B nwell:B psub:B
+MM1 vout vin VSS psub sg13_lv_nmos w=2.0u l=0.13u ng=2
+MM2 vout vin VDD nwell sg13_lv_pmos w=6.0u l=0.13u ng=2
+MMdummy1 VSS VSS VSS psub sg13_lv_nmos w=2.0u l=0.13u ng=2
+MMdummy2 VDD VDD VDD nwell sg13_lv_pmos w=6.0u l=0.13u ng=2
+RR1 VDD nwell ntap1 A=5.268e-12 P=3.512e-05
+RR2 VSS psub ptap1 A=4.284e-12 P=2.856e-05
+.ends
+
+
+* expanding   symbol:  iqmod_mixer_se2diff_inv_NF6.sym # of pins=6
+** sym_path: xschem/iqmod_mixer_se2diff_inv_NF6.sym
+** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/xschem/iqmod_mixer_se2diff_inv_NF6.sch
+.subckt iqmod_mixer_se2diff_inv_NF6 nwell psub VDD vin vout VSS
+*.PININFO vin:I VDD:B VSS:B vout:B nwell:B psub:B
+MM1 vout vin VSS psub sg13_lv_nmos w=6.0u l=0.13u ng=6
+MM2 vout vin VDD nwell sg13_lv_pmos w=18.0u l=0.13u ng=6
+MMdummy1 VSS VSS VSS psub sg13_lv_nmos w=2.0u l=0.13u ng=2
+MMdummy2 VDD VDD VDD nwell sg13_lv_pmos w=6.0u l=0.13u ng=2
+RR1 VDD nwell ntap1 A=6.492e-12 P=4.328e-05
+RR2 VSS psub ptap1 A=5.508e-12 P=3.672e-05
+.ends
+
+
+* expanding   symbol:  iqmod_mixer_se2diff_inv_NF54.sym # of pins=6
+** sym_path: xschem/iqmod_mixer_se2diff_inv_NF54.sym
+** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/xschem/iqmod_mixer_se2diff_inv_NF54.sch
+.subckt iqmod_mixer_se2diff_inv_NF54 nwell psub VDD vin vout VSS
+*.PININFO vin:I VDD:B VSS:B vout:B nwell:B psub:B
+MM1 vout vin VSS psub sg13_lv_nmos w=54.0u l=0.13u ng=54
+MM2 vout vin VDD nwell sg13_lv_pmos w=162.0u l=0.13u ng=54
+MMdummy1 VSS VSS VSS psub sg13_lv_nmos w=2.0u l=0.13u ng=2
+MMdummy2 VDD VDD VDD nwell sg13_lv_pmos w=6.0u l=0.13u ng=2
+RR1 VDD nwell ntap1 A=2.118e-11 P=0.0001412
+RR2 VSS psub ptap1 A=2.0196e-11 P=0.00013464
+.ends
+

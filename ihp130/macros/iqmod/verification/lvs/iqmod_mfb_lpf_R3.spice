@@ -1,0 +1,10 @@
+** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/xschem/iqmod_mfb_lpf_R3.sch
+.subckt iqmod_mfb_lpf_R3 v_b v_a psub VSS
+*.PININFO v_a:B v_b:B VSS:B psub:B
+RR1 v_a net1 174.75k $SUB=psub $[rhigh] w=0.5e-6 l=59.0e-6 b=0
+RR2 net1 net2 174.75k $SUB=psub $[rhigh] w=0.5e-6 l=59.0e-6 b=0
+RR3 net2 v_b 174.75k $SUB=psub $[rhigh] w=0.5e-6 l=59.0e-6 b=0
+RRdummy1 VSS VSS 174.75k $SUB=psub $[rhigh] w=0.5e-6 l=59.0e-6 b=0
+RRdummy2 VSS VSS 174.75k $SUB=psub $[rhigh] w=0.5e-6 l=59.0e-6 b=0
+RR4 VSS psub ptap1 A=4.2312e-11 P=0.00028208
+.ends

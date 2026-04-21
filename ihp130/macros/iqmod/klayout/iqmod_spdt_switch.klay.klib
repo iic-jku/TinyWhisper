@@ -1,0 +1,13 @@
+{
+    "technology": "",
+    "statements": [
+        {
+            "lib_name": "spdt_switch_inv",
+            "lib_path": "iqmod_spdt_switch_inv.gds"
+        },
+        {
+            "lib_name": "spdt_switch_tg",
+            "lib_path": "iqmod_spdt_switch_tg.gds"
+        }
+    ]
+}

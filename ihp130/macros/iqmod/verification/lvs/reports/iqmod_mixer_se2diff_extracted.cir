@@ -1,0 +1,107 @@
+* Extracted by KLayout with SG13G2 LVS runset on : 28/03/2026 21:38
+
+.SUBCKT iqmod_mixer_se2diff VSS vin VDD voutp voutn
+X$10 vin \$9 \$4 VSS VDD \$I13 iqmod_mixer_se2diff_inv_NF2
+X$11 VDD VSS \$9 VDD VSS \$I12 \$4 \$I13 iqmod_mixer_se2diff_tg_NF6
+X$12 VDD VSS \$I12 \$5 \$4 \$I13 iqmod_mixer_se2diff_inv_NF6
+X$13 \$5 \$6 \$4 VSS VDD \$I13 iqmod_mixer_se2diff_inv_NF2
+X$14 VDD VSS \$5 \$I10 \$4 \$I13 iqmod_mixer_se2diff_inv_NF6
+X$15 \$4 VSS \$I11 VDD \$I10 \$I13 iqmod_mixer_se2diff_inv_NF18
+X$16 \$4 VSS voutn VDD \$I11 \$I13 iqmod_mixer_se2diff_inv_NF54
+M$1 VSS VSS VSS \$4 sg13_lv_nmos L=0.13u W=14u AS=3.71p AD=3.71p PS=28.42u
++ PD=28.42u rfmode=0
+M$2 VSS \$I8 voutp \$4 sg13_lv_nmos L=0.13u W=54u AS=10.26p AD=10.26p PS=74.52u
++ PD=74.52u rfmode=0
+R$57 VSS \$4 ptap1 A=54.468p P=363.12u
+M$58 VDD VDD VDD \$I9 sg13_lv_pmos L=0.13u W=42u AS=11.13p AD=11.13p PS=70.42u
++ PD=70.42u rfmode=0
+M$59 VDD \$I8 voutp \$I9 sg13_lv_pmos L=0.13u W=162u AS=30.78p AD=30.78p
++ PS=182.52u PD=182.52u rfmode=0
+R$114 VDD \$I9 ntap1 A=61.356p P=409.04u
+M$116 VSS \$I7 \$I8 \$4 sg13_lv_nmos L=0.13u W=18u AS=3.42p AD=3.42p PS=24.84u
++ PD=24.84u rfmode=0
+M$137 VDD \$I7 \$I8 \$I9 sg13_lv_pmos L=0.13u W=54u AS=10.26p AD=10.26p
++ PS=60.84u PD=60.84u rfmode=0
+M$158 VDD vin \$9 \$I9 sg13_lv_pmos L=0.13u W=6u AS=1.14p AD=1.14p PS=6.76u
++ PD=6.76u rfmode=0
+M$163 VDD \$6 \$5 \$I9 sg13_lv_pmos L=0.13u W=6u AS=1.14p AD=1.14p PS=6.76u
++ PD=6.76u rfmode=0
+M$168 VSS vin \$9 \$4 sg13_lv_nmos L=0.13u W=2u AS=0.38p AD=0.38p PS=2.76u
++ PD=2.76u rfmode=0
+M$173 VSS \$6 \$5 \$4 sg13_lv_nmos L=0.13u W=2u AS=0.38p AD=0.38p PS=2.76u
++ PD=2.76u rfmode=0
+M$178 VSS \$I6 \$6 \$4 sg13_lv_nmos L=0.13u W=6u AS=1.14p AD=1.14p PS=8.28u
++ PD=8.28u rfmode=0
+M$187 VSS \$9 \$I6 \$4 sg13_lv_nmos L=0.13u W=6u AS=1.14p AD=1.14p PS=8.28u
++ PD=8.28u rfmode=0
+M$196 VSS \$6 \$I7 \$4 sg13_lv_nmos L=0.13u W=6u AS=1.14p AD=1.14p PS=8.28u
++ PD=8.28u rfmode=0
+M$205 VDD \$I6 \$6 \$I9 sg13_lv_pmos L=0.13u W=18u AS=3.42p AD=3.42p PS=20.28u
++ PD=20.28u rfmode=0
+M$214 VDD \$9 \$I6 \$I9 sg13_lv_pmos L=0.13u W=18u AS=3.42p AD=3.42p PS=20.28u
++ PD=20.28u rfmode=0
+M$223 VDD \$6 \$I7 \$I9 sg13_lv_pmos L=0.13u W=18u AS=3.42p AD=3.42p PS=20.28u
++ PD=20.28u rfmode=0
+.ENDS iqmod_mixer_se2diff
+
+.SUBCKT iqmod_mixer_se2diff_tg_NF6 VDD VSS v_a di_tg_ctrl di_tg_ctrl_n v_b \$7
++ \$I33
+M$1 v_a di_tg_ctrl v_b \$7 sg13_lv_nmos L=0.13u W=6u AS=1.29p AD=1.29p PS=9.58u
++ PD=9.58u rfmode=0
+R$7 VSS \$7 ptap1 A=4.896p P=32.64u
+M$8 v_a di_tg_ctrl_n v_b \$I33 sg13_lv_pmos L=0.13u W=18u AS=3.87p AD=3.87p
++ PS=23.58u PD=23.58u rfmode=0
+R$14 VDD \$I33 ntap1 A=5.88p P=39.2u
+.ENDS iqmod_mixer_se2diff_tg_NF6
+
+.SUBCKT iqmod_mixer_se2diff_inv_NF54 \$1 VSS vout VDD vin \$I241
+M$1 VSS VSS VSS \$1 sg13_lv_nmos L=0.13u W=2u AS=0.53p AD=0.53p PS=4.06u
++ PD=4.06u rfmode=0
+M$2 VSS vin vout \$1 sg13_lv_nmos L=0.13u W=54u AS=10.26p AD=10.26p PS=74.52u
++ PD=74.52u rfmode=0
+R$57 VSS \$1 ptap1 A=20.196p P=134.64u
+M$58 VDD VDD VDD \$I241 sg13_lv_pmos L=0.13u W=6u AS=1.59p AD=1.59p PS=10.06u
++ PD=10.06u rfmode=0
+M$59 VDD vin vout \$I241 sg13_lv_pmos L=0.13u W=162u AS=30.78p AD=30.78p
++ PS=182.52u PD=182.52u rfmode=0
+R$114 VDD \$I241 ntap1 A=21.18p P=141.2u
+.ENDS iqmod_mixer_se2diff_inv_NF54
+
+.SUBCKT iqmod_mixer_se2diff_inv_NF18 \$1 VSS vout VDD vin \$I98
+M$1 VSS VSS VSS \$1 sg13_lv_nmos L=0.13u W=2u AS=0.53p AD=0.53p PS=4.06u
++ PD=4.06u rfmode=0
+M$2 VSS vin vout \$1 sg13_lv_nmos L=0.13u W=18u AS=3.42p AD=3.42p PS=24.84u
++ PD=24.84u rfmode=0
+R$21 VSS \$1 ptap1 A=9.18p P=61.2u
+M$22 VDD VDD VDD \$I98 sg13_lv_pmos L=0.13u W=6u AS=1.59p AD=1.59p PS=10.06u
++ PD=10.06u rfmode=0
+M$23 VDD vin vout \$I98 sg13_lv_pmos L=0.13u W=54u AS=10.26p AD=10.26p
++ PS=60.84u PD=60.84u rfmode=0
+R$42 VDD \$I98 ntap1 A=10.164p P=67.76u
+.ENDS iqmod_mixer_se2diff_inv_NF18
+
+.SUBCKT iqmod_mixer_se2diff_inv_NF2 vin vout \$3 VSS VDD \$I31
+M$1 VDD VDD VDD \$I31 sg13_lv_pmos L=0.13u W=6u AS=1.59p AD=1.59p PS=10.06u
++ PD=10.06u rfmode=0
+M$2 VDD vin vout \$I31 sg13_lv_pmos L=0.13u W=6u AS=1.14p AD=1.14p PS=6.76u
++ PD=6.76u rfmode=0
+R$5 VDD \$I31 ntap1 A=5.268p P=35.12u
+M$6 VSS VSS VSS \$3 sg13_lv_nmos L=0.13u W=2u AS=0.53p AD=0.53p PS=4.06u
++ PD=4.06u rfmode=0
+M$7 VSS vin vout \$3 sg13_lv_nmos L=0.13u W=2u AS=0.38p AD=0.38p PS=2.76u
++ PD=2.76u rfmode=0
+R$10 VSS \$3 ptap1 A=4.284p P=28.56u
+.ENDS iqmod_mixer_se2diff_inv_NF2
+
+.SUBCKT iqmod_mixer_se2diff_inv_NF6 VDD VSS vin vout \$5 \$I46
+M$1 VSS VSS VSS \$5 sg13_lv_nmos L=0.13u W=2u AS=0.53p AD=0.53p PS=4.06u
++ PD=4.06u rfmode=0
+M$2 VSS vin vout \$5 sg13_lv_nmos L=0.13u W=6u AS=1.14p AD=1.14p PS=8.28u
++ PD=8.28u rfmode=0
+R$9 VSS \$5 ptap1 A=5.508p P=36.72u
+M$10 VDD VDD VDD \$I46 sg13_lv_pmos L=0.13u W=6u AS=1.59p AD=1.59p PS=10.06u
++ PD=10.06u rfmode=0
+M$11 VDD vin vout \$I46 sg13_lv_pmos L=0.13u W=18u AS=3.42p AD=3.42p PS=20.28u
++ PD=20.28u rfmode=0
+R$18 VDD \$I46 ntap1 A=6.492p P=43.28u
+.ENDS iqmod_mixer_se2diff_inv_NF6

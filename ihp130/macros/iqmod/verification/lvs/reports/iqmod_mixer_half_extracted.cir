@@ -1,0 +1,78 @@
+* Extracted by KLayout with SG13G2 LVS runset on : 28/03/2026 01:57
+
+.SUBCKT iqmod_mixer_half VDD|di_tg_ctrl v_b|vin vin|vout vin|vout$1 vin|vout$2
++ di_tg_ctrl_n|vout|voutn v_a|vin|vout VSS|di_tg_ctrl_n vin|vinp_IF
++ v_b|voutp_RF v_a|vinp_LO vin|vout$3 vin|vout$4 di_tg_ctrl|vout|voutp
++ vin|vout$5 vin|vout$6
+M$1 v_b|voutp_RF di_tg_ctrl|vout|voutp v_a|vinp_LO \$18 sg13_lv_nmos L=0.13u
++ W=108u AS=20.97p AD=20.52p PS=124.98u PD=121.68u rfmode=0
+M$37 v_b|voutp_RF di_tg_ctrl_n|vout|voutn v_b|voutp_RF \$18 sg13_lv_nmos
++ L=0.13u W=54u AS=10.26p AD=10.71p PS=60.84u PD=64.14u rfmode=0
+M$55 VSS|di_tg_ctrl_n VSS|di_tg_ctrl_n VSS|di_tg_ctrl_n \$18 sg13_lv_nmos
++ L=0.13u W=26u AS=6.89p AD=6.89p PS=52.78u PD=52.78u rfmode=0
+M$56 VSS|di_tg_ctrl_n vin|vinp_IF v_a|vin|vout \$18 sg13_lv_nmos L=0.13u W=4u
++ AS=0.76p AD=0.76p PS=5.52u PD=5.52u rfmode=0
+M$59 v_a|vin|vout VDD|di_tg_ctrl v_b|vin \$18 sg13_lv_nmos L=0.13u W=6u
++ AS=1.29p AD=1.29p PS=9.58u PD=9.58u rfmode=0
+M$66 VSS|di_tg_ctrl_n v_b|vin vin|vout \$18 sg13_lv_nmos L=0.13u W=6u AS=1.14p
++ AD=1.14p PS=8.28u PD=8.28u rfmode=0
+M$74 VSS|di_tg_ctrl_n vin|vout vin|vout$4 \$18 sg13_lv_nmos L=0.13u W=2u
++ AS=0.38p AD=0.38p PS=2.76u PD=2.76u rfmode=0
+M$78 VSS|di_tg_ctrl_n vin|vout vin|vout$1 \$18 sg13_lv_nmos L=0.13u W=6u
++ AS=1.14p AD=1.14p PS=8.28u PD=8.28u rfmode=0
+M$86 VSS|di_tg_ctrl_n vin|vout$1 vin|vout$2 \$18 sg13_lv_nmos L=0.13u W=18u
++ AS=3.42p AD=3.42p PS=24.84u PD=24.84u rfmode=0
+M$106 VSS|di_tg_ctrl_n vin|vout$2 di_tg_ctrl_n|vout|voutn \$18 sg13_lv_nmos
++ L=0.13u W=54u AS=10.26p AD=10.26p PS=74.52u PD=74.52u rfmode=0
+M$166 VSS|di_tg_ctrl_n v_a|vin|vout vin|vout$3 \$18 sg13_lv_nmos L=0.13u W=6u
++ AS=1.14p AD=1.14p PS=8.28u PD=8.28u rfmode=0
+M$174 VSS|di_tg_ctrl_n vin|vout$3 vin|vout$4 \$18 sg13_lv_nmos L=0.13u W=6u
++ AS=1.14p AD=1.14p PS=8.28u PD=8.28u rfmode=0
+M$182 VSS|di_tg_ctrl_n vin|vout$4 vin|vout \$18 sg13_lv_nmos L=0.13u W=2u
++ AS=0.38p AD=0.38p PS=2.76u PD=2.76u rfmode=0
+M$186 VSS|di_tg_ctrl_n vin|vout$4 vin|vout$5 \$18 sg13_lv_nmos L=0.13u W=6u
++ AS=1.14p AD=1.14p PS=8.28u PD=8.28u rfmode=0
+M$194 VSS|di_tg_ctrl_n vin|vout$5 vin|vout$6 \$18 sg13_lv_nmos L=0.13u W=18u
++ AS=3.42p AD=3.42p PS=24.84u PD=24.84u rfmode=0
+M$214 VSS|di_tg_ctrl_n vin|vout$6 di_tg_ctrl|vout|voutp \$18 sg13_lv_nmos
++ L=0.13u W=54u AS=10.26p AD=10.26p PS=74.52u PD=74.52u rfmode=0
+M$269 VDD|di_tg_ctrl VDD|di_tg_ctrl VDD|di_tg_ctrl \$2 sg13_lv_pmos L=0.13u
++ W=36u AS=9.54p AD=9.54p PS=60.36u PD=60.36u rfmode=0
+M$270 VDD|di_tg_ctrl vin|vinp_IF v_a|vin|vout \$2 sg13_lv_pmos L=0.13u W=6u
++ AS=1.14p AD=1.14p PS=6.76u PD=6.76u rfmode=0
+M$273 v_a|vin|vout VSS|di_tg_ctrl_n v_b|vin \$2 sg13_lv_pmos L=0.13u W=18u
++ AS=3.87p AD=3.87p PS=23.58u PD=23.58u rfmode=0
+M$280 VDD|di_tg_ctrl v_b|vin vin|vout \$2 sg13_lv_pmos L=0.13u W=18u AS=3.42p
++ AD=3.42p PS=20.28u PD=20.28u rfmode=0
+M$288 VDD|di_tg_ctrl vin|vout vin|vout$4 \$2 sg13_lv_pmos L=0.13u W=6u AS=1.14p
++ AD=1.14p PS=6.76u PD=6.76u rfmode=0
+M$292 VDD|di_tg_ctrl vin|vout vin|vout$1 \$2 sg13_lv_pmos L=0.13u W=18u
++ AS=3.42p AD=3.42p PS=20.28u PD=20.28u rfmode=0
+M$300 VDD|di_tg_ctrl vin|vout$1 vin|vout$2 \$2 sg13_lv_pmos L=0.13u W=54u
++ AS=10.26p AD=10.26p PS=60.84u PD=60.84u rfmode=0
+M$320 VDD|di_tg_ctrl vin|vout$2 di_tg_ctrl_n|vout|voutn \$2 sg13_lv_pmos
++ L=0.13u W=162u AS=30.78p AD=30.78p PS=182.52u PD=182.52u rfmode=0
+M$375 VDD|di_tg_ctrl VDD|di_tg_ctrl VDD|di_tg_ctrl \$38 sg13_lv_pmos L=0.13u
++ W=42u AS=11.13p AD=11.13p PS=70.42u PD=70.42u rfmode=0
+M$376 VDD|di_tg_ctrl vin|vinp_IF v_a|vin|vout \$38 sg13_lv_pmos L=0.13u W=6u
++ AS=1.14p AD=1.14p PS=6.76u PD=6.76u rfmode=0
+M$380 VDD|di_tg_ctrl v_a|vin|vout vin|vout$3 \$38 sg13_lv_pmos L=0.13u W=18u
++ AS=3.42p AD=3.42p PS=20.28u PD=20.28u rfmode=0
+M$388 VDD|di_tg_ctrl vin|vout$3 vin|vout$4 \$38 sg13_lv_pmos L=0.13u W=18u
++ AS=3.42p AD=3.42p PS=20.28u PD=20.28u rfmode=0
+M$396 VDD|di_tg_ctrl vin|vout$4 vin|vout \$38 sg13_lv_pmos L=0.13u W=6u
++ AS=1.14p AD=1.14p PS=6.76u PD=6.76u rfmode=0
+M$400 VDD|di_tg_ctrl vin|vout$4 vin|vout$5 \$38 sg13_lv_pmos L=0.13u W=18u
++ AS=3.42p AD=3.42p PS=20.28u PD=20.28u rfmode=0
+M$408 VDD|di_tg_ctrl vin|vout$5 vin|vout$6 \$38 sg13_lv_pmos L=0.13u W=54u
++ AS=10.26p AD=10.26p PS=60.84u PD=60.84u rfmode=0
+M$428 VDD|di_tg_ctrl vin|vout$6 di_tg_ctrl|vout|voutp \$38 sg13_lv_pmos L=0.13u
++ W=162u AS=30.78p AD=30.78p PS=182.52u PD=182.52u rfmode=0
+M$483 v_b|voutp_RF di_tg_ctrl_n|vout|voutn v_a|vinp_LO \$38 sg13_lv_pmos
++ L=0.13u W=324u AS=62.91p AD=61.56p PS=346.98u PD=337.68u rfmode=0
+M$519 v_b|voutp_RF di_tg_ctrl|vout|voutp v_b|voutp_RF \$38 sg13_lv_pmos L=0.13u
++ W=162u AS=30.78p AD=32.13p PS=168.84u PD=178.14u rfmode=0
+R$537 VDD|di_tg_ctrl \$2 ntap1 A=56.8284p P=343.16u
+R$538 VDD|di_tg_ctrl \$38 ntap1 A=76.488p P=506.32u
+R$540 VSS|di_tg_ctrl_n \$18 ptap1 A=120.3876p P=774.44u
+.ENDS iqmod_mixer_half

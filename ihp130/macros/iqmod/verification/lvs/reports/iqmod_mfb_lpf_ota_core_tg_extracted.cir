@@ -1,0 +1,10 @@
+* Extracted by KLayout with SG13G2 LVS runset on : 27/03/2026 17:46
+
+.SUBCKT iqmod_mfb_lpf_ota_core_tg VSS di_tg_ctrl v_a v_b VDD di_tg_ctrl_n
+M$1 v_a di_tg_ctrl v_b \$1 sg13_lv_nmos L=0.13u W=6u AS=1.29p AD=1.29p PS=9.58u
++ PD=9.58u rfmode=0
+M$7 v_a di_tg_ctrl_n v_b \$8 sg13_lv_pmos L=0.13u W=36u AS=7.74p AD=7.74p
++ PS=44.58u PD=44.58u rfmode=0
+R$13 VDD \$8 ntap1 A=7.68p P=51.2u
+R$14 VSS \$1 ptap1 A=4.896p P=32.64u
+.ENDS iqmod_mfb_lpf_ota_core_tg

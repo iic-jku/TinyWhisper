@@ -1,0 +1,13 @@
+{
+    "technology": "",
+    "statements": [
+        {
+            "lib_name": "iqmod_mixer_se2diff_half_inv",
+            "lib_path": "iqmod_mixer_se2diff_half_inv.klay.gds"
+        },
+        {
+            "lib_name": "iqmod_mixer_se2diff_half_tg",
+            "lib_path": "iqmod_mixer_se2diff_half_tg.klay.gds"
+        }
+    ]
+}

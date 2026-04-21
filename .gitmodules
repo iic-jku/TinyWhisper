@@ -1,0 +1,9 @@
+[submodule "ihp130/artistic"]
+	path = ihp130/artistic
+	url = https://github.com/pulp-platform/artistic.git
+[submodule "software/c_toolchain/printf"]
+	path = software/c_toolchain/printf
+	url = https://github.com/mpaland/printf
+[submodule "software/c_toolchain/oled_96"]
+	path = software/c_toolchain/oled_96
+	url = https://github.com/jona250210/oled_96

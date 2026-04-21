@@ -1,0 +1,20 @@
+* PEX produced on Sun Mar 29 01:59:34 AM CET 2026 using /foss/tools/sak/sak-pex.sh with m=2 and s=1
+* NGSPICE file created from iqmod_spdt_switch_inv_pex.ext - technology: ihp-sg13g2
+
+.subckt iqmod_spdt_switch_inv_pex vin VDD VSS vout
+X0 vout vin VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X1 VDD vin vout VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
+X2 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=14.2195p ps=30.56u w=1u l=0.13u
+X3 vout vin VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X4 VDD VDD VDD VDD sg13_lv_pmos ad=1.14p pd=6.38u as=16.648p ps=0.1012m w=6u l=0.13u
+X5 VSS vin vout VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
+X6 VSS VSS VSS VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0 ps=0 w=1u l=0.13u
+X7 VDD VDD VDD VDD sg13_lv_pmos ad=2.04p pd=12.68u as=0 ps=0 w=6u l=0.13u
+C0 vin VDD 0.60689f
+C1 vout vin 0.43097f
+C2 vout VDD 3.84166f
+C3 vout VSS 1.14827f
+C4 vin VSS 0.51665f
+C5 VDD VSS 1.64417f
+.ends
+

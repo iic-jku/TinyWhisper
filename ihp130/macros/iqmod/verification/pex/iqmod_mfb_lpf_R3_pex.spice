@@ -1,0 +1,32 @@
+* PEX produced on Fri Mar 27 08:59:48 PM CET 2026 using /foss/tools/sak/sak-pex.sh with m=2 and s=1
+* NGSPICE file created from iqmod_mfb_lpf_R3_pex.ext - technology: ihp-sg13g2
+
+.subckt iqmod_mfb_lpf_R3_pex VSS v_b v_a
+X0 a_242_846# a_12128_546# VSS rhigh l=59u w=0.5u
+X1 a_242_846# v_b VSS rhigh l=59u w=0.5u
+X2 VSS VSS VSS rhigh l=59u w=0.5u
+X3 VSS VSS VSS rhigh l=59u w=0.5u
+X4 v_a a_12128_546# VSS rhigh l=59u w=0.5u
+C0 a_328_546# v_a 0.04232f
+C1 a_242_846# a_328_846# 0.01901f
+C2 a_328_546# a_12128_546# 0.01901f
+C3 a_12128_546# a_328_846# 0.01901f
+C4 a_328_1146# a_328_846# 0.70571f
+C5 a_328_1146# a_328_1446# 0.70571f
+C6 a_328_546# a_328_846# 0.70571f
+C7 a_328_546# a_328_246# 0.70571f
+C8 a_242_846# v_a 0.02096f
+C9 v_b a_12128_546# 0.02096f
+C10 v_b a_328_1146# 0.04232f
+C11 a_328_1146# a_242_846# 0.01901f
+C12 v_a VSS 0.24913f
+C13 v_b VSS 0.24913f
+C14 a_328_246# VSS 7.47702f $ **FLOATING
+C15 a_328_546# VSS 6.1949f $ **FLOATING
+C16 a_12128_546# VSS 0.30355f
+C17 a_328_846# VSS 6.16404f $ **FLOATING
+C18 a_328_1146# VSS 6.1949f $ **FLOATING
+C19 a_242_846# VSS 0.30355f
+C20 a_328_1446# VSS 7.47702f $ **FLOATING
+.ends
+

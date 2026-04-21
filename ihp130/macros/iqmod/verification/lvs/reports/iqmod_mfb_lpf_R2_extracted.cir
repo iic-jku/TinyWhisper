@@ -1,0 +1,7 @@
+* Extracted by KLayout with SG13G2 LVS runset on : 27/03/2026 20:58
+
+.SUBCKT iqmod_mfb_lpf_R2 VSS v_a v_b
+R$1 VSS VSS \$1 rhigh w=0.5u l=31u ps=0u b=0 m=2
+R$2 v_a v_b \$1 rhigh w=0.5u l=93u ps=0u b=0 m=1
+R$6 VSS \$1 ptap1 A=25.512p P=170.08u
+.ENDS iqmod_mfb_lpf_R2

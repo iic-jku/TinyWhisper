@@ -1,0 +1,10 @@
+** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/xschem/iqmod_mfb_lpf_ota_core_inv_NF6.sch
+.subckt iqmod_mfb_lpf_ota_core_inv_NF6 nwell psub VDD vin vout VSS
+*.PININFO vin:I VDD:B VSS:B vout:B nwell:B psub:B
+MMdummy1 VSS VSS VSS psub sg13_lv_nmos w=2.0u l=1.0u ng=2
+MMdummy2 VDD VDD VDD nwell sg13_lv_pmos w=12.0u l=1.0u ng=2
+MM1 vout vin VSS psub sg13_lv_nmos w=6.0u l=1.0u ng=6
+MM2 vout vin VDD nwell sg13_lv_pmos w=36.0u l=1.0u ng=6
+RR1 VDD nwell ntap1 A=1.2468e-11 P=8.312e-05
+RR2 VSS psub ptap1 A=9.684e-12 P=6.456e-05
+.ends

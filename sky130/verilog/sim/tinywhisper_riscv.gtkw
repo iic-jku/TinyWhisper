@@ -1,0 +1,54 @@
+[*]
+[*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
+[*] Fri Nov 28 20:24:23 2025
+[*]
+[dumpfile] "./tinywhisper_riscv.vcd"
+[dumpfile_mtime] "Fri Nov 28 20:16:11 2025"
+[dumpfile_size] 670657324
+[savefile] "./tinywhisper_riscv.gtkw"
+[timestart] 14052000000
+[size] 1916 901
+[pos] -1 -1
+*-29.140915 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tinywhisper_riscv_tb.
+[treeopen] tinywhisper_riscv_tb.dut.
+[treeopen] tinywhisper_riscv_tb.dut.memory_i.
+[sst_width] 297
+[signals_width] 190
+[sst_expanded] 1
+[sst_vpaned_height] 262
+@28
+tinywhisper_riscv_tb.dut.clk
+tinywhisper_riscv_tb.dut.reset
+@22
+tinywhisper_riscv_tb.dut.pc_new[22:0]
+tinywhisper_riscv_tb.dut.iword[31:0]
+@28
+tinywhisper_riscv_tb.dut.memory_i.uart_tx_busy
+@820
+tinywhisper_riscv_tb.dut.memory_i.uart_transmitter.uart_tx_data[7:0]
+@28
+tinywhisper_riscv_tb.dut.memory_i.freq_inst.transmission_reset_n
+@10420
+tinywhisper_riscv_tb.dut.memory_i.freq_inst.cosine[29:0]
+@20000
+-
+-
+-
+@28
+tinywhisper_riscv_tb.dut.memory_i.freq_inst.cos_ds
+@10420
+tinywhisper_riscv_tb.dut.memory_i.freq_inst.sine[29:0]
+@20000
+-
+-
+-
+@28
+tinywhisper_riscv_tb.dut.memory_i.freq_inst.sin_ds
+tinywhisper_riscv_tb.dut.memory_i.freq_inst.lo_i
+tinywhisper_riscv_tb.dut.memory_i.freq_inst.lo_ix
+tinywhisper_riscv_tb.dut.memory_i.freq_inst.lo_q
+@29
+tinywhisper_riscv_tb.dut.memory_i.freq_inst.lo_qx
+[pattern_trace] 1
+[pattern_trace] 0

@@ -1,0 +1,58 @@
+187. Printing statistics.
+
+=== riscv_top ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+    24553        - wires
+    24559        - wire bits
+     2524        - public wires
+     2530        - public wire bits
+       37        - ports
+       43        - port bits
+    24542 3.35E+05 cells
+      333 4.23E+03   sg13g2_a21o_1
+        3   43.546   sg13g2_a21o_2
+     2164 1.96E+04   sg13g2_a21oi_1
+       11  159.667   sg13g2_a21oi_2
+      351 5.09E+03   sg13g2_a221oi_1
+      674 7.31E+03   sg13g2_a22oi_1
+      550   4989.6   sg13g2_and2_1
+        1   10.886   sg13g2_and2_2
+       86 1.09E+03   sg13g2_and3_1
+       58  841.882   sg13g2_and4_1
+     1691 1.23E+04   sg13g2_buf_1
+        3   136.08   sg13g2_buf_16
+      154  1.4E+03   sg13g2_buf_2
+       80 1.16E+03   sg13g2_buf_4
+       26  613.267   sg13g2_buf_8
+     2500   122472   sg13g2_dfrbpq_1
+      583 3.17E+03   sg13g2_inv_1
+      416 7.55E+03   sg13g2_mux2_1
+      426 1.62E+04   sg13g2_mux4_1
+     3228 2.34E+04   sg13g2_nand2_1
+        2   21.773   sg13g2_nand2_2
+      594 5.39E+03   sg13g2_nand2b_1
+        1   14.515   sg13g2_nand2b_2
+      741 6.72E+03   sg13g2_nand3_1
+       89 1.13E+03   sg13g2_nand3b_1
+      258 2.81E+03   sg13g2_nand4_1
+     2087 1.51E+04   sg13g2_nor2_1
+        8   87.091   sg13g2_nor2_2
+      311 2.82E+03   sg13g2_nor2b_1
+      528 4.79E+03   sg13g2_nor3_1
+       15  244.944   sg13g2_nor3_2
+      210 2.29E+03   sg13g2_nor4_1
+       14  304.819   sg13g2_nor4_2
+     2025  18370.8   sg13g2_o21ai_1
+      236 2.14E+03   sg13g2_or2_1
+       88  1117.67   sg13g2_or3_1
+       50   725.76   sg13g2_or4_1
+     2500    18144   sg13g2_tiehi
+      968 1.41E+04   sg13g2_xnor2_1
+      479 6.95E+03   sg13g2_xor2_1
+
+   Chip area for module '\riscv_top': 335108.718000
+     of which used for sequential elements: 122472.000000 (36.55%)
+
