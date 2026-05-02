@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025-2026 The TinyWhisper Team
+// SPDX-License-Identifier: Apache-2.0
+
 #ifndef MMIO_H_
 #define MMIO_H_
 

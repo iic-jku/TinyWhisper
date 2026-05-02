@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025-2026 The TinyWhisper Team
+// SPDX-License-Identifier: Apache-2.0
+
 #include "mmio.h"
 
 volatile char *const GPIO_OUT = (char *)0x0800000;

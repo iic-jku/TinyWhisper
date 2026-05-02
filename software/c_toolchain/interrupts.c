@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025-2026 The TinyWhisper Team
+// SPDX-License-Identifier: Apache-2.0
+
 #include "interrupts.h"
 #include "csr.h"
 #include "mmio.h"
