@@ -1,0 +1,70 @@
+[*]
+[*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
+[*] Tue Oct 28 15:40:47 2025
+[*]
+[dumpfile] "/foss/designs/TinyWhisper/verilog/tb/dsmod_tb.vcd"
+[dumpfile_mtime] "Tue Oct 28 15:40:38 2025"
+[dumpfile_size] 17392470
+[savefile] "/foss/designs/TinyWhisper/verilog/tb/dsmod_tb.gtkw"
+[timestart] 0
+[size] 2366 961
+[pos] -1 -1
+*-17.093111 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[markername] AA
+[markername] BB
+[markername] CC
+[markername] DD
+[markername] EE
+[markername] FF
+[markername] GG
+[markername] HH
+[markername] II
+[markername] JJ
+[markername] KK
+[markername] LL
+[markername] MM
+[markername] NN
+[markername] OO
+[markername] PP
+[markername] QQ
+[markername] RR
+[markername] SS
+[markername] TT
+[markername] UU
+[markername] VV
+[markername] WW
+[markername] XX
+[markername] YY
+[markername] ZZ
+[treeopen] dsmod_tb.
+[sst_width] 297
+[signals_width] 174
+[sst_expanded] 1
+[sst_vpaned_height] 275
+@200
+-PARAMETERs
+@420
+dsmod_tb.dut.NBIT
+@200
+-INPUTs
+@28
+dsmod_tb.dut.i_clk
+dsmod_tb.dut.i_rst_n
+dsmod_tb.dut.i_ena_mod
+dsmod_tb.dut.i_mode
+dsmod_tb.dut.i_osr[1:0]
+@24
+dsmod_tb.dut.i_data[9:0]
+@8024
+dsmod_tb.dut.i_data[9:0]
+@20000
+-
+-
+-
+@200
+-OUTPUTs
+@28
+dsmod_tb.dut.o_ds
+dsmod_tb.dut.o_ds_n
+[pattern_trace] 1
+[pattern_trace] 0

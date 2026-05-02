@@ -1,0 +1,82 @@
+magic
+tech sky130A
+magscale 1 2
+timestamp 1762641840
+<< viali >>
+rect -40 180 5 755
+rect 415 180 460 755
+rect -40 -500 5 -330
+rect 415 -500 460 -330
+<< metal1 >>
+rect -55 755 20 985
+rect 140 930 280 970
+rect 125 805 295 880
+rect -55 180 -40 755
+rect 5 180 20 755
+rect -55 165 20 180
+rect 90 -20 140 770
+rect 175 760 245 770
+rect 175 175 180 760
+rect 240 175 245 760
+rect 175 165 245 175
+rect 280 -20 330 770
+rect 400 755 475 985
+rect 400 180 415 755
+rect 460 180 475 755
+rect 400 165 475 180
+rect -70 -140 330 -20
+rect -55 -330 20 -315
+rect -55 -500 -40 -330
+rect 5 -500 20 -330
+rect -55 -660 20 -500
+rect 90 -515 140 -140
+rect 175 -325 245 -315
+rect 175 -505 180 -325
+rect 240 -505 245 -325
+rect 175 -515 245 -505
+rect 280 -515 330 -140
+rect 400 -330 475 -315
+rect 400 -500 415 -330
+rect 460 -500 475 -330
+rect 400 -660 475 -500
+rect 155 -710 265 -670
+<< via1 >>
+rect 180 175 240 760
+rect 180 -505 240 -325
+rect 135 -615 285 -560
+<< metal2 >>
+rect 175 760 245 770
+rect 175 175 180 760
+rect 240 175 245 760
+rect 175 -20 245 175
+rect 175 -140 490 -20
+rect 175 -325 245 -140
+rect 175 -505 180 -325
+rect 240 -505 245 -325
+rect 175 -515 245 -505
+rect 125 -560 295 -550
+rect 125 -615 135 -560
+rect 285 -615 295 -560
+rect 125 -625 295 -615
+use sky130_fd_pr__nfet_01v8_JS22WR  sky130_fd_pr__nfet_01v8_JS22WR_0
+timestamp 1762641840
+transform 1 0 210 0 1 -415
+box -265 -310 265 310
+use sky130_fd_pr__pfet_01v8_JBTYG7  sky130_fd_pr__pfet_01v8_JBTYG7_0
+timestamp 1762641840
+transform 1 0 210 0 1 466
+box -265 -520 265 520
+<< labels >>
+flabel metal1 210 -690 210 -690 0 FreeSans 400 0 0 0 VSS
+port 1 nsew
+flabel metal1 -60 -80 -60 -80 0 FreeSans 400 0 0 0 v_a
+port 3 nsew
+flabel metal2 480 -80 480 -80 0 FreeSans 400 0 0 0 v_b
+port 5 nsew
+flabel metal1 205 950 205 950 0 FreeSans 400 0 0 0 VDD
+port 7 nsew
+flabel metal1 210 845 210 845 0 FreeSans 240 0 0 0 di_tg_ctrl_n
+port 12 nsew
+flabel via1 210 -590 210 -590 0 FreeSans 240 0 0 0 di_tg_ctrl
+port 14 nsew
+<< end >>

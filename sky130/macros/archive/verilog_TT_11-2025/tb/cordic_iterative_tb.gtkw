@@ -1,0 +1,90 @@
+[*]
+[*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
+[*] Wed Oct 29 21:21:02 2025
+[*]
+[dumpfile] "/foss/designs/TinyWhisper/verilog/tb/cordic_iterative_tb.vcd"
+[dumpfile_mtime] "Wed Oct 29 21:15:37 2025"
+[dumpfile_size] 336033
+[savefile] "/foss/designs/TinyWhisper/verilog/tb/cordic_iterative_tb.gtkw"
+[timestart] 0
+[size] 2082 1046
+[pos] -1 -1
+*-11.364014 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[markername] AA
+[markername] BB
+[markername] CC
+[markername] DD
+[markername] EE
+[markername] FF
+[markername] GG
+[markername] HH
+[markername] II
+[markername] JJ
+[markername] KK
+[markername] LL
+[markername] MM
+[markername] NN
+[markername] OO
+[markername] PP
+[markername] QQ
+[markername] RR
+[markername] SS
+[markername] TT
+[markername] UU
+[markername] VV
+[markername] WW
+[markername] XX
+[markername] YY
+[markername] ZZ
+[sst_width] 297
+[signals_width] 239
+[sst_expanded] 1
+[sst_vpaned_height] 305
+@201
+-PARAMETERs
+@24
+cordic_iterative_tb.CORDIC_BW
+@28
+cordic_iterative_tb.f_c[9:0]
+@24
+cordic_iterative_tb.theta[9:0]
+@200
+-INPUTs
+@28
+cordic_iterative_tb.CLK
+cordic_iterative_tb.RESET_N
+cordic_iterative_tb.STRB_DATA_VALID_dummy
+cordic_iterative_tb.STRB_DATA_VALID_i
+@24
+cordic_iterative_tb.X_i[9:0]
+cordic_iterative_tb.Y_i[9:0]
+@200
+-OUTPUTs
+@420
+cordic_iterative_tb.X_o[9:0]
+@10420
+cordic_iterative_tb.cosine[9:0]
+@20000
+-
+-
+-
+-
+-
+-
+@420
+cordic_iterative_tb.Y_o[9:0]
+@10420
+cordic_iterative_tb.sine[9:0]
+@20000
+-
+-
+-
+-
+-
+-
+@24
+cordic_iterative_tb.Z_o[9:0]
+@28
+cordic_iterative_tb.STRB_DATA_VALID_o
+[pattern_trace] 1
+[pattern_trace] 0
