@@ -2,10 +2,10 @@
 [*] GTKWave Analyzer v4.0.0-prealpha (1dbe6d0) (w)1999-2022 BSI
 [*] Sat May  2 14:24:43 2026
 [*]
-[dumpfile] "/foss/designs/TinyWhisper-archive/ihp130/testbenches/cocotb/sim_build/tinywhisper_top.fst"
+[dumpfile] "/foss/designs/TinyWhisper/ihp130/testbenches/cocotb/sim_build/tinywhisper_top.fst"
 [dumpfile_mtime] "Sat May  2 14:12:32 2026"
 [dumpfile_size] 569093158
-[savefile] "/foss/designs/TinyWhisper-archive/ihp130/testbenches/cocotb/tinywhisper_top_tb.gtkw"
+[savefile] "/foss/designs/TinyWhisper/ihp130/testbenches/cocotb/tinywhisper_top_tb.gtkw"
 [timestart] 0
 [size] 1920 1029
 [pos] -911 -420

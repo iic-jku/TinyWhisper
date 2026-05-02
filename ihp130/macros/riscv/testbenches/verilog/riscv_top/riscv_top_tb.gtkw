@@ -2,10 +2,10 @@
 [*] GTKWave Analyzer v4.0.0-prealpha (7d7b4db) (w)1999-2022 BSI
 [*] Sat May  2 11:59:04 2026
 [*]
-[dumpfile] "/foss/designs/TinyWhisper-archive/ihp130/macros/riscv/testbenches/verilog/riscv_top/riscv_top_tb.vcd"
+[dumpfile] "/foss/designs/TinyWhisper/ihp130/macros/riscv/testbenches/verilog/riscv_top/riscv_top_tb.vcd"
 [dumpfile_mtime] "Sat May  2 11:41:39 2026"
 [dumpfile_size] 2026097208
-[savefile] "/foss/designs/TinyWhisper-archive/ihp130/macros/riscv/testbenches/verilog/riscv_top/riscv_top_tb.gtkw"
+[savefile] "/foss/designs/TinyWhisper/ihp130/macros/riscv/testbenches/verilog/riscv_top/riscv_top_tb.gtkw"
 [timestart] 0
 [size] 1427 600
 [pos] -1 -1

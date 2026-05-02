@@ -2,10 +2,10 @@
 [*] GTKWave Analyzer v4.0.0-prealpha (1dbe6d0) (w)1999-2022 BSI
 [*] Sat May  2 13:10:19 2026
 [*]
-[dumpfile] "/foss/designs/TinyWhisper-archive/ihp130/macros/riscv/testbenches/cocotb/riscv_top/sim_build/riscv_top.fst"
+[dumpfile] "/foss/designs/TinyWhisper/ihp130/macros/riscv/testbenches/cocotb/riscv_top/sim_build/riscv_top.fst"
 [dumpfile_mtime] "Sat May  2 12:50:57 2026"
 [dumpfile_size] 40466420
-[savefile] "/foss/designs/TinyWhisper-archive/ihp130/macros/riscv/testbenches/cocotb/riscv_top/sim_build/riscv_top_tb.gtkw"
+[savefile] "/foss/designs/TinyWhisper/ihp130/macros/riscv/testbenches/cocotb/riscv_top/sim_build/riscv_top_tb.gtkw"
 [timestart] 0
 [size] 1920 1029
 [pos] -1 -420
