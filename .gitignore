@@ -38,6 +38,7 @@ lvs_run_*
 /sky130/testbenches/simulations
 /ihp130/flow/final
 /ihp130/flow/artistic
+/ihp130/doc/AMS
 /ihp130/doc/klayout/pex.zip
 /ihp130/doc/klayout/ue_dcic_part2_v12.pdf
 /ihp130/doc/GHDL
