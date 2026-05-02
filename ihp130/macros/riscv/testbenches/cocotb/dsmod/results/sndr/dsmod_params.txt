@@ -1,0 +1,7 @@
+clk_freq=56000000.0
+osr=256
+sine_freq=8171.08154296875
+n_samples=4096
+amplitude=0.5
+nbit=30
+order=2

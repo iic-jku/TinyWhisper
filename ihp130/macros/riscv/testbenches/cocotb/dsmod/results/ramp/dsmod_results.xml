@@ -1,0 +1,6 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1777206442" />
+    <testcase name="dsmod_ramp_test" classname="dsmod_ramp_cocotb" file="/foss/designs/TinyWhisper-archive/ihp130/macros/riscv/testbenches/cocotb/dsmod/dsmod_ramp_cocotb.py" lineno="54" time="5.334533929824829" sim_time_ns="1109998.0" ratio_time="208077.7842266811" />
+  </testsuite>
+</testsuites>

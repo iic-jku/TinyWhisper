@@ -1,0 +1,6 @@
+osr=256
+order=2
+nbit=30
+n_samples=254
+n_per_leg=64
+clk_freq=56000000.0

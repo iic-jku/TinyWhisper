@@ -1,0 +1,9 @@
+{
+    "technology": "",
+    "statements": [
+        {
+            "lib_name": "iqmod_mfb_lpf_ota_core_hybrid_bm_half",
+            "lib_path": "iqmod_mfb_lpf_ota_core_hybrid_bm_half.klay.gds"
+        }
+    ]
+}
