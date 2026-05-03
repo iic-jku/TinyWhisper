@@ -6,7 +6,7 @@
 
 **Computer Engineering, Julius-Maximilians-Universität, Würzburg, Germany
 
-The full documentation of the TinyWhisper transmitter is available [here](https://iic-jku.github.io/TinyWhisper/index.html).
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20004085.svg)](https://doi.org/10.5281/zenodo.20004085)
 
 > [!WARNING]
 > This repository is a Work in Progress.
@@ -29,6 +29,11 @@ The full documentation of the TinyWhisper transmitter is available [here](https:
   <br>
   <em>Render of the TopMetal2 TinyWhisper logo, generated with the tool ArtistIC.</em>
 </p>
+
+
+## Documentation
+
+The full documentation of the TinyWhisper transmitter is available [here](https://iic-jku.github.io/TinyWhisper/index.html).
 
 
 ## Purpose
@@ -209,7 +214,7 @@ The ToDo list can be found in [ToDo.md](https://github.com/iic-jku/TinyWhisper/t
     year = {2026},
 	title = {{GitHub Repository for TinyWhisper: An Open-Source Fully-Integrated Multi-Mode Short-Wave Transmitter for Amateur Radio Applications in 130-nm CMOS}},
 	url = {https://github.com/iic-jku/TinyWhisper},
-	doi = {10.5281/zenodo.19666960}
+	doi = {10.5281/zenodo.20004085}
 }
 ```
 
