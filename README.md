@@ -154,6 +154,9 @@ The ToDo list can be found in [ToDo.md](https://github.com/iic-jku/TinyWhisper/t
 
 ```text
 📁 TinyWhisper-archive/
+├─ 📁 .github/
+│  └─ 📁 workflows/
+│     └─ quarto-publish.yml
 ├─ 📁 doc/
 │  ├─ 📁 fig/
 │  ├─ index.qmd
