@@ -23,9 +23,6 @@ lvs_run_*
 /doc/fig/fec.fdb_latexmk
 /doc/fig/DSMOD Fig. 1.13.jpeg
 /doc/fig/DSMOD Fig 1.4.jpeg
-/doc/_site/index.html
-/doc/_site/search.json
-/doc/_site/fig/fec.svg
 /packaging/ASIC_Prototype_Packaging_Design_Rules_2024.pdf
 /packaging/klayout_printout.pdf
 /packaging/MLP7X7-48-OP-02-R2-ECN-10501.pdf
