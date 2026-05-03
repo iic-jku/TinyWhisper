@@ -13,6 +13,8 @@ lvs_run_*
 *.ext
 .DS_Store
 /archive
+/doc/.quarto/
+/doc/_site/
 /doc/fig/fec.pdf
 /doc/fig/fec.log
 /doc/fig/fec.fls

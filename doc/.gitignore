@@ -1,7 +1,0 @@
-# Quarto
-**/*.quarto_ipynb
-**/*_files
-/.quarto/
-_freeze
-_runs
-_site
