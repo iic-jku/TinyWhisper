@@ -21,6 +21,9 @@ format:
     number-sections: true
     toc: true
     toc-expand: 3
+  pdf:
+    number-sections: true
+    toc: true
 ---
 
 ::: {.callout-warning}
