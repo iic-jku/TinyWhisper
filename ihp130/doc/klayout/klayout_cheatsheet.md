@@ -208,13 +208,8 @@ Common SG13_dev PCells:
 
 ---
 
-## PEX (Parasitic Extraction)
+## Makefiles
 
-- Run after layout is DRC-clean and LVS-clean.
-- Typical flow:
-    1. Open terminal and go to pex directory: `cd pex`
-    2. Run extraction: `sh ihp-pex.sh <cell-name>`
-    3. Script runs `kpex` (magic engine) with `<cell-name>.gds` and LVS netlist
-    4. Result is copied to `pex/<cell-name>_pex.spice`
+- Every macro folder contains Makefile targets for common verification and extraction flows, including LVS, DRC, and PEX with KLayout or Magic & Netgen.
 
 ---
