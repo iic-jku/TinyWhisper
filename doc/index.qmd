@@ -1,5 +1,5 @@
 ---
-title: TinyWhisper
+title: "TinyWhisper: An Open-Source Fully-Integrated Multi-Mode Short-Wave Transmitter for Amateur Radio Applications in 130-nm CMOS"
 author:
   - name: Simon Dorrer (OE3SDE)
     orcid: 0009-0001-5994-5477
