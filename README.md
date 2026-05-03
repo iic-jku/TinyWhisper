@@ -2,7 +2,7 @@
 
 (c) 2025-2026 Simon Dorrer (OE3SDE), Jonathan Hager (DK7JH), Matthias Jung (DL9MJ) and Harald Pretl
 
-The full documentation of the TinyWhisper transmitter is available [here](doc/_site/index.html).
+The full documentation of the TinyWhisper transmitter is available [here](https://iic-jku.github.io/TinyWhisper/index.html).
 
 > [!WARNING]
 > This repository is a Work in Progress.
