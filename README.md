@@ -1,12 +1,13 @@
 # TinyWhisper: An Open-Source Fully-Integrated Multi-Mode Short-Wave Transmitter for Amateur Radio Applications in 130-nm CMOS
 
+[![Quarto Publish](https://github.com/iic-jku/TinyWhisper/actions/workflows/quarto-publish.yml/badge.svg?branch=main)](https://github.com/iic-jku/TinyWhisper/actions/workflows/quarto-publish.yml)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20004085.svg)](https://doi.org/10.5281/zenodo.20004085)
+
 (c) 2025-2026 Simon Dorrer* (OE3SDE), Jonathan Hager** (DK7JH), Matthias Jung** (DL9MJ) and Harald Pretl*
 
 *Institute for Integrated Circuits and Quantum Computing, Johannes Kepler University (JKU), Linz, Austria
 
 **Computer Engineering, Julius-Maximilians-Universität, Würzburg, Germany
-
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20004085.svg)](https://doi.org/10.5281/zenodo.20004085)
 
 > [!WARNING]
 > This repository is a Work in Progress.
@@ -153,12 +154,20 @@ The ToDo list can be found in [ToDo.md](https://github.com/iic-jku/TinyWhisper/t
 ## Directory Structure
 
 ```text
-📁 TinyWhisper-archive/
+📁 TinyWhisper/
 ├─ 📁 .github/
 │  └─ 📁 workflows/
 │     └─ quarto-publish.yml
 ├─ 📁 doc/
 │  ├─ 📁 fig/
+│  │  ├─ 📁 funding/
+│  │  │  ├─ iic-jku.svg
+│  │  │  └─ silicon-austria-labs-logo.svg
+│  │  ├─ Makefile
+│  │  ├─ tinywhisper_blockdiagramm.png
+│  │  ├─ tinywhisper_top_black.png
+│  │  └─ tinywhisper_top_white.png
+│  ├─ _quarto.yml
 │  ├─ index.qmd
 │  └─ Makefile
 ├─ 📁 enclosure/
@@ -166,17 +175,75 @@ The ToDo list can be found in [ToDo.md](https://github.com/iic-jku/TinyWhisper/t
 ├─ 📁 ihp130/
 │  ├─ 📁 doc/
 │  ├─ 📁 flow/
+│  │  ├─ 📁 artistic/
+│  │  ├─ 📁 final/
+│  │  ├─ 📁 librelane/
+│  │  ├─ 📁 logo/
+│  │  └─ 📁 reports/
 │  ├─ 📁 ip/
+│  │  ├─ 📁 sg13g2_io_custom/
+│  │  ├─ 📁 sg13g2_ip__bondpad_70x70/
+│  │  ├─ 📁 sg13g2_ip__ce/
+│  │  ├─ 📁 sg13g2_ip__ce_names/
+│  │  ├─ 📁 sg13g2_ip__jku/
+│  │  └─ 📁 sg13g2_ip__jku_names/
 │  ├─ 📁 layout/
+│  │  ├─ tinywhisper_top.gds.gz
+│  │  └─ tinywhisper_top_logo_fill.gds.gz
 │  ├─ 📁 macros/
+│  │  ├─ 📁 coupled_resonator_lc_bpf/
+│  │  ├─ 📁 iqmod/
+│  │  └─ 📁 riscv/
 │  ├─ 📁 netlist/
+│  │  ├─ 📁 layout/
+│  │  ├─ 📁 nl/
+│  │  ├─ 📁 pex/
+│  │  ├─ 📁 pnl/
+│  │  └─ 📁 spice/
 │  ├─ 📁 release/
+│  │  ├─ 📁 v.1.0.0/
+│  │  │  ├─ 📁 doc/
+│  │  │  │  └─ README.md
+│  │  │  ├─ 📁 gds/
+│  │  │  │  └─ SoC4219.gds.gz
+│  │  │  └─ 📁 img/
+│  │  │     ├─ tinywhisper_top_black.png
+│  │  │     └─ tinywhisper_top_white.png
+│  │  └─ 📁 v.2.0.0/
+│  │     ├─ 📁 gds/
+│  │     │  └─ tinywhisper_top_logo_fill.gds.gz
+│  │     └─ 📁 netlist/
+│  │        ├─ 📁 layout/
+│  │        ├─ 📁 pnl/
+│  │        └─ 📁 spice/
 │  ├─ 📁 render/
+│  │  ├─ 📁 blender/
+│  │  └─ 📁 img/
+│  │     ├─ tinywhisper_top_black.png
+│  │     ├─ tinywhisper_top_librelane.png
+│  │     └─ tinywhisper_top_white.png
 │  ├─ 📁 rtl/
+│  │  ├─ tinywhisper_core.sv
+│  │  └─ tinywhisper_top.sv
 │  ├─ 📁 schematic/
+│  │  ├─ tinywhisper.sch
+│  │  ├─ tinywhisper.sym
+│  │  ├─ tinywhisper_top.sch
+│  │  ├─ tinywhisper_top.sym
+│  │  ├─ tinywhisper_top_pex.sym
+│  │  └─ xschemrc
 │  ├─ 📁 scripts/
+│  │  ├─ 📁 plot_simulations/
+│  │  ├─ add_logo_fill.sh
+│  │  ├─ add_rectangle.py
+│  │  ├─ gds_xor.py
+│  │  └─ lay2img.py
 │  ├─ 📁 testbenches/
+│  │  ├─ 📁 cocotb/
+│  │  └─ 📁 xschem/
 │  ├─ 📁 verification/
+│  │  ├─ 📁 drc/
+│  │  └─ 📁 lvs/
 │  ├─ Makefile
 │  └─ README.md
 ├─ 📁 measurements/
@@ -190,6 +257,9 @@ The ToDo list can be found in [ToDo.md](https://github.com/iic-jku/TinyWhisper/t
 │  └─ README.md
 ├─ 📁 sky130/
 │  └─ 📁 macros/
+│     ├─ 📁 archive/
+│     ├─ 📁 iqmod/
+│     └─ 📁 riscv/
 ├─ 📁 software/
 │  ├─ 📁 c_toolchain/
 │  ├─ generate_tests.py
