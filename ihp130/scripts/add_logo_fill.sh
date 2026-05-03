@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2025-2026 The TinyWhisper Team
+# SPDX-License-Identifier: Apache-2.0
+
 #!/bin/bash
 #
 # Chip top finishing script: Logo addition and fill pattern generation
