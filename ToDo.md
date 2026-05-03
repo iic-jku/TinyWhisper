@@ -48,7 +48,7 @@
 - [ ] fix ntap in CACE (should be fixed after removing nwell / psub and ptap / ntap)
 - [ ] iqmod PEX is currently not working --> seg fault (EXT_MODE = 3), wrong pins (EXT_MODE = 1/2)
 - [ ] update testbenches with https://github.com/StefanSchippers/xschem/issues/463
-- [ ] find a better way of linking xschemrc files
+- [ ] find a better way of linking `xschemrc` files and `.designinit`
 - [ ] change DBU to 1nm for all cells
 - [ ] clean up top-level LVS (Magic + Netgen)
 - [ ] Custom LibreLane steps
