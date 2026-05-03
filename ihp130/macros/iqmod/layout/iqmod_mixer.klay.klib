@@ -1,9 +1,0 @@
-{
-    "technology": "",
-    "statements": [
-        {
-            "lib_name": "iqmod_mixer_half",
-            "lib_path": "iqmod_mixer_half.klay.gds"
-        }
-    ]
-}

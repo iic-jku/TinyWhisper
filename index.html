@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Simon Dorrer (OE3SDE)">
+<meta name="author" content="Jonathan Hager (DK7JH)">
+<meta name="author" content="Matthias Jung (DL9MJ)">
+<meta name="author" content="Harald Pretl">
+<meta name="dcterms.date" content="2026-05-03">
+
+<title>TinyWhisper: An Open-Source Fully-Integrated Multi-Mode Short-Wave Transmitter for Amateur Radio Applications in 130-nm CMOS – TinyWhisper</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./fig/favicon.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-91544e611bd0e83221240cde35fa504f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-8fe479874ca0985b39699dca03e940ea.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-91544e611bd0e83221240cde35fa504f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">TinyWhisper</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./index.html" aria-current="page"> <i class="bi bi-house" role="img">
+</i> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./TinyWhisper.pdf"> <i class="bi bi-filetype-pdf" role="img">
+</i> 
+<span class="menu-text">PDF</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/iic-jku/TinyWhisper" target="_blank"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="3">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">1</span> Overview</a>
+  <ul class="collapse">
+  <li><a href="#purpose" id="toc-purpose" class="nav-link" data-scroll-target="#purpose"><span class="header-section-number">1.1</span> Purpose</a></li>
+  <li><a href="#weak-signal-propagation-reporter" id="toc-weak-signal-propagation-reporter" class="nav-link" data-scroll-target="#weak-signal-propagation-reporter"><span class="header-section-number">1.2</span> Weak Signal Propagation Reporter</a></li>
+  <li><a href="#digital-core" id="toc-digital-core" class="nav-link" data-scroll-target="#digital-core"><span class="header-section-number">1.3</span> Digital Core</a></li>
+  <li><a href="#analog-front-end" id="toc-analog-front-end" class="nav-link" data-scroll-target="#analog-front-end"><span class="header-section-number">1.4</span> Analog Front-End</a></li>
+  <li><a href="#tapeout" id="toc-tapeout" class="nav-link" data-scroll-target="#tapeout"><span class="header-section-number">1.5</span> Tapeout</a></li>
+  <li><a href="#outlook" id="toc-outlook" class="nav-link" data-scroll-target="#outlook"><span class="header-section-number">1.6</span> Outlook</a></li>
+  </ul></li>
+  <li><a href="#system-description" id="toc-system-description" class="nav-link" data-scroll-target="#system-description"><span class="header-section-number">2</span> System Description</a>
+  <ul class="collapse">
+  <li><a href="#modem" id="toc-modem" class="nav-link" data-scroll-target="#modem"><span class="header-section-number">2.1</span> MODEM</a></li>
+  <li><a href="#sec-sys-rf-freq" id="toc-sec-sys-rf-freq" class="nav-link" data-scroll-target="#sec-sys-rf-freq"><span class="header-section-number">2.2</span> PHY</a></li>
+  </ul></li>
+  <li><a href="#implementation" id="toc-implementation" class="nav-link" data-scroll-target="#implementation"><span class="header-section-number">3</span> Implementation</a>
+  <ul class="collapse">
+  <li><a href="#concept" id="toc-concept" class="nav-link" data-scroll-target="#concept"><span class="header-section-number">3.1</span> Concept</a></li>
+  <li><a href="#mixed-signal-transmitter" id="toc-mixed-signal-transmitter" class="nav-link" data-scroll-target="#mixed-signal-transmitter"><span class="header-section-number">3.2</span> Mixed-Signal Transmitter</a></li>
+  <li><a href="#modem-1" id="toc-modem-1" class="nav-link" data-scroll-target="#modem-1"><span class="header-section-number">3.3</span> Modem</a></li>
+  <li><a href="#host-interface" id="toc-host-interface" class="nav-link" data-scroll-target="#host-interface"><span class="header-section-number">3.4</span> Host Interface</a></li>
+  </ul></li>
+  <li><a href="#packaging" id="toc-packaging" class="nav-link" data-scroll-target="#packaging"><span class="header-section-number">4</span> Packaging</a></li>
+  <li><a href="#pcb-design" id="toc-pcb-design" class="nav-link" data-scroll-target="#pcb-design"><span class="header-section-number">5</span> PCB Design</a></li>
+  <li><a href="#measurements" id="toc-measurements" class="nav-link" data-scroll-target="#measurements"><span class="header-section-number">6</span> Measurements</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="{{< meta var.url-repo >}}/edit/main/index.qmd" class="toc-action"><i class="bi bi-git"></i>Edit this page</a></li><li><a href="{{< meta var.url-repo >}}/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">TinyWhisper: An Open-Source Fully-Integrated Multi-Mode Short-Wave Transmitter for Amateur Radio Applications in 130-nm CMOS</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Authors</div>
+    <div class="quarto-title-meta-contents">
+             <p>Simon Dorrer (OE3SDE) <a href="https://orcid.org/0009-0001-5994-5477" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+             <p>Jonathan Hager (DK7JH) <a href="https://orcid.org/0009-0006-7950-6312" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+             <p>Matthias Jung (DL9MJ) <a href="https://orcid.org/0000-0003-0036-2143" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+             <p>Harald Pretl <a href="mailto:harald.pretl@jku.at" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> <a href="https://orcid.org/0000-0003-1519-076X" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 3, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This documentation is a Work in Progress.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This repository requires the <a href="https://github.com/iic-jku/IIC-OSIC-TOOLS">IIC-OSIC-TOOLS</a> container with tag <code>2026.04</code> or later.</p>
+</div>
+</div>
+<section id="overview" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="overview"><span class="header-section-number">1</span> Overview</h2>
+<p>TinyWhisper is a compact WSPR transmitter realized with the ihp-sg13g2 PDK. The 2 mm x 2 mm chip operates at a core supply voltage of 1.5 V and an I/O supply voltage of 3.3 V. The chip is <a href="https://github.com/iic-jku/TinyWhisper/tree/main/packaging">packaged</a> in a QFN-48 package with a total of 56 pins, eight of which are VSS pins connected directly to the package VSS. All documentation, presentations, design files, and future updates are publicly available <a href="https://github.com/iic-jku/TinyWhisper/tree/main/presentations">here</a>. The block diagram is shown below. A render of the final chip layout is shown below, with the digital part placed on the left side of the chip and the analog part on the right. A custom logo on the topmost metal layer, generated with the tool <a href="https://arxiv.org/abs/2502.02626">ArtistIC</a>, is also shown below.</p>
+<p align="center">
+<a href="fig/tinywhisper_blockdiagramm.png"> <img src="fig/tinywhisper_blockdiagramm.png" alt="Block diagram of the TinyWhisper ASIC and external RF circuitry" width="90%"> </a> <br> <em>Block diagram of the TinyWhisper ASIC and external RF circuitry.</em>
+</p>
+<section id="purpose" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="purpose"><span class="header-section-number">1.1</span> Purpose</h3>
+<p>TinyWhisper demonstrates what is possible with current open-source tools and open-source PDKs, from system design to final tapeout, from packaging to PCB design, and even to a 3D-printable enclosure. It can also be used for:</p>
+<ul>
+<li>Ham radio courses</li>
+<li>University courses</li>
+<li>Regression tests of open-source EDA tools</li>
+</ul>
+</section>
+<section id="weak-signal-propagation-reporter" class="level3" data-number="1.2">
+<h3 data-number="1.2" class="anchored" data-anchor-id="weak-signal-propagation-reporter"><span class="header-section-number">1.2</span> Weak Signal Propagation Reporter</h3>
+<p>WSPR is a popular digital transmission scheme in amateur radio, specifically designed to study propagation conditions at low transmit power. WSPR transmits a short message containing the callsign, location, and transmit power using 4-FSK modulation (tone spacing 1.46 Hz, symbol duration 0.683 s). Thanks to strong forward error correction (rate 1/2), long ranges can be achieved even at very low transmit power levels (down to 10 mW). Receivers can decode WSPR signals down to -31 dB below the noise floor of a 2500 Hz channel. Received signals are reported to a central <a href="https://www.wsprnet.org/drupal/wsprnet/map">database</a> via the internet, enabling global analysis of signal propagation.</p>
+</section>
+<section id="digital-core" class="level3" data-number="1.3">
+<h3 data-number="1.3" class="anchored" data-anchor-id="digital-core"><span class="header-section-number">1.3</span> Digital Core</h3>
+<p>The heart of the digital core is a simple multi-cycle embedded processor based on a 32-bit RISC-V architecture running at a clock rate of 56 MHz. By using the RISC-V architecture, the CPU is directly compatible with common compilers, and programs can, for example, be written in C. The program is stored in an external SPI SRAM, from which the CPU fetches its instructions. For communication with peripherals, the chip features I2C and UART interfaces as well as digital GPIO pins that can be freely controlled.</p>
+<p>An integrated 30-bit CORDIC algorithm generates the 4-FSK-modulated I/Q baseband signals according to the WSPR protocol. The phase increment of the CORDIC can be configured via software, allowing any frequency to be generated with a resolution of approximately 0.05 Hz. This also enables compensation for frequency errors of the external crystal oscillator. Using a second-order Delta-Sigma (DS) modulator with selectable oversampling (32, 64, 128, or 256), the parallel 30-bit data from the CORDIC is converted into a 1-bit signal that is passed directly to the analog front-end. Additionally, the digital core generates the LO frequencies listed in the table below by dividing the 56 MHz clock by two, covering the most common shortwave bands: 28 MHz, 14 MHz, 7 MHz, and 3.5 MHz.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Band</th>
+<th>RF Frequency</th>
+<th>LO Frequency</th>
+<th>IF (CORDIC)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>80m</td>
+<td>3.592600 MHz</td>
+<td>3.5 MHz</td>
+<td>92.600 kHz</td>
+</tr>
+<tr class="even">
+<td>40m</td>
+<td>7.038600 MHz</td>
+<td>7 MHz</td>
+<td>38.600 kHz</td>
+</tr>
+<tr class="odd">
+<td>20m</td>
+<td>14.095600 MHz</td>
+<td>14 MHz</td>
+<td>95.600 kHz</td>
+</tr>
+<tr class="even">
+<td>10m</td>
+<td>28.124600 MHz</td>
+<td>28 MHz</td>
+<td>124.600 kHz</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="analog-front-end" class="level3" data-number="1.4">
+<h3 data-number="1.4" class="anchored" data-anchor-id="analog-front-end"><span class="header-section-number">1.4</span> Analog Front-End</h3>
+<p>The analog front-end is an IQ modulator consisting of two third-order multiple-feedback (MFB) low-pass filters with a cutoff frequency of 400 kHz and a Butterworth characteristic. The amplifier core of the MFB filter is based on a Barthelemy / Manfredini (B/M) inverter-based OTA. Two passive voltage-mode mixers are driven by a 25% duty-cycle local oscillator and produce a single-ended RF output signal.</p>
+<p>Integrated SPDT switches allow switching between the internal CORDIC/DSM signals and external analog inputs, enabling tests with an external function generator, among other uses.</p>
+<p>Since the analog front-end is an IQ modulator, it supports not only WSPR but also other modulation schemes such as FT8, SSB, and CW. Hence, the title “TinyWhisper: An Open-Source Fully-Integrated Multi-Mode Short-Wave Transmitter for Amateur Radio Applications in 130-nm CMOS”.</p>
+</section>
+<section id="tapeout" class="level3" data-number="1.5">
+<h3 data-number="1.5" class="anchored" data-anchor-id="tapeout"><span class="header-section-number">1.5</span> Tapeout</h3>
+<p align="center">
+<a href="fig/tinywhisper_top_black.png"> <img src="fig/tinywhisper_top_black.png" alt="Chip render of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm)" width="70%"> </a> <br> <em>Chip render of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm).</em>
+</p>
+<p align="center">
+<a href="fig/tinywhisper_top_black_TM2.png"> <img src="fig/tinywhisper_top_black_TM2.png" alt="Chip render of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm)" width="70%"> </a> <br> <em>Render of the TopMetal2 TinyWhisper logo, generated with the tool ArtistIC.</em>
+</p>
+</section>
+<section id="outlook" class="level3" data-number="1.6">
+<h3 data-number="1.6" class="anchored" data-anchor-id="outlook"><span class="header-section-number">1.6</span> Outlook</h3>
+<p>The chip is still in production and is expected to be delivered in December 2026. The ASIC is just the beginning of a broader open-hardware project. The next step is to design a <a href="https://github.com/iic-jku/TinyWhisper/tree/main/pcb">PCB</a> that includes all necessary external components: switchable bandpass filters for each RF band, an RF amplifier, a crystal oscillator as the clock source, external SRAM, voltage regulators for the various supply voltages, a display, controls, an SMA connector for the antenna, and a USB interface for configuration. The packaged chip will be soldered onto this board and then <a href="https://github.com/iic-jku/TinyWhisper/tree/main/measurements">characterized</a>.</p>
+<p>Building on this PCB, a compact, 3D-printable <a href="https://github.com/iic-jku/TinyWhisper/tree/main/enclosure">enclosure</a> is planned that accommodates the board together with a small battery and is robust enough for outdoor use during field tests and SOTA activations.</p>
+</section>
+</section>
+<section id="system-description" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="system-description"><span class="header-section-number">2</span> System Description</h2>
+<p>This TinyTapeout chip implements a transmitter for the long-range wireless protocol <strong>WSPR</strong> (weak signal propagation reporter) in the shortwave frequency range (3 MHz to 30 MHz). Transmissions last <span class="math inline">\(162 \cdot 8192 / 12000 = 110.6\,\text{s}\)</span> and start at even UTC minutes.</p>
+<section id="modem" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="modem"><span class="header-section-number">2.1</span> MODEM</h3>
+<p>The modulation layer, which packs information into the transmit data packet, works as follows<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
+<ul>
+<li>A 50-bit payload is encoded with a convolutional code with <span class="math inline">\(K=32\)</span> and <span class="math inline">\(r=1/2\)</span>
+<ul>
+<li>Call sign of 6 characters (A-Z, 0-9, SPACE)
+<ul>
+<li>Shorter call signs are padded with SPACE to result in 6 characters</li>
+<li>The 3rd character has to be a number, so insert SPACE in front if needed</li>
+</ul></li>
+<li>Locator coded with 4 characters (A-Z, 0-9) <span class="math inline">\(L_1, L_2, L_3, L_4\)</span>
+<ul>
+<li>The first pair of characters takes values from A-R and is encoded using the integers 0-17</li>
+<li>The second pair of characters are taken from 0-9 and are encoded as that respective number</li>
+<li>Finally, the locator is encoded as the integer <span class="math inline">\(M_1 = (179 - 10 \cdot L_1 - L_3) \cdot 180 + 10 \cdot L_2 + L_4\)</span></li>
+</ul></li>
+<li>Transmit power level in dBm (0 to 60)</li>
+</ul></li>
+<li>Number of symbols <span class="math inline">\(N_\mathrm{sym} = (50 + K - 1) \cdot r^{-1} = 162\)</span></li>
+<li>The baud rate is <span class="math inline">\(12000 / 8192 = 1.4648\,\text{baud}\)</span></li>
+<li>Synchronization is achieved with a 162-bit constant pseudo-random vector</li>
+<li>Interleaving is used</li>
+</ul>
+<section id="coding-of-callsign" class="level4" data-number="2.1.1">
+<h4 data-number="2.1.1" class="anchored" data-anchor-id="coding-of-callsign"><span class="header-section-number">2.1.1</span> Coding of Callsign</h4>
+<p>Starting with a 6-character call sign of [A-Z], [0-9], [SPACE], represented as <span class="math inline">\(C_1, C_2, C_3, C_4, C_5, C_6\)</span>.</p>
+<ul>
+<li>Shorter call signs are padded with SPACE to result in 6 characters.</li>
+<li>The 3rd character (<span class="math inline">\(C_3\)</span>) has to be a number, so insert SPACE in front if needed.</li>
+<li>The mapping is:
+<ul>
+<li>[0]-[9] = 0-9</li>
+<li>[A]-[Z] = 10-35</li>
+<li>[SPACE] = 36</li>
+</ul></li>
+</ul>
+<p>The calculation of the integer <span class="math inline">\(N\)</span> representing the call sign is:</p>
+<p><span class="math display">\[
+N_1 = C_1
+\]</span> <span class="math display">\[
+N_2 = 36 \cdot N_1 + C_2
+\]</span> <span class="math display">\[
+N_3 = 10 \cdot N_2 + C_3
+\]</span> <span class="math display">\[
+N_4 = 27 \cdot N_3 + C_4 - 10
+\]</span> <span class="math display">\[
+N_5 = 27 \cdot N_4 + C_5 - 10
+\]</span> <span class="math display">\[
+N = 27 \cdot N_5 + C_6 - 10
+\]</span></p>
+<p>The resulting <span class="math inline">\(N\)</span> is represented as a 28-bit integer used for transmission<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+</section>
+<section id="coding-of-locator" class="level4" data-number="2.1.2">
+<h4 data-number="2.1.2" class="anchored" data-anchor-id="coding-of-locator"><span class="header-section-number">2.1.2</span> Coding of Locator</h4>
+<p>Location is given as a 4-letter string of [A-Z] and [0-9], represented as <span class="math inline">\(L_1, L_2, L_3, L_4\)</span>. The mapping of the locator:</p>
+<ul>
+<li>The first two characters can be [A]-[R] so are coded as 0-17.</li>
+<li>The second two characters are [0]-[9] coded as 0-9.</li>
+</ul>
+<p>The integer <span class="math inline">\(M_1\)</span> is calculated as:</p>
+<p><span class="math display">\[
+M_1 = ( 179 - 10 \cdot L_1 - L_3) \cdot 180 + 10 \cdot L_2 + L_4
+\]</span></p>
+<p>This integer <span class="math inline">\(M_1\)</span> fits into a 15-bit representation<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
+</section>
+<section id="coding-of-power-level" class="level4" data-number="2.1.3">
+<h4 data-number="2.1.3" class="anchored" data-anchor-id="coding-of-power-level"><span class="header-section-number">2.1.3</span> Coding of Power Level</h4>
+<p>The transmit power level <span class="math inline">\(P\)</span> is coded in dBm with a range of 0 to 60. The final value of <span class="math inline">\(M\)</span> is coded as:</p>
+<p><span class="math display">\[
+M = 128 \cdot M_1 + P + 64
+\]</span></p>
+<p><span class="math inline">\(M\)</span> is represented as a 22-bit integer<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
+</section>
+<section id="formation-of-data-packet" class="level4" data-number="2.1.4">
+<h4 data-number="2.1.4" class="anchored" data-anchor-id="formation-of-data-packet"><span class="header-section-number">2.1.4</span> Formation of Data Packet</h4>
+<p>The final 50-bit payload is formed by packing <span class="math inline">\(N\)</span> (28 bit) and <span class="math inline">\(M\)</span> (22 bit) into a 50-bit array. These 50 bits are packed into a 7-byte array D[0] to D[6] (D[0] contains the MSB of the callsign; the LSBs of D[6] are set to zero).</p>
+</section>
+<section id="convolutional-encoding" class="level4" data-number="2.1.5">
+<h4 data-number="2.1.5" class="anchored" data-anchor-id="convolutional-encoding"><span class="header-section-number">2.1.5</span> Convolutional Encoding</h4>
+<div id="fig-fec" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-fec-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fig/fec.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: Convolutional Encoder"><img src="fig/fec.svg" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fec-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Convolutional Encoder
+</figcaption>
+</figure>
+</div>
+<p>TBD (see http://www.g4jnt.com/Coding/WSPR_Coding_Process.pdf)</p>
+</section>
+<section id="interleaving" class="level4" data-number="2.1.6">
+<h4 data-number="2.1.6" class="anchored" data-anchor-id="interleaving"><span class="header-section-number">2.1.6</span> Interleaving</h4>
+<p>TBD (see http://www.g4jnt.com/Coding/WSPR_Coding_Process.pdf)</p>
+</section>
+<section id="sync-vector-and-symbol-formation" class="level4" data-number="2.1.7">
+<h4 data-number="2.1.7" class="anchored" data-anchor-id="sync-vector-and-symbol-formation"><span class="header-section-number">2.1.7</span> Sync Vector and Symbol Formation</h4>
+<p>The resulting 162 bits of data from convolutional coding and interleaving are then combined with a fixed 162-bit synchronization vector.</p>
+<p>Each transmission symbol <span class="math inline">\(S_i\)</span> (2 bit for 4-FSK) is formed by (<span class="math inline">\(b_{\mathrm{sync},i}\)</span> is the synchronization bit and <span class="math inline">\(b_{\mathrm{data},i}\)</span> is the data bit)</p>
+<p><span class="math display">\[
+S_i = b_{\mathrm{sync},i} + 2 \cdot b_{\mathrm{data},i}
+\]</span></p>
+<p>The synchronization vector is given as a 162-bit constant<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>:</p>
+<p><code>110000001000111000100101111000000010010100000010110011010001101000011010101010010010110001101010001000001001001110110011010001110000010100110000000110101100011000</code></p>
+</section>
+<section id="data-interface-after-modulation" class="level4" data-number="2.1.8">
+<h4 data-number="2.1.8" class="anchored" data-anchor-id="data-interface-after-modulation"><span class="header-section-number">2.1.8</span> Data Interface after Modulation</h4>
+<p>The final 162 two-bit symbols are packed as 4 symbols per byte (MSB first) into 41 bytes, resulting in a transmit message M[0] to M[40].</p>
+</section>
+</section>
+<section id="sec-sys-rf-freq" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="sec-sys-rf-freq"><span class="header-section-number">2.2</span> PHY</h3>
+<p>WSPR supports various RF frequencies. The frequencies supported by TinyWhisper are<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>:</p>
+<ul>
+<li>3.592600 MHz (80m band)</li>
+<li>7.038600 MHz (40m band)</li>
+<li>14.095600 MHz (20m band)</li>
+<li>28.124600 MHz (10m band)</li>
+</ul>
+<p>These frequencies are the center frequencies (LO frequencies) for the WSPR transmissions. The actual RF output frequency is offset by +1500 Hz using upper-sideband (USB) modulation. For channel selection, the nominal +1500 Hz can be varied in the range of +1400 Hz to +1600 Hz.</p>
+<section id="sec-sys-modulation" class="level4" data-number="2.2.1">
+<h4 data-number="2.2.1" class="anchored" data-anchor-id="sec-sys-modulation"><span class="header-section-number">2.2.1</span> Modulation</h4>
+<ul>
+<li>4-FSK with a tone spacing of 1.465 Hz (mode F1D) is used.</li>
+<li>The modulation tone frequencies are:
+<ul>
+<li><span class="math inline">\(f_1 = -3/2 \cdot 12000/8192 = -2.197\,\text{Hz}\)</span> (symbol <code>00</code>)</li>
+<li><span class="math inline">\(f_2 = -1/2 \cdot 12000/8192 = -0.732\,\text{Hz}\)</span> (symbol <code>01</code>)</li>
+<li><span class="math inline">\(f_3 = 1/2 \cdot 12000/8192 = 0.732\,\text{Hz}\)</span> (symbol <code>10</code>)</li>
+<li><span class="math inline">\(f_4 = 3/2 \cdot 12000/8192 = 2.197\,\text{Hz}\)</span> (symbol <code>11</code>)</li>
+</ul></li>
+<li>The occupied bandwidth is therefore approximately 6 Hz.</li>
+<li>Minimum SNR for decoding is around <span class="math inline">\(-34\,\text{dB}\)</span>.</li>
+</ul>
+</section>
+<section id="rf" class="level4" data-number="2.2.2">
+<h4 data-number="2.2.2" class="anchored" data-anchor-id="rf"><span class="header-section-number">2.2.2</span> RF</h4>
+<p>The RF output of the TinyTapeout chip is a single-ended analog output. It can be used to connect an external power amplifier and low-pass filters to meet the required output power and spectral emissions. Further details can be found in the PCB design section.</p>
+</section>
+</section>
+</section>
+<section id="implementation" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="implementation"><span class="header-section-number">3</span> Implementation</h2>
+<p>The implementation is targeting a TinyTapeout run using <code>sky130A</code> technology, since it allows combining digital and custom components for this WSPR transmitter.</p>
+<section id="concept" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="concept"><span class="header-section-number">3.1</span> Concept</h3>
+<p>The implementation concept is based on a few important boundary conditions listed below:</p>
+<ul>
+<li>A digital clock frequency <span class="math inline">\(f_\mathrm{clk} = 56\,\text{MHz}\)</span> is used throughout the design. With this choice of clock frequency the identified transmit frequencies are readily supported.</li>
+<li>For implementation efficiency, the digital content of the architecture is maximized in contrast to the full-custom content.</li>
+</ul>
+</section>
+<section id="mixed-signal-transmitter" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="mixed-signal-transmitter"><span class="header-section-number">3.2</span> Mixed-Signal Transmitter</h3>
+<p>The architectural overview is shown in <a href="#fig-tx-concept" class="quarto-xref">Figure&nbsp;2</a>. The FSK-4 modulation is based on an analog IQ transmitter driven by a CORDIC. An IQ DAC path with a sample rate of 218.75 kSps (TBC) and a CORDIC/DSM data path width of 30 bit, followed by a 3rd-order low-pass filter, is upconverted in a passive voltage-mode mixer with 25% LO generated by a divide-by-2 circuit.</p>
+<div id="fig-tx-concept" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tx-concept-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fig/TinyWhisper_architecture.drawio.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: Architecture of the mixed-signal WSPR transmitter."><img src="fig/TinyWhisper_architecture.drawio.svg" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tx-concept-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Architecture of the mixed-signal WSPR transmitter.
+</figcaption>
+</figure>
+</div>
+<section id="sec-impl-lo-gen" class="level4" data-number="3.2.1">
+<h4 data-number="3.2.1" class="anchored" data-anchor-id="sec-impl-lo-gen"><span class="header-section-number">3.2.1</span> TX LO Generation</h4>
+<p>To support the RF frequencies listed in <a href="#sec-sys-rf-freq" class="quarto-xref">Section&nbsp;2.2</a>, the following LO generation concept is planned. The LO frequency is 2x the RF frequency, since the IQ phases are generated by a divide-by-2 circuit (<a href="https://iic-jku.github.io/radio-frequency-integrated-circuits/rfic.html#sec-lo-ff" class="uri">https://iic-jku.github.io/radio-frequency-integrated-circuits/rfic.html#sec-lo-ff</a>). If a constant 56 MHz crystal clock is used, the resulting frequency offset must be generated digitally by the CORDIC.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 16%">
+<col style="width: 18%">
+<col style="width: 17%">
+<col style="width: 29%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>RF frequency</th>
+<th>LO frequency</th>
+<th>LO pre-divider</th>
+<th>CLK frequency</th>
+<th>CORDIC frequency offset</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>3.592600 MHz</td>
+<td>7&nbsp;MHz</td>
+<td>8</td>
+<td>56&nbsp;MHz</td>
+<td>92.600&nbsp;kHz</td>
+</tr>
+<tr class="even">
+<td>7.038600 MHz</td>
+<td>14 MHz</td>
+<td>4</td>
+<td>56&nbsp;MHz</td>
+<td>38.600&nbsp;kHz</td>
+</tr>
+<tr class="odd">
+<td>14.095600 MHz</td>
+<td>28&nbsp;MHz</td>
+<td>2</td>
+<td>56&nbsp;MHz</td>
+<td>95.600&nbsp;kHz</td>
+</tr>
+<tr class="even">
+<td>28.124600 MHz</td>
+<td>56&nbsp;MHz</td>
+<td>1</td>
+<td>56&nbsp;MHz</td>
+<td>124.600&nbsp;kHz</td>
+</tr>
+</tbody>
+</table>
+<p>As the frequencies are low enough, the LO generation is implemented in HDL in <code>src/lo_gen.v</code>.</p>
+</section>
+<section id="sec-impl-dac" class="level4" data-number="3.2.2">
+<h4 data-number="3.2.2" class="anchored" data-anchor-id="sec-impl-dac"><span class="header-section-number">3.2.2</span> TX DACs</h4>
+<p>To simplify the analog DAC design, delta-sigma DACs (DSM) with differential single-bit outputs are used. As a compromise between implementation complexity and performance, a programmable 1st/2nd-order modulator is used, which can be implemented purely digitally in HDL with inverter-style outputs.</p>
+<p>The output sample rate of the DS modulator is 56 MSps, and it supports OSR = 32/64/128/256. The corresponding input sample rates are given in the following table:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>OSR</th>
+<th>Input sample rate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>32</td>
+<td>1.75&nbsp;MSps</td>
+</tr>
+<tr class="even">
+<td>64</td>
+<td>875&nbsp;kSps (default)</td>
+</tr>
+<tr class="odd">
+<td>128</td>
+<td>437.5&nbsp;kSps</td>
+</tr>
+<tr class="even">
+<td>256</td>
+<td>218.75&nbsp;kSps</td>
+</tr>
+</tbody>
+</table>
+<p>The general SNR formula for an <span class="math inline">\(N\)</span>-bit, <span class="math inline">\(L\)</span>-order DSM with OSR is<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> <span class="math display">\[
+\text{SNR} = 6.02 N + 1.76 + 10 \log_{10}\biggl(\frac{2 L + 1}{\pi^{2L}}\biggr) + (2L + 1) 10 \log_{10}(\text{OSR}).
+\]</span></p>
+<p>The SNR of a single-bit (<span class="math inline">\(N = 1\)</span>) first-order (<span class="math inline">\(L = 1\)</span>) DSM is given by (<span class="math inline">\(r = \log_2(\text{OSR}) = 6\)</span> for an <span class="math inline">\(\text{OSR} = 64\)</span>) <span class="math display">\[
+\text{SNR} = 6.02 + 9.03 r - 3.41 = 56.8\,\text{dB},
+\]</span></p>
+<p>which motivates using a higher-order DSM for improved in-band SNR. A second-order (<span class="math inline">\(L = 2\)</span>) DSM with single-bit (<span class="math inline">\(N = 1\)</span>) output is given by <span class="math display">\[
+\text{SNR} = 6.02 + 15.05 r - 11.14 = 85.2\,\text{dB},
+\]</span></p>
+<p>which provides significantly higher in-band SNR and supports high-resolution signal generation. In the current TinyWhisper architecture, the CORDIC uses a 30-bit data path and the DSM consumes this high-resolution parallel data before 1-bit quantization. The DSM order is selectable (1st or 2nd order), and this option is programmable via a configuration register.</p>
+<p>The data width of the input samples is configurable; the current TinyWhisper implementation uses a 30-bit CORDIC/DSM path. The input data is linearly interpolated to the 56 MSps output sample rate. The interpolation is done by a linear ramp between two input samples, with step size depending on the OSR (i.e., for OSR = 64 the step size is <span class="math inline">\((\text{data}_{n+1} - \text{data}_n) / 64\)</span>).</p>
+<p>The DSM is implemented in <code>src/dsmod.v</code>.</p>
+<!-- ToDo: Add 1st/2nd order block diagrams from KV IC course (WS2022)? Adapt figures from DSM_book: CH1. Fig. 1.4 and CH2. Fig. 1.13 -->
+</section>
+<section id="lowpass-filters" class="level4" data-number="3.2.3">
+<h4 data-number="3.2.3" class="anchored" data-anchor-id="lowpass-filters"><span class="header-section-number">3.2.3</span> Lowpass Filters</h4>
+<p>To pass the maximum CORDIC frequency offset of around <span class="math inline">\(f_\mathrm{mod,max} = 125\,\text{kHz}\)</span> through the filters, we assume a nominal filter <span class="math inline">\(-3\,\text{dB}\)</span> cutoff frequency of <span class="math inline">\(f_\mathrm{c} = 400\,\text{kHz}\)</span>. This allows the use of untrimmed filters with an assumed RC-product frequency variation of <span class="math inline">\(\pm30\%\)</span>. With a maximum frequency deviation to <span class="math inline">\(f_\mathrm{c,max} = 1.3 \cdot f_\mathrm{c} = 520\,\text{kHz}\)</span>, and assuming a third-order low-pass response, the DAC aliasing at 56 MHz is suppressed by <span class="math inline">\(&gt;100\,\text{dB}\)</span>. A minimum filter corner frequency of <span class="math inline">\(f_\mathrm{c,min} = 0.7 \cdot f_\mathrm{c} = 280\,\text{kHz}\)</span> still passes the maximum modulation frequency comfortably.</p>
+<p>We select a 3rd-order filter based on the argument that the DS-modulator in the DAC is second order; so to suppress the rising quantization noise with a slope of <span class="math inline">\(40\,\text{dB/dec}\)</span> we opt for a 3rd-order filter with a filter slope of <span class="math inline">\(60\,\text{dB/dec}\)</span>.</p>
+<!-- TBD: add more detail. TBD: finalize the implementation of the 3rd-order filter. If a 3rd-order Sallen-Key structure with a single OTA is used, an OTA with a rail-to-rail input stage is needed. A differential 3rd-order multiple-feedback structure with a single OTA is likely a good approach. -->
+<!-- Online calculator for a 3rd-order multiple-feedback structure: http://sim.okawa-denshi.jp/en/MultipleFB3Lowkeisan.htm -->
+<!-- ToDo: Add circuit of fully-differential 3rd-order MFB filter -->
+<!-- ToDo: Add circuit of inverter-based OTA -->
+<!-- ToDo: Add table of OTA specifications -->
+</section>
+<section id="iq-modulator" class="level4" data-number="3.2.4">
+<h4 data-number="3.2.4" class="anchored" data-anchor-id="iq-modulator"><span class="header-section-number">3.2.4</span> IQ Modulator</h4>
+<p>The IQ modulator is implemented as a passive voltage-mode mixer. The 4 LO phases generated in the LO generation block drive 4 transmission gates (to switch rail-to-rail voltage signals coming out of the low-pass filters). These transmission gates are directly DC-connected to the 2 differential outputs of the IQ low-pass filters driven by the OTA. Since 25% LO signals are used, there is only minimal overlap between LO phases, so the mixer switch outputs can simply be connected (added).</p>
+<p>As the digital LO generation block generates 4 single-ended LO signals, the transmission gates include local drivers including creation of an inverted clock to drive the NMOS and PMOS of the transmission gates. Cross-coupling latches reduce the potential overlap of the LOP/LON phases.</p>
+<p>The resulting single-ended RF output is directly connected to an analog output of the TinyTapeout chip to drive external circuitry like lowpass filters and an amplifier.</p>
+<!-- ToDo: Add block diagram of passive voltage-mode mixer -->
+</section>
+</section>
+<section id="modem-1" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="modem-1"><span class="header-section-number">3.3</span> Modem</h3>
+<!-- TBD (digital implementation to be described here). -->
+<section id="cordic" class="level4" data-number="3.3.1">
+<h4 data-number="3.3.1" class="anchored" data-anchor-id="cordic"><span class="header-section-number">3.3.1</span> CORDIC</h4>
+<p>The CORDIC creates the modulation frequencies of the 4-FSK modulation (see <a href="#sec-sys-modulation" class="quarto-xref">Section&nbsp;2.2.1</a>), and also creates the required frequency offset for transmit frequency generation (see <a href="#sec-impl-lo-gen" class="quarto-xref">Section&nbsp;3.2.1</a>). The CORDIC produces a COS/SIN output signal with a sample rate of <span class="math inline">\(875\,\text{kSps} = 56\,\text{MHz} / 64\)</span> (TBC) and a 30-bit word size, matching the high-resolution digital signal path described in <a href="#sec-impl-dac" class="quarto-xref">Section&nbsp;3.2.2</a>.</p>
+<p>Assuming a TCXO initial frequency error of <span class="math inline">\(\pm 5\,\text{ppm}\)</span> (TBC) of the <span class="math inline">\(56\,\text{MHz}\)</span> clock, the CORDIC needs to be able to correct an additional <span class="math inline">\(\pm 280\,\text{Hz}\)</span> of frequency offset.</p>
+<p>As the CORDIC shall only produce a new sample every <span class="math inline">\(\text{OSR} = 64\)</span> clock cycle, a new sample is pulled from the CORDIC by the DSM by asserting its <code>o_data_rd</code> output.</p>
+<!-- TBD (digital implementation to be described here). -->
+</section>
+</section>
+<section id="host-interface" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="host-interface"><span class="header-section-number">3.4</span> Host Interface</h3>
+<p>On TinyTapeout, a 16-bit digital input and an 8-bit digital output are available. However, to simplify the programming interface, a one-wire UART protocol is used. The following registers are available:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Addr</th>
+<th>Number of bits</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>d.c.</td>
+<td>Reset</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>3</td>
+<td>lo_div selection</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>16</td>
+<td>f_c0[15:0] (cordic f_c for the first symbol)</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>16</td>
+<td>OSR_0 &amp; f_c0[29:16]</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>16</td>
+<td>f_c1[15:0]</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>16</td>
+<td>OSR_1 &amp; f_c1[29:16]</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>16</td>
+<td>f_c2[15:0]</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td>16</td>
+<td>OSR_2 &amp; f_c2[29:16]</td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td>16</td>
+<td>f_c3[15:0]</td>
+</tr>
+<tr class="even">
+<td>9</td>
+<td>16</td>
+<td>OSR_3 &amp; f_c3[29:16]</td>
+</tr>
+<tr class="odd">
+<td>10</td>
+<td>12</td>
+<td>callsign[34:24]</td>
+</tr>
+<tr class="even">
+<td>11</td>
+<td>12</td>
+<td>callsign[23:12]</td>
+</tr>
+<tr class="odd">
+<td>12</td>
+<td>12</td>
+<td>callsign[11:0]</td>
+</tr>
+<tr class="even">
+<td>13</td>
+<td>15</td>
+<td>locator[19:5]</td>
+</tr>
+<tr class="odd">
+<td>14</td>
+<td>11</td>
+<td>locator[4:0] &amp; power</td>
+</tr>
+</tbody>
+</table>
+<p>The Python script in the software directory takes care of programming the registers.</p>
+</section>
+</section>
+<section id="packaging" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="packaging"><span class="header-section-number">4</span> Packaging</h2>
+<p>Coming soon…</p>
+</section>
+<section id="pcb-design" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="pcb-design"><span class="header-section-number">5</span> PCB Design</h2>
+<p>Coming soon…</p>
+<!-- The following GitHub repo can serve as an example: <https://github.com/simi1505/5-Band-50W-PA-OE3SDE> -->
+</section>
+<section id="measurements" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="measurements"><span class="header-section-number">6</span> Measurements</h2>
+<p>Coming soon…</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p><a href="https://en.wikipedia.org/wiki/WSPR_(amateur_radio_software)" class="uri">https://en.wikipedia.org/wiki/WSPR_(amateur_radio_software)</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="http://www.g4jnt.com/Coding/WSPR_Coding_Process.pdf" class="uri">http://www.g4jnt.com/Coding/WSPR_Coding_Process.pdf</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><a href="http://www.g4jnt.com/Coding/WSPR_Coding_Process.pdf" class="uri">http://www.g4jnt.com/Coding/WSPR_Coding_Process.pdf</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><a href="http://www.g4jnt.com/Coding/WSPR_Coding_Process.pdf" class="uri">http://www.g4jnt.com/Coding/WSPR_Coding_Process.pdf</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p><a href="http://www.g4jnt.com/Coding/WSPR_Coding_Process.pdf" class="uri">http://www.g4jnt.com/Coding/WSPR_Coding_Process.pdf</a><a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p><a href="https://wsjt.sourceforge.io/WSPR_QST_Nov_2010.pdf" class="uri">https://wsjt.sourceforge.io/WSPR_QST_Nov_2010.pdf</a><a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Norsworthy, Schreier, Temes, “Delta-Sigma Data Converters”, Wiley, 1997.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div>Apache-2.0 license</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/iic-jku\.github\.io\/TinyWhisper\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p><a href="https://github.com/iic-jku/TinyWhisper" class="external" target="_blank">Source code</a></p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="{{< meta var.url-repo >}}/edit/main/index.qmd" class="toc-action"><i class="bi bi-git"></i>Edit this page</a></li><li><a href="{{< meta var.url-repo >}}/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>Website built with <a href="https://quarto.org/" class="external" target="_blank">Quarto</a></p>
+</div>
+  </div>
+</footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+</body></html>
