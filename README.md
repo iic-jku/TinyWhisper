@@ -1,10 +1,10 @@
 # TinyWhisper: An Open-Source Fully-Integrated Multi-Mode Short-Wave Transmitter for Amateur Radio Applications in 130-nm CMOS
 
-(c) 2025-2026 Simon Dorrer* (OE3SDE), Jonathan Hager^ (DK7JH), Matthias Jung^ (DL9MJ) and Harald Pretl*
+(c) 2025-2026 Simon Dorrer* (OE3SDE), Jonathan Hager** (DK7JH), Matthias Jung** (DL9MJ) and Harald Pretl*
 
 *Institute for Integrated Circuits and Quantum Computing, Johannes Kepler University (JKU), Linz, Austria
 
-^Computer Engineering, Julius-Maximilians-Universität, Würzburg, Germany
+**Computer Engineering, Julius-Maximilians-Universität, Würzburg, Germany
 
 The full documentation of the TinyWhisper transmitter is available [here](https://iic-jku.github.io/TinyWhisper/index.html).
 
