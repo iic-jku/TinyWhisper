@@ -109,13 +109,13 @@ let fdc = 10
 * Operating Point Analysis
 op
 remzerovec
-write iqmod_mfb_lpf_ota_core_tb_Rin.raw
+write @schname\\\\.raw
 set appendwrite
 
 * AC Analysis
 ac dec 101 $&const.f_min $&const.f_max
 remzerovec
-write iqmod_mfb_lpf_ota_core_tb_Rin.raw
+write @schname\\\\.raw
 set appendwrite
 
 * Plotting

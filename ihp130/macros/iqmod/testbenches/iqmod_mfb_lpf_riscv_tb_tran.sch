@@ -382,12 +382,12 @@ let tstep = 0.1/flo
 optran 0 0 0 $&tstep $&tstart 0
 * op
 remzerovec
-write iqmod_mfb_lpf_riscv_tb_tran.raw
+write @schname\\\\.raw
 set appendwrite
 
 * Transient Analysis
 tran $&tstep $&tstop $&tstart
-write iqmod_mfb_lpf_riscv_tb_tran.raw
+write @schname\\\\.raw
 
 * Measurements
 meas tran vout_pp_max MAX v(voutp)

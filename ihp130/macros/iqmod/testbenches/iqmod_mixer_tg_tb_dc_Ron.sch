@@ -100,12 +100,12 @@ save all
 * Operating Point Analysis
 op
 remzerovec
-write iqmod_mixer_tg_tb_dc_Ron.raw
+write @schname\\\\.raw
 set appendwrite
 
 * DC Sweep Analysis
 dc vin 0 $&VDD 0.01
-write iqmod_mixer_tg_tb_dc_Ron.raw
+write @schname\\\\.raw
 
 * On-Resistance
 * LV with Dummy

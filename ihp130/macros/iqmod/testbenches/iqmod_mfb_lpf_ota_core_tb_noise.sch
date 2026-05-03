@@ -111,7 +111,7 @@ let f_max = 1G
 * Operating Point Analysis
 op
 remzerovec
-write iqmod_mfb_lpf_ota_core_tb_noise.raw
+write @schname\\\\.raw
 set appendwrite
 
 * Noise Analysis
@@ -121,7 +121,7 @@ noise v(vout) vin dec 101 $&const.f_min $&const.f_max 1
 setplot noise1
 plot inoise_spectrum ylog xlog ylabel 'Input Noise'
 plot onoise_spectrum ylog xlog ylabel 'Output Noise'
-write iqmod_mfb_lpf_ota_core_tb_noise.raw
+write @schname\\\\.raw
 set appendwrite
 
 * Write Data

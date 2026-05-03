@@ -89,13 +89,13 @@ let fdc = 1
 * Operating Point Analysis
 op
 remzerovec
-write iqmod_mfb_lpf_ota_core_inv_tb_ac_ol.raw
+write @schname\\\\.raw
 set appendwrite
 
 * AC Analysis
 ac dec 101 $&const.f_min $&const.f_max
 remzerovec
-write iqmod_mfb_lpf_ota_core_inv_tb_ac_ol.raw
+write @schname\\\\.raw
 
 * Plotting
 let Aol = v(vout)/v(vin)		

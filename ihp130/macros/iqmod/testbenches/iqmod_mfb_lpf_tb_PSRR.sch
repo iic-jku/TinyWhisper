@@ -83,13 +83,13 @@ let fdc = 1
 * Operating Point Analysis
 op
 remzerovec
-write iqmod_mfb_lpf_tb_PSRR.raw
+write @schname\\\\.raw
 set appendwrite
 
 * AC Analysis
 ac dec 101 $&const.f_min $&const.f_max
 remzerovec
-write iqmod_mfb_lpf_tb_PSRR.raw
+write @schname\\\\.raw
 
 * Plotting
 let PSRR = v(VDD)/v(vout)

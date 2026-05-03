@@ -146,13 +146,13 @@ let fdc = 10
 * Operating Point Analysis
 op
 remzerovec
-write iqmod_top_tb_ac.raw
+write @schname\\\\.raw
 set appendwrite
 
 * AC Analysis
 ac dec 101 $&const.f_min $&const.f_max
 remzerovec
-write iqmod_top_tb_ac.raw
+write @schname\\\\.raw
 set appendwrite
 
 * Plotting

@@ -88,7 +88,7 @@ save all
 * Operating Point Analysis
 op
 remzerovec
-write iqmod_mfb_lpf_ota_core_inv_tb_tran.raw
+write @schname\\\\.raw
 set appendwrite
 
 * Transient Analysis
@@ -96,7 +96,7 @@ set appendwrite
 tran 1u 5m
 * Pulse Input
 * tran 500n 1m
-write iqmod_mfb_lpf_ota_core_inv_tb_tran.raw
+write @schname\\\\.raw
 
 * Plotting
 plot vin vout

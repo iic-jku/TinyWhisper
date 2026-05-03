@@ -243,12 +243,12 @@ let tstep = 1 * 1/fpwm
 * Operating Point Analysis
 op
 remzerovec
-write iqmod_mfb_lpf_tb_tran.raw
+write @schname\\\\.raw
 set appendwrite
 
 * Transient Analysis
 tran $&tstep $&tstop $&tstart
-write iqmod_mfb_lpf_tb_tran.raw
+write @schname\\\\.raw
 
 * Measurements
 meas tran vin_peak MAX v(vin)

@@ -132,12 +132,12 @@ save all
 * Operating Point Analysis
 op
 remzerovec
-write iqmod_spdt_switch_tb_dc_Ileak.raw
+write @schname\\\\.raw
 set appendwrite
 
 * DC Sweep Analysis x1
 dc vin 0 $&VDD 10m vout_x1 0 $&VDD 0.25
-write iqmod_spdt_switch_tb_dc_Ileak.raw
+write @schname\\\\.raw
 set appendwrite
 
 *Off-Leakage Current v_c to v_b
@@ -146,7 +146,7 @@ plot Ileak_cb
 
 * DC Sweep Analysis x2
 dc vin 0 $&VDD 10m vout_x2 0 $&VDD 0.25
-write iqmod_spdt_switch_tb_dc_Ileak.raw
+write @schname\\\\.raw
 
 *Off-Leakage Current v_c to v_a
 let Ileak_ca = I(vout_x2)

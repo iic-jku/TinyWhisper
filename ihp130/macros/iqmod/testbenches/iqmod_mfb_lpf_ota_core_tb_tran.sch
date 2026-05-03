@@ -186,7 +186,7 @@ let tstep = 0.05/fsig
 * Operating Point Analysis
 op
 remzerovec
-write iqmod_mfb_lpf_ota_core_tb_tran.raw
+write @schname\\\\.raw
 set appendwrite
 
 * Transient Analysis
@@ -194,7 +194,7 @@ set appendwrite
 tran $&tstep $&tstop $&tstart
 * Pulse Input
 * tran 50n 2.05m 1.95m
-write iqmod_mfb_lpf_ota_core_tb_tran.raw
+write @schname\\\\.raw
 
 * Plotting
 plot vinp vinn voutp voutn

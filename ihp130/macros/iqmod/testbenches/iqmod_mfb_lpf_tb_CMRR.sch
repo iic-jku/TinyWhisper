@@ -172,13 +172,13 @@ let fdc = 1
 * Operating Point Analysis
 op
 remzerovec
-write iqmod_mfb_lpf_tb_CMRR.raw
+write @schname\\\\.raw
 set appendwrite
 
 * AC Analysis
 ac dec 101 $&const.f_min $&const.f_max
 remzerovec
-write iqmod_mfb_lpf_tb_CMRR.raw
+write @schname\\\\.raw
 
 * Plotting Differential Mode Gain
 let Adm = v(vout_dm)/v(vin)		

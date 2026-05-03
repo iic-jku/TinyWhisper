@@ -212,12 +212,12 @@ let tstep = 1/fclk
 * Operating Point Analysis
 op
 remzerovec
-write riscv_top_tb_tran.raw
+write @schname\\\\.raw
 set appendwrite
 
 * Transient Analysis
 tran $&tstep $&tstop
-write riscv_top_tb_tran.raw
+write @schname\\\\.raw
 
 *quit
 .endc

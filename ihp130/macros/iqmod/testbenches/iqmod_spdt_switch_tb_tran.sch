@@ -179,12 +179,12 @@ save all
 * Operating Point Analysis
 op
 remzerovec
-write iqmod_spdt_switch_tb_tran.raw
+write @schname\\\\.raw
 set appendwrite
 
 * Transient Analysis
 tran 1n 100n
-write iqmod_spdt_switch_tb_tran.raw
+write @schname\\\\.raw
 
 plot vout_b_spdt_ca vout_a_spdt_ca vin_spdt
 plot vout_b_spdt_cb vout_a_spdt_cb vin_spdt

@@ -315,12 +315,12 @@ optran 0 0 0 $&tstep $&tstart 0
 * Operating Point Analysis
 * op
 * remzerovec
-* write iqmod_top_tb_tran.raw
+* write @schname\\\\.raw
 * set appendwrite
 
 * Transient Analysis
 tran $&tstep $&tstop $&tstart
-write iqmod_top_tb_tran.raw
+write @schname\\\\.raw
 
 * Plotting
 plot vinp_I vinn_I vinp_Q vinn_Q

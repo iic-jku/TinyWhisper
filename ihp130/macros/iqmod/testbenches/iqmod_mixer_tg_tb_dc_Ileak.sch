@@ -86,12 +86,12 @@ save all
 * Operating Point Analysis
 op
 remzerovec
-write iqmod_mixer_tg_tb_dc_Ileak.raw
+write @schname\\\\.raw
 set appendwrite
 
 * DC Sweep Analysis LV with Dummy
 dc vin 0 $&VDD 10m vout_w_dummy 0 $&VDD $&Vcm
-write iqmod_mixer_tg_tb_dc_Ileak.raw
+write @schname\\\\.raw
 set appendwrite
 
 * Off-Leakage Current

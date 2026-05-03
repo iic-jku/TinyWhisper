@@ -164,12 +164,12 @@ save all
 * Operating Point Analysis
 op
 remzerovec
-write iqmod_mixer_tg_tb_tran.raw
+write @schname\\\\.raw
 set appendwrite
 
 * Transient Analysis
 tran 10u 10ms
-write iqmod_mixer_tg_tb_tran.raw
+write @schname\\\\.raw
 
 plot vin_tg vout_tg_on
 plot vin_tg vout_tg_off

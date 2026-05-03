@@ -66,12 +66,12 @@ save all
 * Operating Point Analysis
 op
 remzerovec
-write iqmod_mixer_se2diff_inv_tb_tran.raw
+write @schname\\\\.raw
 set appendwrite
 
 * Transient Analysis
 tran 100p 400n
-write iqmod_mixer_se2diff_inv_tb_tran.raw
+write @schname\\\\.raw
 
 quit
 .endc

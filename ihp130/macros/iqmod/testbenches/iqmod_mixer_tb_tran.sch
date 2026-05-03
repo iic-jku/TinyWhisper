@@ -210,12 +210,12 @@ optran 0 0 0 $&tstep $&tstart 0
 * Operating Point Analysis
 * op
 * remzerovec
-* write iqmod_mixer_tb_tran.raw
+* write @schname\\\\.raw
 * set appendwrite
 
 * Transient Analysis
 tran $&tstep $&tstop $&tstart
-write iqmod_mixer_tb_tran.raw
+write @schname\\\\.raw
 
 * Plotting
 plot vinp1_IF vinn1_IF vinp2_IF vinn2_IF

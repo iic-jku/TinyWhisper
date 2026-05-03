@@ -101,13 +101,13 @@ save all
 * Operating Point Analysis
 op
 remzerovec
-write iqmod_mfb_lpf_ota_core_tb_Vout.raw
+write @schname\\\\.raw
 set appendwrite
 
 * DC Sweep
 dc Vgsp -$&VDD $&VDD 1m
 remzerovec
-write iqmod_mfb_lpf_ota_core_tb_Vout.raw
+write @schname\\\\.raw
 set appendwrite
 
 * Plotting

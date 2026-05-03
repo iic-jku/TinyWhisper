@@ -85,13 +85,13 @@ let fdc = 10
 * Operating Point Analysis
 op
 remzerovec
-write iqmod_mfb_lpf_tb_Zin_dm.raw
+write @schname\\\\.raw
 set appendwrite
 
 * AC Analysis
 ac dec 101 $&const.f_min $&const.f_max
 remzerovec
-write iqmod_mfb_lpf_tb_Zin_dm.raw
+write @schname\\\\.raw
 
 * Plotting Differential Mode Zin
 * let Zin_dm = (v(vinp) - v(vinn)) / (i(Vmeasp) - i(Vmeasn))

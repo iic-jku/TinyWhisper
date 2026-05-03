@@ -132,12 +132,12 @@ save all
 * Operating Point Analysis
 op
 remzerovec
-write iqmod_spdt_switch_tb_dc_Ron.raw
+write @schname\\\\.raw
 set appendwrite
 
 * DC Sweep Analysis
 dc vin 0 $&VDD 10m
-write iqmod_spdt_switch_tb_dc_Ron.raw
+write @schname\\\\.raw
 
 * On-Resistance v_c to v_a
 let r_on_ca = (v(vout_a_spdt_ca)-v(vin_spdt))/I(vds_x1)
