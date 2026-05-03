@@ -1,5 +1,6 @@
-# Development Board
+# Application Board
 
+- PCB design with [KiCad](https://www.kicad.org/)
 - 3.3V LDO (I/O + external peripherals supply)
 - 1.5V LDO (chip core supply)
 - 56MHz clock source for TinyWhisper chip

@@ -8,7 +8,7 @@ The full documentation of the TinyWhisper transmitter is available [here](https:
 > This repository is a Work in Progress.
 
 > [!IMPORTANT]
-> This repository requires the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) container with tag `2026.04` or later.
+> This repository requires the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) container with tag `2026.05` or later.
 
 <p align="center">
   <a href="doc/fig/tinywhisper_top_black.png">

@@ -1,7 +1,7 @@
 # ihp-sg13g2 TinyWhisper
 
 > [!IMPORTANT]
-> This repository requires the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) container with tag `2026.04` or later.
+> This repository requires the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) container with tag `2026.05` or later.
 
 <p align="center">
   <a href="render/img/tinywhisper_top_black.png">
