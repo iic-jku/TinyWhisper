@@ -447,14 +447,18 @@ all: ## Simulate, build and verify the whole chip
 
 
 # Release Target
-release: ## Copy the gds and netlist files to the release folder (usage: make release VERSION=<version>)
+release: ## Copy the gds, netlist files and chip renders to the release folder (usage: make release VERSION=<version>)
 	mkdir -p $(RELEASE_DIR)/v.$(VERSION)/gds
 	mkdir -p $(RELEASE_DIR)/v.$(VERSION)/netlist
+	mkdir -p $(RELEASE_DIR)/v.$(VERSION)/img
 	cp -f $(LAY_DIR)/$(TOP)_logo_fill.gds.gz $(RELEASE_DIR)/v.$(VERSION)/gds/$(TOP)_logo_fill.gds.gz
-#	cp -r $(NET_SCH_DIR) $(RELEASE_DIR)/v.$(VERSION)/netlist/schematic
-	cp -r $(NET_LAY_DIR) $(RELEASE_DIR)/v.$(VERSION)/netlist/layout
-#	cp -r $(NET_PEX_DIR) $(RELEASE_DIR)/v.$(VERSION)/netlist/pex
-	cp -r $(NET_PNL_DIR) $(RELEASE_DIR)/v.$(VERSION)/netlist/pnl
-	cp -r $(NET_SPICE_DIR) $(RELEASE_DIR)/v.$(VERSION)/netlist/spice
+#	cp -r $(NET_SCH_DIR)/. $(RELEASE_DIR)/v.$(VERSION)/netlist/schematic
+	cp -r $(NET_LAY_DIR)/. $(RELEASE_DIR)/v.$(VERSION)/netlist/layout
+#	cp -r $(NET_PEX_DIR)/. $(RELEASE_DIR)/v.$(VERSION)/netlist/pex
+	cp -r $(NET_PNL_DIR)/. $(RELEASE_DIR)/v.$(VERSION)/netlist/pnl
+	cp -r $(NET_SPICE_DIR)/. $(RELEASE_DIR)/v.$(VERSION)/netlist/spice
+	cp -f $(RENDER_IMG_DIR)/$(TOP)_black.png $(RELEASE_DIR)/v.$(VERSION)/img/$(TOP)_black.png
+	cp -f $(RENDER_IMG_DIR)/$(TOP)_white.png $(RELEASE_DIR)/v.$(VERSION)/img/$(TOP)_white.png
+	cp -f $(RENDER_IMG_DIR)/$(TOP)_librelane.png $(RELEASE_DIR)/v.$(VERSION)/img/$(TOP)_librelane.png
 .PHONY: release
 # ================================================================================================
