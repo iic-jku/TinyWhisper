@@ -82,6 +82,7 @@
 │  │  └─ riscv_top.spice
 │  └─ 📁 xspice/
 │     ├─ 📁 riscv_top/
+│     │  └─ riscv_top.xspice
 │     ├─ reorder_xspice_pins.py
 │     ├─ spi2xspice.py
 │     └─ verilog2xspice.sh
