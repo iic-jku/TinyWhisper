@@ -49,8 +49,8 @@
 │  └─ 📁 schematic/
 │     ├─ *.cdl
 │     ├─ *.spice
-│     ├─ iqmod_top.cdl
-│     └─ iqmod_top.spice
+│     ├─ iqmod_top_klayout.cdl
+│     └─ iqmod_top_magic.spice
 ├─ 📁 render/
 │  ├─ 📁 blender/
 │  └─ 📁 img/
