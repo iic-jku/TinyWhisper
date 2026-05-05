@@ -44,8 +44,8 @@
 │  │  └─ iqmod_top_magic.ext.spc
 │  ├─ 📁 pex/
 │  │  ├─ *.spice
-│  │  ├─ iqmod_top_klayout_pex.spice
-│  │  ├─ iqmod_top_magic_pex.spice
+│  │  ├─ iqmod_top_klayout_pex_*.spice
+│  │  ├─ iqmod_top_magic_pex_*.spice
 │  │  └─ reorder_spice_pins.py
 │  └─ 📁 schematic/
 │     ├─ *.cdl
@@ -359,6 +359,10 @@ Runs parasitic extraction on the layout in `layout/`. The extracted SPICE netlis
 - `klayout-pex` uses `layout/<CELL>.$(_GDS_EXT)` (`.gds` if present, otherwise `.klay.gds`)
 - `magic-pex` uses `layout/<CELL>.gds` (Magic requires `.gds`)
 
+The extracted SPICE filenames include the selected extraction mode:
+- `klayout-pex` writes `netlist/pex/<CELL>_klayout_pex_<EXT_MODE>.spice`
+- `magic-pex` writes `netlist/pex/<CELL>_magic_pex_<EXT_MODE>.spice`
+
 The `EXT_MODE` parameter selects the extraction mode:
 - `1` = C-decoupled
 - `2` = C-coupled
@@ -368,7 +372,7 @@ The `EXT_MODE` parameter selects the extraction mode:
 
 The `.subckt` name in the extracted SPICE file is automatically renamed from `<CELL>_flat` (kpex) or `<CELL>` (Magic) to `<CELL>_pex`.
 
-If a matching Xschem symbol (`schematic/<CELL>_pex.sym`) exists, the `.subckt` pin order in the extracted SPICE file is automatically reordered to match the symbol's pin positions. This ensures the PEX netlist can be used directly with the corresponding Xschem symbol for simulation.
+If a matching Xschem symbol (`schematic/<CELL>_pex.sym`) exists, the `.subckt` pin order in the extracted SPICE file is automatically reordered to match the symbol's pin positions. This ensures the PEX netlist can be used directly with the corresponding Xschem symbol for simulation regardless of the selected `EXT_MODE`.
 
 **KLayout PEX** uses `kpex` with the Magic extraction engine currently (2.5D engine is work in progress):
 
