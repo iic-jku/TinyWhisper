@@ -20,6 +20,11 @@ EXT_MODE ?= 3
 # Override with: make <target> EV_PRECISION=<digits>
 EV_PRECISION ?= 5
 
+# Preferred GDS extension: use .gds when available, otherwise .klay.gds
+# This checks both TOP and CELL names so it can be used as: $(LAY_DIR)/$(TOP).$(_GDS_EXT) or $(LAY_DIR)/$(CELL).$(_GDS_EXT)
+# KLayout LVS, DRC and PEX work with either .gds or .klay.gds, but Magic LVS, DRC and PEX require .gds.
+_GDS_EXT = $(if $(wildcard $(LAY_DIR)/$(TOP).gds)$(wildcard $(LAY_DIR)/$(CELL).gds),gds,klay.gds)
+
 # Folder structure
 SCH_DIR         := schematic
 LAY_DIR         := layout
@@ -244,7 +249,7 @@ klayout-lvs: ## Run KLayout LVS of the CELL cell (usage: make klayout-lvs [CELL=
 	mkdir -p $(LVS_RPT_DIR)
 	mkdir -p $(NET_LAY_DIR)
 	python3 $(PDK_ROOT)/$(PDK)/libs.tech/klayout/tech/lvs/run_lvs.py \
-		--layout=$(LAY_DIR)/$(CELL).klay.gds \
+		--layout=$(LAY_DIR)/$(CELL).$(_GDS_EXT) \
 		--netlist=$(NET_SCH_DIR)/$(CELL)_klayout.cdl \
 		--topcell=$(CELL) \
 		--run_dir=$(LVS_RPT_DIR) \
@@ -287,7 +292,7 @@ magic-lvs: ## Run Magic + Netgen LVS of the CELL cell (usage: make magic-lvs [CE
 klayout-drc: ## Run KLayout DRC of the CELL cell (usage: make klayout-drc [CELL=<cellname>])
 	mkdir -p $(DRC_RPT_DIR)
 	python3 $(PDK_ROOT)/$(PDK)/libs.tech/klayout/tech/drc/run_drc.py \
-		--path=$(LAY_DIR)/$(CELL).klay.gds \
+		--path=$(LAY_DIR)/$(CELL).$(_GDS_EXT) \
 		--topcell=$(CELL) \
 		--run_dir=$(DRC_RPT_DIR) \
 		--no_feol \
@@ -321,7 +326,7 @@ klayout-pex: ## Run Parasitic Extraction with KPEX of the CELL cell (usage: make
 	--pdk $$PDK_UNDERSCORED \
 	--cell $(CELL) \
 	--schematic $(SCH_DIR)/$(CELL).sch \
-	--gds $(LAY_DIR)/$(CELL).gds \
+	--gds $(LAY_DIR)/$(CELL).$(_GDS_EXT) \
 	--magic \
 	--magic_mode $$KPEX_MODE \
 	--out_dir $(NET_PEX_DIR) \
