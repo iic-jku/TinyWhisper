@@ -160,53 +160,36 @@ lib: ## Generate a Liberty timing library for the TOP cell
 
 
 # Verilog Target
-verilog: ## Generate a Verilog stub of the TOP cell from PEX netlist pins
+verilog: ## Generate a Verilog stub of the TOP cell from Magic PEX netlist pins
+	@if [ ! -f $(NET_PEX_DIR)/$(TOP)_magic_pex.spice ]; then \
+		echo "ERROR: PEX netlist $(NET_PEX_DIR)/$(TOP)_magic_pex.spice not found. Run 'make magic-pex' first."; \
+		exit 1; \
+	fi
 	rm -rf $(VH_DIR)
 	mkdir -p $(VH_DIR)
-	@echo 'module $(TOP) (' > $(VH_DIR)/$(TOP).v
-	@echo '`ifdef USE_POWER_PINS' >> $(VH_DIR)/$(TOP).v
-	@echo '    inout VDD,' >> $(VH_DIR)/$(TOP).v
-	@echo '    inout VSS,' >> $(VH_DIR)/$(TOP).v
-	@echo '`endif' >> $(VH_DIR)/$(TOP).v
-	@echo '    input di_analog_en,' >> $(VH_DIR)/$(TOP).v
-	@echo '    input di_spdt_ctrl_I,' >> $(VH_DIR)/$(TOP).v
-	@echo '    inout vinp_I,' >> $(VH_DIR)/$(TOP).v
-	@echo '    input di_ds_I_p,' >> $(VH_DIR)/$(TOP).v
-	@echo '    inout vinn_I,' >> $(VH_DIR)/$(TOP).v
-	@echo '    input di_ds_I_n,' >> $(VH_DIR)/$(TOP).v
-	@echo '    input di_lo_I,' >> $(VH_DIR)/$(TOP).v
-	@echo '    input di_lo_Ix,' >> $(VH_DIR)/$(TOP).v
-	@echo '    input di_lo_Qx,' >> $(VH_DIR)/$(TOP).v
-	@echo '    input di_lo_Q,' >> $(VH_DIR)/$(TOP).v
-	@echo '    input di_ds_Q_n,' >> $(VH_DIR)/$(TOP).v
-	@echo '    inout vinn_Q,' >> $(VH_DIR)/$(TOP).v
-	@echo '    input di_ds_Q_p,' >> $(VH_DIR)/$(TOP).v
-	@echo '    inout vinp_Q,' >> $(VH_DIR)/$(TOP).v
-	@echo '    input di_spdt_ctrl_Q,' >> $(VH_DIR)/$(TOP).v
-	@echo '    inout voutp_I_RF,' >> $(VH_DIR)/$(TOP).v
-	@echo '    inout voutn_I_RF,' >> $(VH_DIR)/$(TOP).v
-	@echo '    inout voutn_Q_RF,' >> $(VH_DIR)/$(TOP).v
-	@echo '    inout voutp_Q_RF' >> $(VH_DIR)/$(TOP).v
-	@echo ');' >> $(VH_DIR)/$(TOP).v
-	@echo 'endmodule' >> $(VH_DIR)/$(TOP).v
-	@echo "Checking PEX pins against Verilog stub..."
-	@pex_pins=$$(awk '/^\.subckt $(TOP)_pex/{sub(/^\.subckt [^ ]+ /,"");p=$$0;next} p&&/^[+]/{sub(/^[+] */,"");p=p" "$$0;next} p{exit} END{print p}' $(NET_PEX_DIR)/$(TOP)_pex.spice); \
-	vh_pins=$$(grep -oP '(?<=inout |input )\w+' $(VH_DIR)/$(TOP).v | tr '\n' ' '); \
-	fail=0; \
-	for pin in $$pex_pins; do \
-		if ! echo " $$vh_pins " | grep -qw "$$pin"; then \
-			echo "ERROR: PEX pin '$$pin' missing from Verilog stub!"; \
-			fail=1; \
+	@echo "Reading pins from $(NET_PEX_DIR)/$(TOP)_magic_pex.spice..."
+	@pex_pins=$$(awk '/^\.subckt $(TOP)_pex/{sub(/^\.subckt [^ ]+ /,"");p=$$0;next} p&&/^[+]/{sub(/^[+] */,"");p=p" "$$0;next} p{exit} END{print p}' $(NET_PEX_DIR)/$(TOP)_magic_pex.spice); \
+	power_pins=$$(echo "$$pex_pins" | tr ' ' '\n' | grep -E '^(VDD|VSS|VPWR|VGND|VNB|VPB)$$' | sort -u | tr '\n' ' '); \
+	signal_pins=$$(echo "$$pex_pins" | tr ' ' '\n' | grep -vE '^(VDD|VSS|VPWR|VGND|VNB|VPB)$$' | grep -v '^$$' | sort | tr '\n' ' '); \
+	{ \
+		echo 'module $(TOP) ('; \
+		if [ -n "$$(echo $$power_pins | xargs)" ]; then \
+			echo '`ifdef USE_POWER_PINS'; \
+			for p in $$power_pins; do echo "    inout $$p,"; done; \
+			echo '`endif'; \
 		fi; \
-	done; \
-	for pin in $$vh_pins; do \
-		if ! echo " $$pex_pins " | grep -qw "$$pin"; then \
-			echo "ERROR: Verilog pin '$$pin' not found in PEX netlist!"; \
-			fail=1; \
-		fi; \
-	done; \
-	if [ "$$fail" -ne 0 ]; then exit 1; fi; \
-	echo "All pins match between PEX netlist and Verilog stub."
+		last=$$(echo $$signal_pins | awk '{print $$NF}'); \
+		for p in $$signal_pins; do \
+			case "$$p" in \
+				di_*) t=input ;; \
+				do_*) t=output ;; \
+				*) t=inout ;; \
+			esac; \
+			if [ "$$p" = "$$last" ]; then echo "    $$t $$p"; else echo "    $$t $$p,"; fi; \
+		done; \
+		echo ');'; \
+		echo 'endmodule'; \
+	} > $(VH_DIR)/$(TOP).v
 .PHONY: verilog
 # ================================================================================================
 

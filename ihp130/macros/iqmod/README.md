@@ -44,7 +44,8 @@
 │  │  └─ iqmod_top_magic.ext.spc
 │  ├─ 📁 pex/
 │  │  ├─ *.spice
-│  │  ├─ iqmod_top_pex.spice
+│  │  ├─ iqmod_top_klayout_pex.spice
+│  │  ├─ iqmod_top_magic_pex.spice
 │  │  └─ reorder_spice_pins.py
 │  └─ 📁 schematic/
 │     ├─ *.cdl
@@ -247,7 +248,13 @@ make lib
 
 ## Verilog Stub
 
-Generates a Verilog stub (`final/vh/<TOP>.v`) for top-level integration into the LibreLane flow. The pin names are hardcoded and all ports are declared as `inout`. After writing the stub, the target performs a bidirectional check against the PEX netlist (`netlist/pex/<TOP>_pex.spice`) to ensure both pin sets match:
+Generates a Verilog stub (`final/vh/<TOP>.v`) for top-level integration into the LibreLane flow by parsing pins from the Magic PEX netlist (`netlist/pex/<TOP>_magic_pex.spice`).
+
+The `verilog` target:
+- requires `netlist/pex/<TOP>_magic_pex.spice` (run `make magic-pex` first)
+- reads the `.subckt <TOP>_pex` pin list (including continuation lines)
+- emits recognized supply pins (`VDD`, `VSS`, `VPWR`, `VGND`, `VNB`, `VPB`) as `inout` under `` `ifdef USE_POWER_PINS ``
+- classifies signal pins by prefix: `di_*` as `input`, `do_*` as `output`, others as `inout`
 
 ```sh
 make verilog
