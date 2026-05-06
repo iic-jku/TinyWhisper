@@ -72,9 +72,13 @@ default_conditions:
     description: Process corner MOSFET
     display: Corner MOSFET
     typical: tt
-  corner_rc:
-    description: Process corner RC
-    display: Corner RC
+  corner_r:
+    description: Process corner resistor
+    display: Corner R
+    typical: typ
+  corner_c:
+    description: Process corner capacitor
+    display: Corner C
     typical: typ
   temp:
     description: Ambient temperature
@@ -250,7 +254,9 @@ parameters:
       corner_mos:
         # enumerate: [ss, sf, tt, fs, ff]
         typical: tt
-      corner_rc:
+      corner_r:
+        typical: typ
+      corner_c:
         typical: typ
       temp:
         #minimum: 0
@@ -345,8 +351,10 @@ parameters:
         stepsize: 1
       corner_mos:
         typical: tt_stat    # Process variation Monte Carlo
-      corner_rc:
-        typical: stat       # Process variation Monte Carlo
+      corner_r:
+        typical: stat
+      corner_c:
+        typical: typ_stat
       temp:
         #minimum: 0
         typical: 27
@@ -443,7 +451,9 @@ parameters:
         # typical: ss_mismatch
         # typical: ff_mismatch
         # typical: sf_mismatch
-      corner_rc:
+      corner_r:
+        typical: typ_mismatch
+      corner_c:
         typical: typ_mismatch
       temp:
         #minimum: 0

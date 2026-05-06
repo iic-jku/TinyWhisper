@@ -292,8 +292,8 @@ format="tcleval( @value )"
 value="
 .lib cornerMOSlv.lib mos_CACE\{corner_mos\}
 .lib cornerMOShv.lib mos_CACE\{corner_mos\}
-.lib cornerRES.lib res_CACE\{corner_rc\}
-.lib cornerCAP.lib cap_typ_CACE\{corner_rc\}
+.lib cornerRES.lib res_CACE\{corner_r\}
+.lib cornerCAP.lib cap_CACE\{corner_c\}
 "}
 C {vdd.sym} 1140 -1380 0 0 {name=l3 lab=VDD}
 C {vdd.sym} 1180 -700 0 0 {name=l4 lab=VDD}
