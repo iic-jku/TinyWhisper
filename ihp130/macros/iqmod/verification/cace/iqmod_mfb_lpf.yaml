@@ -346,7 +346,7 @@ parameters:
       corner_mos:
         typical: tt_stat    # Process variation Monte Carlo
       corner_rc:
-        typical: typ_stat   # Process variation Monte Carlo
+        typical: stat       # Process variation Monte Carlo
       temp:
         #minimum: 0
         typical: 27
