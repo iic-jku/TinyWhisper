@@ -195,12 +195,27 @@ make sim-xschem TB=iqmod_mixer_tb_tran
 All available testbench schematics are located in `testbenches/`. Generated netlists are written to `testbenches/simulations/`.
 
 
+## Plot Xschem Simulation Results
+
+Plots simulation results using a macro-specific plotting script in `scripts/plot_simulations/`:
+
+```sh
+make sim-xschem-plot CELL=<cellname>
+```
+
+For example:
+
+```sh
+make sim-xschem-plot CELL=iqmod_mfb_lpf
+```
+
+
 ## CACE Simulations
 
 Runs [CACE](https://github.com/fossi-foundation/cace) characterization simulations for the LPF and OTA core, collecting result plots into `verification/cace/results/`. Each CACE YAML
 - `iqmod_mfb_lpf.yaml` — characterization of the 3rd-order MFB low-pass filter
 - `iqmod_mfb_lpf_ota_core.yaml` — characterization of the inverter-based OTA core
-is invoked with its AC parameter sets (mismatch, Monte Carlo, corner sweep), the generated plots are copied, and temporary run artifacts are cleaned up:
+is invoked with its AC parameter sets (`ac_mm_params`, `ac_mc_params`, and `ac_params`), the generated plots are copied, and temporary run artifacts are cleaned up:
 
 ```sh
 make sim-cace
@@ -213,7 +228,18 @@ Result plots are saved to:
 
 ## Simulate All
 
-Runs all simulations:
+Runs the complete simulation flow in sequence:
+- Xschem simulations for:
+  - `iqmod_mfb_lpf_ota_core_tb_ac_ol`
+  - `iqmod_mfb_lpf_tb_ac_cl`
+  - `iqmod_mixer_se2diff_tb_tran`
+  - `iqmod_mixer_tb_tran`
+  - `iqmod_top_tb_ac`
+  - `iqmod_top_tb_tran`
+- Plot generation via `sim-xschem-plot CELL=iqmod_mfb_lpf`
+- CACE characterization via `sim-cace`
+
+Run with:
 
 ```sh
 make sim-all
