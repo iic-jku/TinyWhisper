@@ -57,7 +57,6 @@ lvs_run_*
 /ihp130/schematic/simulations
 /ihp130/testbenches/simulations
 /ihp130/ip/sg13g2_ip__rf_bondpad_80x80
-/ihp130/macros/iqmod/scripts/sizing/data
 /ihp130/macros/iqmod/scripts/sizing/techsweep
 /ihp130/macros/iqmod/scripts/sizing/drawing_circuits.ipynb
 /ihp130/macros/iqmod/verification/cace/_runs
