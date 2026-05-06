@@ -200,13 +200,13 @@ All available testbench schematics are located in `testbenches/`. Generated netl
 Plots simulation results using a macro-specific plotting script in `scripts/plot_simulations/`:
 
 ```sh
-make sim-xschem-plot CELL=<cellname>
+make sim-plot-xschem CELL=<cellname>
 ```
 
 For example:
 
 ```sh
-make sim-xschem-plot CELL=iqmod_mfb_lpf
+make sim-plot-xschem CELL=iqmod_mfb_lpf
 ```
 
 
@@ -236,8 +236,12 @@ Runs the complete simulation flow in sequence:
   - `iqmod_mixer_tb_tran`
   - `iqmod_top_tb_ac`
   - `iqmod_top_tb_tran`
-- Plot generation via `sim-xschem-plot CELL=iqmod_mfb_lpf`
 - CACE characterization via `sim-cace`
+
+> [!NOTE]
+> The `sim-plot-xschem` target is intentionally **not** called by `sim-all`.
+> It opens the generated Python figures, which blocks the shell until the window is closed.
+> They are designed for interactive use and must be called manually after the simulation has completed.
 
 Run with:
 

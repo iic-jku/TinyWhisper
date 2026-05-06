@@ -71,9 +71,9 @@ sim-xschem: ## Run TB simulation with Xschem (usage: make sim-xschem TB=<testben
 	' $(TB).sch
 .PHONY: sim-xschem
 
-sim-xschem-plot: ## Plot Xschem simulation results (usage: make sim-xschem-plot CELL=<cellname>)
+sim-plot-xschem: ## Plot Xschem simulation results (usage: make sim-plot-xschem CELL=<cellname>)
 	python3 $(SIM_PLOT_DIR)/plot_$(CELL).py
-.PHONY: sim-xschem-plot
+.PHONY: sim-plot-xschem
 
 sim-cace: ## Run CACE simulations and collect result plots
 	cd $(CACE_DIR) && \
@@ -125,7 +125,6 @@ sim-all: ## Simulate the macro
 	$(MAKE) sim-xschem TB=iqmod_mixer_tb_tran
 	$(MAKE) sim-xschem TB=iqmod_top_tb_ac
 	$(MAKE) sim-xschem TB=iqmod_top_tb_tran
-	$(MAKE) sim-xschem-plot CELL=iqmod_mfb_lpf
 	$(MAKE) sim-cace
 .PHONY: sim-all
 # ================================================================================================
