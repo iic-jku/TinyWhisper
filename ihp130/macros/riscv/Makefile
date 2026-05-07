@@ -52,7 +52,9 @@ FLOW_FINAL_PNL_DIR    := flow/final/pnl
 FLOW_FINAL_SPICE_DIR  := flow/final/spice
 FLOW_FINAL_RENDER_DIR := flow/final/render
 
-# Variables for running the testbenches
+# Variables for simulation and linting targets
+# constants.sv defines the shared opcode/funct localparams and must compile before any module that uses them,
+# so it is always prepended in RISCV_MODULES_SIM and in the single-cell branches below.
 RISCV_MODULES_SYNTH := \
 	$(SRC_DIR)/uart_tx.v \
 	$(SRC_DIR)/uart_rx.v \
@@ -253,7 +255,7 @@ render-gds: ## Render an image from the final GDS using lay2img.py
 
 
 # Build Targets
-build-fpga: ## Build target for FPGA usage (run simulation, synthesis, place & route, generate bitstream and flash bitstream)
+build-fpga: ## Build target for FPGA usage
 	@$(MAKE) -C fpga all
 .PHONY: build-fpga
 
@@ -278,6 +280,7 @@ build-all: ## Build macro (run LibreLane with only Magic DRC checks, copy report
 all: ## Simulate, build and verify the macro
 	$(MAKE) lint-verilog-all
 	$(MAKE) sim-all
+	$(MAKE) build-fpga
 	$(MAKE) build-all
 .PHONY: all
 # ================================================================================================

@@ -170,8 +170,8 @@ make lint-verilog CELL=dsmod   # lint a single module
 make lint-verilog-all          # lint dsmod, cordic_iterative, lo_gen, and riscv_top
 ```
 
-When `CELL=riscv_top` (the default), all synthesis sources plus `constants.sv` are passed to Verilator.
-For a single cell, the correct extension (`.sv` or `.v`) is detected automatically, and `constants.sv` is always included so opcode and funct constants are in scope.
+When `CELL=riscv_top` (the default), the full `RISCV_MODULES_SIM` source list (`constants.sv` + all synthesis sources + `sram_sim.sv`) is passed to Verilator.
+For a single cell, the correct extension (`.sv` or `.v`) is detected automatically, and `constants.sv` is always included first so opcode and funct constants are in scope.
 
 The `lint-verilog-all` target runs these lint checks in sequence:
 
@@ -375,11 +375,27 @@ This only works if the latest run completed without errors.
 
 ## Build FPGA
 
-To build the FPGA design, run:
+The FPGA flow targets a [pico-ice](https://pico-ice.tinyvision.ai/) board (iCE40 UP5K, sg48 package) and uses the open-source iCE40 toolchain: Yosys → nextpnr → icepack.
+
+To run the full flow (lint → synthesis → place-and-route → bitstream), run:
 
 ```sh
 make build-fpga
 ```
+
+This invokes `make -C fpga all`. Individual steps can also be run from `fpga/`:
+
+```sh
+make -C fpga synthesis       # Yosys iCE40 synthesis
+make -C fpga pr              # nextpnr place-and-route
+make -C fpga gen_bitstream   # icepack → .bin
+make -C fpga flash_bitstream # flash via dfu-util
+```
+
+> [!NOTE]
+> Flashing uses `dfu-util`, not `iceprog`. Both flash iCE40 bitstreams, but they target different interfaces:
+> - **`iceprog`** speaks directly over SPI via an FTDI USB bridge (iCEstick, iCEBreaker, …).
+> - **`dfu-util`** uses the USB DFU standard — the pico-ice's RP2040 co-processor acts as the DFU bootloader and forwards the bitstream to the iCE40 flash. `iceprog` does not work on this board.
 
 
 ## Build All
