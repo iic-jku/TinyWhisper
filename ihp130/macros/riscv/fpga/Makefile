@@ -6,15 +6,17 @@ MAKEFILE_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 # Variables
 TOP = riscv_top
 TARGET ?= synth_ice40
+CELL ?= $(TOP)
 
 .DEFAULT_GOAL := help
 
 # Folder structure
-VERILOG_DIR := ../verilog
-SRC_DIR     := $(VERILOG_DIR)/src
-TB_DIR      := $(VERILOG_DIR)/tb
-PCF_FILE    := pico-ice.pcf
+SRC_DIR  := ../rtl
+PCF_FILE := pico-ice.pcf
 
+# Variables for linting and synthesis targets
+# constants.sv defines the shared opcode/funct localparams and must compile before any module that uses them,
+# so it is always prepended in MODULES_SIM and in the single-cell branches below.
 MODULES_SYNTH := \
 	$(SRC_DIR)/uart_tx.v \
 	$(SRC_DIR)/uart_rx.v \
@@ -34,10 +36,12 @@ MODULES_SYNTH := \
 	$(SRC_DIR)/csr.sv \
 	$(SRC_DIR)/imm_gen.sv
 
-MODULES_SIM :=  \
-	$(VERILOG_DIR)/constants.sv \
-	$(MODULES_SYNTH) \
-	$(SRC_DIR)/sram_sim.sv
+MODULES_SIM := \
+	$(SRC_DIR)/constants.sv \
+	$(MODULES_SYNTH)
+
+# Source files for lint-verilog: full module list with constants for TOP, single-file (with constants.sv, auto-detecting .sv/.v) otherwise
+_LINT_SRCS = $(if $(filter $(CELL),$(TOP)),$(MODULES_SIM) $(SRC_DIR)/$(TOP).sv,$(SRC_DIR)/constants.sv $(or $(wildcard $(SRC_DIR)/$(CELL).sv),$(SRC_DIR)/$(CELL).v))
 
 
 # Help Target
@@ -59,9 +63,18 @@ clean: ## Remove generated files
 .PHONY: clean
 # ================================================================================================
 
-lint: ## Run Verilator lint checks
-	verilator --lint-only -Wall -I$(SRC_DIR) $(SRC_DIR)/$(TOP).sv
-.PHONY: lint
+
+# Linter Targets
+lint-verilog: ## Lint Verilog source files with Verilator (usage: make lint-verilog [CELL=<cellname>])
+	verilator --lint-only -I"$(SRC_DIR)" $(_LINT_SRCS)
+.PHONY: lint-verilog
+
+lint-verilog-all: ## Lint all Verilog source files (dsmod, cordic_iterative, lo_gen, riscv_top)
+	$(MAKE) lint-verilog CELL=dsmod
+	$(MAKE) lint-verilog CELL=cordic_iterative
+	$(MAKE) lint-verilog CELL=lo_gen
+	$(MAKE) lint-verilog
+.PHONY: lint-verilog-all
 # ================================================================================================
 
 
@@ -120,6 +133,7 @@ $(TOP).bin: $(TOP).asc
 
 flash_bitstream: $(TOP).bin ## Flash FPGA bitstream
 	dfu-util --alt 0 --download $(TOP).bin
+#	iceprog $(TOP).bin
 .PHONY: flash_bitstream
 # ================================================================================================
 
@@ -134,11 +148,10 @@ $(TOP).v: $(SRC_DIR)/$(TOP).sv $(MODULES_SYNTH)
 
 
 # All Target
-all: ## Run full FPGA flow (simulation, synthesis, place-and-route, bitstream, flash)
-	$(MAKE) simulation
+all: ## Run full FPGA flow (lint, synthesis, place-and-route, bitstream)
+	$(MAKE) lint-verilog-all
 	$(MAKE) synthesis
 	$(MAKE) pr
 	$(MAKE) gen_bitstream
-	$(MAKE) flash_bitstream
 .PHONY: all
 # ================================================================================================
