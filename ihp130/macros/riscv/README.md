@@ -414,13 +414,15 @@ The LibreLane flow already includes LVS and DRC checks with Magic and KLayout, a
 
 ## Build and Verify All
 
-Builds and verifies the whole macro by running both simulation and build steps:
+Builds and verifies the whole macro by running linting, simulation, and build steps:
 
 - `lint-verilog-all`
 - `sim-all`
+- `build-fpga`
 - `build-all`
 
-The LVS and DRC verification is done within the LibreLane flow.
+> [!NOTE]
+> The LVS and DRC verification is done within the LibreLane flow.
 
 ```sh
 make all

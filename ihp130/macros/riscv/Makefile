@@ -80,8 +80,8 @@ RISCV_MODULES_SIM :=  \
 	$(RISCV_MODULES_SYNTH) \
 	$(SRC_DIR)/sram_sim.sv
 
-# Source files for sim-rtl-verilog: auto-selects RISCV_MODULES_SIM when CELL == TOP, single-file otherwise
-_SIM_SRCS = $(if $(filter $(CELL),$(TOP)),$(RISCV_MODULES_SIM),$(SRC_DIR)/$(CELL).v)
+# Source files for sim-rtl-verilog: auto-selects RISCV_MODULES_SIM when CELL == TOP, single-file (auto-detecting .sv/.v) otherwise
+_SIM_SRCS = $(if $(filter $(CELL),$(TOP)),$(RISCV_MODULES_SIM),$(or $(wildcard $(SRC_DIR)/$(CELL).sv),$(SRC_DIR)/$(CELL).v))
 
 # Source files for lint-verilog: constants + all synthesis sources for TOP, single-file (auto-detecting .sv/.v) otherwise
 _LINT_SRCS = $(if $(filter $(CELL),$(TOP)),$(SRC_DIR)/constants.sv $(RISCV_MODULES_SYNTH),$(SRC_DIR)/constants.sv $(or $(wildcard $(SRC_DIR)/$(CELL).sv),$(SRC_DIR)/$(CELL).v))
