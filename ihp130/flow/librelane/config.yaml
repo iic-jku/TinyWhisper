@@ -171,7 +171,7 @@ EXTRA_LEFS:
 - dir::../../ip/sg13g2_ip__bondpad_70x70/final/lef/sg13g2_ip__bondpad_70x70.lef
 
 IGNORE_DISCONNECTED_MODULES:
-- bondpad_70x70
+- sg13g2_ip__bondpad_70x70
 - sg13g2_ip__ce
 - sg13g2_ip__ce_names
 - sg13g2_ip__jku
