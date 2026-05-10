@@ -193,15 +193,6 @@ PDN_ENABLE_PINS: False
 # Because we have multiple power pads for one power domain
 MAGIC_EXT_UNIQUE: notopports
 
-MAGIC_GDS_FLATGLOB:
- # For DRC of SRAM macros
- - "lvsres_*"
- - "VIA_M1_*"
- - "VIA_M2_*"
- - "*_CELL_CORNER"
- - "RSC_*"
- - "*_CELL_SUB"
-
 # Custom PDN config
 PDN_CFG: dir::pdn_cfg.tcl
 
@@ -211,7 +202,6 @@ PDN_CFG: dir::pdn_cfg.tcl
 # PDN_MACRO_CONNECTIONS:
 # - "i_tinywhisper_core.sram_0 VDD VSS VDDARRAY! VSS!"
 # - "i_tinywhisper_core.sram_0 VDD VSS VDD! VSS!"
-
 
 # Custom Pad Files for PADBARE
 PAD_LEFS: dir::../../ip/sg13g2_io_custom/lef/sg13g2_io.lef
@@ -399,3 +389,12 @@ MACROS:
       jku_names:
         location: ["expr::$DIE_AREA[2] - 36.4 - 120.4", "expr::$DIE_AREA[3] - 36.4 - 120.4"]
         orientation: N
+
+MAGIC_GDS_FLATGLOB:
+ # For DRC of SRAM macros
+ - "lvsres_*"
+ - "VIA_M1_*"
+ - "VIA_M2_*"
+ - "*_CELL_CORNER"
+ - "RSC_*"
+ - "*_CELL_SUB"
