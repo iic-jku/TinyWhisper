@@ -1,7 +1,6 @@
-# SPDX-FileCopyrightText: 2025-2026 The TinyWhisper Team
-# SPDX-License-Identifier: Apache-2.0
-
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Simon Dorrer and Harald Pretl
+# SPDX-License-Identifier: Apache-2.0
 """
 Reorder the .subckt pin list in an XSPICE file to match the pin order
 of an Xschem .sym symbol file.
