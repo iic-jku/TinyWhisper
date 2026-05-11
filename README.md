@@ -28,7 +28,7 @@
 
 <p align="center">
   <a href="doc/fig/tinywhisper_top_black_TM2.png">
-    <img src="doc/fig/tinywhisper_top_black_TM2.png" alt="Chip render of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm)" width=70%>
+    <img src="doc/fig/tinywhisper_top_black_TM2.png" alt="Render of the TopMetal2 TinyWhisper logo, generated with the tool ArtistIC" width=70%>
   </a>
   <br>
   <em>Render of the TopMetal2 TinyWhisper logo, generated with the tool ArtistIC.</em>
