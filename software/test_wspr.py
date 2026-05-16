@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2025-2026 The TinyWhisper Team
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 
 from wspr import align_call, encode_call, encode_locator, encode_power, pack_bits, fec, reverse_bits, interleave, mapping
 from cocotb.types import LogicArray, Range

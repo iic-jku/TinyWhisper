@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 # Copyright (c) 2024 Tiny Tapeout LTD
 # Author: Uri Shaked
 # Description: This script initializes a new Magic project for an analog design on Tiny Tapeout.

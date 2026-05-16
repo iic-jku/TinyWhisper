@@ -1,7 +1,7 @@
 #!/bin/sh
 # SPDX-FileCopyrightText: 2026 Harald Pretl
 # Johannes Kepler University, Department for Integrated Circuits
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 
 ERR_FILE_NOT_FOUND=2
 ERR_NO_PARAM=3

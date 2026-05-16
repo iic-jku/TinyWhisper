@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 # SPDX-FileCopyrightText: 2025-2026 The TinyWhisper Team
-# SPDX-License-Identifier: Apache-2.0
-# Master-Thesis
-# @ JKU IIC / ISP
-# 2024
+# SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 # Author: Simon Dorrer
 # Description: Module for loading ngspice files into Python.
 # Created: 02.04.2024

@@ -1,5 +1,5 @@
 // SPDX-FileCopyrightText: 2025-2026 The TinyWhisper Team
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 module imm_gen (
     input  logic [31:0] iword,
     output logic [31:0] immediate

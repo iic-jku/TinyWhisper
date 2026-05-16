@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # SPDX-FileCopyrightText: 2025-2026 The TinyWhisper Team
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 # Author: Simon Dorrer
 # Description: Bode plot of the 3rd-order MFB LPF closed-loop AC simulation
 #              (ngspice) compared with the analytical Prototype Filter transfer

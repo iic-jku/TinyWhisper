@@ -1,5 +1,5 @@
 // SPDX-FileCopyrightText: 2025-2026 The TinyWhisper Team
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 module spi_master (
     input logic clk,
     input logic reset,     // reset should be held high if not in use

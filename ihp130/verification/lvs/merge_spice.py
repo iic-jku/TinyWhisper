@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-FileCopyrightText: 2026 Harald Pretl
 # Johannes Kepler University, Department for Integrated Circuits
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 """
 merge_spice.py - Merge SPICE subcircuits from library files into a main netlist.
 

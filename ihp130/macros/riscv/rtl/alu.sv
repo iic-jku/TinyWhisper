@@ -1,5 +1,5 @@
 // SPDX-FileCopyrightText: 2025-2026 The TinyWhisper Team
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 module alu (
     input logic [31:0] a,               // rs1/pc
     input logic [31:0] b,               // rs2/imm

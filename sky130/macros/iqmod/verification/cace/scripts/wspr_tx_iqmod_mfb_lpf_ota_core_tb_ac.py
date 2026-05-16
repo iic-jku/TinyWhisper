@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 # SPDX-FileCopyrightText: 2025-2026 The TinyWhisper Team
-# SPDX-License-Identifier: Apache-2.0
-# Master-Thesis
-# @ JKU IICQC
-# 2025
+# SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 # Author: Simon Dorrer
 # Description: This file reads the data from the OTA Core AC analysis and save it to a .csv file.
 # Created: 18.08.2025
