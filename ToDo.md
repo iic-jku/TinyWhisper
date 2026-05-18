@@ -47,7 +47,6 @@
 - [ ] update changes from `ihp-sg13g2-ams-chip-template` to `TinyWhisper`
 - [ ] **add [conditional labels](https://github.com/StefanSchippers/xschem/issues/474) nwell / psub to iqmod schematics or remove them entirely, wait final decision of IHP Open-PDK [issue 955](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/955)**
 - [ ] fix ntap in CACE (should be fixed after removing nwell / psub and ptap / ntap)
-- [ ] iqmod PEX is currently not working --> seg fault (EXT_MODE = 3), wrong pins (EXT_MODE = 1/2)
 - [ ] update testbenches with https://github.com/StefanSchippers/xschem/issues/463
 - [ ] find a better way of linking `xschemrc` files and `.designinit`
 - [ ] change DBU to 1nm for all cells
