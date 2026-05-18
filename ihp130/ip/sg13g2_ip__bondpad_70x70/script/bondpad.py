@@ -36,7 +36,7 @@ Examples (single-line — copy-paste friendly):
 
 LEF output features:
     - MACRO with CLASS COVER (identifies the cell as a cover/pad macro)
-    - PIN PAD on TopMetal1 (the bondable pad opening layer)
+    - PIN ``pad`` exposed on Metal2 through TopMetal2 (multi-layer port)
     - OBS (obstructions) on every metal from ``bottom_metal`` up to TopMetal2,
       blocking the router from using those layers under the pad
     - Layer names matching the IHP SG13G2 tech.lef
@@ -54,6 +54,13 @@ PCELL = 'bondpad'
 # Full IHP SG13G2 metal stack from bottom to top (indices 0-6).
 METAL_LAYERS = ['Metal1', 'Metal2', 'Metal3', 'Metal4', 'Metal5', 'TopMetal1', 'TopMetal2']
 
+# Mapping from the wrapper's int bottom_metal (1..6) to the value the
+# SG13_dev ``bondpad`` PCell expects on its ``bottomMetal`` parameter
+# (ChoiceConstraint ['1','2','3','4','5','TM1']). Passing the wrong key
+# (e.g. ``bottom_metal``) is silently ignored by ``add_pcell_variant``,
+# which then falls back to the PDK default of '3' (Metal3).
+PCELL_BOTTOM_METAL = {1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: 'TM1'}
+
 
 def generate_bondpad_lef(size: float, shape: str, output: str,
                          bottom_metal: int = 1):
@@ -64,14 +71,15 @@ def generate_bondpad_lef(size: float, shape: str, output: str,
 
     The generated LEF follows the same conventions as the hand-crafted reference:
     - PIN ``pad`` exposed on Metal2 through TopMetal2 (multi-layer port)
-    - OBS covering the full pad area on every metal from Metal1 to TopMetal2
+    - OBS covering the full pad area on every metal from ``bottom_metal``
+      (default Metal1) up to TopMetal2
     - SYMMETRY X Y R90 and SITE sg13g2_ioSite for padring placement
 
     :param size: Pad side length / diameter in microns.
     :param shape: Pad geometry ('square', 'octagon', or 'circle').
         Only affects the GDS; the LEF always uses full-size rectangles.
     :param output: Filesystem path for the LEF file to write.
-    :param bottom_metal: Lowest metal layer in the stack (1-7, default 1).
+    :param bottom_metal: Lowest metal layer in the stack (1-6, default 1).
     """
     cell_name = pathlib.Path(output).resolve().name.split('.')[0]
 
@@ -150,7 +158,7 @@ def generate_bondpad_gds(diameter: float, shape: str, output: str,
     top_cell = layout.cell(layout.add_cell(cell_name))
     pcell = layout.add_pcell_variant(lib, pcell_decl.id(),
         {'diameter': f'{diameter}u', 'shape': shape,
-         'bottom_metal': bottom_metal})
+         'bottomMetal': PCELL_BOTTOM_METAL[bottom_metal]})
     top_cell.insert(klayout.db.CellInstArray(pcell, klayout.db.Trans(klayout.db.Vector(offset, offset))))
 
     # Ensure the output directory exists.
@@ -192,7 +200,7 @@ except NameError:
     lef_output = None  # pylint: disable=invalid-name
 
 if gds_output is None and lef_output is None:
-    print("Missing GDS or LEF output argument. Please define '-rd gds_output=<path-to-bondpad>'")
+    print("Missing GDS or LEF output argument. Please define at least one of:")
     print("  '-rd gds_output=<path-to-bondpad/bondpad.gds>'")
     print("or")
     print("  '-rd lef_output=<path-to-bondpad/bondpad.lef>'")
