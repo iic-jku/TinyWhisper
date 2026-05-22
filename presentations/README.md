@@ -8,13 +8,11 @@ EasterHegg #23 took place from April 3 to 6, 2026, in Koblenz, Germany. Matthias
 - Slides: [EasterHegg_04042026.pdf](EasterHegg_04042026.pdf)
 - Video: https://media.ccc.de/v/eh23-open-source-chip-design-a-new-playground-for-ham-radio
 
-## DATE 2026
+## CERN 2026
 
-The IEEE Design, Automation and Test in Europe Conference (DATE) 2026 took place from April 20 to 22, 2026, in Verona, Italy. Harald presented TinyWhisper in his talk "From Schematic to Silicon: Mixed-Signal IC Design in Open-Source Flows".
+During his sabbatical, Harald visited CERN in Switzerland and presented TinyWhisper in his talk "From Schematic to Silicon: Mixed‑Signal IC Design in Open‑Source Flows" on May 4, 2026.
 
-- Homepage: https://date26.date-conference.com/programme
-- Slides: Coming soon!
-- Video: Coming soon!
+- Slides & Video: https://indico.cern.ch/event/1680490/
 
 ## QSP Article
 
