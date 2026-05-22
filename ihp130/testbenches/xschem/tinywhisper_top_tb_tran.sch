@@ -13,8 +13,8 @@ ypos2=2.1
 divy=5
 subdivy=1
 unity=1
-x1=0
-x2=4.3301839e-09
+x1=4.3301839e-10
+x2=4.7632023e-09
 divx=5
 subdivx=1
 xlabmag=1.0
@@ -41,8 +41,8 @@ ypos2=2.1
 divy=5
 subdivy=1
 unity=1
-x1=0
-x2=4.3301839e-09
+x1=4.3301839e-10
+x2=4.7632023e-09
 divx=5
 subdivx=1
 xlabmag=1.0
@@ -69,8 +69,8 @@ ypos2=5.6106742
 divy=5
 subdivy=1
 unity=1
-x1=0
-x2=4.3301839e-09
+x1=4.3301839e-10
+x2=4.7632023e-09
 divx=5
 subdivx=1
 xlabmag=1.0
@@ -95,8 +95,8 @@ ypos2=2.1
 divy=5
 subdivy=1
 unity=1
-x1=0
-x2=4.3301839e-09
+x1=4.3301839e-10
+x2=4.7632023e-09
 divx=5
 subdivx=1
 xlabmag=1.0
@@ -122,8 +122,8 @@ ypos2=2
 divy=5
 subdivy=1
 unity=1
-x1=0
-x2=4.3301839e-09
+x1=4.3301839e-10
+x2=4.7632023e-09
 divx=5
 subdivx=1
 xlabmag=1.0
@@ -146,8 +146,8 @@ ypos2=2
 divy=5
 subdivy=1
 unity=1
-x1=0
-x2=4.3301839e-09
+x1=4.3301839e-10
+x2=4.7632023e-09
 divx=5
 subdivx=1
 xlabmag=1.0
@@ -169,8 +169,8 @@ ypos2=2
 divy=5
 subdivy=1
 unity=1
-x1=0
-x2=4.3301839e-09
+x1=4.3301839e-10
+x2=4.7632023e-09
 divx=5
 subdivx=1
 xlabmag=1.0
@@ -290,7 +290,7 @@ N 180 -780 320 -780 {lab=VIO}
 N 380 -300 380 -160 {lab=VIO}
 N 2520 -2080 2520 -2040 {lab=VIO}
 N 2520 -1980 2520 -1940 {lab=GND}
-C {devices/code.sym} 2910 -2060 0 0 {name=NGSPICE
+C {devices/code.sym} 2850 -2060 0 0 {name=NGSPICE
 only_toplevel=true 
 value="
 *.include ../../verification/pex/tinywhisper_top_pex.spice
@@ -308,10 +308,6 @@ value="
 .csparam flo=flo
 * .options klu reltol=1e-3 abstol=1e-12 gmin=1e-12 rshunt=1e12
 .control
-
-pre_osdi $PDK_ROOT/$PDK/libs.tech/ngspice/osdi/psp103.osdi
-pre_osdi $PDK_ROOT/$PDK/libs.tech/ngspice/osdi/psp103_nqs.osdi
-pre_osdi $PDK_ROOT/$PDK/libs.tech/ngspice/osdi/r3_cmc.osdi
 
 set num_threads=32
 
@@ -402,7 +398,7 @@ C {devices/launcher.sym} 2680 -1990 0 0 {name=h3
 descr="Annotate OP" 
 tclcommand="set show_hidden_texts 1; xschem annotate_op"
 }
-C {devices/code_shown.sym} 3120 -2050 0 0 {name=MODEL only_toplevel=true
+C {devices/code_shown.sym} 3000 -2050 0 0 {name=MODEL only_toplevel=true
 format="tcleval( @value )"
 value="
 .lib cornerMOSlv.lib mos_tt
@@ -410,7 +406,7 @@ value="
 .lib cornerHBT.lib hbt_typ
 .lib cornerRES.lib res_typ
 .lib cornerCAP.lib cap_typ
-.lib cornerDIO.lib dio_tt
+.lib ../models/cornerDIO_custom.lib dio_tt
 "}
 C {devices/vsource.sym} 2380 -2010 0 0 {name=VDD value=\{VDD\}}
 C {devices/gnd.sym} 2380 -1940 0 0 {name=l3 lab=GND}
