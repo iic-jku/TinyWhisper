@@ -20,10 +20,10 @@
 
 <p align="center">
   <a href="doc/fig/tinywhisper_top_black.png">
-    <img src="doc/fig/tinywhisper_top_black.png" alt="Chip render of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm)" width=70%>
+    <img src="doc/fig/tinywhisper_top_black.png" alt="Chip render of the ihp-sg13cmos TinyWhisper ASIC (2mm x 2mm)" width=70%>
   </a>
   <br>
-  <em>Chip render of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm).</em>
+  <em>Chip render of the ihp-sg13cmos TinyWhisper ASIC (2mm x 2mm).</em>
 </p>
 
 <p align="center">
@@ -99,7 +99,7 @@ TinyWhisper demonstrates what is possible with current open-source tools and ope
 
 ## Description
 
-TinyWhisper is a compact WSPR transmitter realized with the ihp-sg13g2 PDK. The 2 mm x 2 mm chip operates at a core supply voltage of 1.5 V and an I/O supply voltage of 3.3 V. The chip is [packaged](https://github.com/iic-jku/TinyWhisper/tree/main/packaging) in a QFN-48 package with a total of 56 pins, eight of which are VSS pins connected directly to the package VSS. All documentation, presentations, design files, and future updates are publicly available [here](https://github.com/iic-jku/TinyWhisper/tree/main/presentations). The block diagram is shown below. A render of the final chip layout is shown above, with the digital part placed on the left side of the chip and the analog part on the right. A custom logo on the topmost metal layer, generated with the tool [ArtistIC](https://arxiv.org/abs/2502.02626), is also shown above.
+TinyWhisper is a compact WSPR transmitter realized with the ihp-sg13cmos PDK. The 2 mm x 2 mm chip operates at a core supply voltage of 1.5 V and an I/O supply voltage of 3.3 V. The chip is [packaged](https://github.com/iic-jku/TinyWhisper/tree/main/packaging) in a QFN-48 package with a total of 56 pins, eight of which are VSS pins connected directly to the package VSS. All documentation, presentations, design files, and future updates are publicly available [here](https://github.com/iic-jku/TinyWhisper/tree/main/presentations). The block diagram is shown below. A render of the final chip layout is shown above, with the digital part placed on the left side of the chip and the analog part on the right. A custom logo on the topmost metal layer, generated with the tool [ArtistIC](https://arxiv.org/abs/2502.02626), is also shown above.
 
 <p align="center">
   <a href="doc/fig/tinywhisper_blockdiagramm.png">
