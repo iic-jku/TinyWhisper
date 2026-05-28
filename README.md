@@ -148,7 +148,7 @@ The ToDo list can be found in [ToDo.md](https://github.com/iic-jku/TinyWhisper/t
 
 ## Tapeouts
 
-- [x] TinyWhisper Transmitter (Digital Core + IQ Modulator) — IHP130: https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/release
+- [x] TinyWhisper Transmitter (Digital Core + IQ Modulator) — IHP130: https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/release and branch `IHP-TO-2026-03`
 - [x] RISC-V CPU — GF180 wafer.space: https://github.com/iic-jku/gf180mcu-jku-projects
 - [x] WSPR in Hardware without RISC-V CPU (see [archive](https://github.com/iic-jku/TinyWhisper/tree/main/sky130/macros/archive/verilog_TT_11-2025) folder) — SKY130 Tiny Tapeout: https://tinytapeout.com/chips/ttsky25b/tt_um_cejmu_wspr
 - [x] IQ Modulator — SKY130 Tiny Tapeout: https://tinytapeout.com/chips/ttsky25b/tt_um_TinyWhisper
@@ -296,6 +296,8 @@ The ToDo list can be found in [ToDo.md](https://github.com/iic-jku/TinyWhisper/t
 
 
 ## Acknowledgements
+
+Thanks to Chance Reimer for providing an open source [I2C module](https://github.com/chance189/I2C_Master) and to Ben Marshall for providing a [UART implementation](https://github.com/ben-marshall/uart).
 
 This project is funded by the JKU/SAL [IWS Lab](https://research.jku.at/de/projects/jku-lit-sal-intelligent-wireless-systems-lab-iws-lab/), a collaboration of [Johannes Kepler University](https://jku.at) and [Silicon Austria Labs](https://silicon-austria-labs.com).
 
