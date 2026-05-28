@@ -53,7 +53,7 @@ TinyWhisper demonstrates what is possible with current open-source tools and ope
 
 | Parameter           | Value                                                                             |
 | ------------------- | --------------------------------------------------------------------------------- |
-| Technology          | SKY130 \& IHP SG13G2 (130 nm CMOS)                                                |
+| Technology          | SKY130 \& IHP SG13CMOS (130 nm CMOS)                                              |
 | Die Area            | 2000 × 2000 µm (4 mm²)                                                            |
 | Core Area           | 1270 × 1270 µm (1.613 mm²)                                                        |
 | Clock Frequency     | 56 MHz                                                                            |
