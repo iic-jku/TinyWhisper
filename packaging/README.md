@@ -9,3 +9,4 @@
 - EUROPRACTICE - ASIC Packaging - DRC: https://europractice-ic.com/wp-content/uploads/2020/06/ASIC_Prototype_Packaging_Design_Rules_2024.pdf
 - EUROPRACTICE - ASIC Packaging - QFN-48: https://europractice-ic.com/wp-content/uploads/2019/06/MLP7X7-48-OP-02-R2-ECN-10501.pdf
 - EUROPRACTICE - ASIC Packaging - GDS: https://europractice-ic.com/wp-content/uploads/2019/07/EP_PACKAGES_08022018.gds_.gz
+- Take the DXF file from here: https://www.mirrorsemi.com/OpenChip.html and use https://www.artwork.com/gdsii/asm3500/windows/interface.htm to get the GDS file.
