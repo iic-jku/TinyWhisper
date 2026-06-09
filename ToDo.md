@@ -49,6 +49,7 @@
 - [ ] fix ntap in CACE (should be fixed after removing nwell / psub and ptap / ntap)
 - [ ] update testbenches with https://github.com/StefanSchippers/xschem/issues/463
 - [ ] find a better way of linking `xschemrc` files and `.designinit` --> see ihp-sg13g2-ams-chip-template
+- [ ] increase the CORDIC resolution to 32-bits for higher frequency resolution
 - [ ] change DBU to 1nm for all cells
 - [ ] clean up top-level LVS (Magic + Netgen)
 - [ ] Custom LibreLane steps
