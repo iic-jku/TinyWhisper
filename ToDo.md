@@ -44,6 +44,9 @@
 
 ### ihp-sg13g2
 
+- [ ] simulate with VACASK
+    - Filter: https://codeberg.org/arpadbuermen/VACASK/src/branch/main/docs/cmd-analysis-acstb.md
+    - Mixer: HB
 - [ ] update changes from `ihp-sg13g2-ams-chip-template` to `TinyWhisper`
 - [ ] **add [conditional labels](https://github.com/StefanSchippers/xschem/issues/474) nwell / psub to iqmod schematics or remove them entirely, wait final decision of IHP Open-PDK [issue 955](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/955)**
 - [ ] fix ntap in CACE (should be fixed after removing nwell / psub and ptap / ntap)
