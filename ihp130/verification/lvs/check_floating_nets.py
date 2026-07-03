@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2025-2026 The TinyWhisper Team
+# SPDX-License-Identifier: Apache-2.0
+
 """Check for floating (unconnected) nets and unconnected ports in a SPICE netlist.
 
 Traced hierarchically through subcircuit instances.

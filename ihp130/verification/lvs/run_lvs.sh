@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # SPDX-FileCopyrightText: 2026 Harald Pretl
 # Johannes Kepler University, Department for Integrated Circuits
 # SPDX-License-Identifier: Apache-2.0
@@ -11,8 +12,7 @@ SCH_NETLIST="tinywhisper_top.spice"
 SCH_TOPCELL="tinywhisper_top"
 #SCH_TOPCELL="riscv_top"
 #SCH_TOPCELL="iqmod_top"
-LAY_NETLIST="SoC4219.ext.spice"
-#LAY_TOPCELL="SoC4219"
+LAY_NETLIST="SoC4219_fixed_hierarchy.ext.spice"
 LAY_TOPCELL="tinywhisper_top"
 #LAY_TOPCELL="riscv_top"
 #LAY_TOPCELL="iqmod_top"
@@ -89,4 +89,4 @@ netgen -batch lvs \
     lvs.out
 
 # Clean up temporary files
-#rm -f "${SCH_LOCAL}.tmp1" "${SCH_LOCAL}.tmp2" "${LAY_LOCAL}.tmp1" "${LAY_LOCAL}.tmp2"
+rm -f "${SCH_LOCAL}.tmp1" "${SCH_LOCAL}.tmp2" "${LAY_LOCAL}.tmp1" "${LAY_LOCAL}.tmp2"

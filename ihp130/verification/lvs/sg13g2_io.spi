@@ -843,6 +843,7 @@ Xpclamp vss iovdd pad sg13g2_Clamp_P20N0D
 Xdcndiode vss pad iovdd1 sg13g2_DCNDiode
 Xdcpdiode pad iovdd vss sg13g2_DCPDiode
 Xsecondprot iovdd vss pad padres sg13g2_SecondaryProtection
+Rshort pad padbare 0
 .ends sg13g2_IOPadAnalog
 
 * sg13g2_Gallery
