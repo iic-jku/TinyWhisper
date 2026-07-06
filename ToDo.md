@@ -44,6 +44,10 @@
 
 ### ihp-sg13g2
 
+- [ ] add GitHub action for checking license headers
+    - https://github.com/aesc-silicon/ElemRV/blob/main/.github/workflows/license-check.yaml
+    - https://github.com/aesc-silicon/ElemRV/blob/main/REUSE.toml
+- [ ] add regression test like shown in AMS template
 - [ ] simulate with VACASK
     - Filter: https://codeberg.org/arpadbuermen/VACASK/src/branch/main/docs/cmd-analysis-acstb.md
     - Mixer: HB
