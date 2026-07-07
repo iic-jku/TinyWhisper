@@ -1,0 +1,136 @@
+# =============================================================================
+# Bondplan configuration for TinyWhisper (QFN48 7x7)
+#
+# Consumed by run_bondplan.py:
+#   python3 run_bondplan.py config.yaml
+#   klayout -b -r run_bondplan.py -rd config=config.yaml
+#
+# Structured like a LibreLane config.yaml: flat UPPER_CASE keys, `dir::`
+# prefix for paths relative to this file, placement as location/orientation.
+# =============================================================================
+
+meta:
+  version: 1
+  flow: Bondplan
+
+DESIGN_NAME: tinywhisper
+
+# --- Die (chip) --------------------------------------------------------------
+DIE_GDS: dir::../ihp130/layout/tinywhisper_top_logo_fill.gds.gz
+# DIE_CELL: chip                  # default: top cell of DIE_GDS
+
+# Layers copied into the extracted die view (IHP SG13G2):
+DIE_EXTRACT_LAYERS: ["9/0", "133/0", "134/0"]   # Passiv, TopVia2, TopMetal2
+DIE_EXTRACT_GDS: dir::tinywhisper_top_logo_TM2.gds.gz
+DIE_EXTRACT_CELL: tinywhisper_top_logo_TM2
+DIE_KEEP_LABELS: false            # do not copy DIE_PAD_LABEL_LAYER into extract
+
+# Bondpad detection on the die:
+DIE_PAD_LAYER: "9/0"              # Passiv openings define the bondpads
+DIE_PAD_MIN_SIZE: 40              # um; ignore smaller Passiv openings
+DIE_PAD_LABEL_LAYER: "134/25"     # TopMetal2.text labels carry the pad names
+
+# --- Package -----------------------------------------------------------------
+PACKAGE_GDS: dir::QFN48_7x7.gds
+PACKAGE_CELL: QFN48_7x7           # cell placed into the bondplan (A4 sheet)
+PACKAGE_FOOTPRINT_CELL: OP_QFN48  # cell holding lead + pin-number geometry
+PACKAGE_LEAD_LAYER: "210/0"       # 48 lead polygons
+PACKAGE_PIN_LABEL_LAYER: "211/0"  # texts "1".."48" next to their leads
+
+# --- Die placement -----------------------------------------------------------
+# location: lower-left corner of the (oriented) die outline, in um, relative
+# to the lower-left corner of the package inner border (the square touching
+# the lead tips; QFN48: 5521 x 5521 um).
+# orientation: N/S/E/W/FN/FS/FE/FW, as in LibreLane MACROS instances.
+DIE_PLACEMENT:
+  location: [1760.5, 1760.5]      # (5521 - 2000) / 2 -> die centered
+  orientation: N
+
+# --- Bondwires ---------------------------------------------------------------
+BONDWIRE_LAYER: "190/0"           # Exchange0.drawing (free for documentation)
+BONDWIRE_TEXT_LAYER: "190/25"     # Exchange0.text, for per-wire labels
+BONDWIRE_WIDTH: 30                # um (drawing width only)
+BONDWIRE_LABELS: true             # write "<pin> <pad>" text at each wire
+BONDWIRE_LEAD_SITE: 0.5           # bond point on lead: 0 = tip .. 1 = far end
+BONDWIRE_MAX_LENGTH: 3500         # um; warn above this
+EPAD_WIRE_LENGTH: 500             # um; length of exposed-pad downbond stubs
+
+# --- Output ------------------------------------------------------------------
+BONDPLAN_GDS: dir::tinywhisper_bondplan.gds
+BONDPLAN_CELL: tinywhisper_bondplan
+BONDPLAN_DELETE_LAYERS: ["207/0", "134/25"]  # drop from the bondplan GDS
+BONDPLAN_REPORT: dir::tinywhisper_bondplan.csv
+
+# PNG follows ihp130/scripts/lay2img.py conventions: writes *_white / *_black
+BONDPLAN_PNG: dir::tinywhisper_bondplan.png
+BONDPLAN_SVG: dir::tinywhisper_bondplan.svg
+IMAGE_WIDTH: 2000                 # px
+IMAGE_OVERSAMPLING: 2
+IMAGE_REGION: package             # package (footprint + bond table) | full
+
+# --- Pinout ------------------------------------------------------------------
+# Package pin number -> die pad name (TopMetal2.text label on the pad).
+# A list bonds several wires to one lead. Use ~ (null) for NC pins.
+# Duplicate names (VDD/VSS/...) are resolved by shortest-wire assignment.
+# EPAD: downbonds to the exposed pad, drawn as radial stubs from
+# leftover pads with the given names.
+PINOUT:
+  # Left side, top to bottom (pins 1-12)
+  1:  "clk_PAD"                   # clk
+  2:  "rst_n_PAD"                 # rst_n
+  3:  "input_PAD[5]"              # so
+  4:  "output_PAD[8]"             # si
+  5:  "output_PAD[7]"             # sclk
+  6:  "output_PAD[6]"             # sram_ce
+  7:  "IOVDD"                     # IOVDD
+  8:  "VDD"                       # VDD
+  9:  "bidir_PAD[8]"              # sda
+  10: "output_PAD[5]"             # scl
+  11: "input_PAD[4]"              # rx
+  12: "output_PAD[4]"             # tx
+
+  # Bottom side, left to right (pins 13-24)
+  13: "IOVDD"                     # IOVDD
+  14: "IOVSS"                     # IOVSS
+  15: "VDD"                       # VDD
+  16: "output_PAD[0]"             # GPIO_o[0]
+  17: "output_PAD[1]"             # GPIO_o[1]
+  18: "output_PAD[2]"             # GPIO_o[2]
+  19: "output_PAD[3]"             # GPIO_o[3]
+  20: "VDD"                       # VDD
+  21: "bidir_PAD[4]"              # Q_p
+  22: "bidir_PAD[5]"              # Q_n
+  23: "bidir_PAD[6]"              # lo_Q
+  24: "bidir_PAD[7]"              # lo_Qx
+
+  # Right side, bottom to top (pins 25-36)
+  25: "analog_PAD[0]"             # Vinp_Q
+  26: "analog_PAD[1]"             # Vinn_Q
+  27: "VSS"                       # VSS
+  28: "VDD"                       # VDD
+  29: "analog_PAD[2]"             # Voutp_Q_RF
+  30: "analog_PAD[3]"             # Voutn_Q_RF
+  31: "analog_PAD[4]"             # Voutn_I_RF
+  32: "analog_PAD[5]"             # Voutp_I_RF
+  33: "VDD"                       # VDD
+  34: "VSS"                       # VSS
+  35: "analog_PAD[6]"             # Vinn_I
+  36: "analog_PAD[7]"             # Vinp_I
+
+  # Top side, right to left (pins 37-48)
+  37: "bidir_PAD[3]"              # lo_Ix
+  38: "bidir_PAD[2]"              # lo_I
+  39: "bidir_PAD[1]"              # I_n
+  40: "bidir_PAD[0]"              # I_p
+  41: "VDD"                       # VDD
+  42: "input_PAD[3]"              # GPIO_i[3]
+  43: "input_PAD[2]"              # GPIO_i[2]
+  44: "input_PAD[1]"              # GPIO_i[1]
+  45: "input_PAD[0]"              # GPIO_i[0]
+  46: "VSS"                       # VSS
+  47: "VDD"                       # VDD
+  48: "IOVDD"                     # IOVDD
+
+  # Downbonds to the exposed pad (die attach paddle, package GND):
+  # all remaining VSS / IOVSS pads
+  EPAD: ["VSS", "VSS", "VSS", "VSS", "VSS", "VSS", "IOVSS", "IOVSS"]
