@@ -36,6 +36,8 @@ PACKAGE_CELL: QFN48_7x7           # cell placed into the bondplan (A4 sheet)
 PACKAGE_FOOTPRINT_CELL: OP_QFN48  # cell holding lead + pin-number geometry
 PACKAGE_LEAD_LAYER: "210/0"       # 48 lead polygons
 PACKAGE_PIN_LABEL_LAYER: "211/0"  # texts "1".."48" next to their leads
+PACKAGE_PIN_LABEL_OFFSET: 250     # um; regenerated pin numbers sit this far
+                                  # beyond the lead end, on the lead axis
 
 # --- Die placement -----------------------------------------------------------
 # location: lower-left corner of the (oriented) die outline, in um, relative

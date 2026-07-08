@@ -46,6 +46,7 @@ DEFAULTS = {
     "PACKAGE_FOOTPRINT_CELL": None, # default: PACKAGE_CELL
     "PACKAGE_LEAD_LAYER": "210/0",
     "PACKAGE_PIN_LABEL_LAYER": "211/0",
+    "PACKAGE_PIN_LABEL_OFFSET": 250.0,  # um, pin number beyond its lead end
     "BONDWIRE_LAYER": "190/0",
     "BONDWIRE_TEXT_LAYER": "190/25",
     "BONDWIRE_WIDTH": 30.0,
@@ -350,7 +351,7 @@ def analyze_package(cfg):
             % cfg["PACKAGE_PIN_LABEL_LAYER"])
     pins = {}
     used_leads = {}
-    text_box = None
+    sizes = {}
     it = fp_cell.begin_shapes_rec(li)
     while not it.at_end():
         shape = it.shape()
@@ -362,11 +363,7 @@ def analyze_package(cfg):
                 continue
             t = shape.text.transformed(it.trans())
             x, y = t.x * dbu, t.y * dbu
-            size = t.size * dbu if t.size > 0 else 120.0
-            half_w = len(str(num)) * size * 0.35     # centered glyph extent
-            glyph_box = pya.DBox(x - half_w, y - size * 0.55,
-                                 x + half_w, y + size * 0.55)
-            text_box = glyph_box if text_box is None else text_box + glyph_box
+            sizes[num] = t.size * dbu if t.size > 0 else 120.0
             idx = min(range(len(leads)),
                       key=lambda i: (leads[i]["cx"] - x) ** 2
                                   + (leads[i]["cy"] - y) ** 2)
@@ -376,10 +373,14 @@ def analyze_package(cfg):
             pins[num] = leads[idx]
         it.next()
 
-    # Bond point per pin: on the ray center -> lead, between the lead tip
-    # (site 0) and its far end (site 1)
+    # Per pin, on the ray center -> lead: the bond point (between lead tip,
+    # site 0, and far end, site 1) and the pin number label (on the lead
+    # axis, PACKAGE_PIN_LABEL_OFFSET beyond the lead end)
     site = float(cfg["BONDWIRE_LEAD_SITE"])
+    label_off = float(cfg["PACKAGE_PIN_LABEL_OFFSET"])
     bond_pts = {}
+    pin_labels = {}
+    text_box = None
     for num, lead in pins.items():
         direction = (lead["cx"] - center[0], lead["cy"] - center[1])
         norm = math.hypot(*direction)
@@ -388,9 +389,20 @@ def analyze_package(cfg):
         if len(ts) >= 2:
             t = ts[0] + site * (ts[-1] - ts[0])
             pt = (center[0] + t * direction[0], center[1] + t * direction[1])
+            t_label = ts[-1] + label_off
         else:                                   # degenerate: use lead center
             pt = (lead["cx"], lead["cy"])
+            t_label = norm + label_off
         bond_pts[num] = fp_trans * pya.DPoint(*pt)
+
+        size = sizes.get(num, 120.0)
+        lx = center[0] + t_label * direction[0]
+        ly_ = center[1] + t_label * direction[1]
+        pin_labels[num] = (fp_trans * pya.DPoint(lx, ly_), size)
+        half_w = len(str(num)) * size * 0.35     # centered glyph extent
+        glyph_box = pya.DBox(lx - half_w, ly_ - size * 0.55,
+                             lx + half_w, ly_ + size * 0.55)
+        text_box = glyph_box if text_box is None else text_box + glyph_box
 
     center = fp_trans * pya.DPoint(*center)
     inner *= fp_trans.mag
@@ -404,7 +416,8 @@ def analyze_package(cfg):
     info("package: %d leads, %d numbered pins, inner border %.1f x %.1f um"
          % (len(leads), len(pins), 2 * inner, 2 * inner))
     return {"layout": ly, "cell": pkg_cell, "bond_pts": bond_pts,
-            "center": center, "inner": inner, "view_box": view_box}
+            "pin_labels": pin_labels, "center": center, "inner": inner,
+            "view_box": view_box}
 
 
 # ---------------------------------------------------------------------------
@@ -570,7 +583,7 @@ def build_bondplan(cfg, pkg, die_layout, die_cell, die_trans, wires):
     if cfg["BONDWIRE_LABELS"]:
         text_li = ly.layer(*parse_layer(cfg["BONDWIRE_TEXT_LAYER"]))
         size, spacing = 90.0, 120.0
-        x = pkg["view_box"].right + 400.0
+        x = pkg["view_box"].right + 200.0
 
         def key(w):
             return (1, 0) if w["pin"] == "EPAD" else (0, w["pin"])
@@ -585,18 +598,29 @@ def build_bondplan(cfg, pkg, die_layout, die_cell, die_trans, wires):
                              x + max(map(len, rows)) * size * 0.62,
                              y_first + size * 0.6)
 
-    # Lead / pin-number layers are only authoritative inside the footprint
-    # cell; drop drawing-sheet decor (frame rulers, logos) on those layers
+    # The lead layer is only authoritative inside the footprint cell; drop
+    # drawing-sheet decor (frame rulers, logos) on it
     fp_cell = ly.cell(cfg["PACKAGE_FOOTPRINT_CELL"] or pkg["cell"].name)
     if fp_cell is not None:
         keep = {fp_cell.cell_index()} | set(fp_cell.called_cells())
-        for spec in (cfg["PACKAGE_LEAD_LAYER"], cfg["PACKAGE_PIN_LABEL_LAYER"]):
-            li = ly.find_layer(*parse_layer(spec))
-            if li is None:
-                continue
+        li = ly.find_layer(*parse_layer(cfg["PACKAGE_LEAD_LAYER"]))
+        if li is not None:
             for cell in ly.each_cell():
                 if cell.cell_index() not in keep:
                     cell.shapes(li).clear()
+
+    # Replace the package pin numbers: drop the drawing-sheet texts (they
+    # sit offset from their leads) and re-insert each number centered on
+    # its lead axis, PACKAGE_PIN_LABEL_OFFSET beyond the lead end
+    pin_li = ly.layer(*parse_layer(cfg["PACKAGE_PIN_LABEL_LAYER"]))
+    for cell in ly.each_cell():
+        cell.shapes(pin_li).clear()
+    for num, (pt, size) in sorted(pkg["pin_labels"].items()):
+        text = pya.DText(str(num), pya.DTrans(pya.DVector(pt.x, pt.y)),
+                         size, 0)
+        text.halign = pya.HAlign.HAlignCenter
+        text.valign = pya.VAlign.VAlignCenter
+        top.shapes(pin_li).insert(text)
 
     # Drop unwanted layers (e.g. drawing frame, die pad labels)
     for spec in cfg["BONDPLAN_DELETE_LAYERS"]:
