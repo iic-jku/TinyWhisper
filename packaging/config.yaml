@@ -1,9 +1,9 @@
 # =============================================================================
 # Bondplan configuration for TinyWhisper (QFN48 7x7)
 #
-# Consumed by run_bondplan.py:
-#   python3 run_bondplan.py config.yaml
-#   klayout -b -r run_bondplan.py -rd config=config.yaml
+# Consumed by scripts/run_bondplan.py (run from this folder):
+#   python3 scripts/run_bondplan.py config.yaml
+#   klayout -b -r scripts/run_bondplan.py -rd config=config.yaml
 #
 # Structured like a LibreLane config.yaml: flat UPPER_CASE keys, `dir::`
 # prefix for paths relative to this file, placement as location/orientation.
@@ -21,7 +21,7 @@ DIE_GDS: dir::../ihp130/layout/tinywhisper_top_logo_fill.gds.gz
 
 # Layers copied into the extracted die view (IHP SG13G2):
 DIE_EXTRACT_LAYERS: ["9/0", "133/0", "134/0"]   # Passiv, TopVia2, TopMetal2
-DIE_EXTRACT_GDS: dir::tinywhisper_top_logo_TM2.gds.gz
+DIE_EXTRACT_GDS: dir::layout/tinywhisper_top_logo_TM2.gds.gz
 DIE_EXTRACT_CELL: tinywhisper_top_logo_TM2
 DIE_KEEP_LABELS: false            # do not copy DIE_PAD_LABEL_LAYER into extract
 
@@ -31,7 +31,7 @@ DIE_PAD_MIN_SIZE: 40              # um; ignore smaller Passiv openings
 DIE_PAD_LABEL_LAYER: "134/25"     # TopMetal2.text labels carry the pad names
 
 # --- Package -----------------------------------------------------------------
-PACKAGE_GDS: dir::QFN48_7x7.gds
+PACKAGE_GDS: dir::layout/QFN48_7x7.gds
 PACKAGE_CELL: QFN48_7x7           # cell placed into the bondplan (A4 sheet)
 PACKAGE_FOOTPRINT_CELL: OP_QFN48  # cell holding lead + pin-number geometry
 PACKAGE_LEAD_LAYER: "210/0"       # 48 lead polygons
@@ -58,14 +58,14 @@ BONDWIRE_MAX_LENGTH: 3500         # um; warn above this
 EPAD_WIRE_LENGTH: 500             # um; length of exposed-pad downbond stubs
 
 # --- Output ------------------------------------------------------------------
-BONDPLAN_GDS: dir::tinywhisper_bondplan.gds
+BONDPLAN_GDS: dir::layout/tinywhisper_bondplan.gds
 BONDPLAN_CELL: tinywhisper_bondplan
 BONDPLAN_DELETE_LAYERS: ["207/0", "134/25"]  # drop from the bondplan GDS
-BONDPLAN_REPORT: dir::tinywhisper_bondplan.csv
+BONDPLAN_REPORT: dir::render/tinywhisper_bondplan.csv
 
 # PNG follows ihp130/scripts/lay2img.py conventions: writes *_white / *_black
-BONDPLAN_PNG: dir::tinywhisper_bondplan.png
-BONDPLAN_SVG: dir::tinywhisper_bondplan.svg
+BONDPLAN_PNG: dir::render/tinywhisper_bondplan.png
+BONDPLAN_SVG: dir::render/tinywhisper_bondplan.svg
 IMAGE_WIDTH: 2000                 # px
 IMAGE_OVERSAMPLING: 2
 IMAGE_REGION: package             # package (footprint + bond table) | full
