@@ -17,7 +17,7 @@ meta:
 DESIGN_NAME: tinywhisper
 
 # --- Die (chip) --------------------------------------------------------------
-DIE_GDS: dir::../ihp130/layout/{design}_top_logo_fill.gds.gz
+DIE_GDS: dir::../layout/{design}_top_logo_fill.gds.gz
 # DIE_CELL: chip_top              # default: top cell of DIE_GDS
 
 # Layers copied into the extracted die view (IHP SG13G2):
