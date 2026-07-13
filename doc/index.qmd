@@ -97,6 +97,20 @@ Since the analog front-end is an IQ modulator, it supports not only WSPR but als
   <em>Render of the TopMetal2 TinyWhisper logo, generated with the tool ArtistIC.</em>
 </p>
 
+### Bondplan
+
+The die is packaged in a [QFN-48](https://europractice-ic.com/wp-content/uploads/2019/06/MLP7X7-48-OP-02-R2-ECN-10501.pdf) open-molded plastic package ([OmPP](https://www.qptechnologies.com/products/ompp/)). Its 56 bondpads are wired to the 48 package leads, and the eight remaining VSS and IOVSS pads are connected as downbonds directly to the exposed pad, which forms the package ground. Bonding is done with 25 µm gold wire, the longest wire measures 2.75 mm, and the cover is glued on after bonding.
+
+The bonding diagram below is generated fully automatically with `make bondplan` from the final chip GDS and the EUROPRACTICE package library [`EP_PACKAGES_08022018.gds`](https://europractice-ic.com/wp-content/uploads/2019/07/EP_PACKAGES_08022018.gds_.gz). The flow extracts the die bondpads together with their names, places the die in the package cavity, draws the bondwires, fills in the title block, and checks wire lengths, crossings, spacing and the clearance around the sensitive RF wires. The [pinout](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/packaging/config.yaml) and all flow settings are kept in a single configuration file, so the diagram never goes out of sync with the chip. Details are documented in the [packaging README](https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/packaging).
+
+<p align="center">
+  <a href="fig/tinywhisper_bondplan_white.png">
+    <img src="fig/tinywhisper_bondplan_white.png" alt="Bonding diagram of the ihp-sg13g2 TinyWhisper ASIC in a QFN-48 package" width=70%>
+  </a>
+  <br>
+  <em>Bonding diagram of the ihp-sg13g2 TinyWhisper ASIC in a QFN-48 package.</em>
+</p>
+
 ### Outlook
 
 The chip is still in production and is expected to be delivered in December 2026. The ASIC is just the beginning of a broader open-hardware project. The next step is to design a [PCB](https://github.com/iic-jku/TinyWhisper/tree/main/pcb) that includes all necessary external components: switchable bandpass filters for each RF band, an RF amplifier, a crystal oscillator as the clock source, external SRAM, voltage regulators for the various supply voltages, a display, controls, an SMA connector for the antenna, and a USB interface for configuration. The packaged chip will be soldered onto this board and then [characterized](https://github.com/iic-jku/TinyWhisper/tree/main/measurements).
