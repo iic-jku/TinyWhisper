@@ -1,8 +1,5 @@
 # ihp-sg13g2 IQ-Modulator
 
-> [!IMPORTANT]
-> This repository requires the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) container with tag `2026.05` or later.
-
 <p align="center">
   <a href="render/img/iqmod_top_white.png">
     <img src="render/img/iqmod_top_white.png" alt="Render of the ihp-sg13g2 IQ modulator layout (337um x 142um)" width=70%>
