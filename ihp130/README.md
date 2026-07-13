@@ -135,6 +135,19 @@
 │  │  └─ tinywhisper_top.pnl.v
 │  └─ 📁 spice/
 │     └─ tinywhisper_top.spice
+├─ 📁 packaging/
+│  ├─ 📁 layout/
+│  │  ├─ EP_PACKAGES_08022018.gds
+│  │  ├─ OP_QFN48_A4_FIT.gds
+│  │  ├─ tinywhisper_bondplan.gds
+│  │  └─ tinywhisper_top_logo_TM2.gds.gz
+│  ├─ 📁 render/
+│  │  └─ tinywhisper_bondplan_{white,black}.{png,svg}
+│  ├─ 📁 scripts/
+│  │  └─ run_bondplan.py
+│  ├─ config.yaml
+│  ├─ README.md
+│  └─ result.md
 ├─ 📁 release/
 │  ├─ 📁 v.1.0.0/
 │  │  ├─ 📁 doc/
