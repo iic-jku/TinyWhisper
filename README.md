@@ -40,6 +40,8 @@
 
 The full documentation of the TinyWhisper transmitter is available [here](https://iic-jku.github.io/TinyWhisper/index.html).
 
+Moreover, look into the [`presentation/`](https://github.com/iic-jku/TinyWhisper/tree/main/presentations) folder for further information.
+
 
 ## Purpose
 
