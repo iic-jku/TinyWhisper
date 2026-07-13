@@ -1,5 +1,5 @@
 # =============================================================================
-# Bondplan configuration for TinyWhisper (QFN48 7x7)
+# Bondplan configuration for TinyWhisper
 #
 # Consumed by scripts/run_bondplan.py (run from this folder):
 #   python3 scripts/run_bondplan.py config.yaml
@@ -7,6 +7,7 @@
 #
 # Structured like a LibreLane config.yaml: flat UPPER_CASE keys, `dir::`
 # prefix for paths relative to this file, placement as location/orientation.
+# {design} in any value expands to DESIGN_NAME.
 # =============================================================================
 
 meta:
@@ -16,13 +17,13 @@ meta:
 DESIGN_NAME: tinywhisper
 
 # --- Die (chip) --------------------------------------------------------------
-DIE_GDS: dir::../ihp130/layout/tinywhisper_top_logo_fill.gds.gz
-# DIE_CELL: chip                  # default: top cell of DIE_GDS
+DIE_GDS: dir::../ihp130/layout/{design}_top_logo_fill.gds.gz
+# DIE_CELL: chip_top              # default: top cell of DIE_GDS
 
 # Layers copied into the extracted die view (IHP SG13G2):
 DIE_EXTRACT_LAYERS: ["9/0", "133/0", "134/0"]   # Passiv, TopVia2, TopMetal2
-DIE_EXTRACT_GDS: dir::layout/tinywhisper_top_logo_TM2.gds.gz
-DIE_EXTRACT_CELL: tinywhisper_top_logo_TM2
+DIE_EXTRACT_GDS: dir::layout/{design}_top_logo_TM2.gds.gz
+DIE_EXTRACT_CELL: "{design}_top_logo_TM2"
 DIE_KEEP_LABELS: false            # do not copy DIE_PAD_LABEL_LAYER into extract
 
 # Bondpad detection on the die:
@@ -31,51 +32,111 @@ DIE_PAD_MIN_SIZE: 40              # um; ignore smaller Passiv openings
 DIE_PAD_LABEL_LAYER: "134/25"     # TopMetal2.text labels carry the pad names
 
 # --- Package -----------------------------------------------------------------
-PACKAGE_GDS: dir::layout/QFN48_7x7.gds
-PACKAGE_CELL: QFN48_7x7           # cell placed into the bondplan (A4 sheet)
-PACKAGE_FOOTPRINT_CELL: OP_QFN48  # cell holding lead + pin-number geometry
-PACKAGE_LEAD_LAYER: "210/0"       # 48 lead polygons
-PACKAGE_PIN_LABEL_LAYER: "211/0"  # texts "1".."48" next to their leads
-PACKAGE_PIN_LABEL_OFFSET: 250     # um; regenerated pin numbers sit this far
-                                  # beyond the lead end, on the lead axis
+# PACKAGE_GDS is generated automatically from the EUROPRACTICE package
+# library: the PACKAGE_NAME sheet cell is copied out (layer 207/0 dropped).
+# See the README for the list of supported PACKAGE_NAME values.
+PACKAGE_LIBRARY_GDS: dir::layout/EP_PACKAGES_08022018.gds
+PACKAGE_NAME: OP_QFN48_A4_FIT
+# PACKAGE_GDS: ...                # default: <library dir>/<PACKAGE_NAME>.gds
+# PACKAGE_FOOTPRINT_CELL: ...     # default: auto-detect the lead frame
+# Sheet texts to remove when generating the package, as case-insensitive
+# glob patterns (here: the template revision note in the bottom corner)
+PACKAGE_DELETE_TEXTS: ["Updated by *"]
+PACKAGE_LEAD_LAYER: "210/0"       # lead polygons (one per pin)
+PACKAGE_PIN_LABEL_LAYER: "211/0"  # numbered pin texts next to their leads
+PACKAGE_PIN_LABEL_OFFSET: 250     # um; pin number distance outside the
+                                  # package outline
+PACKAGE_PIN_LABEL_SIZE: 180       # um; pin number font size
 
 # --- Die placement -----------------------------------------------------------
 # location: lower-left corner of the (oriented) die outline, in um, relative
 # to the lower-left corner of the package inner border (the square touching
-# the lead tips; QFN48: 5521 x 5521 um).
+# the lead tips). Omit location to center the die in the package.
 # orientation: N/S/E/W/FN/FS/FE/FW, as in LibreLane MACROS instances.
 DIE_PLACEMENT:
-  location: [1760.5, 1760.5]      # (5521 - 2000) / 2 -> die centered
+  # location: [1760.5, 1760.5]    # default: centered
   orientation: N
 
 # --- Bondwires ---------------------------------------------------------------
 BONDWIRE_LAYER: "190/0"           # Exchange0.drawing (free for documentation)
 BONDWIRE_TEXT_LAYER: "190/25"     # Exchange0.text, for per-wire labels
-BONDWIRE_WIDTH: 30                # um (drawing width only)
+BONDWIRE_WIDTH: 25                # um (drawing width only)
 BONDWIRE_LABELS: true             # write "<pin> <pad>" text at each wire
+TABLE_TEXT_SIZE: 100              # um; bond table font size
+TABLE_GAP: 400                    # um; gap between plan and bond table.
+                                  # The side margins are computed so that
+                                  # left and right come out equal.
 BONDWIRE_LEAD_SITE: 0.5           # bond point on lead: 0 = tip .. 1 = far end
 BONDWIRE_MAX_LENGTH: 3500         # um; warn above this
+BONDWIRE_MAX_SKEW: 30             # deg; warn if a wire lands skewed on its lead
 EPAD_WIRE_LENGTH: 500             # um; length of exposed-pad downbond stubs
 
+# Guarded (sensitive) wires: warn if any other wire comes closer than
+# GUARD_SPACING. Entries are pins or [groups]; wires within one group
+# (e.g. a differential quad) are exempt from each other's check.
+GUARDED_PINS: [[29, 30, 31, 32]]  # Voutp/n_Q_RF, Voutn/p_I_RF
+GUARD_SPACING: 60                 # um; see result.md for the actual gaps
+
 # --- Output ------------------------------------------------------------------
-BONDPLAN_GDS: dir::layout/tinywhisper_bondplan.gds
-BONDPLAN_CELL: tinywhisper_bondplan
-BONDPLAN_DELETE_LAYERS: ["207/0", "134/25"]  # drop from the bondplan GDS
-BONDPLAN_REPORT: dir::render/tinywhisper_bondplan.csv
+BONDPLAN_GDS: dir::layout/{design}_bondplan.gds
+BONDPLAN_CELL: "{design}_bondplan"
+# 207/0 is the drawing template's A4 paper rectangle - documentation
+# scaffolding with no use in the bondplan (the frame lines on 211/0 mark
+# the sheet); 134/25 are the die pad name labels
+BONDPLAN_DELETE_LAYERS: ["207/0", "134/25"]
+# Bond report: .md -> Markdown (summary + bond table), .csv -> raw CSV
+BONDPLAN_REPORT: dir::result.md
 
 # PNG follows ihp130/scripts/lay2img.py conventions: writes *_white / *_black
-BONDPLAN_PNG: dir::render/tinywhisper_bondplan.png
-BONDPLAN_SVG: dir::render/tinywhisper_bondplan.svg
+BONDPLAN_PNG: dir::render/{design}_bondplan.png
+BONDPLAN_SVG: dir::render/{design}_bondplan.svg
 IMAGE_WIDTH: 2000                 # px
 IMAGE_OVERSAMPLING: 2
-IMAGE_REGION: package             # package (footprint + bond table) | full
+IMAGE_REGION: full                # package (footprint + bond table) | full
+
+# --- Drawing sheet (title block) -----------------------------------------------
+# Keep the EUROPRACTICE A4 drawing frame and fill in its title block.
+# Keys match the label texts on the sheet (case/colon insensitive). Values
+# may use placeholders: {design} {date} {wire_count} {bondwire_width_um}
+# {max_wire_length_um/mm} {min_wire_length_um} {min_gap_um}
+# {die_width_um/mm} {die_height_um/mm} {pad_pitch_um} {pad_opening_um}.
+# A mapping value allows fine placement: {value: "...", dx: <um>, dy: <um>}
+# relative to the label position.
+SHEET_KEEP: true
+SHEET_FIELDS:
+  Request: "JKU IICQC - {design}"
+  Date: "{date}"
+  MPW: "IHP SG13G2"
+  Die: "{design}"
+  "Size incl scribe": "{die_width_mm} x {die_height_mm} mm"
+  "Max. wire length": "{max_wire_length_mm} mm"
+  "Pad-pitch": "{pad_pitch_um} um"
+  "Pad-opening": "{pad_opening_um} um"
+  "Die-thickness": "200 um"
+  "Extra Info": "{wire_count} wires, min gap {min_gap_um} um, mount the lid with its white dot at pin 1"
+  "Qty packaged": "10"
+  "Qty naked": "20"
+  "Die Attach": "conductive epoxy"
+  "Wire": "Gold, {bondwire_width_um} um"
+
+# Lid option checkbox to mark with an X (Taped | Sealed | Glued | Glass).
+# Glued is the standard for open-molded plastic packages (OmPP): the die
+# sits in an open cavity and the cover is glued on after wire bonding.
+LID: Glued
+
+# Font scale factors for the sheet's own texts (label -> factor).
+# Note: the headline text is package-specific; a warning is printed if an
+# entry matches no text on the sheet.
+SHEET_TEXT_SCALE:
+  "Request": 0.7
+  "QFN48(7x7)": 0.7
 
 # --- Pinout ------------------------------------------------------------------
 # Package pin number -> die pad name (TopMetal2.text label on the pad).
 # A list bonds several wires to one lead. Use ~ (null) for NC pins.
 # Duplicate names (VDD/VSS/...) are resolved by shortest-wire assignment.
-# EPAD: downbonds to the exposed pad, drawn as radial stubs from
-# leftover pads with the given names.
+# EPAD: downbonds to the exposed pad, drawn from leftover pads with the
+# given names, parallel to the neighboring wires.
 PINOUT:
   # Left side, top to bottom (pins 1-12)
   1:  "clk_PAD"                   # clk
