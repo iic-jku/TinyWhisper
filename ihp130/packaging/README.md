@@ -8,13 +8,19 @@ is generated fully automatically by [scripts/run_bondplan.py](scripts/run_bondpl
 ### Requirements
 
 - KLayout Python module (`pya`) and PyYAML. Both available out of the box in the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) container.
-- The die GDS with `Passiv` pad openings and pad name labels (`TopMetal2.text`), e.g. the LibreLane output `ihp130/layout/tinywhisper_top_logo_fill.gds.gz`.
+- The die GDS with `Passiv` pad openings and pad name labels (`TopMetal2.text`), e.g. the LibreLane output `../layout/tinywhisper_top_logo_fill.gds.gz`.
 - The EUROPRACTICE package library GDS (`layout/EP_PACKAGES_08022018.gds`, download link under Useful Links). A pre-made package GDS with lead frame polygons and pin number texts works as well.
 
 ### Quick Start
 
 ```bash
-cd packaging
+make bondplan            # from the ihp130 folder
+```
+
+or directly:
+
+```bash
+cd ihp130/packaging
 python3 scripts/run_bondplan.py config.yaml
 # or: klayout -b -r scripts/run_bondplan.py -rd config=config.yaml
 ```

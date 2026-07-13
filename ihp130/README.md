@@ -539,9 +539,34 @@ make magic-verify
 ```
 
 
+## Packaging (Bondplan Generation)
+
+Generates the bondplan fully automatically: the die placed in the package cavity, all bondwires, a pin table, and the filled EUROPRACTICE title block. Inputs are the final chip GDS (`layout/tinywhisper_top_logo_fill.gds.gz`) and the EUROPRACTICE package library, from which the QFN48 drawing sheet is extracted:
+
+```sh
+make bondplan
+```
+
+The flow ([packaging/scripts/run_bondplan.py](packaging/scripts/run_bondplan.py)) is driven by [packaging/config.yaml](packaging/config.yaml), which holds the full package-pin-to-die-pad `PINOUT` in a LibreLane-style config format. It detects the die bondpads (`Passiv` openings and `TopMetal2.text` labels), places the die in the package cavity, draws the bondwires, and checks wire lengths, crossings, spacing, lead skew and RF guard clearances. Outputs:
+
+- `packaging/layout/tinywhisper_bondplan.gds`: the bondplan GDS
+- [packaging/result.md](packaging/result.md): bond report with summary and bond table
+- `packaging/render/tinywhisper_bondplan_{white,black}.{png,svg}`: bonding diagram images
+
+See [packaging/README.md](packaging/README.md) for the full flow documentation and configuration reference.
+
+<p align="center">
+  <a href="packaging/render/tinywhisper_bondplan_white.png">
+    <img src="packaging/render/tinywhisper_bondplan_white.png" alt="Bonding diagram of the TinyWhisper ASIC in a QFN48 package" width=70%>
+  </a>
+  <br>
+  <em>Bonding diagram of the TinyWhisper ASIC in a QFN48 package.</em>
+</p>
+
+
 ## Build and Verify All
 
-Runs full simulation (`sim-all`), then `build-all`, followed by Magic DRC for both `tinywhisper_top` and `tinywhisper_top_logo_fill`:
+Runs full simulation (`sim-all`), then `build-all`, followed by Magic DRC for both `tinywhisper_top` and `tinywhisper_top_logo_fill`, and finally generates the bondplan (`bondplan`):
 
 ```sh
 make all

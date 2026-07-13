@@ -52,6 +52,7 @@ NET_PEX_DIR 		 	:= netlist/pex
 NET_PNL_DIR			 	:= netlist/pnl
 NET_NL_DIR			 	:= netlist/nl
 NET_SPICE_DIR		 	:= netlist/spice
+PACKAGING_DIR   		:= packaging
 LVS_RPT_DIR 		 	:= verification/lvs
 DRC_RPT_DIR 		 	:= verification/drc
 LIBRELANE_DIR   	 	:= flow/librelane
@@ -422,14 +423,22 @@ magic-verify: ## Verify CELL cell with Magic (usage: make magic-verify [CELL=<ce
 # ================================================================================================
 
 
+# Packaging Target
+bondplan: ## Generate the bondplan (die in package + bondwires + pin table) in packaging/
+	cd $(PACKAGING_DIR) && python3 scripts/run_bondplan.py config.yaml
+.PHONY: bondplan
+# ================================================================================================
+
+
 # Simulate, Build and Verify All Target
-all: ## Simulate, build and verify the whole chip
+all: ## Simulate, build, verify and package the whole chip
 	$(MAKE) sim-all
 	$(MAKE) build-all
 	$(MAKE) magic-drc CELL=$(TOP)
 	$(MAKE) magic-drc CELL=$(TOP)_logo_fill
 #	$(MAKE) klayout-verify
 #	$(MAKE) magic-verify
+	$(MAKE) bondplan
 .PHONY: all
 # ================================================================================================
 
