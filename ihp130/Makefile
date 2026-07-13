@@ -53,6 +53,7 @@ NET_PNL_DIR			 	:= netlist/pnl
 NET_NL_DIR			 	:= netlist/nl
 NET_SPICE_DIR		 	:= netlist/spice
 PACKAGING_DIR   		:= packaging
+PACKAGING_RENDER_DIR	:= packaging/render
 LVS_RPT_DIR 		 	:= verification/lvs
 DRC_RPT_DIR 		 	:= verification/drc
 LIBRELANE_DIR   	 	:= flow/librelane
@@ -457,5 +458,7 @@ release: ## Copy the gds, netlist files and chip renders to the release folder (
 	cp -f $(RENDER_IMG_DIR)/$(TOP)_black.png $(RELEASE_DIR)/v.$(VERSION)/img/$(TOP)_black.png
 	cp -f $(RENDER_IMG_DIR)/$(TOP)_white.png $(RELEASE_DIR)/v.$(VERSION)/img/$(TOP)_white.png
 	cp -f $(RENDER_IMG_DIR)/$(TOP)_librelane.png $(RELEASE_DIR)/v.$(VERSION)/img/$(TOP)_librelane.png
+	cp -f $(PACKAGING_RENDER_DIR)/*_bondplan_black.png $(RELEASE_DIR)/v.$(VERSION)/img/
+	cp -f $(PACKAGING_RENDER_DIR)/*_bondplan_white.png $(RELEASE_DIR)/v.$(VERSION)/img/
 .PHONY: release
 # ================================================================================================
