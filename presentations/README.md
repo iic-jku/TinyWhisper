@@ -14,16 +14,16 @@ During his sabbatical, Harald visited CERN in Switzerland and presented TinyWhis
 
 - Slides & Video: https://indico.cern.ch/event/1680490/
 
+## FSiC 2026
+
+The Free Silicon Conference (FSiC) took place from July 6 to 8, 2026, at the University of Ljubljana, Slovenia. Simon (OE3SDE) presented TinyWhisper in his talk "From Idea to Tapeout: An Open-Source Analog Mixed-Signal Design Flow with the IHP Open-PDK".
+
+- Homepage: https://wiki.f-si.org/index.php?title=FSiC2026
+- Talk page: https://wiki.f-si.org/index.php?title=From_idea_to_tapeout:_an_open-source_analog_mixed-signal_design_flow_with_the_IHP_Open-PDK
+- Slides: [FSiC2026_OSICD-Flow_v3.pdf](https://wiki.f-si.org/images/3/3a/FSiC2026_OSICD-Flow_v3.pdf)
+
 ## QSP Article
 
 The Austrian Experimental Radio Society (Österreichischer Versuchssenderverband - ÖVSV) is celebrating its 100th anniversary in 2026. This milestone marks a century of technical innovation, experimentation, and community in the amateur radio world. To mark this occasion, Simon (OE3SDE) submitted a QSP article (German only) for the anniversary issue, which will be published in August.
 
 - Copies of the ÖVSV amateur radio journal QSP can be downloaded here approximately six months after publication: https://www.oevsv.at/downloads/
-
-## IEEE SSCS-EDS South Brazil Joint Chapter 2026
-
-Simon: Coming soon!
-
-## FSiC 2026
-
-Simon: Coming soon!
