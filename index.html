@@ -336,7 +336,8 @@ window.Quarto = {
   <li><a href="#digital-core" id="toc-digital-core" class="nav-link" data-scroll-target="#digital-core"><span class="header-section-number">1.3</span> Digital Core</a></li>
   <li><a href="#analog-front-end" id="toc-analog-front-end" class="nav-link" data-scroll-target="#analog-front-end"><span class="header-section-number">1.4</span> Analog Front-End</a></li>
   <li><a href="#tapeout" id="toc-tapeout" class="nav-link" data-scroll-target="#tapeout"><span class="header-section-number">1.5</span> Tapeout</a></li>
-  <li><a href="#outlook" id="toc-outlook" class="nav-link" data-scroll-target="#outlook"><span class="header-section-number">1.6</span> Outlook</a></li>
+  <li><a href="#bondplan" id="toc-bondplan" class="nav-link" data-scroll-target="#bondplan"><span class="header-section-number">1.6</span> Bondplan</a></li>
+  <li><a href="#outlook" id="toc-outlook" class="nav-link" data-scroll-target="#outlook"><span class="header-section-number">1.7</span> Outlook</a></li>
   </ul></li>
   <li><a href="#system-description" id="toc-system-description" class="nav-link" data-scroll-target="#system-description"><span class="header-section-number">2</span> System Description</a>
   <ul class="collapse">
@@ -496,8 +497,16 @@ Important
 <a href="fig/tinywhisper_top_black_TM2.png"> <img src="fig/tinywhisper_top_black_TM2.png" alt="Chip render of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm)" width="70%"> </a> <br> <em>Render of the TopMetal2 TinyWhisper logo, generated with the tool ArtistIC.</em>
 </p>
 </section>
-<section id="outlook" class="level3" data-number="1.6">
-<h3 data-number="1.6" class="anchored" data-anchor-id="outlook"><span class="header-section-number">1.6</span> Outlook</h3>
+<section id="bondplan" class="level3" data-number="1.6">
+<h3 data-number="1.6" class="anchored" data-anchor-id="bondplan"><span class="header-section-number">1.6</span> Bondplan</h3>
+<p>The die is packaged in a <a href="https://europractice-ic.com/wp-content/uploads/2019/06/MLP7X7-48-OP-02-R2-ECN-10501.pdf">QFN-48</a> open-molded plastic package (<a href="https://www.qptechnologies.com/products/ompp/">OmPP</a>). Its 56 bondpads are wired to the 48 package leads, and the eight remaining VSS and IOVSS pads are connected as downbonds directly to the exposed pad, which forms the package ground. Bonding is done with 25 µm gold wire, the longest wire measures 2.75 mm, and the cover is glued on after bonding.</p>
+<p>The bonding diagram below is generated fully automatically with <code>make bondplan</code> from the final chip GDS and the EUROPRACTICE package library <a href="https://europractice-ic.com/wp-content/uploads/2019/07/EP_PACKAGES_08022018.gds_.gz"><code>EP_PACKAGES_08022018.gds</code></a>. The flow extracts the die bondpads together with their names, places the die in the package cavity, draws the bondwires, fills in the title block, and checks wire lengths, crossings, spacing and the clearance around the sensitive RF wires. The <a href="https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/packaging/config.yaml">pinout</a> and all flow settings are kept in a single configuration file, so the diagram never goes out of sync with the chip. Details are documented in the <a href="https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/packaging">packaging README</a>.</p>
+<p align="center">
+<a href="fig/tinywhisper_bondplan_white.png"> <img src="fig/tinywhisper_bondplan_white.png" alt="Bonding diagram of the ihp-sg13g2 TinyWhisper ASIC in a QFN-48 package" width="70%"> </a> <br> <em>Bonding diagram of the ihp-sg13g2 TinyWhisper ASIC in a QFN-48 package.</em>
+</p>
+</section>
+<section id="outlook" class="level3" data-number="1.7">
+<h3 data-number="1.7" class="anchored" data-anchor-id="outlook"><span class="header-section-number">1.7</span> Outlook</h3>
 <p>The chip is still in production and is expected to be delivered in December 2026. The ASIC is just the beginning of a broader open-hardware project. The next step is to design a <a href="https://github.com/iic-jku/TinyWhisper/tree/main/pcb">PCB</a> that includes all necessary external components: switchable bandpass filters for each RF band, an RF amplifier, a crystal oscillator as the clock source, external SRAM, voltage regulators for the various supply voltages, a display, controls, an SMA connector for the antenna, and a USB interface for configuration. The packaged chip will be soldered onto this board and then <a href="https://github.com/iic-jku/TinyWhisper/tree/main/measurements">characterized</a>.</p>
 <p>Building on this PCB, a compact, 3D-printable <a href="https://github.com/iic-jku/TinyWhisper/tree/main/enclosure">enclosure</a> is planned that accommodates the board together with a small battery and is robust enough for outdoor use during field tests and SOTA activations.</p>
 </section>
