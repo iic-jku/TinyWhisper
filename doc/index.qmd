@@ -97,7 +97,7 @@ Since the analog front-end is an IQ modulator, it supports not only WSPR but als
   <em>Render of the TopMetal2 TinyWhisper logo, generated with the tool ArtistIC.</em>
 </p>
 
-### Bondplan
+### Packaging
 
 The die is packaged in a [QFN-48](https://europractice-ic.com/wp-content/uploads/2019/06/MLP7X7-48-OP-02-R2-ECN-10501.pdf) open-molded plastic package ([OmPP](https://www.qptechnologies.com/products/ompp/)). Its 56 bondpads are wired to the 48 package leads, and the eight remaining VSS and IOVSS pads are connected as downbonds directly to the exposed pad, which forms the package ground. Bonding is done with 25 µm gold wire, the longest wire measures 2.75 mm, and the cover is glued on after bonding.
 
@@ -394,10 +394,6 @@ On TinyTapeout, a 16-bit digital input and an 8-bit digital output are available
 | 14   | 11             | locator[4:0] & power                         |
 
 The Python script in the software directory takes care of programming the registers.
-
-## Packaging
-
-Coming soon...
 
 ## PCB Design
 
