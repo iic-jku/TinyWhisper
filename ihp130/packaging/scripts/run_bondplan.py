@@ -42,40 +42,40 @@ except ImportError:
 
 DEFAULTS = {
     "DESIGN_NAME": "design",
-    "DIE_CELL": None,               # default: top cell of DIE_GDS
-    "DIE_EXTRACT_CELL": None,       # default: keep original cell name
+    "DIE_CELL": None,                   # default: top cell of DIE_GDS
+    "DIE_EXTRACT_CELL": None,           # default: keep original cell name
     "DIE_KEEP_LABELS": True,
     "DIE_PAD_LAYER": "9/0",
     "DIE_PAD_MIN_SIZE": 40.0,
     "DIE_PAD_LABEL_LAYER": "134/25",
-    "PACKAGE_LIBRARY_GDS": None,    # package library (e.g. EP_PACKAGES_*.gds)
-    "PACKAGE_NAME": None,           # sheet cell to generate PACKAGE_GDS from
-    "PACKAGE_GDS": None,            # default: <library dir>/<PACKAGE_NAME>.gds
-    "PACKAGE_DELETE_TEXTS": [],     # glob patterns of sheet texts to remove
-    "PACKAGE_CELL": None,           # default: top cell of PACKAGE_GDS
-    "PACKAGE_FOOTPRINT_CELL": None, # default: auto-detect the lead frame
+    "PACKAGE_LIBRARY_GDS": None,        # package library (e.g. EP_PACKAGES_*.gds)
+    "PACKAGE_NAME": None,               # sheet cell to generate PACKAGE_GDS from
+    "PACKAGE_GDS": None,                # default: <library dir>/<PACKAGE_NAME>.gds
+    "PACKAGE_DELETE_TEXTS": [],         # glob patterns of sheet texts to remove
+    "PACKAGE_CELL": None,               # default: top cell of PACKAGE_GDS
+    "PACKAGE_FOOTPRINT_CELL": None,     # default: auto-detect the lead frame
     "PACKAGE_LEAD_LAYER": "210/0",
     "PACKAGE_PIN_LABEL_LAYER": "211/0",
     "PACKAGE_PIN_LABEL_OFFSET": 250.0,  # um, pin number outside the outline
-    "PACKAGE_PIN_LABEL_SIZE": None, # um; default: size of the sheet pin texts
-    "TABLE_TEXT_SIZE": 100.0,       # um, bond table font size
-    "TABLE_GAP": 400.0,             # um, between the plan and the bond table
-    "BONDPLAN_TEXT_POLYGONS": True, # render all texts as polygon glyphs
-    "SHEET_KEEP": False,            # keep drawing frame / title block decor
-    "SHEET_FIELDS": {},             # title block label -> value (see README)
-    "SHEET_TEXT_SCALE": {},         # sheet text -> font scale factor
-    "SHEET_NOTES": [],              # free-text lines, stacked below anchor
+    "PACKAGE_PIN_LABEL_SIZE": None,     # um; default: size of the sheet pin texts
+    "TABLE_TEXT_SIZE": 100.0,           # um, bond table font size
+    "TABLE_GAP": 400.0,                 # um, between the plan and the bond table
+    "BONDPLAN_TEXT_POLYGONS": True,     # render all texts as polygon glyphs
+    "SHEET_KEEP": False,                # keep drawing frame / title block decor
+    "SHEET_FIELDS": {},                 # title block label --> value (see README)
+    "SHEET_TEXT_SCALE": {},             # sheet text --> font scale factor
+    "SHEET_NOTES": [],                  # free-text lines, stacked below anchor
     "SHEET_NOTES_ANCHOR": "Extra Info",
-    "LID": "Glued",                 # Taped | Sealed | Glued | Glass (or null)
+    "LID": "Glued",                     # Taped | Sealed | Glued | Glass (or null)
     "BONDWIRE_LAYER": "190/0",
     "BONDWIRE_TEXT_LAYER": "190/25",
-    "BONDWIRE_WIDTH": 25.0,         # standard gold wire diameter
+    "BONDWIRE_WIDTH": 25.0,             # standard gold wire diameter
     "BONDWIRE_LABELS": True,
     "BONDWIRE_LEAD_SITE": 0.5,
     "BONDWIRE_MAX_LENGTH": 3500.0,
-    "BONDWIRE_MAX_SKEW": 30.0,      # deg, wire vs. lead axis
-    "GUARDED_PINS": [],             # pins or [groups] needing extra clearance
-    "GUARD_SPACING": 100.0,         # um, min gap around guarded wires
+    "BONDWIRE_MAX_SKEW": 30.0,          # deg, wire vs. lead axis
+    "GUARDED_PINS": [],                 # pins or [groups] needing extra clearance
+    "GUARD_SPACING": 100.0,             # um, min gap around guarded wires
     "EPAD_WIRE_LENGTH": 500.0,
     "BONDPLAN_CELL": "bondplan",
     "BONDPLAN_DELETE_LAYERS": [],
@@ -170,10 +170,10 @@ IMAGE_LAYERS = [
     ("190/25", "#00e070", True, "fill"),     # bond table (texts)
 ]
 
-# KLayout text halign -> SVG text-anchor (default/left -> "start")
+# KLayout text halign --> SVG text-anchor (default/left --> "start")
 SVG_ANCHOR = {1: "middle", 2: "end"}
 
-# LibreLane/DEF orientation -> KLayout fixpoint transformation
+# LibreLane/DEF orientation --> KLayout fixpoint transformation
 ORIENT = {
     "N": pya.DTrans.R0,  "S": pya.DTrans.R180,
     "W": pya.DTrans.R90, "E": pya.DTrans.R270,
@@ -325,7 +325,7 @@ def extract_die(cfg):
 
     out = resolve(cfg, cfg["DIE_EXTRACT_GDS"])
     ly.write(out)
-    info("die: extracted %s -> %s (top cell: %s)"
+    info("die: extracted %s --> %s (top cell: %s)"
          % (", ".join(cfg["DIE_EXTRACT_LAYERS"]), out, cell.name))
     return ly, cell
 
@@ -447,7 +447,7 @@ def generate_package(cfg):
                                           name + ".gds")
     dest = resolve(cfg, cfg["PACKAGE_GDS"])
     out.write(dest)
-    info("package: '%s' generated from %s -> %s"
+    info("package: '%s' generated from %s --> %s"
          % (name, os.path.basename(path), dest))
 
 
@@ -490,7 +490,7 @@ def analyze_package(cfg):
     inner = min(max(abs(x - center[0]), abs(y - center[1]))
                 for lead in leads for (x, y) in lead["pts"])
 
-    # Pin number labels -> nearest lead
+    # Pin number labels --> nearest lead
     li = ly.find_layer(*parse_layer(cfg["PACKAGE_PIN_LABEL_LAYER"]))
     if li is None:
         die("package pin label layer %s not present"
@@ -555,7 +555,7 @@ def analyze_package(cfg):
                 fp_trans = pya.DCplxTrans(1.0, 0.0, False,
                                           fp_shift, 0.0) * fp_trans
 
-    # Per pin, on the ray center -> lead: the bond point (between lead tip,
+    # Per pin, on the ray center --> lead: the bond point (between lead tip,
     # site 0, and far end, site 1) and the pin number label position
     bond_pts = {}
     lead_dirs = {}
@@ -652,7 +652,7 @@ def die_transform(cfg, die_bbox, pkg):
 
 
 # ---------------------------------------------------------------------------
-# Step 4: pinout -> wire list
+# Step 4: pinout --> wire list
 # ---------------------------------------------------------------------------
 
 def normalize_targets(value):
@@ -814,7 +814,7 @@ def sheet_stats(cfg, pads, die_bbox, wires):
 
 
 def _norm_label(s):
-    """'Max. wire length :' -> 'max. wire length' for tolerant matching."""
+    """'Max. wire length :' --> 'max. wire length' for tolerant matching."""
     s = " ".join(str(s).split())
     if s.endswith(":"):
         s = s[:-1].rstrip()
@@ -832,7 +832,7 @@ def fill_sheet_fields(cfg, ly, top, stats):
     fields = cfg["SHEET_FIELDS"] or {}
     if not fields:
         return
-    # Collect all text labels on the sheet: normalized string -> position
+    # Collect all text labels on the sheet: normalized string --> position
     labels = {}
     for li in ly.layer_indexes():
         it = top.begin_shapes_rec(li)
@@ -1091,7 +1091,7 @@ def build_bondplan(cfg, pkg, die_layout, die_cell, die_trans, wires, stats):
 
     out = resolve(cfg, cfg["BONDPLAN_GDS"])
     ly.write(out)
-    info("bondplan: %d bondwires (w=%g um on %s) -> %s"
+    info("bondplan: %d bondwires (w=%g um on %s) --> %s"
          % (len(wires), width, cfg["BONDWIRE_LAYER"], out))
     return out, ly, top, table_box
 
@@ -1172,7 +1172,7 @@ def write_report(cfg, wires, stats):
         _write_markdown_report(cfg, rows, stats, out)
     else:
         _write_csv_report(rows, out)
-    info("bond report -> %s" % out)
+    info("bond report --> %s" % out)
 
 
 def _write_csv_report(rows, out):
@@ -1281,7 +1281,7 @@ def export_png(cfg, gds_path, crop):
             base + suffix + ext, width, height,
             oversampling=int(cfg["IMAGE_OVERSAMPLING"]),
             target=crop)                            # exact box, zero border
-        info("image -> %s" % (base + suffix + ext))
+        info("image --> %s" % (base + suffix + ext))
 
 
 def svg_escape(text):
@@ -1345,7 +1345,7 @@ def export_svg(cfg, ly, top, crop):
                                        crop.height(), bg))
             f.write("\n".join(shapes + texts))
             f.write("\n</svg>\n")
-        info("image -> %s" % (base + suffix + ext))
+        info("image --> %s" % (base + suffix + ext))
 
 
 def export_images(cfg, pkg, gds_path, ly, top, table_box):
@@ -1399,7 +1399,7 @@ def main():
     pkg = analyze_package(cfg)
 
     trans = die_transform(cfg, die_bbox, pkg)
-    for pad in pads:                            # die -> bondplan coordinates
+    for pad in pads:                            # die --> bondplan coordinates
         p = trans * pya.DPoint(pad["x"], pad["y"])
         pad["x"], pad["y"] = p.x, p.y
     center = trans * die_bbox.center()
@@ -1411,7 +1411,7 @@ def main():
         cfg, pkg, die_layout, die_cell, trans, wires, stats)
     write_report(cfg, wires, stats)
     export_images(cfg, pkg, out, bp_layout, bp_top, table_box)
-    info("done")
+    info("done!")
 
 
 main()
