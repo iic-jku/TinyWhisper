@@ -7,7 +7,9 @@
 #
 # Structured like a LibreLane config.yaml: flat UPPER_CASE keys, `dir::`
 # prefix for paths relative to this file, placement as location/orientation.
-# {design} in any value expands to DESIGN_NAME.
+# {design} in any value expands to DESIGN_NAME, {version} to the VERSION
+# passed on the command line (the Makefile does this, so there is no second
+# place where the version number has to be maintained).
 # =============================================================================
 
 meta:
@@ -107,7 +109,7 @@ SHEET_FIELDS:
   Request: "JKU IICQC - {design}"
   Date: "{date}"
   MPW: "IHP SG13G2"
-  Die: "{design}"
+  Die: "{design} - v.{version}"
   "Size incl scribe": "{die_width_mm} x {die_height_mm} mm"
   "Max. wire length": "{max_wire_length_mm} mm"
   "Pad-pitch": "{pad_pitch_um} um"

@@ -425,8 +425,8 @@ magic-verify: ## Verify CELL cell with Magic (usage: make magic-verify [CELL=<ce
 
 
 # Packaging Target
-bondplan: ## Generate the bondplan (die in package + bondwires + pin table) in packaging/
-	cd $(PACKAGING_DIR) && python3 scripts/run_bondplan.py config.yaml
+bondplan: ## Generate the bondplan (die in package + bondwires + pin table) in packaging/ (usage: make bondplan VERSION=<version>)
+	cd $(PACKAGING_DIR) && python3 scripts/run_bondplan.py config.yaml VERSION=$(VERSION)
 .PHONY: bondplan
 # ================================================================================================
 

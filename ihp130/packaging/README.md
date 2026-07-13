@@ -14,16 +14,18 @@ is generated fully automatically by [scripts/run_bondplan.py](scripts/run_bondpl
 ### Quick Start
 
 ```bash
-make bondplan            # from the ihp130 folder
+make bondplan                        # from the ihp130 folder
+make bondplan VERSION=2.1.0          # override the version
 ```
 
 or directly:
 
 ```bash
 cd ihp130/packaging
-python3 scripts/run_bondplan.py config.yaml
-# or: klayout -b -r scripts/run_bondplan.py -rd config=config.yaml
+python3 scripts/run_bondplan.py config.yaml VERSION=2.0.0
 ```
+
+Any config key can be overridden with `KEY=VALUE` on the command line. The Makefile passes its `VERSION` this way, so the version number lives in the Makefile only and never has to be maintained in `config.yaml`. It is available as the `{version}` placeholder (used in the `Die` title block field).
 
 ### Folder Structure
 
@@ -135,6 +137,7 @@ Everything reachable via a `{placeholder}` is **derived from the layouts and the
 | `{max_wire_length_mm}`, `{min_wire_length_um}`, `{wire_count}`, `{min_gap_um}` | the generated bondwires / checker |
 | `{bondwire_width_um}` | `BONDWIRE_WIDTH` |
 | `{design}`, `{date}` | `DESIGN_NAME`, system date |
+| `{version}` | `VERSION`, passed on the command line by the Makefile |
 
 The remaining fields are **manual entries**, assembly decisions the layout cannot know: `Request`, `MPW`, `Die-thickness`, `Qty packaged`, `Qty naked`, `Die Attach`, the wire material, the `LID` choice and any free-text notes.
 
