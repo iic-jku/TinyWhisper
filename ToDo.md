@@ -44,22 +44,14 @@
 
 ### ihp-sg13g2
 
-- [ ] add GitHub action for checking license headers
+- [ ] update changes from `ihp-sg13g2-ams-chip-template` to `TinyWhisper`
+- [ ] add GitHub action for checking license headers --> see ihp-sg13g2-ams-chip-template
     - https://github.com/aesc-silicon/ElemRV/blob/main/.github/workflows/license-check.yaml
     - https://github.com/aesc-silicon/ElemRV/blob/main/REUSE.toml
-- [ ] add regression test like shown in AMS template (also to IIC-OSIC-TOOLS)
-- [ ] simulate with VACASK
-    - Filter: https://codeberg.org/arpadbuermen/VACASK/src/branch/main/docs/cmd-analysis-acstb.md
-    - Mixer: HB
-- [ ] update changes from `ihp-sg13g2-ams-chip-template` to `TinyWhisper`
-- [ ] **add [conditional labels](https://github.com/StefanSchippers/xschem/issues/474) nwell / psub to iqmod schematics or remove them entirely, wait final decision of IHP Open-PDK [issue 955](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/955)**
-- [ ] fix ntap in CACE (should be fixed after removing nwell / psub and ptap / ntap)
-- [ ] update testbenches with https://github.com/StefanSchippers/xschem/issues/463
+- [ ] add regression test (also to IIC-OSIC-TOOLS) --> see ihp-sg13g2-ams-chip-template
 - [ ] find a better way of linking `xschemrc` files and `.designinit` --> see ihp-sg13g2-ams-chip-template
-- [ ] increase the CORDIC resolution to 32-bits for higher frequency resolution
-- [ ] change DBU to 1nm for all cells
-- [ ] clean up top-level LVS (Magic + Netgen)
-- [ ] Custom LibreLane steps
+- [ ] clean up top-level LVS (Magic + Netgen) --> see ihp-sg13g2-ams-chip-template
+- [ ] Custom LibreLane steps --> see ihp-sg13g2-ams-chip-template
     - flow without filler (GDS streamout + DRC check) --> default
     - add logo with ArtistIC --> custom
     - add filler structures --> custom
@@ -67,21 +59,30 @@
         - KLayout & Magic Filler: https://librelane.readthedocs.io/en/stable/reference/step_config_vars.html
         - GDSFiller: https://github.com/aesc-silicon/gdsfill 
     - GDS streamout + DRC check --> custom
+- [ ] add sg13g2_Filler2000_novdd to split VDD_CORE & VDD_ANA --> see ihp-sg13g2-ams-chip-template
+- [ ] add sg13g2_io_custom to iic-jku/IHP-Open-PDK --> see ihp-sg13g2-ams-chip-template
+- [ ] simulate with VACASK
+    - Filter: https://codeberg.org/arpadbuermen/VACASK/src/branch/main/docs/cmd-analysis-acstb.md
+    - Mixer: HB
+- [ ] remove nwell / psub and ntap / ptap in iqmod schematics --> new KLayout LVS
+- [ ] fix ntap in CACE (should be fixed after removing nwell / psub and ptap / ntap)
+- [ ] update testbenches with https://github.com/StefanSchippers/xschem/issues/463
+- [ ] merge `mfb-lpf-caps` branch into main
+- [ ] increase the CORDIC resolution to 32-bits for higher frequency resolution
+- [ ] add on-chip SRAM
+- [ ] change DBU to 1nm for all cells
 - [ ] delete scripts/pwm_generator and take DSM signal
 - [ ] merge all klay.klib to one iqmod_top.klay.klib
-- [ ] add sg13g2_Filler2000_novdd to split VDD_CORE & VDD_ANA
 - [ ] filter scripts: add fourth-order model
 - [ ] finish ihp-sg13g2 TinyWhisper presentation
-- [ ] add sg13g2_io_custom to iic-jku/IHP-Open-PDK
 
 ### sky130A
 
-- [ ] remove run_drc_lvs_pex.sh and add Makefiles
+- [ ] remove run_drc_lvs_pex.sh and add Makefiles --> see sky130A-ams-chip-template
 - [ ] finish sky130A TinyWhisper presentation
 
 ### General
 
-- [ ] PR IHP sizing scripts
 - [ ] update main Makefile
     - run all testbenches (including macros)
     - compile the firmware / software
