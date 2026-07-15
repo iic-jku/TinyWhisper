@@ -106,6 +106,7 @@ CELL_LAY_ABS=$(realpath "$CELL_LAY")
 	echo "extract no coupling"
 	echo "extract no resistance"
 	echo "extract no length"
+	echo "extract unique"
 	echo "extract all"
 	echo "ext2spice lvs"
 	echo "ext2spice -p $RESDIR -o $OUTPUT"

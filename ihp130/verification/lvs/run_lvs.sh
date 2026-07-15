@@ -12,7 +12,7 @@ SCH_NETLIST="tinywhisper_top.spice"
 SCH_TOPCELL="tinywhisper_top"
 #SCH_TOPCELL="riscv_top"
 #SCH_TOPCELL="iqmod_top"
-LAY_NETLIST="SoC4219_fixed_hierarchy.ext.spice"
+LAY_NETLIST="SoC4219.ext.spice"
 LAY_TOPCELL="tinywhisper_top"
 #LAY_TOPCELL="riscv_top"
 #LAY_TOPCELL="iqmod_top"
@@ -34,7 +34,7 @@ for f in $SPICE_LIBS; do
         err=1
     fi
 done
-for f in check_floating_nets.py merge_spice.py remove_dollar1.sh; do
+for f in check_floating_nets.py merge_spice.py remove_dollar1.sh normalize_analog.py; do
     if [ ! -f "$f" ]; then
         echo "[ERROR] Helper script not found: $f" >&2
         err=1
@@ -73,10 +73,16 @@ python3 merge_spice.py "${SCH_LOCAL}" \
     ${SPICE_LIBS} \
     -o "${SCH_LOCAL}.tmp1"
 
+# The analog macros are netlisted by xschem with explicit well/substrate tap
+# devices (ntap1/ptap1) and xschem-style resistor lines; magic extracts neither
+# in this form. Normalize the schematic netlist to match the layout style.
+
+python3 normalize_analog.py "${SCH_LOCAL}.tmp1" -o "${SCH_LOCAL}.tmp1n"
+
 # There could be unconnected pins on subcircuit instances; this confuses netgen.
 # We remove this pins from the schematic netlist hierarchically.
 
-python3 check_floating_nets.py "${SCH_LOCAL}.tmp1" --top "${SCH_TOPCELL}" \
+python3 check_floating_nets.py "${SCH_LOCAL}.tmp1n" --top "${SCH_TOPCELL}" \
     --fix-ports \
     --output "${SCH_LOCAL}.tmp2"
 
@@ -88,5 +94,5 @@ netgen -batch lvs \
     "$PDKPATH/libs.tech/netgen/ihp-sg13g2_setup.tcl" \
     lvs.out
 
-# Clean up temporary files
-rm -f "${SCH_LOCAL}.tmp1" "${SCH_LOCAL}.tmp2" "${LAY_LOCAL}.tmp1" "${LAY_LOCAL}.tmp2"
+# Clean up temporary files (kept during debugging; uncomment to enable)
+#rm -f "${SCH_LOCAL}.tmp1" "${SCH_LOCAL}.tmp1n" "${SCH_LOCAL}.tmp2" "${LAY_LOCAL}.tmp1" "${LAY_LOCAL}.tmp2"
