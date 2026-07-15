@@ -95,4 +95,4 @@ netgen -batch lvs \
     lvs.out
 
 # Clean up temporary files (kept during debugging; uncomment to enable)
-#rm -f "${SCH_LOCAL}.tmp1" "${SCH_LOCAL}.tmp1n" "${SCH_LOCAL}.tmp2" "${LAY_LOCAL}.tmp1" "${LAY_LOCAL}.tmp2"
+rm -f "${SCH_LOCAL}.tmp1" "${SCH_LOCAL}.tmp1n" "${SCH_LOCAL}.tmp2" "${LAY_LOCAL}.tmp1" "${LAY_LOCAL}.tmp2"
