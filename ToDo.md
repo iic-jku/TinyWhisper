@@ -89,3 +89,10 @@
     - present: GDS and FW binary ready for DL plus verification results
 - [ ] write documentation (https://tinytapeout.com/guides/documentation/)
 - [ ] build same chip for sky130A, gf180mcuD and ihp-sg13cmos5l
+
+### Improvement Potential
+
+- Make KLayout DRC faster (plus multithreading), plus more stable (no more crashes at the end)
+- Clean up IHP Padlib
+- Zero-length paths must be checked in DRC
+- LibreLane sets an incorrect prBoundary (IHP)
