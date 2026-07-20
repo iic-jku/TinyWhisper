@@ -20,7 +20,7 @@ The Free Silicon Conference (FSiC) took place from July 6 to 8, 2026, at the Uni
 
 - Homepage: https://wiki.f-si.org/index.php?title=FSiC2026
 - Talk page: https://wiki.f-si.org/index.php?title=From_idea_to_tapeout:_an_open-source_analog_mixed-signal_design_flow_with_the_IHP_Open-PDK
-- Slides: [FSiC2026_OSICD-Flow_v3.pdf](https://wiki.f-si.org/images/3/3a/FSiC2026_OSICD-Flow_v3.pdf)
+- Slides: [FSiC2026_OSICD-Flow_Final.pdf](https://wiki.f-si.org/images/8/86/FSiC2026_OSICD-Flow_Final.pdf)
 
 ## QSP Article
 
