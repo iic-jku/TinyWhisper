@@ -125,7 +125,7 @@ An integrated 30-bit CORDIC algorithm generates the 4-FSK-modulated I/Q baseband
 
 | Band | RF Frequency  | LO Frequency | IF (CORDIC) |
 | ---- | ------------- | ------------ | ----------- |
-| 80m  | 3.592600 MHz  | 3.5 MHz      | 92.600 kHz  |
+| 80m  | 3.568600 MHz  | 3.5 MHz      | 68.600 kHz  |
 | 40m  | 7.038600 MHz  | 7 MHz        | 38.600 kHz  |
 | 20m  | 14.095600 MHz | 14 MHz       | 95.600 kHz  |
 | 10m  | 28.124600 MHz | 28 MHz       | 124.600 kHz |
