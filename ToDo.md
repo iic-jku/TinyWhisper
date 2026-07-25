@@ -45,10 +45,6 @@
 ### ihp-sg13g2
 
 - [ ] update changes from `ihp-sg13g2-ams-chip-template` to `TinyWhisper`
-- [ ] add GitHub action for checking license headers --> see ihp-sg13g2-ams-chip-template
-    - https://github.com/aesc-silicon/ElemRV/blob/main/.github/workflows/license-check.yaml
-    - https://github.com/aesc-silicon/ElemRV/blob/main/REUSE.toml
-- [ ] add regression test (also to IIC-OSIC-TOOLS) --> see ihp-sg13g2-ams-chip-template
 - [ ] find a better way of linking `xschemrc` files and `.designinit` --> see ihp-sg13g2-ams-chip-template
 - [ ] clean up top-level LVS (Magic + Netgen) --> see ihp-sg13g2-ams-chip-template
 - [ ] Custom LibreLane steps --> see ihp-sg13g2-ams-chip-template
