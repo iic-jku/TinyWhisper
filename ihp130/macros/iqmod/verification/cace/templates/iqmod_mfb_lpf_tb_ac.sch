@@ -110,9 +110,6 @@ N 1140 -1360 1180 -1360 {lab=VDD}
 N 1180 -1360 1180 -1340 {lab=VDD}
 N 1140 -1360 1140 -1340 {lab=VDD}
 N 1180 -700 1180 -680 {lab=VDD}
-N 1220 -1660 1220 -1640 {lab=GND}
-N 1220 -940 1220 -920 {lab=GND}
-N 1220 -280 1220 -260 {lab=GND}
 C {devices/code_shown.sym} 1920 -1550 0 0 {name=NGSPICE
 simulator=ngspice
 only_toplevel=false
@@ -299,6 +296,3 @@ C {vdd.sym} 1140 -1380 0 0 {name=l3 lab=VDD}
 C {vdd.sym} 1180 -700 0 0 {name=l4 lab=VDD}
 C {single2dm.sym} 540 -1860 0 0 {name=x4 gain=1}
 C {single2cm.sym} 540 -1140 0 0 {name=x5 gain=1}
-C {devices/gnd.sym} 1220 -1640 0 0 {name=l22 lab=GND}
-C {devices/gnd.sym} 1220 -920 0 0 {name=l24 lab=GND}
-C {devices/gnd.sym} 1220 -260 0 0 {name=l25 lab=GND}
