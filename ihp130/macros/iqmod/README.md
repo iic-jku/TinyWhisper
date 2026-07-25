@@ -120,13 +120,15 @@
 │  │  ├─ iqmod_mfb_lpf.yaml
 │  │  └─ iqmod_mfb_lpf_ota_core.yaml
 │  ├─ 📁 drc/
-│  │  │  *.magic.drc.rpt
-│  │  │  *_full.lyrdb
-│  │  │  iqmod_top.magic.drc.rpt
-│  │  └─ iqmod_top.klay_iqmod_top_full.lyrdb
+│  │  ├─ 📁 *.klayout.drc/
+│  │  ├─ 📁 *.magic.drc/
+│  │  ├─ 📁 iqmod_top.klayout.drc/
+│  │  └─ 📁 iqmod_top.magic.drc/
 │  └─ 📁 lvs/
-│     ├─ *.lvsdb
-│     └─ iqmod_top.lvsdb
+│     ├─ 📁 *.klayout.lvs/
+│     ├─ 📁 *.magic.lvs/
+│     ├─ 📁 iqmod_top.klayout.lvs/
+│     └─ 📁 iqmod_top.magic.lvs/
 ├─ Makefile
 └─ README.md
 ```
@@ -146,7 +148,7 @@ For the `sim-xschem` target, `TB=<testbenchname>` is required.
 All targets that operate on a specific cell accept an optional `CELL=<cellname>` parameter. The default is the top-level cell (`iqmod_top`).
 
 ```sh
-make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [EV_PRECISION=<digits>]
+make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>] [DRC_LEVEL=<precheck|macro|regular>] [EV_PRECISION=<digits>]
 ```
 
 
@@ -154,15 +156,10 @@ make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [EV_PRECISION=<digits>]
 
 The Makefile defines a `_GDS_EXT` variable that auto-selects the layout file extension: it prefers `.gds` when available, and falls back to `.klay.gds` otherwise.
 
-- KLayout targets use `layout/<name>.$(_GDS_EXT)` and work with either `.gds` or `.klay.gds`:
-  - `klayout-lvs`
-  - `klayout-drc`
-  - `klayout-pex`
-
-- Magic targets always use `layout/<name>.gds` (Magic requires standard `.gds`):
-  - `magic-lvs`
-  - `magic-drc`
-  - `magic-pex`
+- All LVS, DRC and PEX targets use `layout/<name>.$(_GDS_EXT)` and work with either `.gds` or `.klay.gds`:
+  - `klayout-lvs`, `magic-lvs`
+  - `klayout-drc`, `magic-drc`
+  - `klayout-pex`, `magic-pex`
 
 - Build targets always use `layout/<name>.gds`:
   - `lef`
@@ -312,9 +309,9 @@ Exports the schematic netlist for LVS from Xschem and places it in `netlist/sche
 
 The `EV_PRECISION` parameter sets the number of significant digits used by Xschem's `ev` function when calculating device properties (default: 5). Increase this to avoid LVS mismatches caused by floating-point rounding differences between Xschem and KLayout (see [xschem#465](https://github.com/StefanSchippers/xschem/issues/465)).
 
-Currently, KLayout LVS extracts `ntap` and `ptap` devices, so the schematic netlist must include them as well. In contrast, Magic + Netgen LVS does not extract `ntap` and `ptap`. Therefore, the schematic uses `lvs_ignore = short` for these devices and conditional net labels (see [xschem#474](https://github.com/StefanSchippers/xschem/issues/474)). To make this effective during schematic netlist export, `set lvs_ignore 1` must be set in the `magic-lvs-netlist` target.
+The `ntap` and `ptap` substrate contacts are ignored during LVS in both flows. `sak-lvs.sh` runs KLayout LVS with the `--disable_tap_extraction` option so it does not extract `ntap` and `ptap` devices from the layout (matching Magic + Netgen LVS). The schematic uses `lvs_ignore = short` for these devices and conditional net labels (see [xschem#474](https://github.com/StefanSchippers/xschem/issues/474)), which takes effect during schematic netlist export via `set lvs_ignore 1`.
 
-KLayout uses CDL netlists, while Magic uses SPICE netlists. Accordingly, `klayout-lvs-netlist` uses the Xschem commands `set spiceprefix 1`, `set lvs_netlist 1`, `set top_is_subckt 1`, and `set lvs_ignore 0`. In contrast, `magic-lvs-netlist` uses `set spiceprefix 1`, `set lvs_netlist 0`, `set top_is_subckt 1`, and `set lvs_ignore 1`.
+KLayout uses CDL netlists, while Magic uses SPICE netlists. Accordingly, `klayout-lvs-netlist` uses the Xschem commands `set spiceprefix 1`, `set lvs_netlist 1`, `set top_is_subckt 1`, and `set lvs_ignore 1`, while `magic-lvs-netlist` uses `set spiceprefix 1`, `set lvs_netlist 0`, `set top_is_subckt 1`, and `set lvs_ignore 1`. Hence, switching between CDL and SPICE netlists can be done with `lvs_netlist`.
 
 To extract a CDL schematic netlist for KLayout LVS, use:
 ```sh
@@ -333,21 +330,18 @@ make magic-lvs-netlist EV_PRECISION=5
 
 ## Layout Versus Schematic (LVS)
 
-Exports the schematic netlist from Xschem, then runs LVS. Compares the layout in `layout/` against the schematic netlist in `netlist/schematic/`.
+Exports the schematic netlist from Xschem, then runs LVS. Compares the layout in `layout/` against the schematic netlist in `netlist/schematic/`. Both `klayout-lvs` and `magic-lvs` use `layout/<CELL>.$(_GDS_EXT)` (`.gds` if present, otherwise `.klay.gds`).
 
-- `klayout-lvs` uses `layout/<CELL>.$(_GDS_EXT)` (`.gds` if present, otherwise `.klay.gds`)
-- `magic-lvs` uses `layout/<CELL>.gds` (Magic requires `.gds`)
+Both flows use `sak-lvs.sh` and write their reports into per-cell run folders: `verification/lvs/<CELL>.magic.lvs/` (Magic + Netgen) and `verification/lvs/<CELL>.klayout.lvs/` (KLayout, `.lvsdb`). The run folders are wiped at the start of each run, so they always reflect the latest run only. The extracted layout netlist is moved to `netlist/layout/`.
 
-Reports are saved to `verification/lvs/`. The extracted layout netlist is moved to `netlist/layout/`.
-
-**KLayout LVS** uses `run_lvs.py` from the IHP Open-PDK:
+**KLayout LVS** uses `sak-lvs.sh` (KLayout mode `-k`), which wraps `run_lvs.py` from the IHP Open-PDK:
 
 ```sh
 make klayout-lvs
 make klayout-lvs CELL=iqmod_top
 ```
 
-**Magic + Netgen LVS** uses `sak-lvs.sh`:
+**Magic + Netgen LVS** uses `sak-lvs.sh` (Magic + Netgen mode `-m`, the default), which extracts the layout netlist with Magic and compares it against the schematic netlist with Netgen, using the Netgen setup from the IHP Open-PDK:
 
 ```sh
 make magic-lvs
@@ -357,21 +351,25 @@ make magic-lvs CELL=iqmod_top
 
 ## Design Rule Check (DRC)
 
-Runs DRC on the layout in `layout/`.
+Runs DRC on the layout in `layout/`. Both `klayout-drc` and `magic-drc` use `layout/<CELL>.$(_GDS_EXT)` (`.gds` if present, otherwise `.klay.gds`).
 
-- `klayout-drc` uses `layout/<CELL>.$(_GDS_EXT)` (`.gds` if present, otherwise `.klay.gds`)
-- `magic-drc` uses `layout/<CELL>.gds` (Magic requires `.gds`)
+Both flows use `sak-drc.sh` and write their reports into per-cell run folders: `verification/drc/<CELL>.magic.drc/` (Magic) and `verification/drc/<CELL>.klayout.drc/` (KLayout, `.lyrdb`). The run folders are wiped at the start of each run, so they always reflect the latest run only.
 
-Reports are saved to `verification/drc/`.
+The `DRC_LEVEL` parameter selects the KLayout DRC level (`sak-drc.sh -l`). It is ignored by `magic-drc`, since Magic has no selectable rule decks and always runs the full rule set compiled into the PDK's Magic tech file:
 
-**KLayout DRC** uses `run_drc.py` from the IHP Open-PDK with relaxed rules (FEOL, density checks, and extra rules disabled):
+- `precheck` = core FEOL + BEOL manufacturing rules only (fast iteration)
+- `macro` = block-in-isolation sign-off: `precheck` plus off-grid, zero-area, and pin/label checks (default)
+- `regular` = full-chip sign-off: all checks, including density and antenna
+
+**KLayout DRC** runs a KLayout DRC at the selected `DRC_LEVEL`:
 
 ```sh
 make klayout-drc
 make klayout-drc CELL=iqmod_top
+make klayout-drc CELL=iqmod_top DRC_LEVEL=regular
 ```
 
-**Magic DRC** uses `sak-drc.sh`:
+**Magic DRC** runs a Magic DRC with all subcells flattened (`sak-drc.sh -f "*"`):
 
 ```sh
 make magic-drc
@@ -381,10 +379,7 @@ make magic-drc CELL=iqmod_top
 
 ## Parasitic Extraction (PEX)
 
-Runs parasitic extraction on the layout in `layout/`. The extracted SPICE netlist is written to `netlist/pex/`.
-
-- `klayout-pex` uses `layout/<CELL>.$(_GDS_EXT)` (`.gds` if present, otherwise `.klay.gds`)
-- `magic-pex` uses `layout/<CELL>.gds` (Magic requires `.gds`)
+Runs parasitic extraction on the layout in `layout/`. The extracted SPICE netlist is written to `netlist/pex/`. Both `klayout-pex` and `magic-pex` use `layout/<CELL>.$(_GDS_EXT)` (`.gds` if present, otherwise `.klay.gds`).
 
 The extracted SPICE filenames include the selected extraction mode:
 - `klayout-pex` writes `netlist/pex/<CELL>_klayout_pex_<EXT_MODE>.spice`
@@ -397,7 +392,7 @@ The `EXT_MODE` parameter selects the extraction mode:
 
 > **Note:** For `klayout-pex`, `EXT_MODE=1` (C-decoupled) is not yet supported by kpex and automatically falls back to `EXT_MODE=2` (CC) with a warning.
 
-The `.subckt` name in the extracted SPICE file is automatically renamed from `<CELL>_flat` (kpex) or `<CELL>` (Magic) to `<CELL>_pex`.
+The `.subckt` name in the extracted SPICE file is `<CELL>_pex`: `magic-pex` sets it directly via the `sak-pex.sh` option `-n <CELL>_pex`, while for `klayout-pex` it is automatically renamed from `<CELL>_flat` (kpex).
 
 If a matching Xschem symbol (`schematic/<CELL>_pex.sym`) exists, the `.subckt` pin order in the extracted SPICE file is automatically reordered to match the symbol's pin positions. This ensures the PEX netlist can be used directly with the corresponding Xschem symbol for simulation regardless of the selected `EXT_MODE`.
 
@@ -409,12 +404,22 @@ make klayout-pex CELL=iqmod_top
 make klayout-pex CELL=iqmod_top EXT_MODE=3
 ```
 
-**Magic PEX** uses `sak-pex.sh`:
+**Magic PEX** uses `sak-pex.sh`, which extracts the parasitics with Magic (C-decoupled, C-coupled, or full-RC):
 
 ```sh
 make magic-pex
 make magic-pex CELL=iqmod_top
 make magic-pex CELL=iqmod_top EXT_MODE=3
+```
+
+For full-RC extraction (`EXT_MODE=3`), `magic-pex` additionally exposes the `sak-pex.sh` `extresist` tuning parameters. They are ignored in `EXT_MODE=1`/`2`:
+
+- `THRESHOLD` - extresist threshold in mOhm (`-t`, default `10000` = 10 Ohm)
+- `MINRES` - extresist minimum resistance in mOhm (`-r`, default `1000` = 1 Ohm)
+- `MINDELAY` - extresist minimum delay in ps (`-y`, default `1`; `0` = gate by resistance)
+
+```sh
+make magic-pex CELL=iqmod_top EXT_MODE=3 THRESHOLD=5000 MINRES=500 MINDELAY=2
 ```
 
 

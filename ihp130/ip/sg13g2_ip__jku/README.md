@@ -4,24 +4,24 @@ A logo IP block for [Johannes Kepler University Linz](https://www.jku.at/), rend
 
 ## Directory Structure
 
-```
-sg13g2_ip__jku/
-├── Makefile                    # Build automation
-├── logo/
-│   └── jku_logo.png            # Source PNG image
-├── script/
-│   └── make_gds.py             # PNG-to-GDS converter
-├── final/
-│   ├── gds/
-│   │   └── sg13g2_ip__jku.gds  # Generated GDSII layout
-│   ├── lef/
-│   │   └── sg13g2_ip__jku.lef  # LEF macro for place-and-route
-│   ├── lib/
-│   │   └── sg13g2_ip__jku.lib  # Liberty timing stub
-│   └── vh/
-│       └── sg13g2_ip__jku.v    # Verilog blackbox stub
-└── verification/
-    └── drc/                    # DRC report
+```text
+📁 sg13g2_ip__jku/
+├─ Makefile                   # Build automation
+├─ 📁 logo/
+│  └─ jku_logo.png            # Source PNG image
+├─ 📁 script/
+│  └─ make_gds.py             # PNG-to-GDS converter
+├─ 📁 final/
+│  ├─ 📁 gds/
+│  │  └─ sg13g2_ip__jku.gds   # Generated GDSII layout
+│  ├─ 📁 lef/
+│  │  └─ sg13g2_ip__jku.lef   # LEF macro for place-and-route
+│  ├─ 📁 lib/
+│  │  └─ sg13g2_ip__jku.lib   # Liberty timing stub
+│  └─ 📁 vh/
+│     └─ sg13g2_ip__jku.v     # Verilog blackbox stub
+└─ 📁 verification/
+   └─ 📁 drc/                 # DRC reports
 ```
 
 
@@ -35,14 +35,15 @@ make all
 
 ### Individual Targets
 
-| Target    | Description                                              |
-|-----------|----------------------------------------------------------|
-| `logo`    | Convert PNG to GDSII using `make_gds.py`                 |
-| `lef`     | Generate LEF macro (CLASS BLOCK, OBS on `$(LAYER_NAME)`) |
-| `lib`     | Generate Liberty timing stub (empty cell)                |
-| `verilog` | Generate Verilog blackbox stub (no ports)                |
-| `drc`     | Run IHP DRC checks using `run_drc.py`                    |
-| `clean`   | Remove all generated output directories                  |
+| Target        | Description                                              |
+|---------------|----------------------------------------------------------|
+| `logo`        | Convert PNG to GDSII using `make_gds.py`                 |
+| `lef`         | Generate LEF macro (CLASS BLOCK, OBS on `$(LAYER_NAME)`) |
+| `lib`         | Generate Liberty timing stub (empty cell)                |
+| `verilog`     | Generate Verilog blackbox stub (no ports)                |
+| `klayout-drc` | Run KLayout DRC using `sak-drc.sh` (usage: `make klayout-drc [CELL=<cellname>] [DRC_LEVEL=<precheck|macro|regular>]`) |
+| `magic-drc`   | Run Magic DRC using `sak-drc.sh` (usage: `make magic-drc [CELL=<cellname>]`)                                         |
+| `clean`       | Remove all generated output directories                  |
 
 ### Parameters
 
@@ -51,7 +52,7 @@ The following Makefile variables can be overridden:
 | Variable      | Default  | Description                                                                           |
 |---------------|----------|---------------------------------------------------------------------------------------|
 | `IMG_SIZE_PX` | `750`    | Source image width/height in pixels                                                   |
-| `BLOCK_SIZE`  | `143.25` | Desired physical block size in µm                                                     |
+| `BLOCK_SIZE`  | `100`    | Desired physical block size in µm                                                     |
 | `PIXEL_SIZE`  | `0.50`   | Pixel size in µm (must be ≥ M5 min width of 0.21 µm to avoid DRC violations)          |
 | `LAYER`       | `Metal5` | Metal layer the logo is drawn on; one of `Metal1`..`Metal5`, `TopMetal1`, `TopMetal2` |
 
@@ -78,13 +79,14 @@ The `script/make_gds.py` script converts a PNG image into a GDSII layout:
 
 ## Design Rule Check (DRC)
 
-Runs DRC on the GDS layout in `final/gds/`. Reports are saved to `verification/drc/`.
+Runs DRC on the GDS layout in `final/gds/`. Both flows use `sak-drc.sh` and write their reports into per-cell run folders: `verification/drc/<CELL>.magic.drc/` (Magic) and `verification/drc/<CELL>.klayout.drc/` (KLayout, `.lyrdb`).
 
-**KLayout DRC** uses `run_drc.py` from the IHP Open-PDK with relaxed rules (FEOL, density checks, and extra rules disabled):
+**KLayout DRC** uses `sak-drc.sh` at the selected `DRC_LEVEL` (`precheck`, `macro` [default], or `regular`):
 
 ```sh
 make klayout-drc
 make klayout-drc CELL=sg13g2_ip__jku
+make klayout-drc DRC_LEVEL=regular
 ```
 
 **Magic DRC** uses `sak-drc.sh`:

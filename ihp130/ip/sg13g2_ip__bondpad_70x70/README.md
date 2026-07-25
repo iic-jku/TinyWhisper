@@ -4,20 +4,20 @@ A 70 µm × 70 µm square bondpad for the IHP SG13G2 130 nm CMOS process, genera
 
 ## Directory Structure
 
-```
-sg13g2_ip__bondpad_70x70/
-├── Makefile                                # Build automation
-├── script/
-│   └── bondpad.py                          # KLayout PCell-based bondpad generator
-├── final/
-│   ├── gds/
-│   │   └── sg13g2_ip__bondpad_70x70.gds    # Generated GDSII layout
-│   ├── lef/
-│   │   └── sg13g2_ip__bondpad_70x70.lef    # LEF macro for place-and-route
-│   └── vh/
-│       └── sg13g2_ip__bondpad_70x70.v      # Verilog blackbox stub
-└── verification/
-    └── drc/                                # DRC report
+```text
+📁 sg13g2_ip__bondpad_70x70/
+├─ Makefile                             # Build automation
+├─ 📁 script/
+│  └─ bondpad.py                        # KLayout PCell-based bondpad generator
+├─ 📁 final/
+│  ├─ 📁 gds/
+│  │  └─ sg13g2_ip__bondpad_70x70.gds   # Generated GDSII layout
+│  ├─ 📁 lef/
+│  │  └─ sg13g2_ip__bondpad_70x70.lef   # LEF macro for place-and-route
+│  └─ 📁 vh/
+│     └─ sg13g2_ip__bondpad_70x70.v     # Verilog blackbox stub
+└─ 📁 verification/
+   └─ 📁 drc/                           # DRC reports
 ```
 
 
@@ -35,7 +35,7 @@ make all
 | ------------- | -------------------------------------------------------------------------------------------------------------------- |
 | `bondpad`     | Generate GDS and LEF via `bondpad.py` (usage: `make bondpad [DIAMETER=<um>] [SHAPE=<square\|octagon\|circle>] [BOTTOM_METAL=<1-6>]`) |
 | `verilog`     | Generate Verilog blackbox stub (`inout pad`)                                                                         |
-| `klayout-drc` | Run KLayout DRC using `run_drc.py` (usage: `make klayout-drc [CELL=<cellname>]`)                                     |
+| `klayout-drc` | Run KLayout DRC using `sak-drc.sh` (usage: `make klayout-drc [CELL=<cellname>] [DRC_LEVEL=<precheck|macro|regular>]`) |
 | `magic-drc`   | Run Magic DRC using `sak-drc.sh` (usage: `make magic-drc [CELL=<cellname>]`)                                         |
 | `clean`       | Remove all generated output directories                                                                              |
 
@@ -72,13 +72,14 @@ The metal stack used for the bondpad covers `Metal3` through `TopMetal2` by defa
 
 ## Design Rule Check (DRC)
 
-Runs DRC on the GDS layout in `final/gds/`. Reports are saved to `verification/drc/`.
+Runs DRC on the GDS layout in `final/gds/`. Both flows use `sak-drc.sh` and write their reports into per-cell run folders: `verification/drc/<CELL>.magic.drc/` (Magic) and `verification/drc/<CELL>.klayout.drc/` (KLayout, `.lyrdb`).
 
-**KLayout DRC** uses `run_drc.py` from the IHP Open-PDK with relaxed rules (FEOL, density checks, and extra rules disabled):
+**KLayout DRC** uses `sak-drc.sh` at the selected `DRC_LEVEL` (`precheck`, `macro` [default], or `regular`):
 
 ```sh
 make klayout-drc
 make klayout-drc CELL=sg13g2_ip__bondpad_70x70
+make klayout-drc DRC_LEVEL=regular
 ```
 
 **Magic DRC** uses `sak-drc.sh`:
