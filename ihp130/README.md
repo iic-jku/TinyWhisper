@@ -648,3 +648,45 @@ Run with a custom version:
 ```sh
 make release VERSION=2.1.0
 ```
+
+
+## Regression
+
+The `regression` target is the project's end-to-end smoke test for the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) environment. Its goal is to exercise **every tool and flow** in the project at least once with the **shortest possible runtime**. It is a tool/flow regression, not a design sign-off.
+
+```sh
+make regression
+```
+
+This target also runs automatically in continuous integration: the [`regression`](../.github/workflows/regression.yml) GitHub Actions workflow runs `make regression` inside the `IIC-OSIC-TOOLS` container nightly (and on manual dispatch), and its status is shown by the *Regression* badge at the top of the [repository README](../README.md). The scheduled run is gated so it only executes when there have been changes since the previous night.
+
+To keep the runtime low while still covering the full toolchain, the regression makes the following trade-offs:
+
+- The riscv macro is hardened with `librelane-magicdrc` (only **Magic DRC** enabled, the slower KLayout DRC is skipped). Netgen LVS still runs as part of the flow.
+- The chip top-level runs `librelane-nodrc`. All DRC checks are skipped to save runtime on the large top-level assembly. The macros and IP blocks are DRC-checked individually beforehand, so this only leaves the top-level routing/fill unchecked.
+- KLayout DRC (`sak-drc.sh`) is skipped inside the LibreLane runs, but is still exercised in the bondpad and logo IP builds, and in the iqmod `klayout-verify`.
+- Only **one** logo (`sg13g2_ip__jku`) is regenerated. It is the only step that exercises the PNG to GDS flow. The other logos (`sg13g2_ip__jku_names`, `sg13g2_ip__ce`, `sg13g2_ip__ce_names`) use an identical toolchain and reuse their committed views.
+- Exactly **one** Xschem testbench (`iqmod_mfb_lpf_tb_ac_cl`) and **one** CACE parameter set (the AC VDD sweep `ac_params` of `iqmod_mfb_lpf.yaml`, no Monte-Carlo) are run. Swap `ac_params` for `ac_mc_params` / `ac_mm_params` in the target to also exercise the Monte-Carlo flow.
+
+The regression runs bottom-up: first the iqmod and riscv macros, then the top-level assembly (submodules, bondpad, logo) and finally the chip top-level LibreLane run that integrates the freshly built macros and IP. After the riscv macro is hardened, `copy-final` copies its fresh `flow/final/` views into `macros/riscv/final/`, so that the gate-level simulation (`sim-gl-cocotb`) and the chip top-level integration use the freshly built outputs rather than the committed ones.
+
+The following tools and flows are checked:
+
+| Tool / flow | Where it is exercised |
+| --- | --- |
+| git submodules | `init-submodules` |
+| KLayout scripting (bondpad generator), KLayout DRC, Magic DRC | `build-bondpad` |
+| PNG to GDS logo generation, KLayout DRC, Magic DRC | `sg13g2_ip__jku all` (single logo) |
+| Xschem + ngspice (analog simulation) | iqmod `sim-xschem` (`iqmod_mfb_lpf_tb_ac_cl`) |
+| CACE (+ ngspice) | iqmod CACE, single parameter set (`ac_params`) |
+| KLayout LVS (`sak-lvs.sh`) + KLayout DRC (`sak-drc.sh`) + KLayout PEX (`kpex`) | iqmod `klayout-verify CELL=iqmod_top` |
+| Magic extract + Netgen LVS (`sak-lvs.sh`) + Magic DRC (`sak-drc.sh`) + Magic PEX (`sak-pex.sh`) | iqmod `magic-verify CELL=iqmod_top` |
+| Magic LEF export + LIB + Verilog stub + `lay2img` render | iqmod `build-top` |
+| Verilator lint | riscv `lint-verilog-all` |
+| Icarus Verilog (`iverilog`/`vvp`) | riscv `sim-rtl-verilog` |
+| cocotb (RTL + gate-level) | riscv `sim-rtl-cocotb`, `sim-gl-cocotb` |
+| yosys + nextpnr-ice40 + icepack (FPGA) | riscv `build-fpga` |
+| LibreLane (OpenROAD / yosys / KLayout streamout / Netgen LVS) | riscv `librelane-magicdrc`, chip `librelane-nodrc` |
+| Magic DRC (sign-off, run inside LibreLane) | riscv `librelane-magicdrc` |
+| `vlog2Verilog` / `vlog2Spice` / `spi2xspice` | riscv `generate-xspice` |
+| Xschem gate-level | riscv `sim-gl-xschem` |

@@ -443,3 +443,37 @@ release: ## Copy the gds, netlist files and chip renders to the release folder (
 	cp -f $(PACKAGING_RENDER_DIR)/*_bondplan_white.png $(RELEASE_DIR)/v.$(VERSION)/img/
 .PHONY: release
 # ================================================================================================
+
+
+# Regression Target
+regression: ## Regression test target for IIC-OSIC-TOOLS
+# 	Analog macro: iqmod (Xschem + CACE + LVS/DRC/PEX + build-top)
+	$(MAKE) -C $(MACROS_DIR)/iqmod sim-xschem TB=iqmod_mfb_lpf_tb_ac_cl
+	# ONE CACE run: the lightweight AC VDD sweep (no Monte-Carlo) to keep runtime short.
+	cd $(MACROS_DIR)/iqmod/verification/cace && cace iqmod_mfb_lpf.yaml -p ac_params && rm -rf _runs _docs netlist
+# 	KLayout & Magic LVS, DRC and PEX of the iqmod_top cell.
+	$(MAKE) -C $(MACROS_DIR)/iqmod klayout-verify CELL=iqmod_top
+	$(MAKE) -C $(MACROS_DIR)/iqmod magic-verify CELL=iqmod_top
+	$(MAKE) -C $(MACROS_DIR)/iqmod build-top
+
+# 	Digital macro: riscv (Verilator, Icarus, cocotb, yosys/FPGA, LibreLane, xspice)
+	$(MAKE) -C $(MACROS_DIR)/riscv lint-verilog-all
+	$(MAKE) -C $(MACROS_DIR)/riscv sim-rtl-verilog
+	$(MAKE) -C $(MACROS_DIR)/riscv sim-rtl-cocotb
+	$(MAKE) -C $(MACROS_DIR)/riscv build-fpga
+# 	librelane-magicdrc: full RTL-to-GDS. KLayout DRC skipped for runtime.
+	$(MAKE) -C $(MACROS_DIR)/riscv librelane-magicdrc
+	$(MAKE) -C $(MACROS_DIR)/riscv copy-final
+# 	Gate-level flows that depend on the LibreLane outputs above.
+	$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-cocotb
+	$(MAKE) -C $(MACROS_DIR)/riscv generate-xspice
+	$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-xschem
+
+# 	Top-level assembly
+	$(MAKE) init-submodules
+	$(MAKE) build-bondpad
+	$(MAKE) -C $(IP_DIR)/sg13g2_ip__jku all
+	# librelane-nodrc: full RTL-to-GDS. DRC is skipped for runtime.
+	$(MAKE) librelane-nodrc
+.PHONY: regression
+# ================================================================================================
