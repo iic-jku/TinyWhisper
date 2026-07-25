@@ -7,6 +7,9 @@ __pycache__/
 tb/a.out
 drc_run_*
 lvs_run_*
+drc_*.tcl
+ext_*.tcl
+pex_*.tcl
 *.vcd
 *.raw
 *.log
