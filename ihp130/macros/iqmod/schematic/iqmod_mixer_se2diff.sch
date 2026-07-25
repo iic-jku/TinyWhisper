@@ -86,34 +86,6 @@ N 410 -790 460 -790 {lab=vse}
 N 80 -710 170 -710 {lab=vin}
 N 430 -710 520 -710 {lab=vse}
 N 520 -900 520 -710 {lab=vse}
-N 660 -550 660 -540 {lab=psub}
-N 860 -580 860 -540 {lab=psub}
-N 1340 -720 1380 -720 {lab=psub}
-N 1020 -700 1060 -700 {lab=psub}
-N 640 -880 640 -840 {lab=psub}
-N 1560 -580 1560 -540 {lab=psub}
-N 1860 -580 1860 -540 {lab=psub}
-N 2160 -580 2160 -540 {lab=psub}
-N 860 -880 860 -840 {lab=psub}
-N 1560 -880 1560 -840 {lab=psub}
-N 1860 -880 1860 -840 {lab=psub}
-N 2160 -880 2160 -840 {lab=psub}
-N 350 -770 350 -730 {lab=psub}
-N 270 -670 270 -630 {lab=psub}
-N 350 -850 350 -810 {lab=nwell1}
-N 640 -960 640 -920 {lab=nwell1}
-N 860 -960 860 -920 {lab=nwell1}
-N 1560 -960 1560 -920 {lab=nwell1}
-N 1860 -960 1860 -920 {lab=nwell1}
-N 2160 -960 2160 -920 {lab=nwell1}
-N 1100 -700 1140 -700 {lab=nwell1}
-N 860 -500 860 -460 {lab=nwell2}
-N 270 -590 270 -550 {lab=nwell2}
-N 1560 -500 1560 -460 {lab=nwell2}
-N 1860 -500 1860 -460 {lab=nwell2}
-N 2160 -500 2160 -460 {lab=nwell2}
-N 660 -500 660 -490 {lab=nwell2}
-N 1260 -720 1300 -720 {lab=nwell2}
 C {title-3.sym} 0 0 0 0 {name=l1 author="Simon Dorrer" rev=1.0 lock=true}
 C {devices/ipin.sym} 80 -710 0 0 {name=p3 lab=vin}
 C {lab_pin.sym} 840 -460 1 1 {name=p14 sig_type=std_logic lab=VDD}
@@ -167,31 +139,3 @@ C {iqmod_mixer_se2diff_inv_NF2.sym} 330 -790 0 0 {name=x14}
 C {lab_wire.sym} 520 -710 2 0 {name=p38 sig_type=std_logic lab=vse}
 C {lab_pin.sym} 250 -550 1 1 {name=p41 sig_type=std_logic lab=VDD}
 C {lab_pin.sym} 250 -670 3 1 {name=p42 sig_type=std_logic lab=VSS}
-C {lab_wire.sym} 660 -550 0 1 {name=p37 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 860 -580 3 1 {name=p35 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 1380 -720 2 0 {name=p39 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 1020 -700 0 0 {name=p40 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 640 -840 3 0 {name=p43 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 1560 -580 3 1 {name=p44 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 1860 -580 3 1 {name=p45 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 2160 -580 3 1 {name=p46 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 860 -840 3 0 {name=p47 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 1560 -840 3 0 {name=p48 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 1860 -840 3 0 {name=p49 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 2160 -840 3 0 {name=p50 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 270 -670 3 1 {name=p52 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 640 -960 3 1 {name=p54 sig_type=std_logic lab=nwell1}
-C {lab_pin.sym} 860 -960 3 1 {name=p55 sig_type=std_logic lab=nwell1}
-C {lab_pin.sym} 1560 -960 3 1 {name=p56 sig_type=std_logic lab=nwell1}
-C {lab_pin.sym} 1860 -960 3 1 {name=p57 sig_type=std_logic lab=nwell1}
-C {lab_pin.sym} 2160 -960 3 1 {name=p58 sig_type=std_logic lab=nwell1}
-C {lab_pin.sym} 1140 -700 0 1 {name=p59 sig_type=std_logic lab=nwell1}
-C {lab_pin.sym} 860 -460 1 1 {name=p61 sig_type=std_logic lab=nwell2}
-C {lab_pin.sym} 1560 -460 1 1 {name=p62 sig_type=std_logic lab=nwell2}
-C {lab_pin.sym} 1860 -460 1 1 {name=p63 sig_type=std_logic lab=nwell2}
-C {lab_pin.sym} 2160 -460 1 1 {name=p64 sig_type=std_logic lab=nwell2}
-C {lab_wire.sym} 660 -490 2 0 {name=p66 sig_type=std_logic lab=nwell2}
-C {lab_pin.sym} 1260 -720 2 1 {name=p65 sig_type=std_logic lab=nwell2}
-C {devices/iopin.sym} 350 -850 3 0 {name=p67 lab=nwell1}
-C {devices/iopin.sym} 350 -730 1 0 {name=p68 lab=psub}
-C {devices/iopin.sym} 270 -550 3 1 {name=p60 lab=nwell2}

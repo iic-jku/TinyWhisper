@@ -33,15 +33,10 @@ N 500 -1000 1680 -1000 {lab=di_lo_p}
 N 500 -960 1720 -960 {lab=di_lo_n}
 N 640 -1160 780 -1160 {lab=vinn_spdt}
 N 780 -1260 780 -1160 {lab=vinn_spdt}
-N 500 -1100 550 -1100 {lab=psub}
-N 490 -1380 550 -1380 {lab=psub}
 N 500 -1060 580 -1060 {lab=di_spdt_ctrl}
 N 580 -1100 580 -1060 {lab=di_spdt_ctrl}
 N 580 -1380 580 -1340 {lab=di_spdt_ctrl}
 N 500 -1340 580 -1340 {lab=di_spdt_ctrl}
-N 1260 -1100 1260 -1080 {lab=#net1}
-N 1820 -1240 1840 -1240 {lab=psub}
-N 1840 -1240 1840 -1180 {lab=psub}
 C {title-3.sym} 0 0 0 0 {name=l1 author="Simon Dorrer" rev=1.0 lock=true}
 C {devices/iopin.sym} 1180 -1520 3 0 {name=p1 lab=VDD}
 C {devices/iopin.sym} 2020 -1320 0 0 {name=p7 lab=voutp_RF}
@@ -71,7 +66,3 @@ C {lab_pin.sym} 500 -1060 0 0 {name=p9 sig_type=std_logic lab=di_spdt_ctrl}
 C {devices/ipin.sym} 500 -1340 2 1 {name=p29 lab=di_spdt_ctrl
 }
 C {devices/ipin.sym} 500 -1140 2 1 {name=p30 lab=di_ds_n}
-C {lab_pin.sym} 500 -1100 2 1 {name=p2 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 490 -1380 2 1 {name=p4 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 1840 -1180 1 1 {name=p52 sig_type=std_logic lab=psub}
-C {devices/iopin.sym} 1260 -1080 1 0 {name=p5 lab=psub}

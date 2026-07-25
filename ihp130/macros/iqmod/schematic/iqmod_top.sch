@@ -9,7 +9,6 @@ T {IQ Modulator} 1030 -1750 0 0 1.5 1.5 {}
 N 1340 -1000 1340 -980 {lab=VSS}
 N 1340 -1560 1340 -1540 {lab=VDD}
 N 1080 -1560 1080 -1540 {lab=di_analog_en}
-N 1460 -840 1460 -820 {lab=psub}
 N 1680 -1360 1720 -1360 {lab=voutp_I_RF}
 N 1680 -1300 1720 -1300 {lab=voutn_I_RF}
 N 960 -1140 1000 -1140 {lab=di_lo_I}
@@ -33,7 +32,6 @@ N 960 -440 1000 -440 {lab=di_ds_Q_p}
 N 960 -540 1000 -540 {lab=vinn_Q}
 N 960 -580 1000 -580 {lab=di_ds_Q_n}
 N 960 -260 1080 -260 {lab=di_analog_en}
-N 1460 -1000 1460 -980 {lab=psub}
 C {devices/iopin.sym} 1340 -1560 3 0 {name=p1 lab=VDD}
 C {devices/iopin.sym} 1720 -1360 0 0 {name=p7 lab=voutp_I_RF}
 C {title-3.sym} 0 0 0 0 {name=l1 author="Simon Dorrer" rev=1.0 lock=true}
@@ -61,7 +59,5 @@ C {devices/ipin.sym} 960 -540 0 0 {name=p41 lab=vinn_Q}
 C {devices/ipin.sym} 960 -360 0 0 {name=p45 lab=di_spdt_ctrl_Q
 }
 C {devices/ipin.sym} 960 -580 0 0 {name=p46 lab=di_ds_Q_n}
-C {lab_pin.sym} 1460 -840 3 1 {name=p53 sig_type=std_logic lab=psub}
 C {iqmod_top_half.sym} 1340 -1280 0 0 {name=x1}
 C {iqmod_top_half.sym} 1340 -540 2 1 {name=x2}
-C {lab_pin.sym} 1460 -980 1 1 {name=p2 sig_type=std_logic lab=psub}

@@ -123,54 +123,18 @@ N 1880 -1080 1880 -1020 {lab=di_ota_en}
 N 880 -600 880 -580 {lab=VDD}
 N 100 -1080 220 -1080 {lab=vinp}
 N 100 -360 220 -360 {lab=vinn}
-N 1860 -760 1860 -720 {lab=psub}
-N 1860 -960 1860 -950 {lab=psub}
-N 1860 -1010 1860 -1000 {lab=nwell1}
-N 2160 -900 2200 -900 {lab=nwell1}
-N 2240 -900 2280 -900 {lab=psub}
-N 2240 -540 2280 -540 {lab=psub}
-N 2160 -540 2200 -540 {lab=nwell2}
-N 1940 -620 1940 -580 {lab=nwell2}
-N 1600 -620 1600 -580 {lab=nwell2}
-N 900 -620 900 -580 {lab=nwell2}
-N 760 -320 760 -280 {lab=nwell2}
-N 1300 -520 1340 -520 {lab=nwell2}
-N 560 -540 600 -540 {lab=nwell2}
-N 1520 -760 1520 -720 {lab=psub}
-N 1600 -700 1600 -660 {lab=psub}
-N 1940 -700 1940 -660 {lab=psub}
-N 1220 -520 1260 -520 {lab=psub}
-N 900 -700 900 -660 {lab=psub}
-N 760 -400 760 -360 {lab=psub}
-N 640 -540 680 -540 {lab=psub}
-N 640 -900 680 -900 {lab=psub}
-N 760 -1080 760 -1040 {lab=psub}
-N 1220 -920 1260 -920 {lab=psub}
-N 980 -760 980 -720 {lab=psub}
-N 1860 -840 1860 -800 {lab=nwell1}
-N 1520 -840 1520 -800 {lab=nwell1}
-N 1300 -920 1340 -920 {lab=nwell1}
-N 760 -1160 760 -1120 {lab=nwell1}
-N 560 -900 600 -900 {lab=nwell1}
-N 980 -840 980 -800 {lab=nwell1}
 N 960 -940 960 -910 {lab=ota_en_n_1}
 N 1880 -940 1880 -910 {lab=ota_en_n_1}
-N 980 -960 980 -950 {lab=psub}
-N 980 -1010 980 -1000 {lab=nwell1}
 N 940 -420 940 -400 {lab=VDD}
 N 940 -520 940 -500 {lab=VSS}
 N 1040 -460 1120 -460 {lab=node_CDG}
 N 960 -420 960 -360 {lab=di_ota_en}
 N 960 -530 960 -500 {lab=ota_en_n_2}
-N 980 -490 980 -480 {lab=psub}
 N 1900 -420 1900 -400 {lab=VDD}
 N 1900 -520 1900 -500 {lab=VSS}
 N 1880 -420 1880 -360 {lab=di_ota_en}
 N 1720 -460 1800 -460 {lab=node_FG}
-N 1860 -490 1860 -480 {lab=psub}
 N 1880 -530 1880 -500 {lab=ota_en_n_2}
-N 1860 -440 1860 -430 {lab=nwell2}
-N 980 -440 980 -430 {lab=nwell2}
 N 1120 -720 1120 -460 {lab=node_CDG}
 N 780 -460 880 -460 {lab=node_BC}
 N 780 -720 780 -460 {lab=node_BC}
@@ -197,10 +161,6 @@ N 2220 -1100 2380 -1100 {lab=voutn}
 N 2220 -340 2380 -340 {lab=voutp}
 N 280 -1020 280 -960 {lab=ota_en_n_1}
 N 280 -440 280 -420 {lab=ota_en_n_2}
-N 250 -1020 250 -980 {lab=psub}
-N 250 -460 250 -420 {lab=psub}
-N 310 -1020 310 -980 {lab=nwell1}
-N 310 -460 310 -420 {lab=nwell2}
 C {title-3.sym} 0 0 0 0 {name=l1 author="Simon Dorrer" rev=1.0 lock=true}
 C {ipin.sym} 100 -1080 0 0 {name=p4 lab=vinp}
 C {ipin.sym} 100 -360 0 0 {name=p6 lab=vinn}
@@ -266,48 +226,12 @@ C {lab_wire.sym} 620 -1100 0 0 {name=p53 sig_type=std_logic lab=node_vinp}
 C {lab_wire.sym} 620 -340 2 1 {name=p54 sig_type=std_logic lab=node_vinn}
 C {iqmod_mfb_lpf_ota_core_tg.sym} 960 -980 0 0 {name=x15}
 C {iqmod_mfb_lpf_ota_core_tg.sym} 1880 -980 0 1 {name=x18}
-C {lab_pin.sym} 1860 -720 3 0 {name=p66 sig_type=std_logic lab=psub}
-C {lab_wire.sym} 1860 -950 2 1 {name=p69 sig_type=std_logic lab=psub}
-C {lab_wire.sym} 1860 -1010 0 0 {name=p70 sig_type=std_logic lab=nwell1}
-C {lab_pin.sym} 2160 -900 2 1 {name=p71 sig_type=std_logic lab=nwell1}
-C {lab_pin.sym} 2280 -900 0 1 {name=p72 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 2280 -540 0 1 {name=p60 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 2160 -540 2 1 {name=p67 sig_type=std_logic lab=nwell2}
-C {lab_pin.sym} 1940 -580 1 1 {name=p68 sig_type=std_logic lab=nwell2}
-C {lab_pin.sym} 1600 -580 1 1 {name=p73 sig_type=std_logic lab=nwell2}
-C {lab_pin.sym} 900 -580 3 0 {name=p74 sig_type=std_logic lab=nwell2}
-C {lab_pin.sym} 760 -280 3 0 {name=p75 sig_type=std_logic lab=nwell2}
-C {lab_pin.sym} 1340 -520 0 1 {name=p62 sig_type=std_logic lab=nwell2}
-C {lab_pin.sym} 560 -540 0 0 {name=p63 sig_type=std_logic lab=nwell2}
-C {lab_pin.sym} 1520 -720 3 0 {name=p76 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 1600 -700 1 0 {name=p77 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 1940 -700 1 0 {name=p78 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 1220 -520 0 0 {name=p79 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 900 -700 1 0 {name=p80 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 760 -400 1 0 {name=p81 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 680 -540 2 0 {name=p82 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 680 -900 2 0 {name=p83 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 760 -1040 3 0 {name=p84 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 1220 -920 0 0 {name=p87 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 980 -720 3 0 {name=p88 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 1860 -840 1 0 {name=p89 sig_type=std_logic lab=nwell1}
-C {lab_pin.sym} 1520 -840 1 0 {name=p90 sig_type=std_logic lab=nwell1}
-C {lab_pin.sym} 1340 -920 2 0 {name=p91 sig_type=std_logic lab=nwell1}
-C {lab_pin.sym} 760 -1160 3 1 {name=p92 sig_type=std_logic lab=nwell1}
-C {lab_pin.sym} 560 -900 0 0 {name=p93 sig_type=std_logic lab=nwell1}
-C {lab_pin.sym} 980 -840 3 1 {name=p94 sig_type=std_logic lab=nwell1}
-C {lab_wire.sym} 980 -950 2 0 {name=p97 sig_type=std_logic lab=psub}
-C {lab_wire.sym} 980 -1010 0 1 {name=p98 sig_type=std_logic lab=nwell1}
 C {lab_pin.sym} 940 -400 3 0 {name=p61 sig_type=std_logic lab=VDD}
 C {lab_pin.sym} 940 -520 1 0 {name=p64 sig_type=std_logic lab=VSS}
 C {iqmod_mfb_lpf_ota_core_tg.sym} 960 -460 2 1 {name=x20}
-C {lab_wire.sym} 980 -490 0 1 {name=p101 sig_type=std_logic lab=psub}
 C {lab_pin.sym} 1900 -400 1 1 {name=p104 sig_type=std_logic lab=VDD}
 C {lab_pin.sym} 1900 -520 3 1 {name=p105 sig_type=std_logic lab=VSS}
 C {iqmod_mfb_lpf_ota_core_tg.sym} 1880 -460 2 0 {name=x23}
-C {lab_wire.sym} 1860 -490 0 0 {name=p108 sig_type=std_logic lab=psub}
-C {lab_wire.sym} 1860 -430 2 1 {name=p102 sig_type=std_logic lab=nwell2}
-C {lab_wire.sym} 980 -430 2 0 {name=p103 sig_type=std_logic lab=nwell2}
 C {lab_pin.sym} 280 -960 3 0 {name=p95 sig_type=std_logic lab=ota_en_n_1}
 C {lab_pin.sym} 280 -440 1 0 {name=p46 sig_type=std_logic lab=ota_en_n_2}
 C {lab_pin.sym} 960 -1080 2 0 {name=p49 sig_type=std_logic lab=di_ota_en}
@@ -318,10 +242,6 @@ C {lab_pin.sym} 960 -910 2 0 {name=p48 sig_type=std_logic lab=ota_en_n_1}
 C {lab_pin.sym} 1880 -910 2 1 {name=p51 sig_type=std_logic lab=ota_en_n_1}
 C {lab_pin.sym} 960 -530 2 0 {name=p56 sig_type=std_logic lab=ota_en_n_2}
 C {lab_pin.sym} 1880 -530 2 1 {name=p58 sig_type=std_logic lab=ota_en_n_2}
-C {lab_pin.sym} 250 -460 1 0 {name=p65 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 310 -980 3 0 {name=p85 sig_type=std_logic lab=nwell1}
-C {lab_pin.sym} 310 -460 3 1 {name=p86 sig_type=std_logic lab=nwell2}
-C {devices/iopin.sym} 250 -980 1 0 {name=p30 lab=psub}
 C {lab_wire.sym} 620 -720 0 1 {name=p31 sig_type=std_logic lab=node_BC}
 C {lab_wire.sym} 2060 -720 0 1 {name=p57 sig_type=std_logic lab=node_EF}
 C {lab_wire.sym} 1280 -720 0 1 {name=p59 sig_type=std_logic lab=node_CDG}

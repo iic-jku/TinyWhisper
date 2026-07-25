@@ -32,16 +32,6 @@ N 940 -560 1000 -560 {lab=vinn_LO_buf}
 N 940 -600 1000 -600 {lab=vinn_LO_inv}
 N 1720 -580 1800 -580 {lab=voutn_RF}
 N 1720 -1080 1800 -1080 {lab=voutp_RF}
-N 1660 -1060 1660 -1050 {lab=psub}
-N 1660 -1110 1660 -1100 {lab=nwell1}
-N 1660 -610 1660 -600 {lab=psub}
-N 1660 -560 1660 -550 {lab=nwell2}
-N 820 -1150 820 -1140 {lab=nwell1}
-N 880 -1150 880 -1140 {lab=nwell3}
-N 820 -520 820 -510 {lab=nwell2}
-N 880 -520 880 -510 {lab=nwell3}
-N 820 -650 820 -640 {lab=psub}
-N 820 -1020 820 -1010 {lab=psub}
 C {devices/iopin.sym} 1620 -1160 3 0 {name=p1 lab=VDD}
 C {devices/iopin.sym} 1620 -1000 1 0 {name=p2 lab=VSS}
 C {devices/ipin.sym} 1480 -1080 0 0 {name=p8 lab=vinp_IF}
@@ -69,13 +59,3 @@ C {iqmod_mixer_tg.sym} 1640 -580 2 1 {name=x4}
 C {iqmod_mixer_se2diff.sym} 760 -1080 0 0 {name=x1}
 C {iqmod_mixer_se2diff.sym} 760 -580 2 1 {name=x3}
 C {devices/iopin.sym} 1800 -580 2 1 {name=p5 lab=voutn_RF}
-C {lab_wire.sym} 1660 -1050 2 0 {name=p37 sig_type=std_logic lab=psub}
-C {lab_wire.sym} 1660 -1110 0 1 {name=p66 sig_type=std_logic lab=nwell1}
-C {lab_wire.sym} 1660 -610 0 1 {name=p6 sig_type=std_logic lab=psub}
-C {lab_wire.sym} 1660 -550 2 0 {name=p11 sig_type=std_logic lab=nwell2}
-C {lab_wire.sym} 820 -1150 0 1 {name=p12 sig_type=std_logic lab=nwell1}
-C {lab_wire.sym} 820 -510 2 0 {name=p13 sig_type=std_logic lab=nwell2}
-C {lab_wire.sym} 820 -650 0 1 {name=p14 sig_type=std_logic lab=psub}
-C {lab_wire.sym} 880 -510 2 0 {name=p19 sig_type=std_logic lab=nwell3}
-C {lab_wire.sym} 880 -1150 0 1 {name=p20 sig_type=std_logic lab=nwell3}
-C {devices/iopin.sym} 820 -1010 0 0 {name=p23 lab=psub}

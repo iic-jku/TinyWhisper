@@ -65,26 +65,17 @@ N 1100 -300 1160 -300 {lab=vinn_stage2}
 N 1260 -300 1660 -300 {lab=voutp}
 N 1100 -1140 1160 -1140 {lab=vinp_stage2}
 N 1260 -1140 1660 -1140 {lab=voutn}
-N 510 -800 510 -780 {lab=VSS}
-N 890 -800 890 -780 {lab=VSS}
-N 1190 -800 1190 -780 {lab=VSS}
-N 1190 -1100 1190 -1080 {lab=VSS}
-N 510 -660 510 -640 {lab=VSS}
-N 890 -660 890 -640 {lab=VSS}
-N 1190 -660 1190 -640 {lab=VSS}
-N 1190 -360 1190 -340 {lab=VSS}
+N 530 -800 530 -780 {lab=VSS}
+N 870 -800 870 -780 {lab=VSS}
+N 1210 -800 1210 -780 {lab=VSS}
+N 1210 -1100 1210 -1080 {lab=VSS}
+N 530 -660 530 -640 {lab=VSS}
+N 870 -660 870 -640 {lab=VSS}
+N 1210 -660 1210 -640 {lab=VSS}
+N 1210 -360 1210 -340 {lab=VSS}
 N 1500 -840 1500 -820 {lab=di_filter_en}
 N 1480 -840 1480 -820 {lab=VDD}
 N 1480 -620 1480 -600 {lab=VSS}
-N 1520 -620 1520 -600 {lab=psub}
-N 1230 -360 1230 -340 {lab=psub}
-N 1230 -660 1230 -640 {lab=psub}
-N 1230 -800 1230 -780 {lab=psub}
-N 850 -800 850 -780 {lab=psub}
-N 850 -660 850 -640 {lab=psub}
-N 550 -660 550 -640 {lab=psub}
-N 550 -800 550 -780 {lab=psub}
-N 1230 -1100 1230 -1080 {lab=psub}
 C {title-3.sym} 0 0 0 0 {name=l1 author="Simon Dorrer" rev=1.0 lock=true}
 C {iqmod_mfb_lpf_ota_core_hybrid_bm.sym} 1480 -720 0 0 {name=x1
 }
@@ -145,20 +136,11 @@ C {iqmod_mfb_lpf_R3.sym} 1210 -600 2 1 {name=x7}
 C {iqmod_mfb_lpf_R4.sym} 1210 -1140 0 0 {name=x8}
 C {iqmod_mfb_lpf_R4.sym} 1210 -300 2 1 {name=x9}
 C {devices/ipin.sym} 1500 -840 3 1 {name=p42 lab=di_filter_en}
-C {lab_pin.sym} 510 -780 3 0 {name=p3 sig_type=std_logic lab=VSS}
-C {lab_pin.sym} 890 -780 3 0 {name=p4 sig_type=std_logic lab=VSS}
-C {lab_pin.sym} 1190 -780 3 0 {name=p5 sig_type=std_logic lab=VSS}
-C {lab_pin.sym} 1190 -1080 3 0 {name=p6 sig_type=std_logic lab=VSS}
-C {lab_pin.sym} 510 -660 3 1 {name=p9 sig_type=std_logic lab=VSS}
-C {lab_pin.sym} 890 -660 3 1 {name=p10 sig_type=std_logic lab=VSS}
-C {lab_pin.sym} 1190 -660 3 1 {name=p11 sig_type=std_logic lab=VSS}
-C {lab_pin.sym} 1190 -360 3 1 {name=p12 sig_type=std_logic lab=VSS}
-C {lab_pin.sym} 1230 -360 1 0 {name=p13 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 1230 -660 3 1 {name=p15 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 1230 -780 3 0 {name=p16 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 850 -780 3 0 {name=p17 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 850 -660 3 1 {name=p18 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 550 -660 1 0 {name=p19 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 550 -780 1 1 {name=p20 sig_type=std_logic lab=psub}
-C {lab_pin.sym} 1230 -1080 1 1 {name=p21 sig_type=std_logic lab=psub}
-C {devices/iopin.sym} 1520 -600 1 0 {name=p23 lab=psub}
+C {lab_pin.sym} 530 -780 3 0 {name=p3 sig_type=std_logic lab=VSS}
+C {lab_pin.sym} 870 -780 3 0 {name=p4 sig_type=std_logic lab=VSS}
+C {lab_pin.sym} 1210 -780 3 0 {name=p5 sig_type=std_logic lab=VSS}
+C {lab_pin.sym} 1210 -1080 3 0 {name=p6 sig_type=std_logic lab=VSS}
+C {lab_pin.sym} 530 -660 3 1 {name=p9 sig_type=std_logic lab=VSS}
+C {lab_pin.sym} 870 -660 3 1 {name=p10 sig_type=std_logic lab=VSS}
+C {lab_pin.sym} 1210 -660 3 1 {name=p11 sig_type=std_logic lab=VSS}
+C {lab_pin.sym} 1210 -360 3 1 {name=p12 sig_type=std_logic lab=VSS}

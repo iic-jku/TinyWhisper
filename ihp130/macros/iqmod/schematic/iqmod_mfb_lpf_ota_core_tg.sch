@@ -47,13 +47,13 @@ lab=v_b}
 N 1230 -580 1240 -580 {
 lab=v_b}
 N 1200 -860 1200 -760 {
-lab=nwell}
+lab=VDD}
 N 1200 -760 1340 -760 {
-lab=nwell}
+lab=VDD}
 N 1200 -680 1200 -580 {
-lab=psub}
+lab=VSS}
 N 1200 -680 1340 -680 {
-lab=psub}
+lab=VSS}
 N 1040 -720 1040 -640 {
 lab=v_a}
 N 1000 -720 1040 -720 {
@@ -70,12 +70,8 @@ N 1240 -640 1460 -640 {
 lab=v_b}
 N 1240 -800 1460 -800 {
 lab=v_b}
-N 1340 -860 1340 -760 {lab=nwell}
-N 1340 -940 1340 -920 {lab=VDD}
-N 1340 -680 1340 -580 {lab=psub}
-N 1340 -520 1340 -500 {lab=VSS}
-N 1340 -760 1360 -760 {lab=nwell}
-N 1340 -680 1360 -680 {lab=psub}
+N 1340 -940 1340 -760 {lab=VDD}
+N 1340 -680 1340 -500 {lab=VSS}
 C {devices/title-3.sym} 0 0 0 0 {name=l1 author="Simon Dorrer" rev=1.0 lock=true}
 C {devices/iopin.sym} 1000 -720 0 1 {name=p2 lab=v_a}
 C {devices/iopin.sym} 1500 -720 0 0 {name=p4 lab=v_b}
@@ -99,21 +95,3 @@ m=1
 model=sg13_lv_nmos
 spiceprefix=X
 }
-C {sg13g2_pr/ntap1_ring.sym} 1340 -890 0 0 {name=R1
-model=ntap1
-spiceprefix=X
-w=5.38e-6
-l=8.02e-6
-rw=0.3e-6
-lvs_ignore=short
-}
-C {sg13g2_pr/ptap1_ring.sym} 1340 -550 2 1 {name=R2
-model=ptap1
-spiceprefix=X
-w=5.38e-6
-l=3.38e-6
-rw=0.3e-6
-lvs_ignore=short
-}
-C {devices/iopin.sym} 1360 -760 0 0 {name=p1 lab=nwell}
-C {devices/iopin.sym} 1360 -680 0 0 {name=p5 lab=psub}

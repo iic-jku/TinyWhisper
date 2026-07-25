@@ -40,14 +40,6 @@ N 1280 -1120 1420 -1120 {lab=do_spdt_ctrl_n}
 N 1560 -1120 1680 -1120 {lab=spdt_ctrl_buf}
 N 1280 -980 1680 -980 {lab=do_spdt_ctrl_n}
 N 1280 -1120 1280 -980 {lab=do_spdt_ctrl_n}
-N 1080 -1180 1080 -1140 {lab=nwell}
-N 1500 -1100 1500 -1060 {lab=psub}
-N 1100 -580 1100 -570 {lab=psub}
-N 1100 -630 1100 -620 {lab=nwell}
-N 1080 -1100 1080 -1060 {lab=psub}
-N 1500 -1180 1500 -1140 {lab=nwell}
-N 1460 -580 1460 -570 {lab=psub}
-N 1460 -630 1460 -620 {lab=nwell}
 N 1080 -700 1080 -640 {lab=spdt_ctrl_buf}
 N 1080 -700 1100 -700 {lab=spdt_ctrl_buf}
 N 1100 -720 1100 -700 {lab=spdt_ctrl_buf}
@@ -80,12 +72,4 @@ C {iqmod_mfb_lpf_ota_core_spdt_switch_inv.sym} 1060 -1120 0 0 {name=x1}
 C {iqmod_mfb_lpf_ota_core_spdt_switch_inv.sym} 1480 -1120 0 0 {name=x2}
 C {iqmod_mfb_lpf_ota_core_spdt_switch_tg.sym} 1080 -600 0 0 {name=x3}
 C {iqmod_mfb_lpf_ota_core_spdt_switch_tg.sym} 1480 -600 0 1 {name=x4}
-C {lab_pin.sym} 1500 -1060 3 0 {name=p43 sig_type=std_logic lab=psub}
-C {lab_wire.sym} 1100 -570 2 0 {name=p37 sig_type=std_logic lab=psub}
-C {lab_wire.sym} 1100 -630 0 1 {name=p66 sig_type=std_logic lab=nwell}
-C {lab_pin.sym} 1500 -1180 3 1 {name=p19 sig_type=std_logic lab=nwell}
-C {lab_wire.sym} 1460 -570 2 1 {name=p20 sig_type=std_logic lab=psub}
-C {lab_wire.sym} 1460 -630 0 0 {name=p21 sig_type=std_logic lab=nwell}
 C {devices/opin.sym} 1680 -980 0 0 {name=p22 lab=do_spdt_ctrl_n}
-C {devices/iopin.sym} 1080 -1180 3 0 {name=p18 lab=nwell}
-C {devices/iopin.sym} 1080 -1060 1 0 {name=p23 lab=psub}

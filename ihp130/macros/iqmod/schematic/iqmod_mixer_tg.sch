@@ -71,21 +71,21 @@ lab=v_b}
 N 1300 -520 1300 -480 {
 lab=di_tg_ctrl_n}
 N 1160 -840 1160 -740 {
-lab=nwell}
+lab=VDD}
 N 1300 -740 1400 -740 {
-lab=nwell}
+lab=VDD}
 N 1300 -840 1300 -740 {
-lab=nwell}
+lab=VDD}
 N 1160 -740 1300 -740 {
-lab=nwell}
+lab=VDD}
 N 1160 -660 1160 -560 {
-lab=psub}
+lab=VSS}
 N 1300 -660 1400 -660 {
-lab=psub}
+lab=VSS}
 N 1300 -660 1300 -560 {
-lab=psub}
+lab=VSS}
 N 1160 -660 1300 -660 {
-lab=psub}
+lab=VSS}
 N 1000 -700 1000 -620 {
 lab=v_a}
 N 960 -700 1000 -700 {
@@ -96,17 +96,13 @@ N 1330 -560 1340 -560 {lab=v_b}
 N 1340 -620 1340 -560 {lab=v_b}
 N 1260 -620 1340 -620 {
 lab=v_b}
-N 1400 -840 1400 -740 {lab=nwell}
-N 1400 -920 1400 -900 {lab=VDD}
-N 1400 -660 1400 -560 {lab=psub}
-N 1400 -500 1400 -480 {lab=VSS}
+N 1400 -920 1400 -740 {lab=VDD}
+N 1400 -660 1400 -480 {lab=VSS}
 N 1340 -780 1520 -780 {lab=v_b}
 N 1340 -620 1520 -620 {lab=v_b}
 N 1520 -700 1520 -620 {lab=v_b}
 N 1520 -700 1560 -700 {lab=v_b}
 N 1520 -780 1520 -700 {lab=v_b}
-N 1400 -740 1420 -740 {lab=nwell}
-N 1400 -660 1420 -660 {lab=psub}
 C {devices/title-3.sym} 0 0 0 0 {name=l1 author="Simon Dorrer" rev=1.0 lock=true}
 C {devices/iopin.sym} 960 -700 0 1 {name=p2 lab=v_a}
 C {devices/iopin.sym} 1560 -700 0 0 {name=p4 lab=v_b}
@@ -147,20 +143,4 @@ C {devices/lab_pin.sym} 1300 -480 3 0 {name=p13 sig_type=std_logic lab=di_tg_ctr
 C {devices/ipin.sym} 1160 -480 3 0 {name=p8 lab=di_tg_ctrl}
 C {devices/ipin.sym} 1160 -920 1 0 {name=p9 lab=di_tg_ctrl_n}
 C {devices/iopin.sym} 1400 -920 3 0 {name=p3 lab=VDD}
-C {sg13g2_pr/ntap1_ring.sym} 1400 -870 0 0 {name=R1
-model=ntap1
-spiceprefix=X
-w=29.86e-6
-l=11.02e-6
-rw=0.3e-6
-lvs_ignore=short}
 C {devices/iopin.sym} 1400 -480 1 0 {name=p7 lab=VSS}
-C {sg13g2_pr/ptap1_ring.sym} 1400 -530 2 1 {name=R2
-model=ptap1
-spiceprefix=X
-w=29.86e-6
-l=5.38e-6
-rw=0.3e-6
-lvs_ignore=short}
-C {devices/iopin.sym} 1420 -740 0 0 {name=p1 lab=nwell}
-C {devices/iopin.sym} 1420 -660 0 0 {name=p5 lab=psub}
