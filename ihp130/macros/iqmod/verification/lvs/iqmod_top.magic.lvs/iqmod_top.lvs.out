@@ -1,0 +1,726 @@
+
+Circuit 1 cell sg13_lv_nmos and Circuit 2 cell sg13_lv_nmos are black boxes.
+Warning: Equate pins:  cell sg13_lv_nmos is a placeholder, treated as a black box.
+Warning: Equate pins:  cell sg13_lv_nmos is a placeholder, treated as a black box.
+
+Subcircuit pins:
+Circuit 1: sg13_lv_nmos                    |Circuit 2: sg13_lv_nmos                    
+-------------------------------------------|-------------------------------------------
+1                                          |1                                          
+2                                          |2                                          
+3                                          |3                                          
+4                                          |4                                          
+---------------------------------------------------------------------------------------
+Cell pin lists are equivalent.
+Device classes sg13_lv_nmos and sg13_lv_nmos are equivalent.
+
+Circuit 1 cell sg13_lv_pmos and Circuit 2 cell sg13_lv_pmos are black boxes.
+Warning: Equate pins:  cell sg13_lv_pmos is a placeholder, treated as a black box.
+Warning: Equate pins:  cell sg13_lv_pmos is a placeholder, treated as a black box.
+
+Subcircuit pins:
+Circuit 1: sg13_lv_pmos                    |Circuit 2: sg13_lv_pmos                    
+-------------------------------------------|-------------------------------------------
+1                                          |1                                          
+2                                          |2                                          
+3                                          |3                                          
+4                                          |4                                          
+---------------------------------------------------------------------------------------
+Cell pin lists are equivalent.
+Device classes sg13_lv_pmos and sg13_lv_pmos are equivalent.
+
+Circuit 1 cell rhigh and Circuit 2 cell rhigh are black boxes.
+Warning: Equate pins:  cell rhigh is a placeholder, treated as a black box.
+Warning: Equate pins:  cell rhigh is a placeholder, treated as a black box.
+
+Subcircuit pins:
+Circuit 1: rhigh                           |Circuit 2: rhigh                           
+-------------------------------------------|-------------------------------------------
+1                                          |1                                          
+2                                          |2                                          
+3                                          |3                                          
+---------------------------------------------------------------------------------------
+Cell pin lists are equivalent.
+Device classes rhigh and rhigh are equivalent.
+
+Circuit 1 cell cap_cmim and Circuit 2 cell cap_cmim are black boxes.
+Warning: Equate pins:  cell cap_cmim is a placeholder, treated as a black box.
+Warning: Equate pins:  cell cap_cmim is a placeholder, treated as a black box.
+
+Subcircuit pins:
+Circuit 1: cap_cmim                        |Circuit 2: cap_cmim                        
+-------------------------------------------|-------------------------------------------
+1                                          |1                                          
+2                                          |2                                          
+---------------------------------------------------------------------------------------
+Cell pin lists are equivalent.
+Device classes cap_cmim and cap_cmim are equivalent.
+Flattening unmatched subcell iqmod_top_half in circuit iqmod_top (1)(2 instances)
+Flattening unmatched subcell iqmod_mixer in circuit iqmod_top (1)(2 instances)
+Flattening unmatched subcell iqmod_mixer_tg in circuit iqmod_top (1)(4 instances)
+Flattening unmatched subcell iqmod_mixer_se2diff in circuit iqmod_top (1)(4 instances)
+Flattening unmatched subcell iqmod_mixer_se2diff_tg_NF6 in circuit iqmod_top (1)(4 instances)
+Flattening unmatched subcell iqmod_mixer_se2diff_inv_NF18 in circuit iqmod_top (1)(8 instances)
+Flattening unmatched subcell iqmod_mixer_se2diff_inv_NF2 in circuit iqmod_top (1)(16 instances)
+Flattening unmatched subcell iqmod_mixer_se2diff_inv_NF6 in circuit iqmod_top (1)(20 instances)
+Flattening unmatched subcell iqmod_mixer_se2diff_inv_NF54 in circuit iqmod_top (1)(8 instances)
+Flattening unmatched subcell iqmod_mfb_lpf in circuit iqmod_top (1)(2 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_ota_core_hybrid_bm in circuit iqmod_top (1)(2 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_ota_core_inv_NF20 in circuit iqmod_top (1)(12 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_ota_core_inv_NF10 in circuit iqmod_top (1)(4 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_ota_core_inv_NF6 in circuit iqmod_top (1)(12 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_ota_core_spdt_switch in circuit iqmod_top (1)(4 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_ota_core_spdt_switch_inv in circuit iqmod_top (1)(8 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_ota_core_spdt_switch_tg in circuit iqmod_top (1)(8 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_ota_core_tg in circuit iqmod_top (1)(8 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_R1 in circuit iqmod_top (1)(4 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_R2 in circuit iqmod_top (1)(4 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_R3 in circuit iqmod_top (1)(4 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_R4 in circuit iqmod_top (1)(4 instances)
+Flattening unmatched subcell iqmod_spdt_switch in circuit iqmod_top (1)(4 instances)
+Flattening unmatched subcell iqmod_spdt_switch_inv in circuit iqmod_top (1)(8 instances)
+Flattening unmatched subcell iqmod_spdt_switch_tg in circuit iqmod_top (1)(8 instances)
+
+Class iqmod_top (0):  Merged 3189 parallel devices.
+Class iqmod_top (0):  Merged 32 series devices.
+Class iqmod_top (1):  Merged 245 parallel devices.
+Class iqmod_top (1):  Merged 32 series devices.
+Subcircuit summary:
+Circuit 1: iqmod_top                       |Circuit 2: iqmod_top                       
+-------------------------------------------|-------------------------------------------
+sg13_lv_nmos (1688->119)                   |sg13_lv_nmos (228->119)                    
+sg13_lv_pmos (1688->123)                   |sg13_lv_pmos (228->123)                    
+cap_cmim (36->12)                          |cap_cmim (36->12)                          
+rhigh (80->17)                             |rhigh (80->17)                             
+Number of devices: 271                     |Number of devices: 271                     
+Number of nets: 113                        |Number of nets: 113                        
+---------------------------------------------------------------------------------------
+Resolving symmetries by property value.
+Resolving symmetries by pin name.
+Netlists match uniquely with property errors.
+rhigh:151 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R1:2/rhigh:Rdummy1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:151 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R1:2/rhigh:Rdummy1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:151 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R1:2/rhigh:Rdummy1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:151 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R1:2/rhigh:Rdummy1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:918 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R2:4/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:918 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R2:4/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:2700 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R2:5/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:2700 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R2:5/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:253 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R2:4/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:253 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R2:4/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:127 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R2:5/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:127 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R2:5/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:828 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R3:6/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:828 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R3:6/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:1556 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R3:7/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:1556 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R3:7/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:2771 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R3:6/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:2771 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R3:6/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:31 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R3:7/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:31 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R3:7/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:2346 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R1:3/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:2346 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R1:3/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:1288 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R1:2/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:1288 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R1:2/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:563 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R1:2/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:563 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R1:2/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:30 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R1:3/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:30 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R1:3/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:3072 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R4:8/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:3072 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R4:8/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:1736 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R4:8/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:1736 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R4:8/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:950 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R4:9/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:950 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R4:9/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:407 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R4:9/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:407 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_R4:9/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:10 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/cap_cmim:C1a:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:642 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/cap_cmim:C1b:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:157 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/cap_cmim:C1a:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:440 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/cap_cmim:C1b:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:2054 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/cap_cmim:C2a:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:785 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/cap_cmim:C2b:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:299 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/cap_cmim:C2a:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:517 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/cap_cmim:C2b:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:3440 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/cap_cmim:C3b:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:3440 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/cap_cmim:C3b:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:1234 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/cap_cmim:C3a:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:1234 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/cap_cmim:C3a:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:792 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/cap_cmim:C3a:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:792 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/cap_cmim:C3a:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:314 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/cap_cmim:C3b:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:314 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/cap_cmim:C3b:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:2 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF18:8/sg13_lv_pmos:Mdummy2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:2 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF18:8/sg13_lv_pmos:Mdummy2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:59 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_tg:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:115 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_tg:4/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:327 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_tg:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:16 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_tg:4/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:499 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_tg:2/sg13_lv_pmos:Mdummy2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:120 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_tg:4/sg13_lv_pmos:Mdummy2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:154 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_tg:2/sg13_lv_pmos:Mdummy2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:57 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_tg:4/sg13_lv_pmos:Mdummy2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:799 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_tg_NF6:3/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:434 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_tg_NF6:3/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:171 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_tg_NF6:3/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:49 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_tg_NF6:3/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:2402 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF2:5/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:1407 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF2:5/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:898 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF2:5/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:403 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF2:5/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:2342 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF2:6/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:999 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF2:6/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:854 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF2:6/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:584 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF2:6/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:144 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF18:8/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:103 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF18:8/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:356 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF18:8/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:483 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF18:8/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:50 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF18:11/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:239 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF18:11/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:432 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF18:11/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:160 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF18:11/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:338 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF54:12/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:73 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF54:12/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:58 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF54:12/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:48 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF54:12/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:132 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF54:9/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:121 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF54:9/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:116 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF54:9/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:8 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF54:9/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:1212 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF2:13/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:1271 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF2:13/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:281 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF2:13/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:337 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF2:13/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:93 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:6/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:72 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:7/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:38 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:6/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:3 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:7/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:146 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:11/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:65 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:11/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:13 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:12/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:7 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:12/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:172 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF10:9/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:379 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF10:10/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:63 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF10:9/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:282 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF10:10/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:1028 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF6:5/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:663 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF6:5/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:568 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF6:1/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:194 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF6:1/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:162 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF6:8/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:1136 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF6:8/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:180 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:128 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:82 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:3/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:18 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:3/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:2073 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_inv:1/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:1871 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_inv:1/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:321 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_inv:1/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:94 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_inv:1/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:318 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_inv:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:95 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_inv:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:81 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_inv:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:79 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_inv:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:1623 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:7/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:804 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:7/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:530 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:7/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:4 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:7/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:993 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:10/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:841 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:10/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:485 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:10/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:173 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:10/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:392 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_tg:3/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:599 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_tg:3/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:678 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_tg:3/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:109 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_tg:3/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:608 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:355 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:780 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:877 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:307 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:4/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:737 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:4/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:820 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:4/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:796 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:4/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:313 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_tg:4/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:507 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_tg:4/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:264 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_tg:4/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:214 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_tg:4/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:256 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_tg:20/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:28 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_tg:15/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:937 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_tg:15/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:56 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_tg:20/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:784 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_tg:23/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:572 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_tg:18/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:195 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_tg:23/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:42 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_tg:18/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:614 vs. iqmod_top_half:1/iqmod_spdt_switch:6/iqmod_spdt_switch_inv:1/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:412 vs. iqmod_top_half:1/iqmod_spdt_switch:5/iqmod_spdt_switch_inv:1/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:2415 vs. iqmod_top_half:2/iqmod_spdt_switch:6/iqmod_spdt_switch_inv:1/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:2201 vs. iqmod_top_half:2/iqmod_spdt_switch:5/iqmod_spdt_switch_inv:1/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:1468 vs. iqmod_top_half:1/iqmod_spdt_switch:6/iqmod_spdt_switch_inv:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:1262 vs. iqmod_top_half:1/iqmod_spdt_switch:5/iqmod_spdt_switch_inv:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:426 vs. iqmod_top_half:2/iqmod_spdt_switch:6/iqmod_spdt_switch_inv:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:213 vs. iqmod_top_half:2/iqmod_spdt_switch:5/iqmod_spdt_switch_inv:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:613 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:1/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:102 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:1/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:69 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:1/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:22 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:1/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:679 vs. iqmod_top_half:1/iqmod_spdt_switch:5/iqmod_spdt_switch_tg:3/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:11 vs. iqmod_top_half:1/iqmod_spdt_switch:6/iqmod_spdt_switch_tg:3/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:208 vs. iqmod_top_half:2/iqmod_spdt_switch:5/iqmod_spdt_switch_tg:3/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:422 vs. iqmod_top_half:2/iqmod_spdt_switch:6/iqmod_spdt_switch_tg:3/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:45 vs. iqmod_top_half:1/iqmod_spdt_switch:5/iqmod_spdt_switch_tg:4/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:269 vs. iqmod_top_half:1/iqmod_spdt_switch:6/iqmod_spdt_switch_tg:4/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:240 vs. iqmod_top_half:2/iqmod_spdt_switch:5/iqmod_spdt_switch_tg:4/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:206 vs. iqmod_top_half:2/iqmod_spdt_switch:6/iqmod_spdt_switch_tg:4/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:1 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF18:8/sg13_lv_nmos:Mdummy1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:1 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF18:8/sg13_lv_nmos:Mdummy1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:169 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_tg:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:142 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_tg:4/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:23 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_tg:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:155 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_tg:4/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:133 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_tg:2/sg13_lv_nmos:Mdummy1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:348 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_tg:4/sg13_lv_nmos:Mdummy1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:33 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_tg:2/sg13_lv_nmos:Mdummy1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:196 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_tg:4/sg13_lv_nmos:Mdummy1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:262 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_tg_NF6:3/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:158 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_tg_NF6:3/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:88 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_tg_NF6:3/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:62 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_tg_NF6:3/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:2382 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF2:5/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:1538 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF2:5/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:353 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF2:5/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:111 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF2:5/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:1835 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF2:6/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:674 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF2:6/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:46 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF2:6/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:32 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF2:6/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:343 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:715 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:430 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:561 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:656 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:4/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:405 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:4/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:734 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:4/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:260 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:4/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:87 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF18:8/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:279 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF18:8/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:9 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF18:8/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:84 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF18:8/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:198 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF18:11/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:178 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF18:11/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:263 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF18:11/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:209 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF18:11/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:117 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF54:9/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:64 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF54:9/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:61 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF54:9/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:5 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF54:9/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:244 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF54:12/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:189 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF54:12/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:14 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF54:12/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:0 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF54:12/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:110 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF2:13/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:724 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF2:13/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:959 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF2:13/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:1880 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF2:13/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:107 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:6/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:101 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:7/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:24 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:7/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:15 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:6/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:181 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:11/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:176 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:12/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:143 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:11/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:12 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:12/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:205 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF10:9/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:858 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF10:10/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:141 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF10:9/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:496 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF10:10/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:51 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF6:5/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:628 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF6:5/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:96 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF6:1/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:164 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF6:1/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:202 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF6:8/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:215 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF6:8/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:232 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:3/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:91 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:3/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:35 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:25 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:1533 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_inv:1/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:867 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_inv:1/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:601 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_inv:1/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:523 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_inv:1/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:2106 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_inv:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:1386 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_inv:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:1287 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_inv:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:660 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_inv:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:762 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:7/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:610 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:7/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:512 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:7/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:21 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:7/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:925 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:10/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:829 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:10/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:579 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:10/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:461 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:10/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:66 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_tg:3/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:229 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_tg:3/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:26 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_tg:3/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:300 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_tg:3/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:347 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_tg:4/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:230 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_tg:4/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:77 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_tg:4/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:74 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_tg:4/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:174 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_tg:15/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:177 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_tg:15/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:89 vs. iqmod_top_half:1/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_tg:18/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:309 vs. iqmod_top_half:2/iqmod_mfb_lpf:1/iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_tg:18/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:1682 vs. iqmod_top_half:1/iqmod_spdt_switch:6/iqmod_spdt_switch_inv:1/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:41 vs. iqmod_top_half:1/iqmod_spdt_switch:5/iqmod_spdt_switch_inv:1/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:932 vs. iqmod_top_half:2/iqmod_spdt_switch:5/iqmod_spdt_switch_inv:1/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:98 vs. iqmod_top_half:2/iqmod_spdt_switch:6/iqmod_spdt_switch_inv:1/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:566 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:1/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:436 vs. iqmod_top_half:2/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:1/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:159 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:1/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:86 vs. iqmod_top_half:1/iqmod_mixer:3/iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:1/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:2551 vs. iqmod_top_half:1/iqmod_spdt_switch:6/iqmod_spdt_switch_inv:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:1609 vs. iqmod_top_half:2/iqmod_spdt_switch:6/iqmod_spdt_switch_inv:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:39 vs. iqmod_top_half:1/iqmod_spdt_switch:5/iqmod_spdt_switch_inv:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:20 vs. iqmod_top_half:2/iqmod_spdt_switch:5/iqmod_spdt_switch_inv:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:625 vs. iqmod_top_half:1/iqmod_spdt_switch:5/iqmod_spdt_switch_tg:3/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:225 vs. iqmod_top_half:1/iqmod_spdt_switch:6/iqmod_spdt_switch_tg:3/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:52 vs. iqmod_top_half:2/iqmod_spdt_switch:5/iqmod_spdt_switch_tg:3/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:323 vs. iqmod_top_half:2/iqmod_spdt_switch:6/iqmod_spdt_switch_tg:3/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:622 vs. iqmod_top_half:1/iqmod_spdt_switch:5/iqmod_spdt_switch_tg:4/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:486 vs. iqmod_top_half:1/iqmod_spdt_switch:6/iqmod_spdt_switch_tg:4/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:43 vs. iqmod_top_half:2/iqmod_spdt_switch:5/iqmod_spdt_switch_tg:4/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:319 vs. iqmod_top_half:2/iqmod_spdt_switch:6/iqmod_spdt_switch_tg:4/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+
+Subcircuit pins:
+Circuit 1: iqmod_top                       |Circuit 2: iqmod_top                       
+-------------------------------------------|-------------------------------------------
+di_analog_en                               |di_analog_en                               
+voutn_I_RF                                 |voutn_I_RF                                 
+voutp_I_RF                                 |voutp_I_RF                                 
+voutp_Q_RF                                 |voutp_Q_RF                                 
+voutn_Q_RF                                 |voutn_Q_RF                                 
+di_ds_I_n                                  |di_ds_I_n                                  
+di_ds_Q_n                                  |di_ds_Q_n                                  
+di_ds_I_p                                  |di_ds_I_p                                  
+di_ds_Q_p                                  |di_ds_Q_p                                  
+di_lo_Ix                                   |di_lo_Ix                                   
+di_lo_Qx                                   |di_lo_Qx                                   
+di_lo_Q                                    |di_lo_Q                                    
+di_lo_I                                    |di_lo_I                                    
+vinp_I                                     |vinp_I                                     
+vinn_Q                                     |vinn_Q                                     
+vinp_Q                                     |vinp_Q                                     
+vinn_I                                     |vinn_I                                     
+VDD                                        |VDD                                        
+VSS                                        |VSS                                        
+di_spdt_ctrl_Q                             |di_spdt_ctrl_Q                             
+di_spdt_ctrl_I                             |di_spdt_ctrl_I                             
+---------------------------------------------------------------------------------------
+Cell pin lists are equivalent.
+Device classes iqmod_top and iqmod_top are equivalent.
+
+Final result: Circuits match uniquely.
+Property errors were found.
+
+The following cells had property errors:
+ iqmod_top

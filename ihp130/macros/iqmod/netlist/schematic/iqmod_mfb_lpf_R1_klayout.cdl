@@ -1,0 +1,9 @@
+** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/iqmod_mfb_lpf_R1.sch
+.subckt iqmod_mfb_lpf_R1 v_b v_a VSS
+*.PININFO v_a:B v_b:B VSS:B
+RR1 v_a net1 80.146k $SUB=VSS $[rhigh] w=0.5e-6 l=27.0e-6 b=0
+RR2 net1 net2 80.146k $SUB=VSS $[rhigh] w=0.5e-6 l=27.0e-6 b=0
+RR3 net2 v_b 80.146k $SUB=VSS $[rhigh] w=0.5e-6 l=27.0e-6 b=0
+RRdummy1 VSS VSS 80.146k $SUB=VSS $[rhigh] w=0.5e-6 l=27.0e-6 b=0
+RRdummy2 VSS VSS 80.146k $SUB=VSS $[rhigh] w=0.5e-6 l=27.0e-6 b=0
+.ends

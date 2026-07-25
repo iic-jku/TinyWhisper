@@ -1,0 +1,196 @@
+
+Circuit 1 cell sg13_lv_pmos and Circuit 2 cell sg13_lv_pmos are black boxes.
+Warning: Equate pins:  cell sg13_lv_pmos is a placeholder, treated as a black box.
+Warning: Equate pins:  cell sg13_lv_pmos is a placeholder, treated as a black box.
+
+Subcircuit pins:
+Circuit 1: sg13_lv_pmos                    |Circuit 2: sg13_lv_pmos                    
+-------------------------------------------|-------------------------------------------
+1                                          |1                                          
+2                                          |2                                          
+3                                          |3                                          
+4                                          |4                                          
+---------------------------------------------------------------------------------------
+Cell pin lists are equivalent.
+Device classes sg13_lv_pmos and sg13_lv_pmos are equivalent.
+
+Circuit 1 cell sg13_lv_nmos and Circuit 2 cell sg13_lv_nmos are black boxes.
+Warning: Equate pins:  cell sg13_lv_nmos is a placeholder, treated as a black box.
+Warning: Equate pins:  cell sg13_lv_nmos is a placeholder, treated as a black box.
+
+Subcircuit pins:
+Circuit 1: sg13_lv_nmos                    |Circuit 2: sg13_lv_nmos                    
+-------------------------------------------|-------------------------------------------
+1                                          |1                                          
+2                                          |2                                          
+3                                          |3                                          
+4                                          |4                                          
+---------------------------------------------------------------------------------------
+Cell pin lists are equivalent.
+Device classes sg13_lv_nmos and sg13_lv_nmos are equivalent.
+Flattening unmatched subcell iqmod_mixer_tg in circuit iqmod_mixer (1)(2 instances)
+Flattening unmatched subcell iqmod_mixer_se2diff in circuit iqmod_mixer (1)(2 instances)
+Flattening unmatched subcell iqmod_mixer_se2diff_tg_NF6 in circuit iqmod_mixer (1)(2 instances)
+Flattening unmatched subcell iqmod_mixer_se2diff_inv_NF18 in circuit iqmod_mixer (1)(4 instances)
+Flattening unmatched subcell iqmod_mixer_se2diff_inv_NF2 in circuit iqmod_mixer (1)(8 instances)
+Flattening unmatched subcell iqmod_mixer_se2diff_inv_NF6 in circuit iqmod_mixer (1)(10 instances)
+Flattening unmatched subcell iqmod_mixer_se2diff_inv_NF54 in circuit iqmod_mixer (1)(4 instances)
+
+Class iqmod_mixer (0):  Merged 1010 parallel devices.
+Class iqmod_mixer (1):  Merged 54 parallel devices.
+Subcircuit summary:
+Circuit 1: iqmod_mixer                     |Circuit 2: iqmod_mixer                     
+-------------------------------------------|-------------------------------------------
+sg13_lv_nmos (536->31)                     |sg13_lv_nmos (58->31)                      
+sg13_lv_pmos (536->31)                     |sg13_lv_pmos (58->31)                      
+Number of devices: 62                      |Number of devices: 62                      
+Number of nets: 30                         |Number of nets: 30                         
+---------------------------------------------------------------------------------------
+Resolving symmetries by property value.
+Resolving symmetries by pin name.
+Netlists match uniquely with property errors.
+sg13_lv_pmos:17 vs. iqmod_mixer_tg:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:10 vs. iqmod_mixer_tg:4/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:176 vs. iqmod_mixer_tg:2/sg13_lv_pmos:Mdummy2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:141 vs. iqmod_mixer_tg:4/sg13_lv_pmos:Mdummy2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:7 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF18:8/sg13_lv_pmos:Mdummy2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:337 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_tg_NF6:3/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:136 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_tg_NF6:3/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:186 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF2:5/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:51 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF2:5/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:657 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF2:6/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:63 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF2:6/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:93 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:43 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:23 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:4/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:64 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:4/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:279 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:1/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:55 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:1/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:71 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:7/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:20 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:7/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:350 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:10/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:94 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:10/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:72 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF18:8/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:4 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF18:8/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:26 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF18:11/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:27 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF18:11/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:31 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF54:9/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:2 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF54:9/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:12 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF54:12/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:1 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF54:12/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:47 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF2:13/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:203 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF2:13/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:59 vs. iqmod_mixer_tg:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:61 vs. iqmod_mixer_tg:4/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:37 vs. iqmod_mixer_tg:2/sg13_lv_nmos:Mdummy1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:52 vs. iqmod_mixer_tg:4/sg13_lv_nmos:Mdummy1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:0 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF18:8/sg13_lv_nmos:Mdummy1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:219 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_tg_NF6:3/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:46 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_tg_NF6:3/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:559 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF2:5/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:155 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF2:5/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:387 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF2:6/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:319 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF2:6/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:198 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:145 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:32 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:4/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:321 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:4/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:159 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:1/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:126 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:1/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:120 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:7/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:101 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:7/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:484 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF6:10/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:8 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF6:10/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:91 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF54:9/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:11 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF54:9/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:6 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF18:8/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:105 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF18:8/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:86 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF18:11/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:9 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF18:11/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:39 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF54:12/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:5 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF54:12/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:527 vs. iqmod_mixer_se2diff:1/iqmod_mixer_se2diff_inv_NF2:13/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:137 vs. iqmod_mixer_se2diff:3/iqmod_mixer_se2diff_inv_NF2:13/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+
+Subcircuit pins:
+Circuit 1: iqmod_mixer                     |Circuit 2: iqmod_mixer                     
+-------------------------------------------|-------------------------------------------
+vinp_IF                                    |vinp_IF                                    
+vinn_IF                                    |vinn_IF                                    
+vinn_LO                                    |vinn_LO                                    
+vinp_LO                                    |vinp_LO                                    
+voutp_RF                                   |voutp_RF                                   
+voutn_RF                                   |voutn_RF                                   
+VDD                                        |VDD                                        
+VSS                                        |VSS                                        
+---------------------------------------------------------------------------------------
+Cell pin lists are equivalent.
+Device classes iqmod_mixer and iqmod_mixer are equivalent.
+
+Final result: Circuits match uniquely.
+Property errors were found.
+
+The following cells had property errors:
+ iqmod_mixer

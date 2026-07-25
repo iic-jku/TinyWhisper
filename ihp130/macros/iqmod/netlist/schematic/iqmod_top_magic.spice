@@ -37,12 +37,12 @@ x3 VDD vinn_LO vinn_LO_buf VSS vinn_LO_inv iqmod_mixer_se2diff
 .subckt iqmod_mfb_lpf voutp vinp voutn vinn VDD VSS di_filter_en
 *.PININFO VDD:B VSS:B vinp:I vinn:I voutp:O voutn:O di_filter_en:I
 x1 voutp voutn vinn_ota vinp_ota VDD VSS di_filter_en iqmod_mfb_lpf_ota_core_hybrid_bm
-CC1a vinp_stage1 vinn_stage1 cap_cmim w=8.0e-6 l=8.0e-6 m=5
-CC1b vinn_stage1 vinp_stage1 cap_cmim w=8.0e-6 l=8.0e-6 m=5
-CC2a vinp_stage2 vinn_stage2 cap_cmim w=8.0e-6 l=8.0e-6 m=3
-CC2b vinn_stage2 vinp_stage2 cap_cmim w=8.0e-6 l=8.0e-6 m=3
-CC3a voutn vinp_ota cap_cmim w=8.0e-6 l=8.0e-6
-CC3b voutp vinn_ota cap_cmim w=8.0e-6 l=8.0e-6
+XC1a vinp_stage1 vinn_stage1 cap_cmim w=8.0e-6 l=8.0e-6 m=5 mm_ok=1
+XC1b vinn_stage1 vinp_stage1 cap_cmim w=8.0e-6 l=8.0e-6 m=5 mm_ok=1
+XC2a vinp_stage2 vinn_stage2 cap_cmim w=8.0e-6 l=8.0e-6 m=3 mm_ok=1
+XC2b vinn_stage2 vinp_stage2 cap_cmim w=8.0e-6 l=8.0e-6 m=3 mm_ok=1
+XC3a voutn vinp_ota cap_cmim w=8.0e-6 l=8.0e-6 m=1 mm_ok=1
+XC3b voutp vinn_ota cap_cmim w=8.0e-6 l=8.0e-6 m=1 mm_ok=1
 x2 vinp_stage1 vinp VSS iqmod_mfb_lpf_R1
 x3 vinn_stage1 vinn VSS iqmod_mfb_lpf_R1
 x4 vinp_stage1 vinp_stage2 VSS iqmod_mfb_lpf_R2
@@ -71,10 +71,10 @@ x4 VDD spdt_ctrl_n VSS v_c v_b spdt_ctrl_buf iqmod_spdt_switch_tg
 ** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/iqmod_mixer_tg.sch
 .subckt iqmod_mixer_tg VDD di_tg_ctrl VSS v_b v_a di_tg_ctrl_n
 *.PININFO v_a:B v_b:B di_tg_ctrl:I di_tg_ctrl_n:I VDD:B VSS:B
-MM1 v_a di_tg_ctrl v_b VSS sg13_lv_nmos w=108.0u l=0.13u ng=36
-MM2 v_a di_tg_ctrl_n v_b VDD sg13_lv_pmos w=324.0u l=0.13u ng=36
-MMdummy2 v_b di_tg_ctrl v_b VDD sg13_lv_pmos w=162.0u l=0.13u ng=18
-MMdummy1 v_b di_tg_ctrl_n v_b VSS sg13_lv_nmos w=54.0u l=0.13u ng=18
+XM1 v_a di_tg_ctrl v_b VSS sg13_lv_nmos w=108.0u l=0.13u ng=36 m=1 mm_ok=1
+XM2 v_a di_tg_ctrl_n v_b VDD sg13_lv_pmos w=324.0u l=0.13u ng=36 m=1 mm_ok=1
+XMdummy2 v_b di_tg_ctrl v_b VDD sg13_lv_pmos w=162.0u l=0.13u ng=18 m=1 mm_ok=1
+XMdummy1 v_b di_tg_ctrl_n v_b VSS sg13_lv_nmos w=54.0u l=0.13u ng=18 m=1 mm_ok=1
 .ends
 
 
@@ -133,11 +133,11 @@ x23 VDD di_ota_en VSS node_FG node_EF ota_en_n_2 iqmod_mfb_lpf_ota_core_tg
 ** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/iqmod_mfb_lpf_R1.sch
 .subckt iqmod_mfb_lpf_R1 v_b v_a VSS
 *.PININFO v_a:B v_b:B VSS:B
-RR1 v_a net1 80.146k $SUB=VSS $[rhigh] w=0.5e-6 l=27.0e-6 b=0
-RR2 net1 net2 80.146k $SUB=VSS $[rhigh] w=0.5e-6 l=27.0e-6 b=0
-RR3 net2 v_b 80.146k $SUB=VSS $[rhigh] w=0.5e-6 l=27.0e-6 b=0
-RRdummy1 VSS VSS 80.146k $SUB=VSS $[rhigh] w=0.5e-6 l=27.0e-6 b=0
-RRdummy2 VSS VSS 80.146k $SUB=VSS $[rhigh] w=0.5e-6 l=27.0e-6 b=0
+XR1 v_a net1 VSS rhigh w=0.5e-6 l=27.0e-6 m=1 b=0 mm_ok=1
+XR2 net1 net2 VSS rhigh w=0.5e-6 l=27.0e-6 m=1 b=0 mm_ok=1
+XR3 net2 v_b VSS rhigh w=0.5e-6 l=27.0e-6 m=1 b=0 mm_ok=1
+XRdummy1 VSS VSS VSS rhigh w=0.5e-6 l=27.0e-6 m=1 b=0 mm_ok=1
+XRdummy2 VSS VSS VSS rhigh w=0.5e-6 l=27.0e-6 m=1 b=0 mm_ok=1
 .ends
 
 
@@ -146,11 +146,11 @@ RRdummy2 VSS VSS 80.146k $SUB=VSS $[rhigh] w=0.5e-6 l=27.0e-6 b=0
 ** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/iqmod_mfb_lpf_R2.sch
 .subckt iqmod_mfb_lpf_R2 v_b v_a VSS
 *.PININFO v_a:B v_b:B VSS:B
-RR1 v_a net1 91.972k $SUB=VSS $[rhigh] w=0.5e-6 l=31.0e-6 b=0
-RR2 net1 net2 91.972k $SUB=VSS $[rhigh] w=0.5e-6 l=31.0e-6 b=0
-RR3 net2 v_b 91.972k $SUB=VSS $[rhigh] w=0.5e-6 l=31.0e-6 b=0
-RRdummy1 VSS VSS 91.972k $SUB=VSS $[rhigh] w=0.5e-6 l=31.0e-6 b=0
-RRdummy2 VSS VSS 91.972k $SUB=VSS $[rhigh] w=0.5e-6 l=31.0e-6 b=0
+XR1 v_a net1 VSS rhigh w=0.5e-6 l=31.0e-6 m=1 b=0 mm_ok=1
+XR2 net1 net2 VSS rhigh w=0.5e-6 l=31.0e-6 m=1 b=0 mm_ok=1
+XR3 net2 v_b VSS rhigh w=0.5e-6 l=31.0e-6 m=1 b=0 mm_ok=1
+XRdummy1 VSS VSS VSS rhigh w=0.5e-6 l=31.0e-6 m=1 b=0 mm_ok=1
+XRdummy2 VSS VSS VSS rhigh w=0.5e-6 l=31.0e-6 m=1 b=0 mm_ok=1
 .ends
 
 
@@ -159,11 +159,11 @@ RRdummy2 VSS VSS 91.972k $SUB=VSS $[rhigh] w=0.5e-6 l=31.0e-6 b=0
 ** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/iqmod_mfb_lpf_R3.sch
 .subckt iqmod_mfb_lpf_R3 v_b v_a VSS
 *.PININFO v_a:B v_b:B VSS:B
-RR1 v_a net1 174.75k $SUB=VSS $[rhigh] w=0.5e-6 l=59.0e-6 b=0
-RR2 net1 net2 174.75k $SUB=VSS $[rhigh] w=0.5e-6 l=59.0e-6 b=0
-RR3 net2 v_b 174.75k $SUB=VSS $[rhigh] w=0.5e-6 l=59.0e-6 b=0
-RRdummy1 VSS VSS 174.75k $SUB=VSS $[rhigh] w=0.5e-6 l=59.0e-6 b=0
-RRdummy2 VSS VSS 174.75k $SUB=VSS $[rhigh] w=0.5e-6 l=59.0e-6 b=0
+XR1 v_a net1 VSS rhigh w=0.5e-6 l=59.0e-6 m=1 b=0 mm_ok=1
+XR2 net1 net2 VSS rhigh w=0.5e-6 l=59.0e-6 m=1 b=0 mm_ok=1
+XR3 net2 v_b VSS rhigh w=0.5e-6 l=59.0e-6 m=1 b=0 mm_ok=1
+XRdummy1 VSS VSS VSS rhigh w=0.5e-6 l=59.0e-6 m=1 b=0 mm_ok=1
+XRdummy2 VSS VSS VSS rhigh w=0.5e-6 l=59.0e-6 m=1 b=0 mm_ok=1
 .ends
 
 
@@ -172,11 +172,11 @@ RRdummy2 VSS VSS 174.75k $SUB=VSS $[rhigh] w=0.5e-6 l=59.0e-6 b=0
 ** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/iqmod_mfb_lpf_R4.sch
 .subckt iqmod_mfb_lpf_R4 v_b v_a VSS
 *.PININFO v_a:B v_b:B VSS:B
-RR1 v_a net1 177.71k $SUB=VSS $[rhigh] w=0.5e-6 l=60.0e-6 b=0
-RR2 net1 net2 177.71k $SUB=VSS $[rhigh] w=0.5e-6 l=60.0e-6 b=0
-RR3 net2 v_b 177.71k $SUB=VSS $[rhigh] w=0.5e-6 l=60.0e-6 b=0
-RRdummy1 VSS VSS 177.71k $SUB=VSS $[rhigh] w=0.5e-6 l=60.0e-6 b=0
-RRdummy2 VSS VSS 177.71k $SUB=VSS $[rhigh] w=0.5e-6 l=60.0e-6 b=0
+XR1 v_a net1 VSS rhigh w=0.5e-6 l=60.0e-6 m=1 b=0 mm_ok=1
+XR2 net1 net2 VSS rhigh w=0.5e-6 l=60.0e-6 m=1 b=0 mm_ok=1
+XR3 net2 v_b VSS rhigh w=0.5e-6 l=60.0e-6 m=1 b=0 mm_ok=1
+XRdummy1 VSS VSS VSS rhigh w=0.5e-6 l=60.0e-6 m=1 b=0 mm_ok=1
+XRdummy2 VSS VSS VSS rhigh w=0.5e-6 l=60.0e-6 m=1 b=0 mm_ok=1
 .ends
 
 
@@ -185,10 +185,10 @@ RRdummy2 VSS VSS 177.71k $SUB=VSS $[rhigh] w=0.5e-6 l=60.0e-6 b=0
 ** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/iqmod_spdt_switch_inv.sch
 .subckt iqmod_spdt_switch_inv VDD vin vout VSS
 *.PININFO vin:I VDD:B VSS:B vout:B
-MM1 vout vin VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2
-MM2 vout vin VDD VDD sg13_lv_pmos w=12.0u l=0.13u ng=2
-MMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2
-MMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=12.0u l=0.13u ng=2
+XM1 vout vin VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2 m=1 mm_ok=1
+XM2 vout vin VDD VDD sg13_lv_pmos w=12.0u l=0.13u ng=2 m=1 mm_ok=1
+XMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2 m=1 mm_ok=1
+XMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=12.0u l=0.13u ng=2 m=1 mm_ok=1
 .ends
 
 
@@ -197,8 +197,8 @@ MMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=12.0u l=0.13u ng=2
 ** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/iqmod_spdt_switch_tg.sch
 .subckt iqmod_spdt_switch_tg VDD di_tg_ctrl VSS v_b v_a di_tg_ctrl_n
 *.PININFO v_a:B v_b:B VDD:B VSS:B di_tg_ctrl:I di_tg_ctrl_n:I
-MM2 v_a di_tg_ctrl_n v_b VDD sg13_lv_pmos w=36.0u l=0.13u ng=6
-MM1 v_a di_tg_ctrl v_b VSS sg13_lv_nmos w=6.0u l=0.13u ng=6
+XM2 v_a di_tg_ctrl_n v_b VDD sg13_lv_pmos w=36.0u l=0.13u ng=6 m=1 mm_ok=1
+XM1 v_a di_tg_ctrl v_b VSS sg13_lv_nmos w=6.0u l=0.13u ng=6 m=1 mm_ok=1
 .ends
 
 
@@ -207,8 +207,8 @@ MM1 v_a di_tg_ctrl v_b VSS sg13_lv_nmos w=6.0u l=0.13u ng=6
 ** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/iqmod_mixer_se2diff_tg_NF6.sch
 .subckt iqmod_mixer_se2diff_tg_NF6 VDD di_tg_ctrl VSS v_b v_a di_tg_ctrl_n
 *.PININFO v_a:B v_b:B VDD:B VSS:B di_tg_ctrl:I di_tg_ctrl_n:I
-MM2 v_a di_tg_ctrl_n v_b VDD sg13_lv_pmos w=18.0u l=0.13u ng=6
-MM1 v_a di_tg_ctrl v_b VSS sg13_lv_nmos w=6.0u l=0.13u ng=6
+XM2 v_a di_tg_ctrl_n v_b VDD sg13_lv_pmos w=18.0u l=0.13u ng=6 m=1 mm_ok=1
+XM1 v_a di_tg_ctrl v_b VSS sg13_lv_nmos w=6.0u l=0.13u ng=6 m=1 mm_ok=1
 .ends
 
 
@@ -217,10 +217,10 @@ MM1 v_a di_tg_ctrl v_b VSS sg13_lv_nmos w=6.0u l=0.13u ng=6
 ** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/iqmod_mixer_se2diff_inv_NF18.sch
 .subckt iqmod_mixer_se2diff_inv_NF18 VDD vin vout VSS
 *.PININFO vin:I VDD:B VSS:B vout:B
-MM1 vout vin VSS VSS sg13_lv_nmos w=18.0u l=0.13u ng=18
-MM2 vout vin VDD VDD sg13_lv_pmos w=54.0u l=0.13u ng=18
-MMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2
-MMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=6.0u l=0.13u ng=2
+XM1 vout vin VSS VSS sg13_lv_nmos w=18.0u l=0.13u ng=18 m=1 mm_ok=1
+XM2 vout vin VDD VDD sg13_lv_pmos w=54.0u l=0.13u ng=18 m=1 mm_ok=1
+XMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2 m=1 mm_ok=1
+XMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=6.0u l=0.13u ng=2 m=1 mm_ok=1
 .ends
 
 
@@ -229,10 +229,10 @@ MMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=6.0u l=0.13u ng=2
 ** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/iqmod_mixer_se2diff_inv_NF2.sch
 .subckt iqmod_mixer_se2diff_inv_NF2 VDD vin vout VSS
 *.PININFO vin:I VDD:B VSS:B vout:B
-MM1 vout vin VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2
-MM2 vout vin VDD VDD sg13_lv_pmos w=6.0u l=0.13u ng=2
-MMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2
-MMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=6.0u l=0.13u ng=2
+XM1 vout vin VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2 m=1 mm_ok=1
+XM2 vout vin VDD VDD sg13_lv_pmos w=6.0u l=0.13u ng=2 m=1 mm_ok=1
+XMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2 m=1 mm_ok=1
+XMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=6.0u l=0.13u ng=2 m=1 mm_ok=1
 .ends
 
 
@@ -241,10 +241,10 @@ MMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=6.0u l=0.13u ng=2
 ** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/iqmod_mixer_se2diff_inv_NF6.sch
 .subckt iqmod_mixer_se2diff_inv_NF6 VDD vin vout VSS
 *.PININFO vin:I VDD:B VSS:B vout:B
-MM1 vout vin VSS VSS sg13_lv_nmos w=6.0u l=0.13u ng=6
-MM2 vout vin VDD VDD sg13_lv_pmos w=18.0u l=0.13u ng=6
-MMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2
-MMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=6.0u l=0.13u ng=2
+XM1 vout vin VSS VSS sg13_lv_nmos w=6.0u l=0.13u ng=6 m=1 mm_ok=1
+XM2 vout vin VDD VDD sg13_lv_pmos w=18.0u l=0.13u ng=6 m=1 mm_ok=1
+XMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2 m=1 mm_ok=1
+XMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=6.0u l=0.13u ng=2 m=1 mm_ok=1
 .ends
 
 
@@ -253,10 +253,10 @@ MMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=6.0u l=0.13u ng=2
 ** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/iqmod_mixer_se2diff_inv_NF54.sch
 .subckt iqmod_mixer_se2diff_inv_NF54 VDD vin vout VSS
 *.PININFO vin:I VDD:B VSS:B vout:B
-MM1 vout vin VSS VSS sg13_lv_nmos w=54.0u l=0.13u ng=54
-MM2 vout vin VDD VDD sg13_lv_pmos w=162.0u l=0.13u ng=54
-MMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2
-MMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=6.0u l=0.13u ng=2
+XM1 vout vin VSS VSS sg13_lv_nmos w=54.0u l=0.13u ng=54 m=1 mm_ok=1
+XM2 vout vin VDD VDD sg13_lv_pmos w=162.0u l=0.13u ng=54 m=1 mm_ok=1
+XMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2 m=1 mm_ok=1
+XMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=6.0u l=0.13u ng=2 m=1 mm_ok=1
 .ends
 
 
@@ -265,10 +265,10 @@ MMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=6.0u l=0.13u ng=2
 ** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/iqmod_mfb_lpf_ota_core_inv_NF20.sch
 .subckt iqmod_mfb_lpf_ota_core_inv_NF20 VDD vin vout VSS
 *.PININFO vin:I VDD:B VSS:B vout:B
-MMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=1.0u ng=2
-MMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=12.0u l=1.0u ng=2
-MM1 vout vin VSS VSS sg13_lv_nmos w=20.0u l=1.0u ng=20
-MM2 vout vin VDD VDD sg13_lv_pmos w=120.0u l=1.0u ng=20
+XMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=1.0u ng=2 m=1 mm_ok=1
+XMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=12.0u l=1.0u ng=2 m=1 mm_ok=1
+XM1 vout vin VSS VSS sg13_lv_nmos w=20.0u l=1.0u ng=20 m=1 mm_ok=1
+XM2 vout vin VDD VDD sg13_lv_pmos w=120.0u l=1.0u ng=20 m=1 mm_ok=1
 .ends
 
 
@@ -277,10 +277,10 @@ MM2 vout vin VDD VDD sg13_lv_pmos w=120.0u l=1.0u ng=20
 ** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/iqmod_mfb_lpf_ota_core_inv_NF10.sch
 .subckt iqmod_mfb_lpf_ota_core_inv_NF10 VDD vin vout VSS
 *.PININFO vin:I VDD:B VSS:B vout:B
-MM1 vout vin VSS VSS sg13_lv_nmos w=10.0u l=1.0u ng=10
-MM2 vout vin VDD VDD sg13_lv_pmos w=60.0u l=1.0u ng=10
-MMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=1.0u ng=2
-MMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=12.0u l=1.0u ng=2
+XM1 vout vin VSS VSS sg13_lv_nmos w=10.0u l=1.0u ng=10 m=1 mm_ok=1
+XM2 vout vin VDD VDD sg13_lv_pmos w=60.0u l=1.0u ng=10 m=1 mm_ok=1
+XMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=1.0u ng=2 m=1 mm_ok=1
+XMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=12.0u l=1.0u ng=2 m=1 mm_ok=1
 .ends
 
 
@@ -289,10 +289,10 @@ MMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=12.0u l=1.0u ng=2
 ** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/iqmod_mfb_lpf_ota_core_inv_NF6.sch
 .subckt iqmod_mfb_lpf_ota_core_inv_NF6 VDD vin vout VSS
 *.PININFO vin:I VDD:B VSS:B vout:B
-MMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=1.0u ng=2
-MMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=12.0u l=1.0u ng=2
-MM1 vout vin VSS VSS sg13_lv_nmos w=6.0u l=1.0u ng=6
-MM2 vout vin VDD VDD sg13_lv_pmos w=36.0u l=1.0u ng=6
+XMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=1.0u ng=2 m=1 mm_ok=1
+XMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=12.0u l=1.0u ng=2 m=1 mm_ok=1
+XM1 vout vin VSS VSS sg13_lv_nmos w=6.0u l=1.0u ng=6 m=1 mm_ok=1
+XM2 vout vin VDD VDD sg13_lv_pmos w=36.0u l=1.0u ng=6 m=1 mm_ok=1
 .ends
 
 
@@ -313,8 +313,8 @@ x4 VDD do_spdt_ctrl_n VSS v_c v_b spdt_ctrl_buf iqmod_mfb_lpf_ota_core_spdt_swit
 ** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/iqmod_mfb_lpf_ota_core_tg.sch
 .subckt iqmod_mfb_lpf_ota_core_tg VDD di_tg_ctrl VSS v_b v_a di_tg_ctrl_n
 *.PININFO v_a:B v_b:B VDD:B VSS:B di_tg_ctrl:I di_tg_ctrl_n:I
-MM2 v_a di_tg_ctrl_n v_b VDD sg13_lv_pmos w=36.0u l=0.13u ng=6
-MM1 v_a di_tg_ctrl v_b VSS sg13_lv_nmos w=6.0u l=0.13u ng=6
+XM2 v_a di_tg_ctrl_n v_b VDD sg13_lv_pmos w=36.0u l=0.13u ng=6 m=1 mm_ok=1
+XM1 v_a di_tg_ctrl v_b VSS sg13_lv_nmos w=6.0u l=0.13u ng=6 m=1 mm_ok=1
 .ends
 
 
@@ -323,10 +323,10 @@ MM1 v_a di_tg_ctrl v_b VSS sg13_lv_nmos w=6.0u l=0.13u ng=6
 ** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/iqmod_mfb_lpf_ota_core_spdt_switch_inv.sch
 .subckt iqmod_mfb_lpf_ota_core_spdt_switch_inv VDD vin vout VSS
 *.PININFO vin:I VDD:B VSS:B vout:B
-MM1 vout vin VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2
-MM2 vout vin VDD VDD sg13_lv_pmos w=12.0u l=0.13u ng=2
-MMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2
-MMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=12.0u l=0.13u ng=2
+XM1 vout vin VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2 m=1 mm_ok=1
+XM2 vout vin VDD VDD sg13_lv_pmos w=12.0u l=0.13u ng=2 m=1 mm_ok=1
+XMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2 m=1 mm_ok=1
+XMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=12.0u l=0.13u ng=2 m=1 mm_ok=1
 .ends
 
 
@@ -335,7 +335,7 @@ MMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=12.0u l=0.13u ng=2
 ** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/iqmod_mfb_lpf_ota_core_spdt_switch_tg.sch
 .subckt iqmod_mfb_lpf_ota_core_spdt_switch_tg VDD di_tg_ctrl VSS v_b v_a di_tg_ctrl_n
 *.PININFO v_a:B v_b:B VDD:B VSS:B di_tg_ctrl:I di_tg_ctrl_n:I
-MM2 v_a di_tg_ctrl_n v_b VDD sg13_lv_pmos w=36.0u l=0.13u ng=6
-MM1 v_a di_tg_ctrl v_b VSS sg13_lv_nmos w=6.0u l=0.13u ng=6
+XM2 v_a di_tg_ctrl_n v_b VDD sg13_lv_pmos w=36.0u l=0.13u ng=6 m=1 mm_ok=1
+XM1 v_a di_tg_ctrl v_b VSS sg13_lv_nmos w=6.0u l=0.13u ng=6 m=1 mm_ok=1
 .ends
 

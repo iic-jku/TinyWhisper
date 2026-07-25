@@ -1,0 +1,51 @@
+
+Circuit 1 cell rhigh and Circuit 2 cell rhigh are black boxes.
+Warning: Equate pins:  cell rhigh is a placeholder, treated as a black box.
+Warning: Equate pins:  cell rhigh is a placeholder, treated as a black box.
+
+Subcircuit pins:
+Circuit 1: rhigh                           |Circuit 2: rhigh                           
+-------------------------------------------|-------------------------------------------
+1                                          |1                                          
+2                                          |2                                          
+3                                          |3                                          
+---------------------------------------------------------------------------------------
+Cell pin lists are equivalent.
+Device classes rhigh and rhigh are equivalent.
+
+Class iqmod_mfb_lpf_R1 (0):  Merged 1 parallel devices.
+Class iqmod_mfb_lpf_R1 (0):  Merged 2 series devices.
+Class iqmod_mfb_lpf_R1 (1):  Merged 1 parallel devices.
+Class iqmod_mfb_lpf_R1 (1):  Merged 2 series devices.
+Subcircuit summary:
+Circuit 1: iqmod_mfb_lpf_R1                |Circuit 2: iqmod_mfb_lpf_R1                
+-------------------------------------------|-------------------------------------------
+rhigh (5->2)                               |rhigh (5->2)                               
+Number of devices: 2                       |Number of devices: 2                       
+Number of nets: 3                          |Number of nets: 3                          
+---------------------------------------------------------------------------------------
+Resolving symmetries by property value.
+Resolving symmetries by pin name.
+Netlists match uniquely with property errors.
+rhigh:0 vs. rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:0 vs. rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:2 vs. rhigh:Rdummy1:
+Property mm_ok in circuit2 has no matching property in circuit1
+
+Subcircuit pins:
+Circuit 1: iqmod_mfb_lpf_R1                |Circuit 2: iqmod_mfb_lpf_R1                
+-------------------------------------------|-------------------------------------------
+v_a                                        |v_a                                        
+v_b                                        |v_b                                        
+VSS                                        |VSS                                        
+---------------------------------------------------------------------------------------
+Cell pin lists are equivalent.
+Device classes iqmod_mfb_lpf_R1 and iqmod_mfb_lpf_R1 are equivalent.
+
+Final result: Circuits match uniquely.
+Property errors were found.
+
+The following cells had property errors:
+ iqmod_mfb_lpf_R1

@@ -1,0 +1,263 @@
+
+Circuit 1 cell sg13_lv_nmos and Circuit 2 cell sg13_lv_nmos are black boxes.
+Warning: Equate pins:  cell sg13_lv_nmos is a placeholder, treated as a black box.
+Warning: Equate pins:  cell sg13_lv_nmos is a placeholder, treated as a black box.
+
+Subcircuit pins:
+Circuit 1: sg13_lv_nmos                    |Circuit 2: sg13_lv_nmos                    
+-------------------------------------------|-------------------------------------------
+1                                          |1                                          
+2                                          |2                                          
+3                                          |3                                          
+4                                          |4                                          
+---------------------------------------------------------------------------------------
+Cell pin lists are equivalent.
+Device classes sg13_lv_nmos and sg13_lv_nmos are equivalent.
+
+Circuit 1 cell sg13_lv_pmos and Circuit 2 cell sg13_lv_pmos are black boxes.
+Warning: Equate pins:  cell sg13_lv_pmos is a placeholder, treated as a black box.
+Warning: Equate pins:  cell sg13_lv_pmos is a placeholder, treated as a black box.
+
+Subcircuit pins:
+Circuit 1: sg13_lv_pmos                    |Circuit 2: sg13_lv_pmos                    
+-------------------------------------------|-------------------------------------------
+1                                          |1                                          
+2                                          |2                                          
+3                                          |3                                          
+4                                          |4                                          
+---------------------------------------------------------------------------------------
+Cell pin lists are equivalent.
+Device classes sg13_lv_pmos and sg13_lv_pmos are equivalent.
+
+Circuit 1 cell rhigh and Circuit 2 cell rhigh are black boxes.
+Warning: Equate pins:  cell rhigh is a placeholder, treated as a black box.
+Warning: Equate pins:  cell rhigh is a placeholder, treated as a black box.
+
+Subcircuit pins:
+Circuit 1: rhigh                           |Circuit 2: rhigh                           
+-------------------------------------------|-------------------------------------------
+1                                          |1                                          
+2                                          |2                                          
+3                                          |3                                          
+---------------------------------------------------------------------------------------
+Cell pin lists are equivalent.
+Device classes rhigh and rhigh are equivalent.
+
+Circuit 1 cell cap_cmim and Circuit 2 cell cap_cmim are black boxes.
+Warning: Equate pins:  cell cap_cmim is a placeholder, treated as a black box.
+Warning: Equate pins:  cell cap_cmim is a placeholder, treated as a black box.
+
+Subcircuit pins:
+Circuit 1: cap_cmim                        |Circuit 2: cap_cmim                        
+-------------------------------------------|-------------------------------------------
+1                                          |1                                          
+2                                          |2                                          
+---------------------------------------------------------------------------------------
+Cell pin lists are equivalent.
+Device classes cap_cmim and cap_cmim are equivalent.
+Flattening unmatched subcell iqmod_mfb_lpf_ota_core_hybrid_bm in circuit iqmod_mfb_lpf (1)(1 instance)
+Flattening unmatched subcell iqmod_mfb_lpf_ota_core_inv_NF20 in circuit iqmod_mfb_lpf (1)(6 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_ota_core_inv_NF10 in circuit iqmod_mfb_lpf (1)(2 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_ota_core_inv_NF6 in circuit iqmod_mfb_lpf (1)(6 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_ota_core_spdt_switch in circuit iqmod_mfb_lpf (1)(2 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_ota_core_spdt_switch_inv in circuit iqmod_mfb_lpf (1)(4 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_ota_core_spdt_switch_tg in circuit iqmod_mfb_lpf (1)(4 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_ota_core_tg in circuit iqmod_mfb_lpf (1)(4 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_R1 in circuit iqmod_mfb_lpf (1)(2 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_R2 in circuit iqmod_mfb_lpf (1)(2 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_R3 in circuit iqmod_mfb_lpf (1)(2 instances)
+Flattening unmatched subcell iqmod_mfb_lpf_R4 in circuit iqmod_mfb_lpf (1)(2 instances)
+
+Class iqmod_mfb_lpf (0):  Merged 517 parallel devices.
+Class iqmod_mfb_lpf (0):  Merged 16 series devices.
+Class iqmod_mfb_lpf (1):  Merged 57 parallel devices.
+Class iqmod_mfb_lpf (1):  Merged 16 series devices.
+Subcircuit summary:
+Circuit 1: iqmod_mfb_lpf                   |Circuit 2: iqmod_mfb_lpf                   
+-------------------------------------------|-------------------------------------------
+sg13_lv_pmos (268->24)                     |sg13_lv_pmos (44->24)                      
+sg13_lv_nmos (268->22)                     |sg13_lv_nmos (44->22)                      
+rhigh (40->9)                              |rhigh (40->9)                              
+cap_cmim (18->6)                           |cap_cmim (18->6)                           
+Number of devices: 61                      |Number of devices: 61                      
+Number of nets: 23                         |Number of nets: 23                         
+---------------------------------------------------------------------------------------
+Resolving symmetries by property value.
+Resolving symmetries by pin name.
+Netlists match uniquely with property errors.
+cap_cmim:113 vs. cap_cmim:C1a:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:44 vs. cap_cmim:C1b:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:30 vs. cap_cmim:C2a:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:343 vs. cap_cmim:C2b:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:350 vs. cap_cmim:C3a:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:350 vs. cap_cmim:C3a:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:46 vs. cap_cmim:C3b:
+Property mm_ok in circuit2 has no matching property in circuit1
+cap_cmim:46 vs. cap_cmim:C3b:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:21 vs. iqmod_mfb_lpf_R1:2/rhigh:Rdummy1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:21 vs. iqmod_mfb_lpf_R1:2/rhigh:Rdummy1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:21 vs. iqmod_mfb_lpf_R1:2/rhigh:Rdummy1:
+ l circuit1: 5.9e-05   circuit2: 6e-05   (delta=1.68%, cutoff=1%)
+rhigh:21 vs. iqmod_mfb_lpf_R1:2/rhigh:Rdummy1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:21 vs. iqmod_mfb_lpf_R1:2/rhigh:Rdummy1:
+ l circuit1: 6e-05   circuit2: 5.9e-05   (delta=1.68%, cutoff=1%)
+rhigh:21 vs. iqmod_mfb_lpf_R1:2/rhigh:Rdummy1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:471 vs. iqmod_mfb_lpf_R1:2/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:471 vs. iqmod_mfb_lpf_R1:2/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:49 vs. iqmod_mfb_lpf_R1:3/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:49 vs. iqmod_mfb_lpf_R1:3/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:271 vs. iqmod_mfb_lpf_R2:4/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:271 vs. iqmod_mfb_lpf_R2:4/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:101 vs. iqmod_mfb_lpf_R2:5/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:101 vs. iqmod_mfb_lpf_R2:5/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:107 vs. iqmod_mfb_lpf_R3:6/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:107 vs. iqmod_mfb_lpf_R3:6/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:48 vs. iqmod_mfb_lpf_R3:7/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:48 vs. iqmod_mfb_lpf_R3:7/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:345 vs. iqmod_mfb_lpf_R4:8/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:345 vs. iqmod_mfb_lpf_R4:8/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:105 vs. iqmod_mfb_lpf_R4:9/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+rhigh:105 vs. iqmod_mfb_lpf_R4:9/rhigh:R1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:15 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:6/sg13_lv_nmos:Mdummy1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:15 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:6/sg13_lv_nmos:Mdummy1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:23 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:7/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:14 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:6/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:112 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF10:9/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:189 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF10:10/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:50 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:11/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:6 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:12/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:24 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF6:5/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:5 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF6:1/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:2 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF6:8/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:13 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:9 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:3/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:331 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_inv:1/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:7 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_inv:1/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:220 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_inv:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:8 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_inv:2/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:317 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_tg:3/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:106 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_tg:3/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:165 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_tg:4/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:1 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_tg:4/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:99 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_tg:15/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_nmos:12 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_tg:18/sg13_lv_nmos:M1:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:31 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:6/sg13_lv_pmos:Mdummy2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:31 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:6/sg13_lv_pmos:Mdummy2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:29 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:7/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:3 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:6/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:22 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF10:9/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:109 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF10:10/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:32 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:12/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:19 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:11/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:37 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF6:5/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:4 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF6:1/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:47 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF6:8/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:77 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:3/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:18 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_inv_NF20:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:187 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_inv:1/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:156 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_inv:1/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:374 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_inv:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:40 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_inv:2/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:41 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_tg:3/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:25 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_tg:3/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:0 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:16/iqmod_mfb_lpf_ota_core_spdt_switch_tg:4/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:10 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_spdt_switch:17/iqmod_mfb_lpf_ota_core_spdt_switch_tg:4/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:95 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_tg:15/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:20 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_tg:20/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:129 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_tg:18/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+sg13_lv_pmos:36 vs. iqmod_mfb_lpf_ota_core_hybrid_bm:1/iqmod_mfb_lpf_ota_core_tg:23/sg13_lv_pmos:M2:
+Property mm_ok in circuit2 has no matching property in circuit1
+
+Subcircuit pins:
+Circuit 1: iqmod_mfb_lpf                   |Circuit 2: iqmod_mfb_lpf                   
+-------------------------------------------|-------------------------------------------
+vinp                                       |vinp                                       
+vinn                                       |vinn                                       
+di_filter_en                               |di_filter_en                               
+VSS                                        |VSS                                        
+voutp                                      |voutp                                      
+voutn                                      |voutn                                      
+VDD                                        |VDD                                        
+---------------------------------------------------------------------------------------
+Cell pin lists are equivalent.
+Device classes iqmod_mfb_lpf and iqmod_mfb_lpf are equivalent.
+
+Final result: Circuits match uniquely.
+Property errors were found.
+
+The following cells had property errors:
+ iqmod_mfb_lpf

@@ -588,142 +588,6 @@ def calc_3rd_order_mfb_coefficients(w_pass, R1, R2, R3, R4, C1, C2, C3):
 # =========================================================================
 
 
-def calc_3rd_order_mfb_nonideal_coefficients(R1, R2, R3, R4, C1, C2, C3, Aol, Rout, Cout, verbose=True):
-    """
-    Calculate the EXACT 3rd-order MFB lowpass transfer function with a NON-IDEAL OTA.
-
-    The single operational transconductance amplifier (OTA) is modelled to first
-    order by three given values: a finite dc open-loop gain Aol, an output
-    resistance Rout, and an output capacitance Cout (transconductance gm = Aol/Rout,
-    open-loop response A(s) = Aol / (1 + s*Rout*Cout)). No large-gain or large-gm
-    approximation is made: Aol, Rout, and Cout are kept exactly.
-
-    In contrast to the ideal-OTA case (calc_3rd_order_mfb_coefficients), two things
-    change:
-      1. The OTA output pole (Rout, Cout) is promoted to a 4th design pole, so the
-         denominator becomes 4th order (alpha4 != 0, proportional to Cout).
-      2. A single right-half-plane (RHP) transmission zero appears, caused by the
-         feed-forward of the input through the feedback capacitor C3 when the OTA
-         runs short of loop gain. The realization is therefore no longer all-pole:
-
-                         b0 * (1 - s/wz)
-            H(s) = -------------------------------------------------
-                    1 + b1*s + b2*s^2 + b3*s^3 + b4*s^4
-
-    All coefficients share the common denominator term (the "characteristic sum")
-
-            Delta = Aol*(R1 + R2) + (R1 + R2 + R4 + Rout).
-
-    Exact closed-form results (derived with the Extra-Element/FACTs method and
-    verified against a direct nodal solve to machine precision):
-
-        b0 = (Aol*R4 - Rout) / Delta            (dc gain magnitude; circuit inverts)
-           ----> R4 / (R1 + R2)                 in the ideal limit
-        wz = (Aol*R4 - Rout) / (C3*Rout*(R3+R4))   (RHP zero, rad/s; --> inf ideally)
-        b4 = C1*C2*C3*Cout*R1*R2*R3*R4*Rout / Delta   (pure Cout: the 4th pole)
-
-    In the ideal limit (Aol -> inf, Rout -> 0, Cout -> 0) the RHP zero vanishes,
-    b4 -> 0, Delta -> Aol*(R1+R2), and b0..b3 collapse onto the ideal 3rd-order
-    coefficients returned by calc_3rd_order_mfb_coefficients().
-
-    Args:
-        R1 (float): First-order section resistor in Ohms
-        R2 (float): Biquad input resistor in Ohms (= k * R1)
-        R3 (float): Biquad resistor to the OTA inverting input in Ohms
-        R4 (float): Biquad feedback resistor in Ohms
-        C1 (float): First-order section capacitor to ground in Farads (single-ended)
-        C2 (float): Biquad capacitor to ground in Farads (single-ended)
-        C3 (float): Biquad feedback capacitor in Farads
-        Aol (float): OTA dc open-loop gain (LINEAR, not dB)
-        Rout (float): OTA output resistance in Ohms
-        Cout (float): OTA output capacitance in Farads
-        verbose (bool): If True, print Delta, dc gain, RHP zero, OTA pole, and the
-                        four closed-loop pole frequencies. Default True.
-
-    Returns:
-        tuple: (beta, alpha) coefficient arrays for control.TransferFunction, with
-               s in rad/s and the denominator constant term normalized to 1:
-            - beta  = [-b0/wz, b0]                  (numerator, descending powers)
-            - alpha = [b4, b3, b2, b1, 1.0]         (denominator, descending powers)
-
-        The returned dc gain uses the same positive-magnitude convention as
-        calc_3rd_order_mfb_coefficients() so the two can be overlaid directly; the
-        physical MFB stage is inverting (true dc gain = -b0).
-
-    Notes:
-        - The four poles are the *closed-loop* roots of alpha. The open-loop OTA
-          output pole 1/(2*pi*Rout*Cout) is pushed up by the loop gain, so the 4th
-          closed-loop pole typically lands far above it (~Aol times higher).
-        - A stability check on the denominator roots is printed when verbose=True.
-    """
-
-    # Characteristic sum shared by every coefficient
-    Delta = Aol * (R1 + R2) + (R1 + R2 + R4 + Rout)
-
-    # Numerator (first order): single RHP zero from C3 feed-forward
-    b0 = (Aol * R4 - Rout) / Delta                      # |H(0)| (positive convention)
-    wz = (Aol * R4 - Rout) / (C3 * Rout * (R3 + R4))    # RHP zero in rad/s (> 0)
-
-    # Normalized denominator coefficients b_k (constant term = 1).
-    # Each numerator is grouped as Aol*(ideal core) + (Rout/Cout corrections).
-    b1 = (Aol * (C1*R1*R2 + C3*(R1*R3 + R1*R4 + R2*R3 + R2*R4 + R3*R4))
-          + C1*R1*R2 + C1*R1*R4 + C1*R1*Rout
-          + C2*R1*R4 + C2*R1*Rout + C2*R2*R4 + C2*R2*Rout
-          + C3*R1*R3 + C3*R1*R4 + C3*R2*R3 + C3*R2*R4 + C3*R3*R4 + C3*R3*Rout + C3*R4*Rout
-          + Cout*R1*Rout + Cout*R2*Rout + Cout*R4*Rout) / Delta
-
-    b2 = (Aol * (C1*C3*R1*R2*R3 + C1*C3*R1*R2*R4 + C1*C3*R1*R3*R4
-                 + C2*C3*R1*R3*R4 + C2*C3*R2*R3*R4)
-          + C1*C2*R1*R2*R4 + C1*C2*R1*R2*Rout
-          + C1*C3*R1*R2*R3 + C1*C3*R1*R2*R4 + C1*C3*R1*R3*R4 + C1*C3*R1*R3*Rout + C1*C3*R1*R4*Rout
-          + C1*Cout*R1*R2*Rout + C1*Cout*R1*R4*Rout
-          + C2*C3*R1*R3*R4 + C2*C3*R1*R3*Rout + C2*C3*R1*R4*Rout
-          + C2*C3*R2*R3*R4 + C2*C3*R2*R3*Rout + C2*C3*R2*R4*Rout
-          + C2*Cout*R1*R4*Rout + C2*Cout*R2*R4*Rout
-          + C3*Cout*R1*R3*Rout + C3*Cout*R1*R4*Rout + C3*Cout*R2*R3*Rout
-          + C3*Cout*R2*R4*Rout + C3*Cout*R3*R4*Rout) / Delta
-
-    b3 = (Aol * C1*C2*C3*R1*R2*R3*R4
-          + C1*C2*C3*R1*R2*R3*R4 + C1*C2*C3*R1*R2*R3*Rout + C1*C2*C3*R1*R2*R4*Rout
-          + C1*C2*Cout*R1*R2*R4*Rout
-          + C1*C3*Cout*R1*R2*R3*Rout + C1*C3*Cout*R1*R2*R4*Rout + C1*C3*Cout*R1*R3*R4*Rout
-          + C2*C3*Cout*R1*R3*R4*Rout + C2*C3*Cout*R2*R3*R4*Rout) / Delta
-
-    b4 = (C1*C2*C3*Cout*R1*R2*R3*R4*Rout) / Delta
-
-    # Transfer function arrays (descending powers of s), positive-gain convention
-    beta = [-b0 / wz, b0]
-    alpha = [b4, b3, b2, b1, 1.0]
-
-    if verbose:
-        b0_dB = 20 * np.log10(b0)
-        b0_ideal = R4 / (R1 + R2)
-        fz = wz / (2 * np.pi)
-        f_ota_ol = 1.0 / (2 * np.pi * Rout * Cout)
-        poles = np.roots(alpha)
-        pole_freqs = np.sort(np.abs(poles) / (2 * np.pi))
-        unstable = np.any(np.real(poles) > 0)
-
-        print("Non-ideal OTA transfer function H(s) = b0*(1 - s/wz) / (1 + b1 s + ... + b4 s^4):")
-        print("Given OTA values:")
-        print("Aol  = %.2f (%.2f dB)" % (Aol, 20 * np.log10(Aol)))
-        print("Rout = %.2f kOhm" % (Rout / 1e3))
-        print("Cout = %.2f fF" % (Cout / 1e-15))
-        print("-" * 60)
-        print("Delta = Aol*(R1+R2) + (R1+R2+R4+Rout) = %.4e" % Delta)
-        print("dc gain   b0 = %.4f (%.2f dB)   [ideal R4/(R1+R2) = %.4f]" % (b0, b0_dB, b0_ideal))
-        print("RHP zero  fz = wz/2pi          = %.4e Hz" % fz)
-        print("OTA pole  1/(2*pi*Rout*Cout)   = %.4e Hz (open loop)" % f_ota_ol)
-        print("Closed-loop pole freqs |p|/2pi = " + ", ".join("%.4e" % f for f in pole_freqs) + " Hz")
-        print("Stable (all poles in LHP): %s" % ("NO !!!" if unstable else "yes"))
-        print("-" * 60)
-        print("beta  = [-b0/wz, b0]        =", beta)
-        print("alpha = [b4, b3, b2, b1, 1] =", alpha)
-
-    return beta, alpha
-# =========================================================================
-
-
 def quantize_3rd_order_mfb_components(R1_ideal, R2_ideal, R3_ideal, R4_ideal, C1_ideal, C2_ideal, C3_ideal, w_rhigh, s_rhigh, l_rhigh_grid, CU):
     """
     Quantize ideal 3rd-order MFB filter components to realizable values.
@@ -1271,19 +1135,11 @@ def main():
     f_c = 4.04e6                                # Cutoff frequency of the OTA in Hz (simulated)
     GBWP = aol * f_c                            # Gain-Bandwidth Product
 
-    # Non-ideal first-order OTA output stage (GIVEN values for the exact model).
-    # gm = Aol/Rout, open-loop OTA response A(s) = Aol / (1 + s*Rout*Cout).
-    Rout = 50e3                                 # OTA output resistance in Ohms (given)
-    Cout = 200e-15                              # OTA output capacitance in Farads (given)
-
     print("\nOTA Specifications:")
     print("-" * 60)
     print("Open-Loop Gain: Aol = %.2f (%.2fdB)" % (aol, aol_dB))
     print("Cutoff Frequency: fc = %.2f MHz" % (f_c/1e6))
     print("Gain-Bandwidth Product: GBWP = %.2f MHz" % (GBWP/1e6))
-    print("Output Resistance: Rout = %.2f kOhm" % (Rout/1e3))
-    print("Output Capacitance: Cout = %.2f fF" % (Cout/1e-15))
-    print("OTA Output Pole: f_ota = 1/(2*pi*Rout*Cout) = %.2f MHz" % (1/(2*pi*Rout*Cout)/1e6))
     print("-" * 60)
 
     # Closed-Loop Gain Error Compensation
@@ -1497,54 +1353,10 @@ def main():
     plot_system_analysis({"Real RC Filter": sys_real_rc_filter}, "Real RC Filter", filter_order, w_vec, w_pass, gp, show_plot = False)
     print("=" * 60, "\n")
     # =========================================================================
+    
 
-
-    # --- 6. Non-Ideal OTA Filter (exact 4th-order model) ---
-    print("\n        --- 6. Non-Ideal OTA Filter (exact model) ---")
-    print("=" * 60)
-    print("Exact transfer function with finite Aol, Rout, Cout (given OTA values).")
-    print("                  b0 * (1 - s/wz)")
-    print("H(s) = -------------------------------------------------")
-    print("        1 + b1*s + b2*s^2 + b3*s^3 + b4*s^4")
-    print("4th order: the OTA output pole (Rout, Cout) becomes a design pole;")
-    print("a single right-half-plane (RHP) zero appears via C3 feed-forward.")
-    print("-" * 60, "\n")
-
-    # Effective (single-ended-equivalent) capacitor values, matching the RC calls above
-    if fully_differential:
-        C1_real_eff, C2_real_eff = C1_real * 2, C2_real * 2
-    else:
-        C1_real_eff, C2_real_eff = C1_real, C2_real
-
-    # Non-ideal OTA filter using IDEAL (continuous) RC values
-    print("Non-Ideal OTA Filter (with ideal RC values):")
-    beta_nonideal_ideal_rc, alpha_nonideal_ideal_rc = calc_3rd_order_mfb_nonideal_coefficients(
-        R1_ideal, R2_ideal, R3_ideal, R4_ideal, C1_se, C2_se, C3, aol, Rout, Cout)
-    print("-" * 60, "\n")
-
-    # Non-ideal OTA filter using REAL (quantized) RC values
-    print("Non-Ideal OTA Filter (with real / quantized RC values):")
-    beta_nonideal_real_rc, alpha_nonideal_real_rc = calc_3rd_order_mfb_nonideal_coefficients(
-        R1_real, R2_real, R3_real, R4_real, C1_real_eff, C2_real_eff, C3_real, aol, Rout, Cout)
-    print("-" * 60, "\n")
-
-    # Build transfer functions
-    sys_nonideal_ideal_rc = control.TransferFunction(beta_nonideal_ideal_rc, alpha_nonideal_ideal_rc)
-    sys_nonideal_real_rc = control.TransferFunction(beta_nonideal_real_rc, alpha_nonideal_real_rc)
-
-    # Plot non-ideal OTA filter vs ideal RC filter (note: 4th-order -> order=4 for phase axis)
-    print("Plotting Non-Ideal OTA Filter Analysis...")
-    plot_system_analysis({
-        "Ideal RC Filter": sys_ideal_rc_filter,
-        "Non-Ideal OTA (ideal RC)": sys_nonideal_ideal_rc,
-        "Non-Ideal OTA (real RC)": sys_nonideal_real_rc
-    }, "Non-Ideal OTA Filter", 4, w_vec, w_pass, gp, show_plot = True)
-    print("=" * 60, "\n")
-    # =========================================================================
-
-
-    # --- 7. Filter Design Comparison ---
-    print("\n      --- 7. Filter Design Comparison ---")
+    # --- 6. Filter Design Comparison ---
+    print("\n      --- 6. Filter Design Comparison ---")
     print("=" * 60)
 
     print("Print Filter Coefficients H(s) = beta / alpha:")
@@ -1553,25 +1365,22 @@ def main():
     print("beta_ideal_rc = [beta0] =", beta_ideal_rc)
     print("alpha_ideal_rc = [alpha3, alpha2, alpha1, 1] =", alpha_ideal_rc, "\n")
     print("beta_real_rc = [beta0] =", beta_real_rc)
-    print("alpha_real_rc = [alpha3, alpha2, alpha1, 1] =", alpha_real_rc, "\n")
-    print("beta_nonideal_real_rc = [b1, b0] =", beta_nonideal_real_rc)
-    print("alpha_nonideal_real_rc = [b4, b3, b2, b1, 1] =", alpha_nonideal_real_rc)
+    print("alpha_real_rc = [alpha3, alpha2, alpha1, 1] =", alpha_real_rc)
     print("-" * 60, "\n")
 
     print("Plotting Filter Design Comparison Analysis...")
     sys_filters = {
         "Ideal Prototype": sys_prototype_filter,
         "Ideal RC Filter": sys_ideal_rc_filter,
-        "Real RC Filter": sys_real_rc_filter,
-        "Non-Ideal OTA (real RC)": sys_nonideal_real_rc
+        "Real RC Filter": sys_real_rc_filter
     }
-    plot_system_analysis(sys_filters, "Filter Design Comparison", 4, w_vec, w_pass, gp, show_plot = True)
+    plot_system_analysis(sys_filters, "Filter Design Comparison", filter_order, w_vec, w_pass, gp, show_plot = True)
     print("=" * 60, "\n")
     # =========================================================================
 
 
-    # --- 8. Area Estimation (IHP130) ---
-    print("\n           --- 8. Area Estimation (IHP130) ---")
+    # --- 7. Area Estimation (IHP130) ---
+    print("\n           --- 7. Area Estimation (IHP130) ---")
     print("=" * 60)
     
     # RC Area Estimation (Fully-Differential)
