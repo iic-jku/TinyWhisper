@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2025-2026 The TinyWhisper Team
+# SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
+
 set clock_port __VIRTUAL_CLK__
 if { [info exists ::env(CLOCK_PORT)] } {
     set port_count [llength $::env(CLOCK_PORT)]
