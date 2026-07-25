@@ -326,6 +326,17 @@ make copy-reports
 This only works if at least one LibreLane run exists in `flow/librelane/runs/` and the latest run completed without errors.
 
 
+## Copy the Final Views
+
+To copy the final `gds`, `lef`, `lib`, `nl`, `pnl`, `spef`, and `vh` view folders from `flow/final/` into `final/`, run:
+
+```sh
+make copy-final
+```
+
+This refreshes the committed views in `final/` after a LibreLane run, so that the gate-level simulation (`sim-gl-cocotb` reads `final/nl/riscv_top.nl.v`) and the chip top-level integration use the freshly built outputs. It assumes the required views exist under `flow/final/`.
+
+
 ## Copy the Final GDS
 
 To copy the latest GDS from `flow/final/gds/` into `final/gds/`, run:

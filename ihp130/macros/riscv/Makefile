@@ -32,6 +32,7 @@ VERILOG_TB_DIR        := testbenches/verilog
 XSCHEM_TB_DIR         := testbenches/xschem
 SCH_DIR               := schematic
 LAY_DIR               := final/gds
+FINAL_DIR             := final
 SCRIPTS_DIR     	  := scripts
 SRC_DIR 			  := rtl
 RENDER_IMG_DIR        := render/img
@@ -219,6 +220,17 @@ copy-reports: ## Copy yosys, antenna violations, hold & setup timing and manufac
 	cp $(LIBRELANE_DIR)/runs/${RUN_TAG}/*-netgen-lvs/reports/lvs.netgen.rpt $(FLOW_REPORT_DIR)/lvs.netgen.rpt
 	cp $(LIBRELANE_DIR)/runs/${RUN_TAG}/*-misc-reportmanufacturability/manufacturability.rpt $(FLOW_REPORT_DIR)/manufacturability.rpt
 .PHONY: copy-reports
+
+copy-final: ## Copy final output gds, lef, lib, nl, pnl, spef, and vh folders from the last LibreLane run to final/
+	rm -rf $(FINAL_DIR)/gds $(FINAL_DIR)/lef $(FINAL_DIR)/lib $(FINAL_DIR)/nl $(FINAL_DIR)/pnl $(FINAL_DIR)/spef $(FINAL_DIR)/vh
+	cp -r $(FLOW_FINAL_DIR)/gds  $(FINAL_DIR)/gds
+	cp -r $(FLOW_FINAL_DIR)/lef  $(FINAL_DIR)/lef
+	cp -r $(FLOW_FINAL_DIR)/lib  $(FINAL_DIR)/lib
+	cp -r $(FLOW_FINAL_DIR)/nl   $(FINAL_DIR)/nl
+	cp -r $(FLOW_FINAL_DIR)/pnl  $(FINAL_DIR)/pnl
+	cp -r $(FLOW_FINAL_DIR)/spef $(FINAL_DIR)/spef
+	cp -r $(FLOW_FINAL_DIR)/vh   $(FINAL_DIR)/vh
+.PHONY: copy-final
 
 copy-gds: ## Copy final output GDS from the last LibreLane run to final/gds/
 	rm -rf $(LAY_DIR)/
