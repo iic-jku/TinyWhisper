@@ -1,0 +1,85 @@
+version = 1
+
+# Files that cannot carry an SPDX header (layout data, netlists, schematics,
+# figures, measurement data, generated reports and renders) are annotated
+# here. Source files (Python scripts, Makefiles, RTL, configs, workflows)
+# carry their own SPDX headers, so the license check still catches new source
+# files without licensing information.
+
+[[annotations]]
+path = [".designinit", ".gitattributes", ".gitignore", ".gitmodules", "CITATION.cff", "README.md", "ToDo.md"]
+SPDX-FileCopyrightText = "2025-2026 The TinyWhisper Team"
+SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
+
+[[annotations]]
+path = "doc/**"
+SPDX-FileCopyrightText = "2025-2026 The TinyWhisper Team"
+SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
+
+[[annotations]]
+path = ["enclosure/**", "measurements/**", "pcb/**", "presentations/**", "software/**"]
+SPDX-FileCopyrightText = "2025-2026 The TinyWhisper Team"
+SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
+
+# Legacy sky130 test chip (kept for reference, no longer actively maintained).
+[[annotations]]
+path = "sky130/**"
+SPDX-FileCopyrightText = "2025-2026 The TinyWhisper Team"
+SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
+
+[[annotations]]
+path = ["ihp130/README.md", "ihp130/doc/**", "ihp130/flow/logo/**", "ihp130/flow/reports/**", "ihp130/layout/**", "ihp130/netlist/**", "ihp130/release/**", "ihp130/render/**", "ihp130/schematic/**", "ihp130/verification/**"]
+SPDX-FileCopyrightText = "2025-2026 The TinyWhisper Team"
+SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
+
+[[annotations]]
+path = ["ihp130/scripts/plot_simulations/data/**", "ihp130/scripts/plot_simulations/figures/**"]
+SPDX-FileCopyrightText = "2025-2026 The TinyWhisper Team"
+SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
+
+[[annotations]]
+path = ["ihp130/testbenches/cocotb/*.txt", "ihp130/testbenches/cocotb/*.gtkw", "ihp130/testbenches/cocotb/*.surf.ron", "ihp130/testbenches/xschem/**"]
+SPDX-FileCopyrightText = "2025-2026 The TinyWhisper Team"
+SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
+
+[[annotations]]
+path = ["ihp130/ip/*/README.md", "ihp130/ip/*/final/**", "ihp130/ip/*/logo/**", "ihp130/ip/*/verification/**"]
+SPDX-FileCopyrightText = "2025-2026 The TinyWhisper Team"
+SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
+
+[[annotations]]
+path = ["ihp130/macros/*/README.md", "ihp130/macros/*/final/**", "ihp130/macros/*/layout/**", "ihp130/macros/*/netlist/**", "ihp130/macros/*/render/**", "ihp130/macros/*/schematic/**", "ihp130/macros/*/testbenches/**"]
+SPDX-FileCopyrightText = "2025-2026 The TinyWhisper Team"
+SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
+
+[[annotations]]
+path = ["ihp130/macros/*/scripts/plot_simulations/data/**", "ihp130/macros/*/scripts/plot_simulations/figures/**", "ihp130/macros/coupled_resonator_lc_bpf/scripts/*.mcdx", "ihp130/macros/coupled_resonator_lc_bpf/scripts/*.pdf", "ihp130/macros/iqmod/scripts/filter_designer/figures/**", "ihp130/macros/iqmod/scripts/filter_designer/*.mcdx", "ihp130/macros/iqmod/scripts/filter_designer/*.pdf", "ihp130/macros/iqmod/scripts/pwm_generator/data/**", "ihp130/macros/iqmod/scripts/sizing/data/**", "ihp130/macros/iqmod/scripts/sizing/figures/**"]
+SPDX-FileCopyrightText = "2025-2026 The TinyWhisper Team"
+SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
+
+[[annotations]]
+path = ["ihp130/macros/*/verification/drc/**", "ihp130/macros/*/verification/lvs/**", "ihp130/macros/iqmod/verification/cace/results/**", "ihp130/macros/iqmod/verification/cace/templates/**", "ihp130/macros/iqmod/verification/cace/scripts/*.csv"]
+SPDX-FileCopyrightText = "2025-2026 The TinyWhisper Team"
+SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
+
+[[annotations]]
+path = ["ihp130/macros/riscv/flow/final/**", "ihp130/macros/riscv/flow/reports/**", "ihp130/macros/riscv/flow/librelane/pin_order.cfg", "ihp130/macros/riscv/fpga/README.md", "ihp130/macros/riscv/fpga/.gitignore"]
+SPDX-FileCopyrightText = "2025-2026 The TinyWhisper Team"
+SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
+
+[[annotations]]
+path = ["ihp130/packaging/README.md", "ihp130/packaging/result.md", "ihp130/packaging/layout/tinywhisper_bondplan.gds", "ihp130/packaging/layout/tinywhisper_top_logo_TM2.gds.gz", "ihp130/packaging/render/**"]
+SPDX-FileCopyrightText = "2025-2026 The TinyWhisper Team"
+SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
+
+# Third-party files keep their original copyright and license.
+
+[[annotations]]
+path = ["ihp130/ip/sg13g2_io_custom/**", "ihp130/testbenches/xschem/models/**", "ihp130/verification/lvs/sg13g2_io.spi", "ihp130/verification/lvs/sg13g2_io.spi.orig", "ihp130/verification/lvs/sg13g2_stdcell.spice"]
+SPDX-FileCopyrightText = "2024-2025 IHP PDK Authors"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = ["ihp130/packaging/layout/EP_PACKAGES_08022018.gds", "ihp130/packaging/layout/OP_QFN48_A4_FIT.gds"]
+SPDX-FileCopyrightText = "2018 EUROPRACTICE"
+SPDX-License-Identifier = "LicenseRef-EUROPRACTICE"

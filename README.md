@@ -3,6 +3,7 @@
 [![License: Solderpad Hardware License v2.1](https://img.shields.io/badge/License-Solderpad%20Hardware%20License%20v2.1-blue.svg)](LICENSE)
 [![Quarto Publish](https://github.com/iic-jku/TinyWhisper/actions/workflows/quarto-publish.yml/badge.svg?branch=main)](https://github.com/iic-jku/TinyWhisper/actions/workflows/quarto-publish.yml)
 [![Regression](https://github.com/iic-jku/TinyWhisper/actions/workflows/regression.yml/badge.svg?branch=main)](https://github.com/iic-jku/TinyWhisper/actions/workflows/regression.yml)
+[![License Check](https://github.com/iic-jku/TinyWhisper/actions/workflows/license-check.yml/badge.svg?branch=main)](https://github.com/iic-jku/TinyWhisper/actions/workflows/license-check.yml)
 [![Documentation](https://img.shields.io/badge/Documentation-online-orange?logo=quarto)](https://iic-jku.github.io/TinyWhisper/index.html)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20004085.svg)](https://doi.org/10.5281/zenodo.20004085)
 
@@ -165,7 +166,9 @@ The ToDo list can be found in [ToDo.md](https://github.com/iic-jku/TinyWhisper/t
 📁 TinyWhisper/
 ├─ 📁 .github/
 │  └─ 📁 workflows/
-│     └─ quarto-publish.yml
+│     ├─ license-check.yml
+│     ├─ quarto-publish.yml
+│     └─ regression.yml
 ├─ 📁 doc/
 │  ├─ 📁 fig/
 │  │  ├─ 📁 funding/
@@ -261,6 +264,11 @@ The ToDo list can be found in [ToDo.md](https://github.com/iic-jku/TinyWhisper/t
 │  │  └─ 📁 lvs/
 │  ├─ Makefile
 │  └─ README.md
+├─ 📁 LICENSES/
+│  ├─ Apache-2.0.txt
+│  ├─ LicenseRef-EUROPRACTICE.txt
+│  ├─ MIT.txt
+│  └─ SHL-2.1.txt
 ├─ 📁 measurements/
 │  └─ README.md
 ├─ 📁 pcb/
@@ -287,6 +295,7 @@ The ToDo list can be found in [ToDo.md](https://github.com/iic-jku/TinyWhisper/t
 ├─ CITATION.cff
 ├─ LICENSE
 ├─ README.md
+├─ REUSE.toml
 └─ requirements.txt
 ```
 
