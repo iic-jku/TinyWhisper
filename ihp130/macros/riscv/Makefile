@@ -146,13 +146,16 @@ sim-view-cocotb: ## View CELL cell cocotb simulation waveforms (usage: make sim-
 	fi
 .PHONY: sim-view-cocotb
 
+# See macros/iqmod/Makefile: `xschem simulate` would launch an interactive
+# ngspice in a terminal, detached from make; ngspice -b blocks and reports its
+# exit status.
 sim-gl-xschem: ## Run gate-level simulation of CELL cell with Xschem (usage: make sim-gl-xschem [CELL=<cellname>])
 	cd $(XSCHEM_TB_DIR) && xschem -x -q --rcfile xschemrc --command ' \
 		set netlist_dir $(abspath $(XSCHEM_TB_DIR)/simulations); \
 		xschem save; \
-		xschem netlist; \
-		xschem simulate \
+		xschem netlist \
 	' $(CELL)_tb_tran.sch
+	cd $(XSCHEM_TB_DIR)/simulations && ngspice -b $(CELL)_tb_tran.spice
 .PHONY: sim-gl-xschem
 
 sim-all: ## Simulate the macro (RTL Verilog + RTL/GL cocotb + GL Xschem for riscv_top)

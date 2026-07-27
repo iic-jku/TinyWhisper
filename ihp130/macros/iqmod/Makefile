@@ -41,6 +41,15 @@ EV_PRECISION ?= 5
 # All LVS, DRC and PEX targets (KLayout and Magic) work with either .gds or .klay.gds.
 _GDS_EXT = $(if $(wildcard $(LAY_DIR)/$(CELL).gds),gds,klay.gds)
 
+# The testbenches write their measurement data to $PROJECT_PATH/scripts/... .
+# PROJECT_PATH normally comes from .designinit, which is only sourced when the
+# design is opened interactively in the container -- a plain `make` (CI, or any
+# checkout outside $DESIGNS) leaves it empty, and ngspice then fails the wrdata
+# line with "PROJECT_PATH: no such variable". Default it to this macro, which is
+# what .designinit points it at, and let an existing value win.
+PROJECT_PATH ?= $(CURDIR)
+export PROJECT_PATH
+
 # Folder structure
 XSCHEM_SCH_DIR  := schematic/xschem
 XSCHEM_TB_DIR   := testbenches/xschem
@@ -80,13 +89,21 @@ help: ## Show this help message
 # Testbench name for sim-xschem target (required: make sim-xschem TB=<testbenchname>)
 TB ?= $(error TB is not set. Usage: make sim-xschem TB=<testbenchname>)
 
+# Netlist with xschem, then simulate with ngspice in batch mode. `xschem
+# simulate` would start ngspice through xschem's default simulator command,
+# which is interactive and wrapped in a terminal ($terminal -e 'ngspice -i ...').
+# That detaches from make: the target returns while ngspice is still sitting at
+# its prompt waiting for input that never comes, so the simulation result is
+# never checked and the process (plus its X server) leaks for as long as the
+# session lives. Calling ngspice -b directly blocks until the run is over and
+# propagates its exit status.
 sim-xschem: ## Run TB simulation with Xschem (usage: make sim-xschem TB=<testbenchname>)
 	cd $(XSCHEM_TB_DIR) && xschem -x -q --rcfile xschemrc --command ' \
 		set netlist_dir $(abspath $(XSCHEM_TB_DIR)/simulations); \
 		xschem save; \
-		xschem netlist; \
-		xschem simulate \
+		xschem netlist \
 	' $(TB).sch
+	cd $(XSCHEM_TB_DIR)/simulations && ngspice -b $(TB).spice
 .PHONY: sim-xschem
 
 sim-view-xschem: ## Plot Xschem simulation results (usage: make sim-view-xschem CELL=<cellname>)
