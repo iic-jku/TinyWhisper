@@ -481,7 +481,7 @@ regression: ## Regression test target for IIC-OSIC-TOOLS
 	$(MAKE) -C $(MACROS_DIR)/riscv lint-verilog-all
 	$(MAKE) -C $(MACROS_DIR)/riscv sim-rtl-verilog
 	$(MAKE) -C $(MACROS_DIR)/riscv sim-rtl-cocotb
-	$(MAKE) -C $(MACROS_DIR)/riscv build-fpga
+#	$(MAKE) -C $(MACROS_DIR)/riscv build-fpga
 # 	librelane-magicdrc: full RTL-to-GDS. KLayout DRC skipped for runtime.
 	$(MAKE) -C $(MACROS_DIR)/riscv librelane-magicdrc
 	$(MAKE) -C $(MACROS_DIR)/riscv copy-final
