@@ -1,5 +1,6 @@
-# SPDX-FileCopyrightText: 2025-2026 The TinyWhisper Team
-# SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
+# SPDX-FileCopyrightText: 2020-2022 Efabless Corporation, 2025 LibreLane Contributors, 2025-2026 The TinyWhisper Team
+# SPDX-License-Identifier: Apache-2.0
+#
 
 # Copyright 2025 LibreLane Contributors
 #

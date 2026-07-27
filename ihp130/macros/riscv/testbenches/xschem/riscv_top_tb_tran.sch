@@ -193,7 +193,7 @@ C {devices/code_shown.sym} 80 -2110 0 0 {name=NGSPICE
 only_toplevel=true 
 value="
 * Gate-Level Analog Mixed Signal Simulation (.xspice)
-.include /foss/designs/TinyWhisper/ihp130/macros/riscv/netlist/xspice/riscv_top/riscv_top.xspice
+.include ../../../netlist/xspice/riscv_top.xspice
 .param VDD=1.5
 .param temp=27
 .param fclk=56e6

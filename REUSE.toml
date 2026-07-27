@@ -28,7 +28,7 @@ SPDX-FileCopyrightText = "2025-2026 The TinyWhisper Team"
 SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
 
 [[annotations]]
-path = ["ihp130/README.md", "ihp130/doc/**", "ihp130/flow/logo/**", "ihp130/flow/reports/**", "ihp130/layout/**", "ihp130/netlist/**", "ihp130/release/**", "ihp130/render/**", "ihp130/schematic/**", "ihp130/verification/**"]
+path = ["ihp130/README.md", "ihp130/doc/**", "ihp130/flow/logo/**", "ihp130/layout/**", "ihp130/netlist/**", "ihp130/release/**", "ihp130/render/**", "ihp130/schematic/**", "ihp130/verification/**"]
 SPDX-FileCopyrightText = "2025-2026 The TinyWhisper Team"
 SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
 
@@ -63,7 +63,7 @@ SPDX-FileCopyrightText = "2025-2026 The TinyWhisper Team"
 SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
 
 [[annotations]]
-path = ["ihp130/macros/riscv/flow/final/**", "ihp130/macros/riscv/flow/reports/**", "ihp130/macros/riscv/flow/librelane/pin_order.cfg", "ihp130/macros/riscv/fpga/README.md", "ihp130/macros/riscv/fpga/.gitignore"]
+path = ["ihp130/macros/riscv/verification/*.rpt", "ihp130/macros/riscv/flow/librelane/pin_order.cfg", "ihp130/macros/riscv/fpga/README.md", "ihp130/macros/riscv/fpga/.gitignore"]
 SPDX-FileCopyrightText = "2025-2026 The TinyWhisper Team"
 SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
 

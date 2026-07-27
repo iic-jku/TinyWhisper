@@ -293,8 +293,8 @@ N 2520 -1980 2520 -1940 {lab=GND}
 C {devices/code.sym} 2850 -2060 0 0 {name=NGSPICE
 only_toplevel=true 
 value="
-*.include ../../verification/pex/tinywhisper_top_pex.spice
-.include /foss/designs/TinyWhisper/ihp130/macros/riscv/netlist/xspice/riscv_top/riscv_top.xspice
+*.include ../../../netlist/pex/tinywhisper_top_pex.spice
+.include ../../../macros/riscv/netlist/xspice/riscv_top.xspice
 .param IOVDD=3.3
 .param VDD=1.5
 .param temp=27

@@ -42,8 +42,7 @@
 │  ├─ 📁 pex/
 │  │  ├─ *.spice
 │  │  ├─ iqmod_top_klayout_pex_*.spice
-│  │  ├─ iqmod_top_magic_pex_*.spice
-│  │  └─ reorder_spice_pins.py
+│  │  └─ iqmod_top_magic_pex_*.spice
 │  └─ 📁 schematic/
 │     ├─ *.cdl
 │     ├─ *.spice
@@ -55,27 +54,28 @@
 │     ├─ iqmod_top_black.png
 │     └─ iqmod_top_white.png
 ├─ 📁 schematic/
-│  ├─ *.sch
-│  ├─ *.sym
-│  ├─ iqmod_mfb_lpf.sch
-│  ├─ iqmod_mfb_lpf.sym
-│  ├─ iqmod_mfb_lpf_pex.sym
-│  ├─ iqmod_mfb_lpf_ota_core_hybrid_bm.sch
-│  ├─ iqmod_mfb_lpf_ota_core_hybrid_bm.sym
-│  ├─ iqmod_mfb_lpf_ota_core_hybrid_bm_pex.sym
-│  ├─ iqmod_mixer.sch
-│  ├─ iqmod_mixer.sym
-│  ├─ iqmod_mixer_pex.sym
-│  ├─ iqmod_mixer_se2diff.sch
-│  ├─ iqmod_mixer_se2diff.sym
-│  ├─ iqmod_mixer_se2diff_pex.sym
-│  ├─ iqmod_mixer_tg.sch
-│  ├─ iqmod_mixer_tg.sym
-│  ├─ iqmod_mixer_tg_pex.sym
-│  ├─ iqmod_top.sch
-│  ├─ iqmod_top.sym
-│  ├─ iqmod_top_pex.sym
-│  └─ xschemrc
+│  └─ 📁 xschem/
+│     ├─ *.sch
+│     ├─ *.sym
+│     ├─ iqmod_mfb_lpf.sch
+│     ├─ iqmod_mfb_lpf.sym
+│     ├─ iqmod_mfb_lpf_pex.sym
+│     ├─ iqmod_mfb_lpf_ota_core_hybrid_bm.sch
+│     ├─ iqmod_mfb_lpf_ota_core_hybrid_bm.sym
+│     ├─ iqmod_mfb_lpf_ota_core_hybrid_bm_pex.sym
+│     ├─ iqmod_mixer.sch
+│     ├─ iqmod_mixer.sym
+│     ├─ iqmod_mixer_pex.sym
+│     ├─ iqmod_mixer_se2diff.sch
+│     ├─ iqmod_mixer_se2diff.sym
+│     ├─ iqmod_mixer_se2diff_pex.sym
+│     ├─ iqmod_mixer_tg.sch
+│     ├─ iqmod_mixer_tg.sym
+│     ├─ iqmod_mixer_tg_pex.sym
+│     ├─ iqmod_top.sch
+│     ├─ iqmod_top.sym
+│     ├─ iqmod_top_pex.sym
+│     └─ xschemrc
 ├─ 📁 scripts/
 │  ├─ 📁 filter_designer/
 │  │  ├─ 📁 figures/
@@ -102,16 +102,17 @@
 │  │  └─ sizing_inverter_based_ota_nauta.ipynb
 │  └─ lay2img.py
 ├─ 📁 testbenches/
-│  ├─ *_tb_*.sch
-│  ├─ iqmod_mfb_lpf_ota_core_tb_ac_ol.sch
-│  ├─ iqmod_mfb_lpf_riscv_tb_tran.sch
-│  ├─ iqmod_mfb_lpf_tb_ac_cl.sch
-│  ├─ iqmod_mixer_se2diff_tb_tran.sch
-│  ├─ iqmod_mixer_tb_tran.sch
-│  ├─ iqmod_mixer_tg_tb_tran.sch
-│  ├─ iqmod_top_tb_ac.sch
-│  ├─ iqmod_top_tb_tran.sch
-│  └─ xschemrc
+│  └─ 📁 xschem/
+│     ├─ *_tb_*.sch
+│     ├─ iqmod_mfb_lpf_ota_core_tb_ac_ol.sch
+│     ├─ iqmod_mfb_lpf_riscv_tb_tran.sch
+│     ├─ iqmod_mfb_lpf_tb_ac_cl.sch
+│     ├─ iqmod_mixer_se2diff_tb_tran.sch
+│     ├─ iqmod_mixer_tb_tran.sch
+│     ├─ iqmod_mixer_tg_tb_tran.sch
+│     ├─ iqmod_top_tb_ac.sch
+│     ├─ iqmod_top_tb_tran.sch
+│     └─ xschemrc
 ├─ 📁 verification/
 │  ├─ 📁 cace/
 │  │  ├─ 📁 results/
@@ -169,7 +170,7 @@ The Makefile defines a `_GDS_EXT` variable that auto-selects the layout file ext
 
 ## Run Xschem Testbench Simulation
 
-Runs a single Xschem testbench in batch mode (no display): saves the schematic, exports the netlist to `testbenches/simulations/`, and runs the simulator. The testbench name **must** be specified via the `TB` variable:
+Runs a single Xschem testbench in batch mode (no display): saves the schematic, exports the netlist to `testbenches/xschem/simulations/`, and runs the simulator. The testbench name **must** be specified via the `TB` variable:
 
 ```sh
 make sim-xschem TB=<testbenchname>
@@ -186,7 +187,7 @@ make sim-xschem TB=iqmod_mixer_se2diff_tb_tran
 make sim-xschem TB=iqmod_mixer_tb_tran
 ```
 
-All available testbench schematics are located in `testbenches/`. Generated netlists are written to `testbenches/simulations/`.
+All available testbench schematics are located in `testbenches/xschem/`. Generated netlists are written to `testbenches/xschem/simulations/`.
 
 
 ## Plot Xschem Simulation Results
@@ -194,13 +195,13 @@ All available testbench schematics are located in `testbenches/`. Generated netl
 Plots simulation results using a macro-specific plotting script in `scripts/plot_simulations/`:
 
 ```sh
-make sim-plot-xschem CELL=<cellname>
+make sim-view-xschem CELL=<cellname>
 ```
 
 For example:
 
 ```sh
-make sim-plot-xschem CELL=iqmod_mfb_lpf
+make sim-view-xschem CELL=iqmod_mfb_lpf
 ```
 
 
@@ -233,7 +234,7 @@ Runs the complete simulation flow in sequence:
 - CACE characterization via `sim-cace`
 
 > [!NOTE]
-> The `sim-plot-xschem` target is intentionally **not** called by `sim-all`.
+> The `sim-view-xschem` target is intentionally **not** called by `sim-all`.
 > It opens the generated Python figures, which blocks the shell until the window is closed.
 > They are designed for interactive use and must be called manually after the simulation has completed.
 
@@ -394,7 +395,7 @@ The `EXT_MODE` parameter selects the extraction mode:
 
 The `.subckt` name in the extracted SPICE file is `<CELL>_pex`: `magic-pex` sets it directly via the `sak-pex.sh` option `-n <CELL>_pex`, while for `klayout-pex` it is automatically renamed from `<CELL>_flat` (kpex).
 
-If a matching Xschem symbol (`schematic/<CELL>_pex.sym`) exists, the `.subckt` pin order in the extracted SPICE file is automatically reordered to match the symbol's pin positions. This ensures the PEX netlist can be used directly with the corresponding Xschem symbol for simulation regardless of the selected `EXT_MODE`.
+If a matching Xschem symbol (`schematic/xschem/<CELL>_pex.sym`) exists, the `.subckt` pin order in the extracted SPICE file is automatically reordered with `sak-pin-reorder.py` (installed in the IIC-OSIC-TOOLS container) to match the symbol's pin positions. This ensures the PEX netlist can be used directly with the corresponding Xschem symbol for simulation regardless of the selected `EXT_MODE`.
 
 **KLayout PEX** uses `kpex` with the Magic extraction engine currently (2.5D engine is work in progress):
 

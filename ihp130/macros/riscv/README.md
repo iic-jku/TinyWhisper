@@ -33,39 +33,11 @@
 │  └─ 📁 vh/
 │     └─ riscv_top.vh
 ├─ 📁 flow/
-│  ├─ 📁 final/
-│  │  ├─ 📁 def/
-│  │  ├─ 📁 gds/
-│  │  ├─ 📁 json_h/
-│  │  ├─ 📁 klayout_gds/
-│  │  ├─ 📁 lef/
-│  │  ├─ 📁 lib/
-│  │  ├─ 📁 mag/
-│  │  ├─ 📁 mag_gds/
-│  │  ├─ 📁 nl/
-│  │  ├─ 📁 odb/
-│  │  ├─ 📁 pnl/
-│  │  ├─ 📁 render/
-│  │  ├─ 📁 sdc/
-│  │  ├─ 📁 sdf/
-│  │  ├─ 📁 spef/
-│  │  ├─ 📁 spice/
-│  │  ├─ 📁 vh/
-│  │  ├─ metrics.csv
-│  │  └─ metrics.json
-│  ├─ 📁 librelane/
-│  │  ├─ config.yaml
-│  │  ├─ impl.sdc
-│  │  ├─ pin_order.cfg
-│  │  └─ signoff.sdc
-│  └─ 📁 reports/
-│     ├─ hold_setup_timing.rpt
-│     ├─ lvs.netgen.rpt
-│     ├─ manufacturability.rpt
-│     ├─ stat.rpt
-│     ├─ yosys_post_dff.rpt
-│     ├─ yosys_pre_techmap.rpt
-│     └─ yosys_synth_check.rpt
+│  └─ 📁 librelane/
+│     ├─ config.yaml
+│     ├─ impl.sdc
+│     ├─ pin_order.cfg
+│     └─ signoff.sdc
 ├─ 📁 fpga/
 │  ├─ Makefile
 │  ├─ pico-ice.pcf
@@ -78,11 +50,7 @@
 │  ├─ 📁 spice/
 │  │  └─ riscv_top.spice
 │  └─ 📁 xspice/
-│     ├─ 📁 riscv_top/
-│     │  └─ riscv_top.xspice
-│     ├─ reorder_xspice_pins.py
-│     ├─ spi2xspice.py
-│     └─ verilog2xspice.sh
+│     └─ riscv_top.xspice
 ├─ 📁 render/
 │  ├─ 📁 blender/
 │  └─ 📁 img/
@@ -118,10 +86,12 @@
 │  ├─ uart_rx.v
 │  └─ uart_tx.v
 ├─ 📁 schematic/
-│  ├─ riscv_top.sym
-│  └─ xschemrc
+│  └─ 📁 xschem/
+│     ├─ riscv_top.sym
+│     └─ xschemrc
 ├─ 📁 scripts/
-│  └─ lay2img.py
+│  ├─ lay2img.py
+│  └─ spi2xspice.py
 ├─ 📁 testbenches/
 │  ├─ 📁 cocotb/
 │  │  ├─ 📁 dsmod/
@@ -142,6 +112,9 @@
 │  └─ 📁 xschem/
 │     ├─ riscv_top_tb_tran.sch
 │     └─ xschemrc
+├─ 📁 verification/
+│  ├─ *.rpt
+│  └─ stat.rpt
 ├─ Makefile
 └─ README.md
 ```
@@ -253,7 +226,7 @@ make sim-gl-xschem CELL=<cell>    # run gate-level Xschem simulation for another
 ```
 
 > [!NOTE]
-> This flow expects the generated XSPICE model in `netlist/xspice/riscv_top/`. If needed, generate it first with:
+> This flow expects the generated XSPICE model in `netlist/xspice/riscv_top.xspice`. If needed, generate it first with:
 >
 > ```sh
 > make generate-xspice
@@ -317,7 +290,7 @@ make librelane-klayout
 
 ## Copy Important Reports
 
-To copy the yosys, antenna-violation, DRC errors, hold & setup violation, timing, LVS, and manufacturability reports from the latest run into `flow/reports/`, run:
+To copy the yosys, antenna-violation, DRC errors, hold & setup violation, timing, LVS, and manufacturability reports from the latest run into `verification/`, run:
 
 ```sh
 make copy-reports
@@ -335,17 +308,6 @@ make copy-final
 ```
 
 This refreshes the committed views in `final/` after a LibreLane run, so that the gate-level simulation (`sim-gl-cocotb` reads `final/nl/riscv_top.nl.v`) and the chip top-level integration use the freshly built outputs. It assumes the required views exist under `flow/final/`.
-
-
-## Copy the Final GDS
-
-To copy the latest GDS from `flow/final/gds/` into `final/gds/`, run:
-
-```sh
-make copy-gds
-```
-
-This assumes the final GDS view exists under `flow/final/gds/`.
 
 
 ## Copy the Final Netlist
@@ -406,18 +368,18 @@ make -C fpga flash_bitstream # flash via dfu-util
 > - **`dfu-util`** uses the USB DFU standard — the pico-ice's RP2040 co-processor acts as the DFU bootloader and forwards the bitstream to the iCE40 flash. `iceprog` does not work on this board.
 
 
-## Build All
+## Build Top
 
-To build the macro with LibreLane, copy its reports, copy GDS, copy netlists, copy the render, and render the final GDS, run:
+To build the macro with LibreLane, copy its reports, copy the final output files, copy netlists, copy the render, and render the final GDS, run:
 
 ```sh
-make build-all
+make build-top
 ```
 
 
 ## Layout Versus Schematic (LVS) & Design Rule Check (DRC)
 
-The LibreLane flow already includes LVS and DRC checks with Magic and KLayout, and they are saved in the flow/reports folder.
+The LibreLane flow already includes LVS and DRC checks with Magic and KLayout, and they are saved in the `verification/` folder.
 
 
 ## Build and Verify All
@@ -427,7 +389,7 @@ Builds and verifies the whole macro by running linting, simulation, and build st
 - `lint-verilog-all`
 - `sim-all`
 - `build-fpga`
-- `build-all`
+- `build-top`
 
 > [!NOTE]
 > The LVS and DRC verification is done within the LibreLane flow.
@@ -445,7 +407,10 @@ To generate an XSPICE file of the macro for mixed-signal simulation in Xschem, r
 make generate-xspice
 ```
 
+This builds the XSPICE model **directly from the LibreLane-extracted SPICE netlist** in `netlist/spice/riscv_top.spice` (copied from the last run by `make copy-netlist`). Two tools do the work:
+
+1. `scripts/spi2xspice.py` replaces every standard cell with an XSPICE primitive (`d_lut`, `d_dff`, …), taking the pin order from the inline black-box `.subckt` stubs in the extracted netlist and the logic functions from the liberty file.
+2. `sak-pin-reorder.py` (installed in the IIC-OSIC-TOOLS container) reorders the resulting `.subckt` ports to match the Xschem symbol in `schematic/xschem/riscv_top.sym`. Magic sorts the top-level ports alphabetically, so the pins are mapped **by name**: every pin in the symbol carries a `sim_pinname=<netlist_name>` property.
+
 > [!NOTE]
 > This command should not be run as part of `all`, since this XSPICE file is generated once with specific CPU settings for a more convenient simulation.
-> This method does not work with the `.pnl.v` file in `flow/final/`. The `.nl.v` file from the LibreLane step `yosys-synthesis` must be used.
-> Conversion pipeline: Copy gate-level Verilog (`.nl.v`) → Verilog with power pins (`.vp`) → SPICE (`.spice`) → XSPICE (`.xspice`) → Reorder pins in XSPICE file according to the Xschem symbol.

@@ -18,8 +18,8 @@
 │  │  ├─ AMS_simulation.pdf
 │  │  ├─ Verilog-CoSim_Ngspice.pdf
 │  │  └─ Verilog-CoSim_Xschem.pdf
-│  ├─ 📁 IHP-PDK/
-│  │  └─ SG13G2_os_layout_cheatsheet.xlsx
+│  ├─ 📁 ihp-sg13g2-Open-PDK/
+│  │  └─ sg13g2_os_layout_cheatsheet.xlsx
 │  ├─ 📁 klayout/
 │  │  └─ klayout_cheatsheet.md
 │  ├─ 📁 librelane/
@@ -32,26 +32,18 @@
 │  │  ├─ techsweep_sg13g2_hv_pmos_plots_overview.pdf
 │  │  ├─ techsweep_sg13g2_lv_nmos_plots_overview.pdf
 │  │  └─ techsweep_sg13g2_lv_pmos_plots_overview.pdf
+│  ├─ floorplan.md
 │  ├─ pinout.md
-│  └─ pinout.pdf
+│  ├─ pinout.pdf
+│  └─ specifications.md
 ├─ 📁 flow/
 │  ├─ 📁 artistic/
 │  ├─ 📁 librelane/
 │  │  ├─ config.yaml
 │  │  ├─ pdn_cfg.tcl
 │  │  └─ tinywhisper_top.sdc
-│  ├─ 📁 logo/
-│  │  └─ tinywhisper_logo_mono.png
-│  └─ 📁 reports/
-│     ├─ antenna_summary.rpt
-│     ├─ antenna_violations.rpt
-│     ├─ hold_setup_timing.rpt
-│     ├─ lvs.netgen.rpt
-│     ├─ manufacturability.rpt
-│     ├─ stat.rpt
-│     ├─ yosys_post_dff.rpt
-│     ├─ yosys_pre_techmap.rpt
-│     └─ yosys_synth_check.rpt
+│  └─ 📁 logo/
+│     └─ tinywhisper_logo_mono.png
 ├─ 📁 ip/
 │  ├─ 📁 sg13g2_io_custom/
 │  ├─ 📁 sg13g2_ip__bondpad_70x70/
@@ -95,7 +87,9 @@
 │  ├─ 📁 coupled_resonator_lc_bpf/
 │  │  ├─ 📁 schematic/
 │  │  ├─ 📁 scripts/
-│  │  └─ 📁 testbenches/
+│  │  ├─ 📁 testbenches/
+│  │  ├─ Makefile
+│  │  └─ README.md
 │  ├─ 📁 iqmod/
 │  │  ├─ 📁 final/
 │  │  ├─ 📁 layout/
@@ -117,6 +111,7 @@
 │     ├─ 📁 schematic/
 │     ├─ 📁 scripts/
 │     ├─ 📁 testbenches/
+│     ├─ 📁 verification/
 │     ├─ Makefile
 │     └─ README.md
 ├─ 📁 netlist/
@@ -125,7 +120,6 @@
 │  ├─ 📁 nl/
 │  │  └─ tinywhisper_top.nl.v
 │  ├─ 📁 pex/
-│  │  ├─ reorder_spice_pins.py
 │  │  ├─ tinywhisper_top_klayout_pex_*.spice
 │  │  └─ tinywhisper_top_magic_pex_*.spice
 │  ├─ 📁 pnl/
@@ -163,13 +157,15 @@
 │  ├─ tinywhisper_core.sv
 │  └─ tinywhisper_top.sv
 ├─ 📁 schematic/
-│  ├─ tinywhisper.sch
-│  ├─ tinywhisper.sym
-│  ├─ tinywhisper_top.sch
-│  ├─ tinywhisper_top.sym
-│  ├─ tinywhisper_top_pex.sym
-│  └─ xschemrc
+│  └─ 📁 xschem/
+│     ├─ tinywhisper.sch
+│     ├─ tinywhisper.sym
+│     ├─ tinywhisper_top.sch
+│     ├─ tinywhisper_top.sym
+│     ├─ tinywhisper_top_pex.sym
+│     └─ xschemrc
 ├─ 📁 scripts/
+│  ├─ 📁 plot_simulations/
 │  ├─ add_logo_fill.sh
 │  ├─ add_rectangle.py
 │  ├─ gds_xor.py
@@ -187,8 +183,9 @@
 │  ├─ 📁 drc/
 │  │  ├─ 📁 tinywhisper_top.magic.drc/
 │  │  └─ 📁 tinywhisper_top_logo_fill.magic.drc/
-│  └─ 📁 lvs/
-│     └─ 📁 tinywhisper_top.magic.lvs/
+│  ├─ 📁 lvs/
+│  │  └─ 📁 tinywhisper_top.magic.lvs/
+│  └─ 📁 reports/
 ├─ Makefile
 └─ README.md
 ```
@@ -299,7 +296,7 @@ These commands are also available for the digital macros.
 
 ## Copy Important Reports
 
-To copy the yosys, antenna-violation, DRC errors, hold & setup violation, timing, LVS, and manufacturability reports from the latest run into `flow/reports/`, run:
+To copy the yosys, antenna-violation, DRC errors, hold & setup violation, timing, LVS, and manufacturability reports from the latest run into `verification/reports/`, run:
 
 ```sh
 make copy-reports
@@ -384,7 +381,7 @@ The following command builds the `riscv` digital macro:
 make build-riscv
 ```
 
-For each digital macro the following commands are executed: `make librelane`, `make copy-reports`, and `make render-gds`.
+For each digital macro this dispatches to its in-tree `make all`, which lints, simulates, runs LibreLane, copies the reports, and renders the final GDS.
 
 > [!TIP]
 > Each macro has its own `Makefile` and `README.md` with additional targets, such as linting, simulation, and verification.
@@ -403,16 +400,27 @@ make build-iqmod
 All analog macros are included in `build-macros` alongside the digital macros.
 
 
+## Build Top
+
+To run LibreLane for the top-level chip and copy the resulting reports, GDS, netlist, and chip render back into the source tree, then add the logo + fill structures and render the final GDS, run:
+
+```sh
+make build-top
+```
+
+Internally this executes (in order): `librelane-nodrc` → `copy-reports` → `copy-gds` → `copy-netlist` → `copy-render` → `add-logo-fill` → `render-gds`.
+
+
 ## Build All
 
-To build the bondpad, logos and macros, run LibreLane for the top-level chip, copy the reports, GDS, netlist, and LibreLane render, add the logo and fill structures, render the final GDS, and open it in the OpenROAD GUI, run:
+To initialise submodules, build the bondpad, build the logos, build the macros, and run the full `build-top` flow, run:
 
 ```sh
 make build-all
 ```
 
 > [!NOTE]
-> The `make build-all` target does **not** currently build the digital macros (e.g., RISC-V CPU, IQ modulator).
+> The `make build-all` target does **not** currently call `make build-macros`: the RISC-V CPU is built with nix-shell and the top-level with the `next` IIC-OSIC-TOOLS release (see the TODO in the [Makefile](Makefile)).
 > To build specific macros, use `make build-riscv`, `make build-iqmod`, or `make build-macros` to build all enabled macros separately.
 
 This is useful if you want to rebuild the chip from scratch. Clone the repository, enter the IIC-OSIC-TOOLS environment, and run `make build-all`.
@@ -527,7 +535,7 @@ The `EXT_MODE` parameter selects the extraction mode:
 
 The `.subckt` name in the extracted SPICE file is `<CELL>_pex`: `magic-pex` sets it directly via the `sak-pex.sh` option `-n <CELL>_pex`, while for `klayout-pex` it is automatically renamed from `<CELL>_flat` (kpex).
 
-If a matching Xschem symbol (`schematic/<CELL>_pex.sym`) exists, the `.subckt` pin order in the extracted SPICE file is automatically reordered to match the symbol's pin positions. This ensures the PEX netlist can be used directly with the corresponding Xschem symbol for simulation regardless of the selected `EXT_MODE`.
+If a matching Xschem symbol (`schematic/xschem/<CELL>_pex.sym`) exists, the `.subckt` pin order in the extracted SPICE file is automatically reordered with `sak-pin-reorder.py` (installed in the IIC-OSIC-TOOLS container) to match the symbol's pin positions. This ensures the PEX netlist can be used directly with the corresponding Xschem symbol for simulation regardless of the selected `EXT_MODE`.
 
 **KLayout PEX** uses `kpex` with the Magic extraction engine currently (2.5D engine is work in progress):
 

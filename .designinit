@@ -15,5 +15,9 @@ export PDKPATH=$PDK_ROOT/$PDK
 export STD_CELL_LIBRARY=sg13g2_stdcell
 export SPICE_USERINIT_DIR=$PDKPATH/libs.tech/ngspice
 export KLAYOUT_PATH=$PDKPATH/libs.tech/klayout:$PDKPATH/libs.tech/klayout/tech
-export XSCHEM_USER_LIBRARY_PATH=$DESIGNS/TinyWhisper/ihp130/xschem
 export PROJECT_PATH=$DESIGNS/TinyWhisper/ihp130/macros/iqmod
+
+# Wrap xschem so it always loads the project xschemrc.
+xschem() {
+    command xschem --rcfile "$DESIGNS/TinyWhisper/ihp130/schematic/xschem/xschemrc" "$@"
+}
