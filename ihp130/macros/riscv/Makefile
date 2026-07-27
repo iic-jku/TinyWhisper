@@ -288,7 +288,7 @@ build-top: ## Build macro (run LibreLane with only Magic DRC checks, copy report
 all: ## Simulate, build and verify the macro
 	$(MAKE) lint-verilog-all
 	$(MAKE) sim-all
-	$(MAKE) build-fpga
+#	$(MAKE) build-fpga
 	$(MAKE) build-top
 .PHONY: all
 # ================================================================================================
