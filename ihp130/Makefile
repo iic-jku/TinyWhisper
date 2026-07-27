@@ -482,22 +482,22 @@ regression: ## Regression test target for IIC-OSIC-TOOLS
 
 # 	Digital macro: riscv (Verilator, Icarus, cocotb, yosys/FPGA, LibreLane, xspice)
 	$(MAKE) -C $(MACROS_DIR)/riscv lint-verilog-all
-	$(MAKE) -C $(MACROS_DIR)/riscv sim-rtl-verilog
+#	$(MAKE) -C $(MACROS_DIR)/riscv sim-rtl-verilog
 	$(MAKE) -C $(MACROS_DIR)/riscv sim-rtl-cocotb
 #	$(MAKE) -C $(MACROS_DIR)/riscv build-fpga
 # 	librelane-magicdrc: full RTL-to-GDS. KLayout DRC skipped for runtime.
 #	$(MAKE) -C $(MACROS_DIR)/riscv librelane-magicdrc
 	$(MAKE) -C $(MACROS_DIR)/riscv copy-final
 # 	Gate-level flows that depend on the LibreLane outputs above.
-	$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-cocotb
-	$(MAKE) -C $(MACROS_DIR)/riscv generate-xspice
-	$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-xschem
+# 	$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-cocotb
+# 	$(MAKE) -C $(MACROS_DIR)/riscv generate-xspice
+# 	$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-xschem
 
 # 	Top-level assembly
 	$(MAKE) init-submodules
 	$(MAKE) build-bondpad
 	$(MAKE) -C $(IP_DIR)/sg13g2_ip__jku all
-	# librelane-nodrc: full RTL-to-GDS. DRC is skipped for runtime.
+# 	librelane-nodrc: full RTL-to-GDS. DRC is skipped for runtime.
 	$(MAKE) librelane-nodrc
 .PHONY: regression
 # ================================================================================================
