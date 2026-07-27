@@ -92,6 +92,7 @@ help: ## Show this help message
 	@echo 'EV_PRECISION defaults to 5 significant digits for Xschem ev function.'
 	@echo 'WAVEFORM_VIEWER defaults to gtkwave. Use surfer to launch Surfer instead.'
 	@echo 'VERSION defaults to $(VERSION). Used by the release target.'
+	@echo 'NIGHTLY_REGRESSION defaults to 0. Set to 1 (or run regression-nightly) to include the riscv hardening and gate-level flows in regression.'
 .PHONY: help
 # ================================================================================================
 
@@ -469,8 +470,14 @@ release: ## Copy the gds, netlist files and chip renders to the release folder (
 # ================================================================================================
 
 
-# Regression Target
-regression: ## Regression test target for IIC-OSIC-TOOLS
+# Regression Targets
+# NIGHTLY_REGRESSION toggles the long-running riscv steps inside `regression`:
+# - 0 (default) skips them and integrates the committed macros/riscv/final/ views
+# - 1 re-hardens the riscv macro (librelane-magicdrc + copy-final, ~2 h) and runs the Icarus RTL and gate-level cocotb/xspice/Xschem flows. 
+# The regression-nightly target sets it to 1.
+NIGHTLY_REGRESSION ?= 0
+
+regression: ## Regression test target for IIC-OSIC-TOOLS (usage: make regression [NIGHTLY_REGRESSION=1])
 # 	Analog macro: iqmod (Xschem + CACE + LVS/DRC/PEX + build-top)
 	$(MAKE) -C $(MACROS_DIR)/iqmod sim-xschem TB=iqmod_mfb_lpf_tb_ac_cl
 	# ONE CACE run: the lightweight AC VDD sweep (no Monte-Carlo) to keep runtime short.
@@ -479,20 +486,18 @@ regression: ## Regression test target for IIC-OSIC-TOOLS
 	$(MAKE) -C $(MACROS_DIR)/iqmod klayout-verify CELL=iqmod_top
 	$(MAKE) -C $(MACROS_DIR)/iqmod magic-verify CELL=iqmod_top
 	$(MAKE) -C $(MACROS_DIR)/iqmod build-top
-
-# 	Digital macro: riscv (Verilator, Icarus, cocotb, yosys/FPGA, LibreLane, xspice)
+# 	Digital macro: riscv (Verilator, Icarus, cocotb, yosys, LibreLane, xspice)
 	$(MAKE) -C $(MACROS_DIR)/riscv lint-verilog-all
-#	$(MAKE) -C $(MACROS_DIR)/riscv sim-rtl-verilog
+	$(if $(filter 1,$(NIGHTLY_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv sim-rtl-verilog)
 	$(MAKE) -C $(MACROS_DIR)/riscv sim-rtl-cocotb
 #	$(MAKE) -C $(MACROS_DIR)/riscv build-fpga
 # 	librelane-magicdrc: full RTL-to-GDS. KLayout DRC skipped for runtime.
-#	$(MAKE) -C $(MACROS_DIR)/riscv librelane-magicdrc
-	$(MAKE) -C $(MACROS_DIR)/riscv copy-final
+	$(if $(filter 1,$(NIGHTLY_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv librelane-magicdrc)
+	$(if $(filter 1,$(NIGHTLY_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv copy-final)
 # 	Gate-level flows that depend on the LibreLane outputs above.
-# 	$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-cocotb
-# 	$(MAKE) -C $(MACROS_DIR)/riscv generate-xspice
-# 	$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-xschem
-
+	$(if $(filter 1,$(NIGHTLY_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-cocotb)
+	$(if $(filter 1,$(NIGHTLY_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv generate-xspice)
+	$(if $(filter 1,$(NIGHTLY_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-xschem)
 # 	Top-level assembly
 	$(MAKE) init-submodules
 	$(MAKE) build-bondpad
@@ -500,4 +505,8 @@ regression: ## Regression test target for IIC-OSIC-TOOLS
 # 	librelane-nodrc: full RTL-to-GDS. DRC is skipped for runtime.
 	$(MAKE) librelane-nodrc
 .PHONY: regression
+
+regression-nightly: ## Nightly regression test target for IIC-OSIC-TOOLS (usage: make regression-nightly)
+	$(MAKE) regression NIGHTLY_REGRESSION=1
+.PHONY: regression-nightly
 # ================================================================================================

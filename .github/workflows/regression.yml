@@ -2,7 +2,7 @@
 # Johannes Kepler University, Department for Integrated Circuits
 # Julius-Maximilians-Universität, Department for Computer Engineering
 # SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
-# Description: Nightly regression workflow running `make regression` (ihp130) in the IIC-OSIC-TOOLS container
+# Description: Nightly regression workflow running `make regression-nightly` in the IIC-OSIC-TOOLS container.
 
 name: regression
 
@@ -55,7 +55,7 @@ jobs:
           fi
 
   regression:
-    name: Run make regression
+    name: Run make regression-nightly
     needs: gate
     if: needs.gate.outputs.should_run == 'true'
     runs-on: ubuntu-latest
@@ -128,8 +128,10 @@ jobs:
 
       - name: Run regression
         # The IHP130 chip Makefile lives in ihp130/, not the repository root.
+        # regression-nightly is the full variant: it re-hardens the riscv macro
+        # and runs the gate-level flows on top of the default regression.
         working-directory: ihp130
-        run: make regression
+        run: make regression-nightly
 
       - name: Upload regression logs
         if: always()
