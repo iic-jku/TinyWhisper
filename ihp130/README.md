@@ -670,7 +670,6 @@ This target also runs automatically in continuous integration: the [`regression`
 
 To keep the runtime low while still covering the full toolchain, the regression makes the following trade-offs:
 
-- The riscv macro is hardened with `librelane-magicdrc` (only **Magic DRC** enabled, the slower KLayout DRC is skipped). Netgen LVS still runs as part of the flow.
 - The chip top-level runs `librelane-nodrc`. All DRC checks are skipped to save runtime on the large top-level assembly. The macros and IP blocks are DRC-checked individually beforehand, so this only leaves the top-level routing/fill unchecked.
 - KLayout DRC (`sak-drc.sh`) is skipped inside the LibreLane runs, but is still exercised in the bondpad and logo IP builds, and in the iqmod `klayout-verify`.
 - Only **one** logo (`sg13g2_ip__jku`) is regenerated. It is the only step that exercises the PNG to GDS flow. The other logos (`sg13g2_ip__jku_names`, `sg13g2_ip__ce`, `sg13g2_ip__ce_names`) use an identical toolchain and reuse their committed views.
@@ -694,7 +693,7 @@ The following tools and flows are checked:
 | Icarus Verilog (`iverilog`/`vvp`) | riscv `sim-rtl-verilog` |
 | cocotb (RTL + gate-level) | riscv `sim-rtl-cocotb`, `sim-gl-cocotb` |
 | yosys + nextpnr-ice40 + icepack (FPGA) | riscv `build-fpga` |
-| LibreLane (OpenROAD / yosys / KLayout streamout / Netgen LVS) | riscv `librelane-magicdrc`, chip `librelane-nodrc` |
+| LibreLane (OpenROAD / yosys / KLayout streamout / Netgen LVS) | chip `librelane-nodrc` |
 | Magic DRC (sign-off, run inside LibreLane) | riscv `librelane-magicdrc` |
 | `vlog2Verilog` / `vlog2Spice` / `spi2xspice` | riscv `generate-xspice` |
 | Xschem gate-level | riscv `sim-gl-xschem` |
