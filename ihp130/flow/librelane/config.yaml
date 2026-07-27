@@ -138,6 +138,13 @@ PAD_WEST: [
     clk_pad                             # clk
 ]
 
+# Pad spacing: each side offers 1360 um between the corner cells for 14 x 80 um pads, leaving 240 um of fill.
+# OpenROAD.PadRing floors the pad-to-pad gap to a multiple of PAD_SPACING_MULTIPLE and centers the row.
+# The leftover at the two row ends must land on the 1 um IO site grid.
+# The ideal gap between the 14 pads is fill / (pads + 1) = 240/15 = 16 um, floored to the multiple: gap = floor(16 / multiple) * multiple.
+# With a multiple of 1 um: gap = floor(16/1)*1 = 16 um and the ends get (240 - 13*16)/2 = 16 um --> on-grid, no rounding needed.
+PAD_SPACING_MULTIPLE: 1
+
 # SDC files
 PNR_SDC_FILE: dir::tinywhisper_top.sdc
 SIGNOFF_SDC_FILE: dir::tinywhisper_top.sdc
