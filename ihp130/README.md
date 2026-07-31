@@ -9,12 +9,6 @@
 </p>
 
 
-> [!WARNING]
-> `make add-logo-fill` currently fails in the IIC-OSIC-TOOLS `2026.07` release. A PDK issue corrupts the
-> seal ring, which makes the KLayout filler abort with an internal error in `Region::holes`. The target is
-> therefore commented out in `Makefile :: build-top`. This will be fixed with the `2026.08` release of
-> IIC-OSIC-TOOLS.
-
 ## Directory Structure
 
 <details>
@@ -23,10 +17,6 @@
 ```text
 📁 ihp130/
 ├─ 📁 doc/
-│  ├─ 📁 AMS/
-│  │  ├─ AMS_simulation.pdf
-│  │  ├─ Verilog-CoSim_Ngspice.pdf
-│  │  └─ Verilog-CoSim_Xschem.pdf
 │  ├─ 📁 ihp-sg13g2-Open-PDK/
 │  │  └─ sg13g2_os_layout_cheatsheet.xlsx
 │  ├─ 📁 klayout/
@@ -196,7 +186,11 @@
 │  │  ├─ 📁 tinywhisper_top.magic.drc/
 │  │  └─ 📁 tinywhisper_top_logo_fill.magic.drc/
 │  ├─ 📁 lvs/
-│  │  └─ 📁 tinywhisper_top.magic.lvs/
+│  │  ├─ run_lvs.sh
+│  │  ├─ gds2spice.sh
+│  │  ├─ merge_spice.py
+│  │  ├─ lvs.out
+│  │  └─ README.md
 │  └─ 📁 reports/
 ├─ Makefile
 └─ README.md
