@@ -448,6 +448,7 @@ all: ## Build, verify, simulate and package the whole chip
 	$(MAKE) magic-drc CELL=$(TOP)_logo_fill
 #	$(MAKE) klayout-verify
 #	$(MAKE) magic-verify
+#	$(MAKE) sim-all
 	$(MAKE) bondplan
 .PHONY: all
 # ================================================================================================
