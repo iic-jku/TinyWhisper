@@ -19,6 +19,12 @@
 > [!IMPORTANT]
 > This repository requires the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) container with tag `2026.07` or later.
 
+> [!WARNING]
+> `make add-logo-fill` currently fails in the IIC-OSIC-TOOLS `2026.07` release. A PDK issue corrupts the
+> seal ring, which makes the KLayout filler abort with an internal error in `Region::holes`. The target is
+> therefore commented out in [`ihp130/Makefile`](https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/Makefile)
+> `:: build-top`. This will be fixed with the `2026.08` release of IIC-OSIC-TOOLS.
+
 > [!TIP]
 > This repository is based on the [ihp-sg13g2-ams-chip-template](https://github.com/iic-jku/ihp-sg13g2-ams-chip-template) template repository. For a better understanding of the folder structure, how to use the Makefiles, and how to implement your own designs, it is recommended to go through this [tutorial](https://iic-jku.github.io/ihp-sg13g2-ams-chip-template/index.html).
 
@@ -162,6 +168,11 @@ The ToDo list can be found in [ToDo.md](https://github.com/iic-jku/TinyWhisper/t
 
 ## Directory Structure
 
+The chip design itself lives in [`ihp130/`](https://github.com/iic-jku/TinyWhisper/tree/main/ihp130), which follows the layout of the [ihp-sg13g2-ams-chip-template](https://github.com/iic-jku/ihp-sg13g2-ams-chip-template). Its own [README](https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/README.md) documents every Makefile target in detail.
+
+<details>
+<summary>Show Directory Structure</summary>
+
 ```text
 📁 TinyWhisper/
 ├─ 📁 .github/
@@ -176,11 +187,14 @@ The ToDo list can be found in [ToDo.md](https://github.com/iic-jku/TinyWhisper/t
 │  │  │  └─ silicon-austria-labs-logo.svg
 │  │  ├─ Makefile
 │  │  ├─ tinywhisper_blockdiagramm.png
+│  │  ├─ tinywhisper_bondplan_white.png
 │  │  ├─ tinywhisper_top_black.png
+│  │  ├─ tinywhisper_top_black_TM2.png
 │  │  └─ tinywhisper_top_white.png
+│  ├─ Makefile
 │  ├─ _quarto.yml
 │  ├─ index.qmd
-│  └─ Makefile
+│  └─ requirements.txt
 ├─ 📁 enclosure/
 │  └─ README.md
 ├─ 📁 ihp130/
@@ -189,8 +203,7 @@ The ToDo list can be found in [ToDo.md](https://github.com/iic-jku/TinyWhisper/t
 │  │  ├─ 📁 artistic/
 │  │  ├─ 📁 final/
 │  │  ├─ 📁 librelane/
-│  │  ├─ 📁 logo/
-│  │  └─ 📁 reports/
+│  │  └─ 📁 logo/
 │  ├─ 📁 ip/
 │  │  ├─ 📁 sg13g2_io_custom/
 │  │  ├─ 📁 sg13g2_ip__bondpad_70x70/
@@ -210,6 +223,7 @@ The ToDo list can be found in [ToDo.md](https://github.com/iic-jku/TinyWhisper/t
 │  │  ├─ 📁 nl/
 │  │  ├─ 📁 pex/
 │  │  ├─ 📁 pnl/
+│  │  ├─ 📁 schematic/
 │  │  └─ 📁 spice/
 │  ├─ 📁 packaging/
 │  │  ├─ 📁 layout/
@@ -230,6 +244,7 @@ The ToDo list can be found in [ToDo.md](https://github.com/iic-jku/TinyWhisper/t
 │  │  └─ 📁 v.2.0.0/
 │  │     ├─ 📁 gds/
 │  │     │  └─ tinywhisper_top_logo_fill.gds.gz
+│  │     ├─ 📁 img/
 │  │     └─ 📁 netlist/
 │  │        ├─ 📁 layout/
 │  │        ├─ 📁 pnl/
@@ -244,24 +259,26 @@ The ToDo list can be found in [ToDo.md](https://github.com/iic-jku/TinyWhisper/t
 │  │  ├─ tinywhisper_core.sv
 │  │  └─ tinywhisper_top.sv
 │  ├─ 📁 schematic/
-│  │  ├─ tinywhisper.sch
-│  │  ├─ tinywhisper.sym
-│  │  ├─ tinywhisper_top.sch
-│  │  ├─ tinywhisper_top.sym
-│  │  ├─ tinywhisper_top_pex.sym
-│  │  └─ xschemrc
+│  │  └─ 📁 xschem/
+│  │     ├─ tinywhisper.sch
+│  │     ├─ tinywhisper.sym
+│  │     ├─ tinywhisper_top.sch
+│  │     ├─ tinywhisper_top.sym
+│  │     ├─ tinywhisper_top_pex.sym
+│  │     └─ xschemrc
 │  ├─ 📁 scripts/
-│  │  ├─ 📁 plot_simulations/
 │  │  ├─ add_logo_fill.sh
 │  │  ├─ add_rectangle.py
-│  │  ├─ gds_xor.py
+│  │  ├─ check_pex_ports.py
 │  │  └─ lay2img.py
 │  ├─ 📁 testbenches/
 │  │  ├─ 📁 cocotb/
 │  │  └─ 📁 xschem/
+│  │     └─ 📁 plot_simulations/
 │  ├─ 📁 verification/
 │  │  ├─ 📁 drc/
-│  │  └─ 📁 lvs/
+│  │  ├─ 📁 lvs/
+│  │  └─ 📁 reports/
 │  ├─ Makefile
 │  └─ README.md
 ├─ 📁 LICENSES/
@@ -296,8 +313,10 @@ The ToDo list can be found in [ToDo.md](https://github.com/iic-jku/TinyWhisper/t
 ├─ LICENSE
 ├─ README.md
 ├─ REUSE.toml
-└─ requirements.txt
+└─ ToDo.md
 ```
+
+</details>
 
 
 ## Cite This Work
