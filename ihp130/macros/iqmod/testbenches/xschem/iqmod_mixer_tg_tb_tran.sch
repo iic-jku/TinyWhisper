@@ -178,7 +178,7 @@ plot vin_tg vout_tg_off
 unset appendwrite
 set wr_singlescale
 set wr_vecnames
-wrdata $PROJECT_PATH/scripts/plot_simulations/data/iqmod_mixer_tg_tb_tran.txt v(vin_tg) v(vout_tg_on) v(vout_tg_off)
+wrdata ../plot_simulations/data/iqmod_mixer_tg_tb_tran.txt v(vin_tg) v(vout_tg_on) v(vout_tg_off)
 
 
 *quit

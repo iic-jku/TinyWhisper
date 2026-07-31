@@ -176,7 +176,7 @@ print fcu
 unset appendwrite
 set wr_vecnames
 set wr_singlescale
-wrdata $PROJECT_PATH/scripts/plot_simulations/data/iqmod_top_tb_ac.txt v(Amag_dB) v(Aarg)
+wrdata ../plot_simulations/data/iqmod_top_tb_ac.txt v(Amag_dB) v(Aarg)
 
 *quit
 .endc

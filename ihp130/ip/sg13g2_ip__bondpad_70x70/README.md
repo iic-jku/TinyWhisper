@@ -4,6 +4,9 @@ A 70 µm × 70 µm square bondpad for the IHP SG13G2 130 nm CMOS process, genera
 
 ## Directory Structure
 
+<details>
+<summary>Show Directory Structure</summary>
+
 ```text
 📁 sg13g2_ip__bondpad_70x70/
 ├─ Makefile                             # Build automation
@@ -20,8 +23,17 @@ A 70 µm × 70 µm square bondpad for the IHP SG13G2 130 nm CMOS process, genera
    └─ 📁 drc/                           # DRC reports
 ```
 
+</details>
+
 
 ## Usage
+
+The default Make target is `help`, so running `make` prints usage and all available targets with short descriptions.
+
+```bash
+make
+make help
+```
 
 Build everything (clean, generate bondpad, generate Verilog, run DRC):
 
@@ -49,7 +61,7 @@ The following Makefile variables can be overridden:
 | `SHAPE`        | `square` | Bondpad shape (`square`/`octagon`/`circle`)                                                |
 | `BOTTOM_METAL` | `3`      | Lowest metal in the pad stack (`1`=Metal1 .. `5`=Metal5, `6`=TopMetal1). Top is fixed to TopMetal2. |
 
-Example — generate an octagonal 70 µm bondpad starting at Metal2:
+Example: generate an octagonal 70 µm bondpad starting at Metal2:
 
 ```bash
 make bondpad DIAMETER=70.0 SHAPE=octagon BOTTOM_METAL=2

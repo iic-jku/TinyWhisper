@@ -201,7 +201,7 @@ print CMRRdc_dB
 unset appendwrite
 set wr_vecnames
 set wr_singlescale
-wrdata $PROJECT_PATH/scripts/plot_simulations/data/iqmod_mfb_lpf_ota_core_tb_CMRR.txt
+wrdata ../plot_simulations/data/iqmod_mfb_lpf_ota_core_tb_CMRR.txt
 + v(Adm_dB) v(Adm_arg) v(Acm_dB) v(Acm_arg) v(CMRR_dB) v(CMRR_arg)
 
 *quit

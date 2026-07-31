@@ -11,6 +11,9 @@
 
 ## Directory Structure
 
+<details>
+<summary>Show Directory Structure</summary>
+
 ```text
 📁 riscv/
 ├─ 📁 final/
@@ -119,8 +122,12 @@
 └─ README.md
 ```
 
+</details>
 
-## Show Available Targets
+
+## Makefile Targets
+
+### Show Available Targets
 
 The default Make target is `help`, so running `make` prints usage and all available targets with short descriptions.
 
@@ -130,7 +137,7 @@ make help
 ```
 
 
-## Linting
+### Linting
 
 To lint the Verilog/SystemVerilog source files with [Verilator](https://www.veripool.org/verilator/), run:
 
@@ -153,14 +160,14 @@ The `lint-verilog-all` target runs these lint checks in sequence:
 This is also the lint step used by `make all`.
 
 
-## Verification and Simulation
+### Verification and Simulation
 
 We use [cocotb](https://www.cocotb.org/), a Python-based testbench environment, and [Icarus Verilog](https://github.com/steveicarus/iverilog) for the verification of the macro.
 
 The simulation targets are unified and accept an optional `CELL` variable (default: `riscv_top`).
 The waveform viewer can be changed with `WAVEFORM_VIEWER=<gtkwave|surfer>` (default: `gtkwave`).
 
-### RTL Verilog Simulation
+#### RTL Verilog Simulation
 
 Compiles the RTL with Icarus Verilog and runs the simulation.
 When `CELL=riscv_top` (the default), the full `RISCV_MODULES_SIM` source list and the `.sv` testbench are selected automatically.
@@ -182,7 +189,7 @@ make sim-view-verilog CELL=dsmod WAVEFORM_VIEWER=surfer        # use Surfer inst
 Each simulation folder contains a pre-configured waveform layout file (`<CELL>_tb.gtkw` for GTKWave, `<CELL>_tb.surf.ron` for Surfer).
 The view target loads it automatically together with the current `.vcd`, so signal formatting is preserved across runs.
 
-### RTL / GL cocotb Simulation
+#### RTL / GL cocotb Simulation
 
 The cocotb testbenches are located in `testbenches/cocotb/`.
 For `CELL=dsmod`, the simulation delegates to the sub-Makefile in `testbenches/cocotb/dsmod/` (PSD, SNDR sweep, and ramp tests).
@@ -216,24 +223,29 @@ make sim-view-cocotb CELL=dsmod WAVEFORM_VIEWER=surfer        # use Surfer inste
 Each cocotb simulation folder contains a pre-configured waveform layout file (`<CELL>_tb.gtkw` for GTKWave, `<CELL>_tb.surf.ron` for Surfer).
 The view target loads it automatically together with the current `.fst`, so signal formatting is preserved across runs.
 
-### Gate-Level Xschem Simulation
+#### Gate-Level Xschem Simulation
 
 Runs the mixed-signal gate-level transient simulation testbench in `testbenches/xschem/<CELL>_tb_tran.sch`:
 
 ```sh
 make sim-gl-xschem                # run riscv_top gate-level Xschem simulation
 make sim-gl-xschem CELL=<cell>    # run gate-level Xschem simulation for another cell
+make sim-gl-xschem TB=<tb>        # run another testbench (default: <CELL>_tb_tran)
 ```
 
+The testbench is selected with the `TB` variable, given without the `.sch` extension (default: `<CELL>_tb_tran`). All testbench schematics are located in `testbenches/xschem/`, and the generated netlists are written to `testbenches/xschem/simulations/`.
+
+The simulation runs in **batch mode**: the target netlists the testbench with `xschem netlist` and then invokes `ngspice -b` directly instead of using `xschem simulate`. `xschem simulate` would spawn an interactive ngspice in a terminal detached from `make`: the target would return immediately, the result would never be checked, and the process (with its X server) would leak. Running the simulator directly makes `make` block until the run finishes and see its exit status.
+
 > [!NOTE]
-> This flow expects the generated XSPICE model in `netlist/xspice/riscv_top.xspice`. If needed, generate it first with:
+> This flow expects the generated XSPICE model in `netlist/xspice/riscv_top.xspice`. It is generated automatically by `make build-top` (right after `copy-netlist`), so it always matches the current LibreLane run. To regenerate it manually, run:
 >
 > ```sh
 > make generate-xspice
 > ```
 
 
-### Run All Simulations
+#### Run All Simulations
 
 To run all simulation targets in sequence:
 
@@ -256,7 +268,7 @@ This executes the following targets in order:
 > They are designed for interactive use and must be called manually after the simulation has completed.
 
 
-## LibreLane Flow
+### LibreLane Flow
 
 Run the LibreLane flow with:
 
@@ -273,7 +285,7 @@ Additional targets are available for different DRC configurations:
 These targets are also available for the digital macros. After the LibreLane flow completes successfully, the generated views are saved under `flow/final/`.
 
 
-## View the Design
+### View the Design
 
 After completion, you can view the design using the OpenROAD GUI:
 
@@ -288,9 +300,9 @@ make librelane-klayout
 ```
 
 
-## Copy Important Reports
+### Copy Important Reports
 
-To copy the yosys, antenna-violation, DRC errors, hold & setup violation, timing, LVS, and manufacturability reports from the latest run into `verification/`, run:
+To copy the yosys synthesis checks, antenna reports, post-PnR timing summary, per-corner power reports, IR-drop report, Magic DRC results, LVS report, and manufacturability report from the latest run into `verification/`, run:
 
 ```sh
 make copy-reports
@@ -299,7 +311,7 @@ make copy-reports
 This only works if at least one LibreLane run exists in `flow/librelane/runs/` and the latest run completed without errors.
 
 
-## Copy the Final Views
+### Copy the Final Views
 
 To copy the final `gds`, `lef`, `lib`, `nl`, `pnl`, `spef`, and `vh` view folders from `flow/final/` into `final/`, run:
 
@@ -310,7 +322,7 @@ make copy-final
 This refreshes the committed views in `final/` after a LibreLane run, so that the gate-level simulation (`sim-gl-cocotb` reads `final/nl/riscv_top.nl.v`) and the chip top-level integration use the freshly built outputs. It assumes the required views exist under `flow/final/`.
 
 
-## Copy the Final Netlist
+### Copy the Final Netlist
 
 To copy the latest SPICE, PnL, and Netlist files from `flow/final/` into `netlist/`, run:
 
@@ -321,7 +333,7 @@ make copy-netlist
 This only works if the required final views exist in `flow/final/spice/`, `flow/final/pnl/`, and `flow/final/nl/`.
 
 
-## Copy the Final Render
+### Copy the Final Render
 
 To copy the latest LibreLane render from `flow/final/render/` into `render/img/`, run:
 
@@ -332,9 +344,9 @@ make copy-render
 This only works if the final render exists in `flow/final/render/`.
 
 
-## Render Top Layout
+### Render Top Layout
 
-Renders the final GDS from `final/gds/` with `scripts/lay2img.py` and saves it in the `render/img/` folder:
+Renders the final GDS from `final/gds/` with `scripts/lay2img.py` and saves the two images `riscv_top_black.png` and `riscv_top_white.png` in the `render/img/` folder:
 
 ```sh
 make render-gds
@@ -343,7 +355,7 @@ make render-gds
 This only works if the latest run completed without errors.
 
 
-## Build FPGA
+### Build FPGA
 
 The FPGA flow targets a [pico-ice](https://pico-ice.tinyvision.ai/) board (iCE40 UP5K, sg48 package) and uses the open-source iCE40 toolchain: Yosys → nextpnr → icepack.
 
@@ -365,41 +377,40 @@ make -C fpga flash_bitstream # flash via dfu-util
 > [!NOTE]
 > Flashing uses `dfu-util`, not `iceprog`. Both flash iCE40 bitstreams, but they target different interfaces:
 > - **`iceprog`** speaks directly over SPI via an FTDI USB bridge (iCEstick, iCEBreaker, …).
-> - **`dfu-util`** uses the USB DFU standard — the pico-ice's RP2040 co-processor acts as the DFU bootloader and forwards the bitstream to the iCE40 flash. `iceprog` does not work on this board.
+> - **`dfu-util`** uses the USB DFU standard. The pico-ice's RP2040 co-processor acts as the DFU bootloader and forwards the bitstream to the iCE40 flash. `iceprog` does not work on this board.
 
 
-## Build Top
+### Build Top
 
-To build the macro with LibreLane, copy its reports, copy the final output files, copy netlists, copy the render, and render the final GDS, run:
+To build the macro with LibreLane, copy its reports, copy the final output files, copy netlists, generate the XSPICE model, copy the render, and render the final GDS, run:
 
 ```sh
 make build-top
 ```
 
 
-## Layout Versus Schematic (LVS) & Design Rule Check (DRC)
+### Design Rule Check (DRC) & Layout Versus Schematic (LVS)
 
-The LibreLane flow already includes LVS and DRC checks with Magic and KLayout, and they are saved in the `verification/` folder.
+The LibreLane flow already includes DRC and LVS checks with Magic and KLayout, and they are saved in the `verification/` folder.
 
 
-## Build and Verify All
+### Lint, Build, Verify and Simulate All
 
-Builds and verifies the whole macro by running linting, simulation, and build steps:
+Lints, builds, verifies and simulates the whole macro:
 
 - `lint-verilog-all`
-- `sim-all`
-- `build-fpga`
+- `build-fpga` (currently disabled in the `Makefile`, run manually if needed)
 - `build-top`
+- `sim-all`
 
-> [!NOTE]
-> The LVS and DRC verification is done within the LibreLane flow.
+Linting runs first to fail fast on structural RTL issues. The simulations run **after** the build, so the gate-level simulations (`sim-gl-cocotb`, `sim-gl-xschem`) run on the netlists and the XSPICE model produced by this build, not on those of a previous one. The DRC and LVS verification is done within the LibreLane flow.
 
 ```sh
 make all
 ```
 
 
-## Generate XSPICE File
+### Generate XSPICE File
 
 To generate an XSPICE file of the macro for mixed-signal simulation in Xschem, run:
 
@@ -413,4 +424,5 @@ This builds the XSPICE model **directly from the LibreLane-extracted SPICE netli
 2. `sak-pin-reorder.py` (installed in the IIC-OSIC-TOOLS container) reorders the resulting `.subckt` ports to match the Xschem symbol in `schematic/xschem/riscv_top.sym`. Magic sorts the top-level ports alphabetically, so the pins are mapped **by name**: every pin in the symbol carries a `sim_pinname=<netlist_name>` property.
 
 > [!NOTE]
-> This command should not be run as part of `all`, since this XSPICE file is generated once with specific CPU settings for a more convenient simulation.
+> This target runs automatically as part of `make build-top` (right after `copy-netlist`), so the XSPICE model always matches the netlists of the current LibreLane run. The simulation timing parameters (`-io_time`, `-time`, `-idelay`, `-odelay`, `-cload`) are pinned in the Makefile, so regeneration is deterministic.
+> Conversion pipeline: extracted SPICE (`.spice`) → XSPICE (`.xspice`) → reorder pins according to the Xschem symbol.

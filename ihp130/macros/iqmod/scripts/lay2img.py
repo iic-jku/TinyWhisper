@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: 2025 Leo Moser, 2025-2026 The TinyWhisper Team
 # SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
+# Description: Render a GDS layout to an image.
 
 import os
 import argparse
@@ -81,6 +82,9 @@ def main(input_layout, output_image, width, height, oversampling, pdk_root, pdk)
 
     if not height:
         height = max(1, round(width / aspect_ratio))
+
+    if not width:
+        width = max(1, round(height * aspect_ratio))
 
     # Save the images
     base_name = os.path.splitext(os.path.basename(output_image))[0]

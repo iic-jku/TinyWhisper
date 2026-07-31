@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: 2024 Leo Moser, 2025-2026 The TinyWhisper Team
 # SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
+# Description: Convert an image to a GDS layout.
 
 import klayout.db as db
 import argparse
@@ -103,7 +104,7 @@ def convert_to_gds(
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(
-        prog="img2gds", description="Convert an image to GDS format"
+        prog="img2lay", description="Convert an image to GDS format"
     )
 
     parser.add_argument("image_path")
@@ -126,12 +127,14 @@ if __name__ == "__main__":
     parser.add_argument(
         "--foreground",
         type=str,
+        default="1/0",
         help="gds layer/datatype pair for foreground pixels e.g. 0/0",
     )
     parser.add_argument(
         "--boundary",
         nargs="*",
         type=str,
+        default=["0/0"],
         help="gds layer/datatype pairs for boundary e.g. 0/0",
     )
     parser.add_argument("--smooth", action="store_true", help="smooth the edges")

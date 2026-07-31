@@ -232,7 +232,7 @@ echo efficiency = $&efficiency %
 unset appendwrite
 set wr_vecnames
 set wr_singlescale
-wrdata $PROJECT_PATH/scripts/plot_simulations/data/iqmod_mfb_lpf_ota_core_tb_tran.txt
+wrdata ../plot_simulations/data/iqmod_mfb_lpf_ota_core_tb_tran.txt
 + v(vin) v(vout_dm) v(vout_cm) v(vinp) v(vinn) v(voutp) v(voutn)
 
 *quit

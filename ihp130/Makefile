@@ -57,7 +57,7 @@ XSCHEM_TB_DIR   		:= testbenches/xschem
 COCOTB_DIR      		:= testbenches/cocotb
 LAY_DIR         		:= layout
 SCRIPTS_DIR     		:= scripts
-SIM_PLOT_DIR    		:= scripts/plot_simulations
+SIM_PLOT_DIR    		:= testbenches/xschem/plot_simulations
 RENDER_IMG_DIR  		:= render/img
 SRC_DIR         		:= rtl
 IP_DIR          		:= ip
@@ -91,6 +91,8 @@ help: ## Show this help message
 	@echo 'DRC_LEVEL defaults to macro. Sets the KLayout DRC level for klayout-drc (precheck|macro|regular).'
 	@echo 'EV_PRECISION defaults to 5 significant digits for Xschem ev function.'
 	@echo 'WAVEFORM_VIEWER defaults to gtkwave. Use surfer to launch Surfer instead.'
+	@echo 'TB selects the Xschem testbench for sim-gl-xschem (default: <CELL>_tb_tran).'
+	@echo 'SCRIPT selects the plotting script for sim-view-xschem (e.g. plot_tinywhisper_top).'
 	@echo 'VERSION defaults to $(VERSION). Used by the release target.'
 	@echo 'NIGHTLY_REGRESSION defaults to 0. Set to 1 (or run regression-nightly) to include the riscv hardening and gate-level flows in regression.'
 .PHONY: help
@@ -105,6 +107,11 @@ init-submodules: ## Initialize and update git submodules (e.g. ihp130/flow/artis
 
 
 # Simulation Targets
+# Testbench for the Xschem simulation targets (default: <CELL>_tb_tran)
+# Override with: make <target> TB=<testbenchname>
+TB ?= $(CELL)_tb_tran
+SCRIPT ?= $(error SCRIPT is not set. Usage: make sim-view-xschem SCRIPT=<scriptname>)
+
 sim-rtl-cocotb: ## Run RTL simulation of CELL cell with cocotb (usage: make sim-rtl-cocotb [CELL=<cellname>])
 	cd $(COCOTB_DIR) && python3 $(CELL)_tb.py
 .PHONY: sim-rtl-cocotb
@@ -123,29 +130,25 @@ sim-view-cocotb: ## View CELL cell cocotb simulation waveforms (usage: make sim-
 	fi
 .PHONY: sim-view-cocotb
 
-# See macros/iqmod/Makefile: `xschem simulate` would launch an interactive
-# ngspice in a terminal, detached from make; ngspice -b blocks and reports its
-# exit status.
-sim-gl-xschem: ## Run gate-level simulation of CELL cell with Xschem (usage: make sim-gl-xschem [CELL=<cellname>])
-	cd $(XSCHEM_TB_DIR) && xschem -s -r -x -q --rcfile xschemrc --command ' \
+sim-gl-xschem: ## Run gate-level simulation of CELL cell with Xschem in batch mode (usage: make sim-gl-xschem [CELL=<cellname>] [TB=<testbenchname>])
+	mkdir -p $(XSCHEM_TB_DIR)/simulations
+	cd $(XSCHEM_TB_DIR) && xschem -r -x -q --rcfile xschemrc --command ' \
+		xschem set netlist_type spice; \
 		set netlist_dir $(abspath $(XSCHEM_TB_DIR)/simulations); \
 		xschem save; \
 		xschem netlist \
-	' $(CELL)_tb_tran.sch
-	cd $(XSCHEM_TB_DIR)/simulations && ngspice -b $(CELL)_tb_tran.spice
+	' $(TB).sch
+	cd $(XSCHEM_TB_DIR)/simulations && ngspice -b $(TB).spice
 .PHONY: sim-gl-xschem
 
-sim-view-xschem: ## Plot Xschem simulation results (usage: make sim-view-xschem CELL=<cellname>)
-	python3 $(SIM_PLOT_DIR)/plot_$(CELL).py
+sim-view-xschem: ## Plot Xschem simulation results (usage: make sim-view-xschem SCRIPT=<scriptname>)
+	SHOW_PLOTS=1 python3 $(SIM_PLOT_DIR)/$(SCRIPT).py
 .PHONY: sim-view-xschem
 
 sim-all: ## Simulate the chip (RTL/GL cocotb + GL Xschem)
 	$(MAKE) sim-rtl-cocotb
-#	$(MAKE) sim-view-cocotb
 	$(MAKE) sim-gl-cocotb
-#	$(MAKE) sim-view-cocotb
 	$(MAKE) sim-gl-xschem
-#	$(MAKE) sim-view-xschem
 .PHONY: sim-all
 # ================================================================================================
 
@@ -181,17 +184,16 @@ librelane-klayout: ## Open the last LibreLane run in KLayout
 # TODO: KLayout antenna and DRC reports are temporarily commented out until
 # IHP fixes the `metal1_pin_offgrid` errors. For now, `make librelane-nodrc` must be used.
 # https://github.com/IHP-GmbH/IHP-Open-PDK/issues/683#issuecomment-4065791975
-copy-reports: ## Copy yosys, antenna, hold & setup timing, LVS and manufacturability reports from the last LibreLane run to verification/reports/
+# Using * wildcard to ignore step numbers
+copy-reports: ## Copy yosys, antenna, STA, power, IR-drop, LVS and manufacturability reports from the last LibreLane run to verification/reports/
 	rm -rf $(REPORT_DIR)/
 	mkdir -p $(REPORT_DIR)/
-	# Using * wildcard to ignore step numbers
 	cp $(LIBRELANE_DIR)/runs/${RUN_TAG}/*-yosys-synthesis/reports/pre_synth_chk.rpt $(REPORT_DIR)/yosys_synth_check.rpt
 	cp $(LIBRELANE_DIR)/runs/${RUN_TAG}/*-yosys-synthesis/reports/pre_techmap.rpt $(REPORT_DIR)/yosys_pre_techmap.rpt
 	cp $(LIBRELANE_DIR)/runs/${RUN_TAG}/*-yosys-synthesis/reports/post_dff.rpt $(REPORT_DIR)/yosys_post_dff.rpt
 	cp $(LIBRELANE_DIR)/runs/${RUN_TAG}/*-yosys-synthesis/reports/stat.rpt $(REPORT_DIR)/stat.rpt
 	cp $(LIBRELANE_DIR)/runs/${RUN_TAG}/*-openroad-checkantennas-1/reports/antenna.rpt $(REPORT_DIR)/antenna_violations.rpt
 	cp $(LIBRELANE_DIR)/runs/${RUN_TAG}/*-openroad-checkantennas-1/reports/antenna_summary.rpt $(REPORT_DIR)/antenna_summary.rpt
-	cp $(LIBRELANE_DIR)/runs/${RUN_TAG}/*-openroad-stapostpnr/summary.rpt $(REPORT_DIR)/hold_setup_timing.rpt
 	cp $(LIBRELANE_DIR)/runs/${RUN_TAG}/*-openroad-stapostpnr/summary.rpt $(REPORT_DIR)/stapostpnr_summary.rpt
 	cp $(LIBRELANE_DIR)/runs/${RUN_TAG}/*-openroad-stapostpnr/nom_fast_1p32V_m40C/power.rpt $(REPORT_DIR)/stapostpnr_nom_fast_1p32V_m40C_power.rpt
 	cp $(LIBRELANE_DIR)/runs/${RUN_TAG}/*-openroad-stapostpnr/nom_fast_1p65V_m40C/power.rpt $(REPORT_DIR)/stapostpnr_nom_fast_1p65V_m40C_power.rpt
@@ -272,15 +274,15 @@ add-logo-fill: ## Run scripts/add_logo_fill.sh to add the TinyWhisper logo and f
 	cd $(SCRIPTS_DIR) && ./add_logo_fill.sh
 .PHONY: add-logo-fill
 
-# TODO: `make librelane-nodrc` is used for now until IHP fixes the `metal1_pin_offgrid` errors.
-# Once fixed, switch back to `make librelane`.
+# TODO: Switch back to `make librelane` once IHP fixes the metal1_pin_offgrid errors.
+# TODO: add `make add-logo-fill` again, when sealring is fixed upstream.
 build-top: ## Build the chip (LibreLane, copy reports/GDS/netlist/render, add logo & filler, render final GDS)
 	$(MAKE) librelane-nodrc
 	$(MAKE) copy-reports
 	$(MAKE) copy-gds
 	$(MAKE) copy-netlist
 	$(MAKE) copy-render
-	$(MAKE) add-logo-fill
+#	$(MAKE) add-logo-fill
 	$(MAKE) render-gds
 #	$(MAKE) librelane-openroad
 .PHONY: build-top
@@ -295,6 +297,29 @@ build-all: ## Build the bondpad, logos, macros and the chip top-level
 # 	$(MAKE) build-macros
 	$(MAKE) build-top
 .PHONY: build-all
+# ================================================================================================
+
+
+# DRC Targets
+klayout-drc-minimum: ## Run minimum pre-check KLayout DRC of the TOP cell with logo and filler
+	mkdir -p $(DRC_RPT_DIR)
+	sak-drc.sh -d -k -l precheck -w $(DRC_RPT_DIR) $(LAY_DIR)/$(TOP)_logo_fill.gds.gz
+.PHONY: klayout-drc-minimum
+
+klayout-drc-regular: ## Run regular KLayout DRC of the TOP cell with logo and filler
+	mkdir -p $(DRC_RPT_DIR)
+	sak-drc.sh -d -k -l regular -w $(DRC_RPT_DIR) $(LAY_DIR)/$(TOP)_logo_fill.gds.gz
+.PHONY: klayout-drc-regular
+
+klayout-drc: ## Run KLayout DRC of the CELL cell (usage: make klayout-drc [CELL=<cellname>] [DRC_LEVEL=<precheck|macro|regular>])
+	mkdir -p $(DRC_RPT_DIR)
+	sak-drc.sh -d -k -l $(DRC_LEVEL) -w $(DRC_RPT_DIR) $(LAY_DIR)/$(CELL).gds.gz
+.PHONY: klayout-drc
+
+magic-drc: ## Run Magic DRC of the CELL cell (usage: make magic-drc [CELL=<cellname>])
+	mkdir -p $(DRC_RPT_DIR)
+	sak-drc.sh -d -m -f "*" -w $(DRC_RPT_DIR) $(LAY_DIR)/$(CELL).gds.gz
+.PHONY: magic-drc
 # ================================================================================================
 
 
@@ -345,29 +370,6 @@ magic-lvs: ## Run Magic + Netgen LVS of the CELL cell (usage: make magic-lvs [CE
 # ================================================================================================
 
 
-# DRC Targets
-klayout-drc-minimum: ## Run minimum pre-check KLayout DRC of the TOP cell with logo and filler
-	mkdir -p $(DRC_RPT_DIR)
-	sak-drc.sh -d -k -l precheck -w $(DRC_RPT_DIR) $(LAY_DIR)/$(TOP)_logo_fill.gds.gz
-.PHONY: klayout-drc-minimum
-
-klayout-drc-regular: ## Run regular KLayout DRC of the TOP cell with logo and filler
-	mkdir -p $(DRC_RPT_DIR)
-	sak-drc.sh -d -k -l regular -w $(DRC_RPT_DIR) $(LAY_DIR)/$(TOP)_logo_fill.gds.gz
-.PHONY: klayout-drc-regular
-
-klayout-drc: ## Run KLayout DRC of the CELL cell (usage: make klayout-drc [CELL=<cellname>] [DRC_LEVEL=<precheck|macro|regular>])
-	mkdir -p $(DRC_RPT_DIR)
-	sak-drc.sh -d -k -l $(DRC_LEVEL) -w $(DRC_RPT_DIR) $(LAY_DIR)/$(CELL).gds.gz
-.PHONY: klayout-drc
-
-magic-drc: ## Run Magic DRC of the CELL cell (usage: make magic-drc [CELL=<cellname>])
-	mkdir -p $(DRC_RPT_DIR)
-	sak-drc.sh -d -m -f "*" -w $(DRC_RPT_DIR) $(LAY_DIR)/$(CELL).gds.gz
-.PHONY: magic-drc
-# ================================================================================================
-
-
 # PEX Targets
 klayout-pex: ## Run Parasitic Extraction with KPEX of the CELL cell (usage: make klayout-pex [CELL=<cellname>] [EXT_MODE=<1|2|3>])
 	mkdir -p $(NET_PEX_DIR)
@@ -398,6 +400,7 @@ klayout-pex: ## Run Parasitic Extraction with KPEX of the CELL cell (usage: make
 	else \
 		echo "No symbol $(XSCHEM_SCH_DIR)/$(CELL)_pex.sym found, skipping pin reorder."; \
 	fi
+	python3 $(SCRIPTS_DIR)/check_pex_ports.py $(NET_PEX_DIR)/$(CELL)_klayout_pex_$(EXT_MODE).spice
 .PHONY: klayout-pex
 
 magic-pex: ## Run Parasitic Extraction with Magic of the CELL cell (usage: make magic-pex [CELL=<cellname>] [EXT_MODE=<1|2|3>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>])
@@ -411,35 +414,35 @@ magic-pex: ## Run Parasitic Extraction with Magic of the CELL cell (usage: make 
 	else \
 		echo "No symbol $(XSCHEM_SCH_DIR)/$(CELL)_pex.sym found, skipping pin reorder."; \
 	fi
+	python3 $(SCRIPTS_DIR)/check_pex_ports.py $(NET_PEX_DIR)/$(CELL)_magic_pex_$(EXT_MODE).spice
 .PHONY: magic-pex
 # ================================================================================================
 
 
 # Verify Targets
 klayout-verify: ## Verify CELL cell with KLayout (usage: make klayout-verify [CELL=<cellname>])
-	$(MAKE) klayout-lvs CELL=$(CELL)
 	$(MAKE) klayout-drc CELL=$(CELL)
+	$(MAKE) klayout-lvs CELL=$(CELL)
 	$(MAKE) klayout-pex CELL=$(CELL)
 .PHONY: klayout-verify
 
 magic-verify: ## Verify CELL cell with Magic (usage: make magic-verify [CELL=<cellname>])
-	$(MAKE) magic-lvs CELL=$(CELL)
 	$(MAKE) magic-drc CELL=$(CELL)
+	$(MAKE) magic-lvs CELL=$(CELL)
 	$(MAKE) magic-pex CELL=$(CELL)
 .PHONY: magic-verify
 # ================================================================================================
 
 
 # Packaging Target
-bondplan: ## Generate the bondplan (die in package + bondwires + pin table) in packaging/ (usage: make bondplan VERSION=<version>)
+bondplan: ## Generate the bondplan (die in package + bondwires + pin table) in packaging/ (usage: make bondplan [VERSION=<version>])
 	cd $(PACKAGING_DIR) && python3 scripts/run_bondplan.py config.yaml VERSION=$(VERSION)
 .PHONY: bondplan
 # ================================================================================================
 
 
-# Simulate, Build and Verify All Target
-all: ## Simulate, build, verify and package the whole chip
-	$(MAKE) sim-all
+# Build, Verify, Simulate and Package All Target
+all: ## Build, verify, simulate and package the whole chip
 	$(MAKE) build-all
 	$(MAKE) magic-drc CELL=$(TOP)
 	$(MAKE) magic-drc CELL=$(TOP)_logo_fill
@@ -456,9 +459,8 @@ release: ## Copy the gds, netlist files and chip renders to the release folder (
 	mkdir -p $(RELEASE_DIR)/v.$(VERSION)/netlist
 	mkdir -p $(RELEASE_DIR)/v.$(VERSION)/img
 	cp -f $(LAY_DIR)/$(TOP)_logo_fill.gds.gz $(RELEASE_DIR)/v.$(VERSION)/gds/$(TOP)_logo_fill.gds.gz
-#	cp -r $(NET_SCH_DIR)/. $(RELEASE_DIR)/v.$(VERSION)/netlist/schematic
+	cp -r $(NET_SCH_DIR)/. $(RELEASE_DIR)/v.$(VERSION)/netlist/schematic
 	cp -r $(NET_LAY_DIR)/. $(RELEASE_DIR)/v.$(VERSION)/netlist/layout
-#	cp -r $(NET_PEX_DIR)/. $(RELEASE_DIR)/v.$(VERSION)/netlist/pex
 	cp -r $(NET_PNL_DIR)/. $(RELEASE_DIR)/v.$(VERSION)/netlist/pnl
 	cp -r $(NET_SPICE_DIR)/. $(RELEASE_DIR)/v.$(VERSION)/netlist/spice
 	cp -f $(RENDER_IMG_DIR)/$(TOP)_black.png $(RELEASE_DIR)/v.$(VERSION)/img/$(TOP)_black.png
@@ -478,11 +480,11 @@ release: ## Copy the gds, netlist files and chip renders to the release folder (
 NIGHTLY_REGRESSION ?= 0
 
 regression: ## Regression test target for IIC-OSIC-TOOLS (usage: make regression [NIGHTLY_REGRESSION=1])
-# 	Analog macro: iqmod (Xschem + CACE + LVS/DRC/PEX + build-top)
+# 	Analog macro: iqmod (Xschem + CACE + DRC/LVS/PEX + build-top)
 	$(MAKE) -C $(MACROS_DIR)/iqmod sim-xschem TB=iqmod_mfb_lpf_tb_ac_cl
-	# ONE CACE run: the lightweight AC VDD sweep (no Monte-Carlo) to keep runtime short.
+# 	ONE CACE run: the lightweight AC VDD sweep (no Monte-Carlo) to keep runtime short.
 	cd $(MACROS_DIR)/iqmod/verification/cace && cace iqmod_mfb_lpf.yaml -p ac_params && rm -rf _runs _docs netlist
-# 	KLayout & Magic LVS, DRC and PEX of the iqmod_top cell.
+# 	KLayout & Magic DRC, LVS and PEX of the iqmod_top cell.
 	$(MAKE) -C $(MACROS_DIR)/iqmod klayout-verify CELL=iqmod_top
 	$(MAKE) -C $(MACROS_DIR)/iqmod magic-verify CELL=iqmod_top
 	$(MAKE) -C $(MACROS_DIR)/iqmod build-top

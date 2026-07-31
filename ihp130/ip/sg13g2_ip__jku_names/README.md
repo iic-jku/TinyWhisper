@@ -4,13 +4,16 @@ A names IP block for [Johannes Kepler University Linz](https://www.jku.at/), ren
 
 ## Directory Structure
 
+<details>
+<summary>Show Directory Structure</summary>
+
 ```text
 📁 sg13g2_ip__jku_names/
 ├─ Makefile                         # Build automation
 ├─ 📁 logo/
 │  └─ jku_names.png                 # Source PNG image
 ├─ 📁 script/
-│  └─ make_gds.py                   # PNG-to-GDS converter
+│  └─ img2lay.py                    # PNG-to-GDS converter
 ├─ 📁 final/
 │  ├─ 📁 gds/
 │  │  └─ sg13g2_ip__jku_names.gds   # Generated GDSII layout
@@ -24,8 +27,17 @@ A names IP block for [Johannes Kepler University Linz](https://www.jku.at/), ren
    └─ 📁 drc/                       # DRC reports
 ```
 
+</details>
+
 
 ## Usage
+
+The default Make target is `help`, so running `make` prints usage and all available targets with short descriptions.
+
+```bash
+make
+make help
+```
 
 Build everything (clean, generate logo GDS, LEF, Liberty, Verilog stub, run DRC):
 
@@ -37,7 +49,7 @@ make all
 
 | Target        | Description                                              |
 |---------------|----------------------------------------------------------|
-| `logo`        | Convert PNG to GDSII using `make_gds.py`                 |
+| `logo`        | Convert PNG to GDSII using `img2lay.py`                  |
 | `lef`         | Generate LEF macro (CLASS BLOCK, OBS on `$(LAYER_NAME)`) |
 | `lib`         | Generate Liberty timing stub (empty cell)                |
 | `verilog`     | Generate Verilog blackbox stub (no ports)                |
@@ -56,7 +68,7 @@ The following Makefile variables can be overridden:
 | `PIXEL_SIZE`  | `0.25`   | Pixel size in µm (must be ≥ M5 min width of 0.21 µm to avoid DRC violations)          |
 | `LAYER`       | `Metal5` | Metal layer the logo is drawn on; one of `Metal1`..`Metal5`, `TopMetal1`, `TopMetal2` |
 
-Setting `LAYER` keeps the GDS artwork (`logo` target) and the LEF obstruction (`lef` target) consistent — the Makefile derives both `LAYER_NUM` (e.g. `67/0`) and `LAYER_NAME` (e.g. `Metal5`) from it.
+Setting `LAYER` keeps the GDS artwork (`logo` target) and the LEF obstruction (`lef` target) consistent. The Makefile derives both `LAYER_NUM` (e.g. `67/0`) and `LAYER_NAME` (e.g. `Metal5`) from it.
 
 ```sh
 make all LAYER=TopMetal1
@@ -67,7 +79,7 @@ The image scale factor is computed automatically.
 
 ## Logo Generator Script
 
-The `script/make_gds.py` script converts a PNG image into a GDSII layout:
+The `script/img2lay.py` script converts a PNG image into a GDSII layout:
 
 - Each dark pixel becomes a rectangle on the layer selected via `LAYER` (default `Metal5` → `67/0`)
 - Boundary layers 189/0 (`prBoundary`) and 160/0 (`NoMetFiller`) mark the block outline

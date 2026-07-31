@@ -17,8 +17,9 @@ from pathlib import Path
 
 # Plotting Configuration
 # ============================================
-# Enable interactive mode so plots do not block execution
-plt.ion()
+# Interactive mode stays off: the plt.show() at the end of main() then blocks in the GUI
+# event loop, which is what draws the windows in the first place. With plt.ion() the call
+# returns immediately and nothing pumps that loop afterwards, so no window ever appears.
 plt.close("all")
 
 # Use LaTeX if available, otherwise fallback gracefully
@@ -243,6 +244,4 @@ def main():
 if __name__ == '__main__':
     main()
 
-    # Keep plots open
-    input("\nPress Enter to close plots and exit...")
 # =========================================================================

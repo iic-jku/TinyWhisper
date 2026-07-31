@@ -83,10 +83,14 @@ _TB_EXT = $(if $(filter $(CELL),$(TOP)),sv,v)
 
 # Help Target
 help: ## Show this help message
-	@echo 'Usage: make [target]'
+	@echo 'Usage: make <target> [CELL=<cellname>] [WAVEFORM_VIEWER=<gtkwave|surfer>]'
 	@echo ''
 	@echo 'Available targets:'
 	@grep -E '^[a-zA-Z0-9_.-]+:.*## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  %-20s %s\n", $$1, $$2}'
+	@echo ''
+	@echo 'CELL defaults to $(TOP). Override to lint or simulate subcells.'
+	@echo 'WAVEFORM_VIEWER defaults to gtkwave. Use surfer to launch Surfer instead.'
+	@echo 'TB selects the Xschem testbench for sim-gl-xschem (default: <CELL>_tb_tran).'
 .PHONY: help
 # ================================================================================================
 
@@ -107,6 +111,9 @@ lint-verilog-all: ## Lint all Verilog source files (dsmod, cordic_iterative, lo_
 
 # Simulation Targets
 # The riscv testbenches are organized in per-cell subfolders: testbenches/verilog/<cell>/ and testbenches/cocotb/<cell>/.
+# Testbench for the Xschem simulation targets (default: <CELL>_tb_tran)
+# Override with: make <target> TB=<testbenchname>
+TB ?= $(CELL)_tb_tran
 sim-rtl-verilog: ## Run RTL simulation of CELL cell with Icarus Verilog (usage: make sim-rtl-verilog [CELL=<cellname>])
 	mkdir -p $(VERILOG_TB_DIR)/$(CELL)
 	iverilog -g2012 -DSIM -o $(VERILOG_TB_DIR)/$(CELL)/test_$(CELL) $(_SIM_SRCS) $(VERILOG_TB_DIR)/$(CELL)/$(CELL)_tb.$(_TB_EXT)
@@ -146,27 +153,23 @@ sim-view-cocotb: ## View CELL cell cocotb simulation waveforms (usage: make sim-
 	fi
 .PHONY: sim-view-cocotb
 
-# See macros/iqmod/Makefile: `xschem simulate` would launch an interactive
-# ngspice in a terminal, detached from make; ngspice -b blocks and reports its
-# exit status.
-sim-gl-xschem: ## Run gate-level simulation of CELL cell with Xschem (usage: make sim-gl-xschem [CELL=<cellname>])
-	cd $(XSCHEM_TB_DIR) && xschem -x -q --rcfile xschemrc --command ' \
+sim-gl-xschem: ## Run gate-level simulation of CELL cell with Xschem in batch mode (usage: make sim-gl-xschem [CELL=<cellname>] [TB=<testbenchname>])
+	mkdir -p $(XSCHEM_TB_DIR)/simulations
+	cd $(XSCHEM_TB_DIR) && xschem -r -x -q --rcfile xschemrc --command ' \
+		xschem set netlist_type spice; \
 		set netlist_dir $(abspath $(XSCHEM_TB_DIR)/simulations); \
 		xschem save; \
 		xschem netlist \
-	' $(CELL)_tb_tran.sch
-	cd $(XSCHEM_TB_DIR)/simulations && ngspice -b $(CELL)_tb_tran.spice
+	' $(TB).sch
+	cd $(XSCHEM_TB_DIR)/simulations && ngspice -b $(TB).spice
 .PHONY: sim-gl-xschem
 
 sim-all: ## Simulate the macro (RTL Verilog + RTL/GL cocotb + GL Xschem for riscv_top)
 	$(MAKE) sim-rtl-verilog CELL=dsmod
 	$(MAKE) sim-rtl-cocotb CELL=dsmod
 	$(MAKE) sim-rtl-verilog
-#	$(MAKE) sim-view-verilog
 	$(MAKE) sim-rtl-cocotb
-#	$(MAKE) sim-view-cocotb
 	$(MAKE) sim-gl-cocotb
-#	$(MAKE) sim-view-cocotb
 	$(MAKE) sim-gl-xschem
 .PHONY: sim-all
 # ================================================================================================
@@ -202,10 +205,10 @@ librelane-klayout: ## Open the last LibreLane run in KLayout
 # Copy Targets
 # TODO: The KLayout DRC report and the nom_slow_1p08V_125C corner are commented out because the riscv
 # LibreLane flow runs with Magic DRC only and the 1.08 V corner is disabled in flow/librelane/config.yaml.
-copy-reports: ## Copy yosys, antenna violations, hold & setup timing, DRC, LVS and manufacturability reports
+# Using * wildcard to ignore step numbers
+copy-reports: ## Copy yosys, antenna, STA, power, IR-drop, DRC, LVS and manufacturability reports from the last LibreLane run to verification/
 	rm -rf $(REPORT_DIR)/
 	mkdir -p $(REPORT_DIR)/
-	# Using * wildcard to ignore step numbers
 	cp $(LIBRELANE_DIR)/runs/${RUN_TAG}/*-yosys-synthesis/reports/pre_synth_chk.rpt $(REPORT_DIR)/yosys_synth_check.rpt
 	cp $(LIBRELANE_DIR)/runs/${RUN_TAG}/*-yosys-synthesis/reports/pre_techmap.rpt $(REPORT_DIR)/yosys_pre_techmap.rpt
 	cp $(LIBRELANE_DIR)/runs/${RUN_TAG}/*-yosys-synthesis/reports/post_dff.rpt $(REPORT_DIR)/yosys_post_dff.rpt
@@ -226,7 +229,8 @@ copy-reports: ## Copy yosys, antenna violations, hold & setup timing, DRC, LVS a
 .PHONY: copy-reports
 
 copy-final: ## Copy final output gds, lef, lib, nl, pnl, spef, and vh folders from the last LibreLane run to final/
-	rm -rf $(FINAL_DIR)/gds $(FINAL_DIR)/lef $(FINAL_DIR)/lib $(FINAL_DIR)/nl $(FINAL_DIR)/pnl $(FINAL_DIR)/spef $(FINAL_DIR)/vh
+	rm -rf $(FINAL_DIR)/
+	mkdir -p $(FINAL_DIR)/
 	cp -r $(FLOW_FINAL_DIR)/gds  $(FINAL_DIR)/gds
 	cp -r $(FLOW_FINAL_DIR)/lef  $(FINAL_DIR)/lef
 	cp -r $(FLOW_FINAL_DIR)/lib  $(FINAL_DIR)/lib
@@ -264,17 +268,29 @@ render-gds: ## Render an image from the final GDS using lay2img.py
 # ================================================================================================
 
 
+# Generate XSPICE Target
+# Runs as part of `build-top` (after `copy-netlist`) so the XSPICE model always matches the
+# netlists of the current LibreLane run. Can also be run standalone to regenerate the model.
+generate-xspice: ## Generate XSPICE model from the LibreLane-extracted SPICE netlist
+	mkdir -p $(XSPICE_DIR)
+	python3 $(SCRIPTS_DIR)/spi2xspice.py $(PDK_ROOT)/$(PDK)/libs.ref/sg13g2_stdcell/lib/sg13g2_stdcell_typ_1p50V_25C.lib -io_time=500p -time=50p -idelay=5p -odelay=50p -cload=250f $(NET_SPICE_DIR)/${TOP}.spice $(XSPICE_DIR)/${TOP}.xspice
+	sak-pin-reorder.py $(XSCHEM_SCH_DIR)/${TOP}.sym $(XSPICE_DIR)/${TOP}.xspice --format xspice
+.PHONY: generate-xspice
+# ================================================================================================
+
+
 # Build Targets
 build-fpga: ## Build target for FPGA usage
 	@$(MAKE) -C fpga all
 .PHONY: build-fpga
 
 # TODO: `make librelane-magicdrc` is used instead of `make librelane` until the KLayout DRC issues are resolved.
-build-top: ## Build macro (run LibreLane with only Magic DRC checks, copy reports, copy final files, copy netlists, copy render, and render final GDS)
+build-top: ## Build macro (run LibreLane with only Magic DRC checks, copy reports, copy final files, copy netlists, generate XSPICE model, copy render, and render final GDS)
 	$(MAKE) librelane-magicdrc
 	$(MAKE) copy-reports
 	$(MAKE) copy-final
 	$(MAKE) copy-netlist
+	$(MAKE) generate-xspice
 	$(MAKE) copy-render
 	$(MAKE) render-gds
 #	$(MAKE) librelane-openroad
@@ -282,25 +298,17 @@ build-top: ## Build macro (run LibreLane with only Magic DRC checks, copy report
 # ================================================================================================
 
 
-# LVS & DRC Verification Targets
-# The LibreLane flow already includes LVS and DRC checks with Magic and KLayout, and they are saved in the verification/ folder.
+# DRC & LVS Verification Targets
+# The LibreLane flow already includes DRC and LVS checks with Magic and KLayout, and they are saved in the verification/ folder.
 # ================================================================================================
 
 
-# Simulate, Build and Verify All Target
-all: ## Simulate, build and verify the macro
+# Lint, Build, Verify and Simulate All Target
+all: ## Lint, build, verify and simulate the macro
 	$(MAKE) lint-verilog-all
-	$(MAKE) sim-all
 #	$(MAKE) build-fpga
 	$(MAKE) build-top
+	$(MAKE) sim-all
 .PHONY: all
 # ================================================================================================
 
-
-# Generate XSPICE Target
-generate-xspice: ## Generate XSPICE model from the LibreLane-extracted SPICE netlist
-	mkdir -p $(XSPICE_DIR)
-	python3 $(SCRIPTS_DIR)/spi2xspice.py $(PDK_ROOT)/$(PDK)/libs.ref/sg13g2_stdcell/lib/sg13g2_stdcell_typ_1p50V_25C.lib -io_time=500p -time=50p -idelay=5p -odelay=50p -cload=250f $(NET_SPICE_DIR)/${TOP}.spice $(XSPICE_DIR)/${TOP}.xspice
-	sak-pin-reorder.py $(XSCHEM_SCH_DIR)/${TOP}.sym $(XSPICE_DIR)/${TOP}.xspice --format xspice
-.PHONY: generate-xspice
-# ================================================================================================

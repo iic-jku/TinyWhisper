@@ -111,7 +111,7 @@ print Zindc_dm
 unset appendwrite
 set wr_vecnames
 set wr_singlescale
-wrdata $PROJECT_PATH/scripts/plot_simulations/data/iqmod_mfb_lpf_tb_Zin_dm.txt v(Zin_dm)
+wrdata ../plot_simulations/data/iqmod_mfb_lpf_tb_Zin_dm.txt v(Zin_dm)
 
 *quit
 .endc

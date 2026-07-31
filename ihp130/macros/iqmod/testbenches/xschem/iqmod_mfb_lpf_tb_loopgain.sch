@@ -268,7 +268,7 @@ plot Tmb_im vs Tmb_re retraceplot title 'Nyquist Plot (Middlebrook)' ylabel 'Ima
 unset appendwrite
 set wr_vecnames
 set wr_singlescale
-wrdata $PROJECT_PATH/scripts/plot_simulations/data/iqmod_mfb_lpf_tb_loopgain.txt v(Tmb_dB) v(Tmb_arg) 
+wrdata ../plot_simulations/data/iqmod_mfb_lpf_tb_loopgain.txt v(Tmb_dB) v(Tmb_arg) 
 * ===================================================
 
 *quit

@@ -417,7 +417,7 @@ plot voutp voutn vout analog_en
 unset appendwrite
 set wr_vecnames
 set wr_singlescale
-wrdata $PROJECT_PATH/scripts/plot_simulations/data/iqmod_mfb_lpf_riscv_tb_tran.txt v(vinp) v(vinn) v(voutp) v(voutn) v(vout)
+wrdata ../plot_simulations/data/iqmod_mfb_lpf_riscv_tb_tran.txt v(vinp) v(vinn) v(voutp) v(voutn) v(vout)
 
 * FFT vout
 setplot tran1
@@ -442,7 +442,7 @@ setscale freq
 unset appendwrite
 set wr_vecnames
 set wr_singlescale
-wrdata $PROJECT_PATH/scripts/plot_simulations/data/iqmod_mfb_lpf_riscv_tb_tran_fft.txt v(vout_spec_db)
+wrdata ../plot_simulations/data/iqmod_mfb_lpf_riscv_tb_tran_fft.txt v(vout_spec_db)
 
 
 *quit

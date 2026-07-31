@@ -346,7 +346,7 @@ echo efficiency = $&efficiency %
 unset appendwrite
 set wr_vecnames
 set wr_singlescale
-wrdata $PROJECT_PATH/scripts/plot_simulations/data/iqmod_top_tb_tran.txt v(vinp_Q) v(vinn_Q) v(vinp_I) v(vinn_I) v(LO_I) v(LO_IX) v(LO_Q) v(LO_QX) v(vout_RF) v(vout_RF_filt)
+wrdata ../plot_simulations/data/iqmod_top_tb_tran.txt v(vinp_Q) v(vinn_Q) v(vinp_I) v(vinn_I) v(LO_I) v(LO_IX) v(LO_Q) v(LO_QX) v(vout_RF) v(vout_RF_filt)
 
 * FFT vout_RF
 * setplot tran1
@@ -371,7 +371,7 @@ wrdata $PROJECT_PATH/scripts/plot_simulations/data/iqmod_top_tb_tran.txt v(vinp_
 * unset appendwrite
 * set wr_vecnames
 * set wr_singlescale
-* wrdata $PROJECT_PATH/scripts/plot_simulations/data/iqmod_tb_tran_fft.txt v(vout_RF_spec_db)
+* wrdata ../plot_simulations/data/iqmod_tb_tran_fft.txt v(vout_RF_spec_db)
 
 * FFT vout_RF_filt
 setplot tran1
@@ -396,7 +396,7 @@ setscale freq
 unset appendwrite
 set wr_vecnames
 set wr_singlescale
-wrdata $PROJECT_PATH/scripts/plot_simulations/data/iqmod_tb_tran_fft_filt.txt v(vout_RF_filt_spec_db)
+wrdata ../plot_simulations/data/iqmod_tb_tran_fft_filt.txt v(vout_RF_filt_spec_db)
 
 * Calc HD2, HD3
 * let sig_idx = ceil(const.f_sig/fres)

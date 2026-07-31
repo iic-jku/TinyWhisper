@@ -30,7 +30,7 @@ Related documents:
 | Clock frequency     | ~56 MHz (`CLOCK_PERIOD: 17` ns in [config.yaml](../flow/librelane/config.yaml))                    |
 | Core supply         | 1.5 V                                                                                              |
 | I/O supply          | 3.3 V                                                                                              |
-| Total bondpads      | 56 (14 per side) — see [pinout.md](pinout.md)                                                      |
+| Total bondpads      | 56 (14 per side), see [pinout.md](pinout.md)                                                      |
 | Packaging           | QFN-48 (`OP_QFN48_A4_FIT`, see [packaging/](../packaging/))                                        |
 | Temperature range   | -40 °C to +125 °C                                                                                  |
 | STA corners         | nom_fast_1p32V_m40C · nom_fast_1p65V_m40C · nom_slow_1p35V_125C · nom_typ_1p20V_25C · nom_typ_1p50V_25C |

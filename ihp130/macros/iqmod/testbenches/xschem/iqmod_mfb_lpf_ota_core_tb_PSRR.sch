@@ -118,7 +118,7 @@ print PSRRndc_dB
 unset appendwrite
 set wr_vecnames
 set wr_singlescale
-wrdata $PROJECT_PATH/scripts/plot_simulations/data/iqmod_mfb_lpf_ota_core_tb_PSRR.txt v(PSRR_dB)
+wrdata ../plot_simulations/data/iqmod_mfb_lpf_ota_core_tb_PSRR.txt v(PSRR_dB)
 
 *quit
 .endc

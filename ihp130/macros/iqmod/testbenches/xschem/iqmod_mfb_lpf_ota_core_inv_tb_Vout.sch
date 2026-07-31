@@ -106,7 +106,7 @@ print Vgsp_at_Vcm
 unset appendwrite
 set wr_vecnames
 set wr_singlescale
-wrdata $PROJECT_PATH/scripts/plot_simulations/data/iqmod_mfb_lpf_ota_core_inv_tb_Vout.txt v(vin) v(vout)
+wrdata ../plot_simulations/data/iqmod_mfb_lpf_ota_core_inv_tb_Vout.txt v(vin) v(vout)
 
 *quit
 .endc

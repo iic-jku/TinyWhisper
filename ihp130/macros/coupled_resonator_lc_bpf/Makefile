@@ -25,11 +25,10 @@ help: ## Show this help message
 # Testbench name for sim-xschem target (required: make sim-xschem TB=<testbenchname>)
 TB ?= $(error TB is not set. Usage: make sim-xschem TB=<testbenchname>)
 
-# See macros/iqmod/Makefile: `xschem simulate` would launch an interactive
-# ngspice in a terminal, detached from make; ngspice -b blocks and reports its
-# exit status.
-sim-xschem: ## Run TB simulation with Xschem (usage: make sim-xschem TB=<testbenchname>)
-	cd $(XSCHEM_TB_DIR) && xschem -x -q --rcfile xschemrc --command ' \
+sim-xschem: ## Run TB simulation with Xschem in batch mode (usage: make sim-xschem TB=<testbenchname>)
+	mkdir -p $(XSCHEM_TB_DIR)/simulations
+	cd $(XSCHEM_TB_DIR) && xschem -r -x -q --rcfile xschemrc --command ' \
+		xschem set netlist_type spice; \
 		set netlist_dir $(abspath $(XSCHEM_TB_DIR)/simulations); \
 		xschem save; \
 		xschem netlist \

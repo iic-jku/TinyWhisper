@@ -103,7 +103,7 @@ set wr_singlescale
 set wr_vecnames
 let Ileak_w_dummy = dc1.Ileak_w_dummy
 unset appendwrite
-wrdata $PROJECT_PATH/scripts/plot_simulations/data/iqmod_mixer_tg_tb_dc_Ileak.txt v(Ileak_w_dummy) 
+wrdata ../plot_simulations/data/iqmod_mixer_tg_tb_dc_Ileak.txt v(Ileak_w_dummy) 
 
 *quit
 .endc"}

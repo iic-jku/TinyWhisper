@@ -116,7 +116,7 @@ plot r_w_dummy_on xlabel 'Vin in V' ylabel 'Ron with Dummy in Ohm'
 unset appendwrite
 set wr_singlescale
 set wr_vecnames
-wrdata $PROJECT_PATH/scripts/plot_simulations/data/iqmod_mixer_tg_tb_dc_Ron.txt v(r_w_dummy_on)
+wrdata ../plot_simulations/data/iqmod_mixer_tg_tb_dc_Ron.txt v(r_w_dummy_on)
 
 *quit
 .endc"}

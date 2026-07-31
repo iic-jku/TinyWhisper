@@ -11,6 +11,9 @@
 
 ## Directory Structure
 
+<details>
+<summary>Show Directory Structure</summary>
+
 ```text
 📁 iqmod/
 ├─ 📁 final/
@@ -77,6 +80,7 @@
 │     ├─ iqmod_top_pex.sym
 │     └─ xschemrc
 ├─ 📁 scripts/
+│  ├─ check_pex_ports.py
 │  ├─ 📁 filter_designer/
 │  │  ├─ 📁 figures/
 │  │  ├─ 3rd_order_mfb_lpf_designer.mcdx
@@ -134,8 +138,12 @@
 └─ README.md
 ```
 
+</details>
 
-## Show Available Targets
+
+## Makefile Targets
+
+### Show Available Targets
 
 The default Make target is `help`, so running `make` prints usage and all available targets with short descriptions.
 
@@ -153,7 +161,7 @@ make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [THRESHOLD=<mOhm>] [MINRES=<m
 ```
 
 
-## Layout File Extension Usage
+### Layout File Extension Usage
 
 The Makefile defines a `_GDS_EXT` variable that auto-selects the layout file extension: it prefers `.gds` when available, and falls back to `.klay.gds` otherwise.
 
@@ -168,9 +176,15 @@ The Makefile defines a `_GDS_EXT` variable that auto-selects the layout file ext
   - `render-gds`
 
 
-## Run Xschem Testbench Simulation
+### Run Xschem Testbench Simulation
 
-Runs a single Xschem testbench in batch mode (no display): saves the schematic, exports the netlist to `testbenches/xschem/simulations/`, and runs the simulator. The testbench name **must** be specified via the `TB` variable:
+Runs a single Xschem testbench in batch mode (no display): saves the schematic, exports the netlist to `testbenches/xschem/simulations/`, and runs the simulator.
+
+The target netlists the testbench with `xschem netlist` and then invokes `ngspice -b` directly instead of using `xschem simulate`. `xschem simulate` would spawn an interactive ngspice in a terminal detached from `make`: the target would return immediately, the result would never be checked, and the process (with its X server) would leak. Running the simulator directly makes `make` block until the run finishes and see its exit status.
+
+Because the run is headless, the `plot` commands in a testbench's `.control` block are a no-op and no plot windows appear. Every testbench instead exports its results with `wrdata` to `testbenches/xschem/plot_simulations/data/`, from where they are plotted with `sim-view-xschem`.
+
+The testbench name **must** be specified via the `TB` variable:
 
 ```sh
 make sim-xschem TB=<testbenchname>
@@ -190,26 +204,28 @@ make sim-xschem TB=iqmod_mixer_tb_tran
 All available testbench schematics are located in `testbenches/xschem/`. Generated netlists are written to `testbenches/xschem/simulations/`.
 
 
-## Plot Xschem Simulation Results
+### Plot Xschem Simulation Results
 
-Plots simulation results using a macro-specific plotting script in `scripts/plot_simulations/`:
+Plots simulation results using a macro-specific plotting script in `testbenches/xschem/plot_simulations/`, selected by `SCRIPT` (given without the `.py` extension):
 
 ```sh
-make sim-view-xschem CELL=<cellname>
+make sim-view-xschem SCRIPT=<scriptname>
 ```
+
+The target runs `SHOW_PLOTS=1 python3 testbenches/xschem/plot_simulations/<SCRIPT>.py`. Every script writes its figures to `testbenches/xschem/plot_simulations/figures/`. Run through `sim-view-xschem`, the plot windows additionally open when a display is available (i.e. the container's X/VNC session). Headless, only the figures are written.
 
 For example:
 
 ```sh
-make sim-view-xschem CELL=iqmod_mfb_lpf
+make sim-view-xschem SCRIPT=plot_iqmod_mfb_lpf
 ```
 
 
-## CACE Simulations
+### CACE Simulations
 
 Runs [CACE](https://github.com/fossi-foundation/cace) characterization simulations for the LPF and OTA core, collecting result plots into `verification/cace/results/`. Each CACE YAML
-- `iqmod_mfb_lpf.yaml` — characterization of the 3rd-order MFB low-pass filter
-- `iqmod_mfb_lpf_ota_core.yaml` — characterization of the inverter-based OTA core
+- `iqmod_mfb_lpf.yaml`: characterization of the 3rd-order MFB low-pass filter
+- `iqmod_mfb_lpf_ota_core.yaml`: characterization of the inverter-based OTA core
 is invoked with its AC parameter sets (`ac_mm_params`, `ac_mc_params`, and `ac_params`), the generated plots are copied, and temporary run artifacts are cleaned up:
 
 ```sh
@@ -217,11 +233,11 @@ make sim-cace
 ```
 
 Result plots are saved to:
-- `verification/cace/results/iqmod_mfb_lpf/` — closed-loop gain, CMRR, and unity-gain frequency plots
-- `verification/cace/results/iqmod_mfb_lpf_ota_core/` — open-loop gain, CMRR, and unity-gain frequency plots
+- `verification/cace/results/iqmod_mfb_lpf/`: closed-loop gain, CMRR, and unity-gain frequency plots
+- `verification/cace/results/iqmod_mfb_lpf_ota_core/`: open-loop gain, CMRR, and unity-gain frequency plots
 
 
-## Simulate All
+### Simulate All
 
 Runs the complete simulation flow in sequence:
 - Xschem simulations for:
@@ -244,7 +260,7 @@ Run with:
 make sim-all
 ```
 
-## Build Top Cell
+### Build Top Cell
 
 Builds the top-level cell deliverables in sequence: LEF export, LIB generation, Verilog stub generation, GDS copy, and layout image rendering:
 
@@ -253,7 +269,7 @@ make build-top
 ```
 
 
-## Export LEF
+### Export LEF
 
 Exports a LEF file (`final/lef/<TOP>.lef`) from the top-level layout GDS in `layout/` using Magic with the `-hide` option:
 
@@ -262,7 +278,7 @@ make lef
 ```
 
 
-## Liberty Timing Library
+### Liberty Timing Library
 
 Generates a Liberty timing library stub (`final/lib/<TOP>.lib`) with default threshold settings for the top-level cell:
 
@@ -271,7 +287,7 @@ make lib
 ```
 
 
-## Verilog Stub
+### Verilog Stub
 
 Generates a Verilog stub (`final/vh/<TOP>.v`) for top-level integration into the LibreLane flow by parsing pins from the Magic PEX netlist (`netlist/pex/<TOP>_magic_pex.spice`).
 
@@ -286,7 +302,7 @@ make verilog
 ```
 
 
-## Copy GDS
+### Copy GDS
 
 Copies the top-level GDS from `layout/` to `final/gds/`:
 
@@ -295,62 +311,16 @@ make copy-gds
 ```
 
 
-## Render Layout Image
+### Render Layout Image
 
-Renders the top-level layout GDS using `lay2img.py` and saves the image to `render/img/`:
+Renders the top-level layout GDS with `scripts/lay2img.py` and saves the two images `iqmod_top_black.png` and `iqmod_top_white.png` in `render/img/`:
 
 ```sh
 make render-gds
 ```
 
 
-## Export Schematic Netlist for LVS
-
-Exports the schematic netlist for LVS from Xschem and places it in `netlist/schematic/`.
-
-The `EV_PRECISION` parameter sets the number of significant digits used by Xschem's `ev` function when calculating device properties (default: 5). Increase this to avoid LVS mismatches caused by floating-point rounding differences between Xschem and KLayout (see [xschem#465](https://github.com/StefanSchippers/xschem/issues/465)).
-
-The `ntap` and `ptap` substrate contacts are ignored during LVS in both flows. `sak-lvs.sh` runs KLayout LVS with the `--disable_tap_extraction` option so it does not extract `ntap` and `ptap` devices from the layout (matching Magic + Netgen LVS). The iqmod schematics contain no `ntap`/`ptap` devices and no `nwell`/`psub` pins: the well and substrate nets are shorted directly to `VDD` and `VSS`, matching the tap-less extraction.
-
-KLayout uses CDL netlists, while Magic uses SPICE netlists. Accordingly, `klayout-lvs-netlist` uses the Xschem commands `set spiceprefix 1`, `set lvs_netlist 1`, `set top_is_subckt 1`, and `set lvs_ignore 1`, while `magic-lvs-netlist` uses `set spiceprefix 1`, `set lvs_netlist 0`, `set top_is_subckt 1`, and `set lvs_ignore 1`. Hence, switching between CDL and SPICE netlists can be done with `lvs_netlist`.
-
-To extract a CDL schematic netlist for KLayout LVS, use:
-```sh
-make klayout-lvs-netlist
-make klayout-lvs-netlist CELL=iqmod_top
-make klayout-lvs-netlist EV_PRECISION=5
-```
-
-To extract a SPICE schematic netlist for Magic + Netgen LVS, use:
-```sh
-make magic-lvs-netlist
-make magic-lvs-netlist CELL=iqmod_top
-make magic-lvs-netlist EV_PRECISION=5
-```
-
-
-## Layout Versus Schematic (LVS)
-
-Exports the schematic netlist from Xschem, then runs LVS. Compares the layout in `layout/` against the schematic netlist in `netlist/schematic/`. Both `klayout-lvs` and `magic-lvs` use `layout/<CELL>.$(_GDS_EXT)` (`.gds` if present, otherwise `.klay.gds`).
-
-Both flows use `sak-lvs.sh` and write their reports into per-cell run folders: `verification/lvs/<CELL>.magic.lvs/` (Magic + Netgen) and `verification/lvs/<CELL>.klayout.lvs/` (KLayout, `.lvsdb`). The run folders are wiped at the start of each run, so they always reflect the latest run only. The extracted layout netlist is moved to `netlist/layout/`.
-
-**KLayout LVS** uses `sak-lvs.sh` (KLayout mode `-k`), which wraps `run_lvs.py` from the IHP Open-PDK:
-
-```sh
-make klayout-lvs
-make klayout-lvs CELL=iqmod_top
-```
-
-**Magic + Netgen LVS** uses `sak-lvs.sh` (Magic + Netgen mode `-m`, the default), which extracts the layout netlist with Magic and compares it against the schematic netlist with Netgen, using the Netgen setup from the IHP Open-PDK:
-
-```sh
-make magic-lvs
-make magic-lvs CELL=iqmod_top
-```
-
-
-## Design Rule Check (DRC)
+### Design Rule Check (DRC)
 
 Runs DRC on the layout in `layout/`. Both `klayout-drc` and `magic-drc` use `layout/<CELL>.$(_GDS_EXT)` (`.gds` if present, otherwise `.klay.gds`).
 
@@ -378,7 +348,53 @@ make magic-drc CELL=iqmod_top
 ```
 
 
-## Parasitic Extraction (PEX)
+### Export Schematic Netlist for LVS
+
+Exports the schematic netlist for LVS from Xschem and places it in `netlist/schematic/`.
+
+The `EV_PRECISION` parameter sets the number of significant digits used by Xschem's `ev` function when calculating device properties (default: 5). Increase this to avoid LVS mismatches caused by floating-point rounding differences between Xschem and KLayout (see [xschem#465](https://github.com/StefanSchippers/xschem/issues/465)).
+
+The `ntap` and `ptap` substrate contacts are ignored during LVS in both flows. `sak-lvs.sh` runs KLayout LVS with the `--disable_tap_extraction` option so it does not extract `ntap` and `ptap` devices from the layout (matching Magic + Netgen LVS). The iqmod schematics contain no `ntap`/`ptap` devices and no `nwell`/`psub` pins: the well and substrate nets are shorted directly to `VDD` and `VSS`, matching the tap-less extraction.
+
+KLayout uses CDL netlists, while Magic uses SPICE netlists. Accordingly, `klayout-lvs-netlist` uses the Xschem commands `set spiceprefix 1`, `set lvs_netlist 1`, `set top_is_subckt 1`, and `set lvs_ignore 1`, while `magic-lvs-netlist` uses `set spiceprefix 1`, `set lvs_netlist 0`, `set top_is_subckt 1`, and `set lvs_ignore 1`. Hence, switching between CDL and SPICE netlists can be done with `lvs_netlist`.
+
+To extract a CDL schematic netlist for KLayout LVS, use:
+```sh
+make klayout-lvs-netlist
+make klayout-lvs-netlist CELL=iqmod_top
+make klayout-lvs-netlist EV_PRECISION=5
+```
+
+To extract a SPICE schematic netlist for Magic + Netgen LVS, use:
+```sh
+make magic-lvs-netlist
+make magic-lvs-netlist CELL=iqmod_top
+make magic-lvs-netlist EV_PRECISION=5
+```
+
+
+### Layout Versus Schematic (LVS)
+
+Exports the schematic netlist from Xschem, then runs LVS. Compares the layout in `layout/` against the schematic netlist in `netlist/schematic/`. Both `klayout-lvs` and `magic-lvs` use `layout/<CELL>.$(_GDS_EXT)` (`.gds` if present, otherwise `.klay.gds`).
+
+Both flows use `sak-lvs.sh` and write their reports into per-cell run folders: `verification/lvs/<CELL>.magic.lvs/` (Magic + Netgen) and `verification/lvs/<CELL>.klayout.lvs/` (KLayout, `.lvsdb`). The run folders are wiped at the start of each run, so they always reflect the latest run only. The extracted layout netlist is moved to `netlist/layout/`.
+
+**KLayout LVS** uses `sak-lvs.sh` (KLayout mode `-k`), which wraps `run_lvs.py` from the IHP Open-PDK:
+
+```sh
+make klayout-lvs
+make klayout-lvs CELL=iqmod_top
+```
+
+**Magic + Netgen LVS** uses `sak-lvs.sh` (Magic + Netgen mode `-m`, the default), which extracts the layout netlist with Magic and compares it against the schematic netlist with Netgen, using the Netgen setup from the IHP Open-PDK:
+
+```sh
+make magic-lvs
+make magic-lvs CELL=iqmod_top
+```
+
+
+### Parasitic Extraction (PEX)
 
 Runs parasitic extraction on the layout in `layout/`. The extracted SPICE netlist is written to `netlist/pex/`. Both `klayout-pex` and `magic-pex` use `layout/<CELL>.$(_GDS_EXT)` (`.gds` if present, otherwise `.klay.gds`).
 
@@ -393,9 +409,21 @@ The `EXT_MODE` parameter selects the extraction mode:
 
 > **Note:** For `klayout-pex`, `EXT_MODE=1` (C-decoupled) is not yet supported by kpex and automatically falls back to `EXT_MODE=2` (CC) with a warning.
 
-The `.subckt` name in the extracted SPICE file is `<CELL>_pex`: `magic-pex` sets it directly via the `sak-pex.sh` option `-n <CELL>_pex`, while for `klayout-pex` it is automatically renamed from `<CELL>_flat` (kpex).
+The `.subckt` name in the extracted SPICE file is `<CELL>_pex`: `magic-pex` sets it directly via the `sak-pex.sh` option `-n <CELL>_pex`, while for `klayout-pex` it is automatically renamed from `<CELL>` (kpex).
 
 If a matching Xschem symbol (`schematic/xschem/<CELL>_pex.sym`) exists, the `.subckt` pin order in the extracted SPICE file is automatically reordered with `sak-pin-reorder.py` (installed in the IIC-OSIC-TOOLS container) to match the symbol's pin positions. This ensures the PEX netlist can be used directly with the corresponding Xschem symbol for simulation regardless of the selected `EXT_MODE`.
+
+Both targets finish by running [`scripts/check_pex_ports.py`](scripts/check_pex_ports.py) on the netlist they just wrote. It verifies that every pin of the `.subckt` really reaches the circuit, and fails the target otherwise. Two cases are caught:
+
+- A port that is declared in the `.subckt` line but referenced by no element at all. Whatever is wired to that pin from outside is then left floating.
+- A port whose net was split into `<port>.t<n>` and `<port>.n<n>` fragments by `extresist` (`EXT_MODE=3`), where none of the fragments is connected back to the port. The pin is then dangling even though the fragments themselves are wired up.
+
+Both produce a netlist that ngspice reads without a single warning while the cell behaves completely differently in simulation, so the check is worth the two seconds it costs. It can also be run by hand on any SPICE netlist:
+
+```sh
+python3 scripts/check_pex_ports.py netlist/pex/iqmod_top_pex.spice
+python3 scripts/check_pex_ports.py -v netlist/pex/*.spice     # -v also prints the size of each subcircuit
+```
 
 **KLayout PEX** uses `kpex` with the Magic extraction engine currently (2.5D engine is work in progress):
 
@@ -413,20 +441,24 @@ make magic-pex CELL=iqmod_top
 make magic-pex CELL=iqmod_top EXT_MODE=3
 ```
 
-For full-RC extraction (`EXT_MODE=3`), `magic-pex` additionally exposes the `sak-pex.sh` `extresist` tuning parameters. They are ignored in `EXT_MODE=1`/`2`:
+For full-RC extraction (`EXT_MODE=3`), `magic-pex` additionally exposes the three `extresist` tuning parameters of `sak-pex.sh`. They are ignored in `EXT_MODE=1`/`2`.
 
-- `THRESHOLD` - extresist threshold in mOhm (`-t`, default `10000` = 10 Ohm)
-- `MINRES` - extresist minimum resistance in mOhm (`-r`, default `1000` = 1 Ohm)
-- `MINDELAY` - extresist minimum delay in ps (`-y`, default `1`; `0` = gate by resistance)
+A full-RC extraction models every wire as a resistor network, and most of those wires are so short that their resistance does not matter. The three parameters are the filters Magic applies to keep only the part of the network that is worth having. They run in this order:
+
+1. **`THRESHOLD`** (`-t`, in mOhm, default `10000` = 10 Ohm) decides **which nets are extracted at all**. Before doing any real work, Magic makes a quick end-to-end resistance guess for every net. The guess is deliberately pessimistic, it is an absolute worst case. Nets that stay below `THRESHOLD` even in that worst case cannot matter, so they are treated as ideal wires and skipped. This is the cheap first pass that removes the many short, low-resistance nets.
+2. **`MINDELAY`** (`-y`, in ps, default `1`) decides **which of the extracted nets are kept**. Because the guess above overestimates, Magic re-checks each net once it has been properly extracted and discards its resistor network again if the RC delay it adds stays below `MINDELAY`. Setting `MINDELAY=0` switches the delay criterion off and applies `THRESHOLD` a second time instead, now against the accurately extracted resistance rather than the initial guess.
+3. **`MINRES`** (`-r`, in mOhm, default `1000` = 1 Ohm) decides **how detailed the kept networks are**. Inside a net, neighbouring resistors below `MINRES` are merged as far as possible, which shrinks the network without changing its overall resistance much.
+
+In short: `THRESHOLD` and `MINDELAY` control *how many* nets carry parasitic resistance, `MINRES` controls *how finely* each of them is modelled. Raising all three gives a smaller netlist that simulates faster with less detail, lowering them gives a more accurate but considerably larger one.
 
 ```sh
 make magic-pex CELL=iqmod_top EXT_MODE=3 THRESHOLD=5000 MINRES=500 MINDELAY=2
 ```
 
 
-## Verify with KLayout
+### Verify with KLayout
 
-**Verify a single cell** by running LVS, DRC, and PEX in sequence:
+**Verify a single cell** by running DRC, LVS, and PEX in sequence:
 
 ```sh
 make klayout-verify
@@ -440,9 +472,9 @@ make klayout-verify-all
 ```
 
 
-## Verify with Magic
+### Verify with Magic
 
-**Verify a single cell** by running LVS, DRC, and PEX in sequence:
+**Verify a single cell** by running DRC, LVS, and PEX in sequence:
 
 ```sh
 make magic-verify
@@ -456,10 +488,12 @@ make magic-verify-all
 ```
 
 
-## Build All
+### Verify, Build and Simulate All
 
-Runs the full flow in sequence: simulations, top-level build deliverables, and all verification steps (`sim-all`, `build-top`, `klayout-verify-all`, `magic-verify-all`):
+Runs the full flow in sequence: KLayout verification, Magic verification, top-level build deliverables, and simulations (`klayout-verify-all`, `magic-verify-all`, `build-top`, `sim-all`):
 
 ```sh
 make all
 ```
+
+Verification runs first because DRC/LVS/PEX produce the fresh, pin-reordered PEX netlists from the current layout. The build follows, since the Verilog stub reads its pins from a PEX netlist. The simulations run **last**, so the testbenches include the PEX netlists produced by this run, not by a previous one.

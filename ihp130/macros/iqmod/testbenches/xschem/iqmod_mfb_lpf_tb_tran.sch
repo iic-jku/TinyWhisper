@@ -286,7 +286,7 @@ plot vinp vinn x4.vinp_stage1 x4.vinn_stage1 x4.vinp_stage2 x4.vinn_stage2 voutp
 unset appendwrite
 set wr_vecnames
 set wr_singlescale
-wrdata $PROJECT_PATH/scripts/plot_simulations/data/iqmod_mfb_lpf_tb_tran.txt v(vin) v(vinp) v(vinn) v(voutp) v(voutn) v(vout)
+wrdata ../plot_simulations/data/iqmod_mfb_lpf_tb_tran.txt v(vin) v(vinp) v(vinn) v(voutp) v(voutn) v(vout)
 
 * FFT vout
 setplot tran1
@@ -311,7 +311,7 @@ setscale freq
 unset appendwrite
 set wr_vecnames
 set wr_singlescale
-wrdata $PROJECT_PATH/scripts/plot_simulations/data/iqmod_mfb_lpf_tb_tran_fft.txt v(vout_spec_db)
+wrdata ../plot_simulations/data/iqmod_mfb_lpf_tb_tran_fft.txt v(vout_spec_db)
 
 
 *quit

@@ -38,24 +38,15 @@ EV_PRECISION ?= 5
 
 # Preferred GDS extension: use .gds when available for the CELL, otherwise .klay.gds
 # Resolved per CELL (CELL defaults to TOP), so cells can mix .gds and .klay.gds within one macro.
-# All LVS, DRC and PEX targets (KLayout and Magic) work with either .gds or .klay.gds.
+# All DRC, LVS and PEX targets (KLayout and Magic) work with either .gds or .klay.gds.
 _GDS_EXT = $(if $(wildcard $(LAY_DIR)/$(CELL).gds),gds,klay.gds)
-
-# The testbenches write their measurement data to $PROJECT_PATH/scripts/... .
-# PROJECT_PATH normally comes from .designinit, which is only sourced when the
-# design is opened interactively in the container -- a plain `make` (CI, or any
-# checkout outside $DESIGNS) leaves it empty, and ngspice then fails the wrdata
-# line with "PROJECT_PATH: no such variable". Default it to this macro, which is
-# what .designinit points it at, and let an existing value win.
-PROJECT_PATH ?= $(CURDIR)
-export PROJECT_PATH
 
 # Folder structure
 XSCHEM_SCH_DIR  := schematic/xschem
 XSCHEM_TB_DIR   := testbenches/xschem
 LAY_DIR         := layout
 SCRIPTS_DIR     := scripts
-SIM_PLOT_DIR    := scripts/plot_simulations
+SIM_PLOT_DIR    := testbenches/xschem/plot_simulations
 GDS_DIR         := final/gds
 LEF_DIR         := final/lef
 LIB_DIR         := final/lib
@@ -74,13 +65,15 @@ help: ## Show this help message
 	@echo 'Usage: make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>] [DRC_LEVEL=<precheck|macro|regular>] [EV_PRECISION=<digits>]'
 	@echo ''
 	@echo 'Available targets:'
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-20s %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z0-9_.-]+:.*## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  %-20s %s\n", $$1, $$2}'
 	@echo ''
 	@echo 'CELL defaults to $(TOP). Override to verify subcells.'
 	@echo 'EXT_MODE defaults to 3 (full-RC). 1=C-decoupled, 2=C-coupled.'
 	@echo 'THRESHOLD/MINRES/MINDELAY are full-RC (EXT_MODE=3) extresist settings for magic-pex (defaults 10000 mOhm / 1000 mOhm / 1 ps).'
 	@echo 'DRC_LEVEL defaults to macro. Sets the KLayout DRC level for klayout-drc (precheck|macro|regular).'
 	@echo 'EV_PRECISION defaults to 5 significant digits for xschem ev function.'
+	@echo 'TB selects the Xschem testbench for sim-xschem (e.g. iqmod_top_tb_tran).'
+	@echo 'SCRIPT selects the plotting script for sim-view-xschem (e.g. plot_iqmod_mfb_lpf).'
 .PHONY: help
 # ================================================================================================
 
@@ -88,17 +81,12 @@ help: ## Show this help message
 # Simulation Targets
 # Testbench name for sim-xschem target (required: make sim-xschem TB=<testbenchname>)
 TB ?= $(error TB is not set. Usage: make sim-xschem TB=<testbenchname>)
+SCRIPT ?= $(error SCRIPT is not set. Usage: make sim-view-xschem SCRIPT=<scriptname>)
 
-# Netlist with xschem, then simulate with ngspice in batch mode. `xschem
-# simulate` would start ngspice through xschem's default simulator command,
-# which is interactive and wrapped in a terminal ($terminal -e 'ngspice -i ...').
-# That detaches from make: the target returns while ngspice is still sitting at
-# its prompt waiting for input that never comes, so the simulation result is
-# never checked and the process (plus its X server) leaks for as long as the
-# session lives. Calling ngspice -b directly blocks until the run is over and
-# propagates its exit status.
-sim-xschem: ## Run TB simulation with Xschem (usage: make sim-xschem TB=<testbenchname>)
-	cd $(XSCHEM_TB_DIR) && xschem -x -q --rcfile xschemrc --command ' \
+sim-xschem: ## Run TB simulation with Xschem in batch mode (usage: make sim-xschem TB=<testbenchname>)
+	mkdir -p $(XSCHEM_TB_DIR)/simulations
+	cd $(XSCHEM_TB_DIR) && xschem -r -x -q --rcfile xschemrc --command ' \
+		xschem set netlist_type spice; \
 		set netlist_dir $(abspath $(XSCHEM_TB_DIR)/simulations); \
 		xschem save; \
 		xschem netlist \
@@ -106,8 +94,8 @@ sim-xschem: ## Run TB simulation with Xschem (usage: make sim-xschem TB=<testben
 	cd $(XSCHEM_TB_DIR)/simulations && ngspice -b $(TB).spice
 .PHONY: sim-xschem
 
-sim-view-xschem: ## Plot Xschem simulation results (usage: make sim-view-xschem CELL=<cellname>)
-	python3 $(SIM_PLOT_DIR)/plot_$(CELL).py
+sim-view-xschem: ## Plot Xschem simulation results (usage: make sim-view-xschem SCRIPT=<scriptname>)
+	SHOW_PLOTS=1 python3 $(SIM_PLOT_DIR)/$(SCRIPT).py
 .PHONY: sim-view-xschem
 
 sim-cace: ## Run CACE simulations and collect result plots
@@ -268,6 +256,19 @@ render-gds: ## Render an image from the final GDS using lay2img.py
 # ================================================================================================
 
 
+# DRC Targets
+klayout-drc: ## Run KLayout DRC of the CELL cell (usage: make klayout-drc [CELL=<cellname>] [DRC_LEVEL=<precheck|macro|regular>])
+	mkdir -p $(DRC_RPT_DIR)
+	sak-drc.sh -d -k -l $(DRC_LEVEL) -w $(DRC_RPT_DIR) $(LAY_DIR)/$(CELL).$(_GDS_EXT)
+.PHONY: klayout-drc
+
+magic-drc: ## Run Magic DRC of the CELL cell (usage: make magic-drc [CELL=<cellname>])
+	mkdir -p $(DRC_RPT_DIR)
+	sak-drc.sh -d -m -f "*" -w $(DRC_RPT_DIR) $(LAY_DIR)/$(CELL).$(_GDS_EXT)
+.PHONY: magic-drc
+# ================================================================================================
+
+
 # LVS Targets
 klayout-lvs-netlist: ## Export CDL schematic netlist from Xschem for KLayout LVS (usage: make klayout-lvs-netlist [CELL=<cellname>] [EV_PRECISION=<digits>])
 	mkdir -p $(NET_SCH_DIR)
@@ -315,19 +316,6 @@ magic-lvs: ## Run Magic + Netgen LVS of the CELL cell (usage: make magic-lvs [CE
 # ================================================================================================
 
 
-# DRC Targets
-klayout-drc: ## Run KLayout DRC of the CELL cell (usage: make klayout-drc [CELL=<cellname>] [DRC_LEVEL=<precheck|macro|regular>])
-	mkdir -p $(DRC_RPT_DIR)
-	sak-drc.sh -d -k -l $(DRC_LEVEL) -w $(DRC_RPT_DIR) $(LAY_DIR)/$(CELL).$(_GDS_EXT)
-.PHONY: klayout-drc
-
-magic-drc: ## Run Magic DRC of the CELL cell (usage: make magic-drc [CELL=<cellname>])
-	mkdir -p $(DRC_RPT_DIR)
-	sak-drc.sh -d -m -f "*" -w $(DRC_RPT_DIR) $(LAY_DIR)/$(CELL).$(_GDS_EXT)
-.PHONY: magic-drc
-# ================================================================================================
-
-
 # PEX Targets
 klayout-pex: ## Run Parasitic Extraction with KPEX of the CELL cell (usage: make klayout-pex [CELL=<cellname>] [EXT_MODE=<1|2|3>])
 	mkdir -p $(NET_PEX_DIR)
@@ -358,6 +346,7 @@ klayout-pex: ## Run Parasitic Extraction with KPEX of the CELL cell (usage: make
 	else \
 		echo "No symbol $(XSCHEM_SCH_DIR)/$(CELL)_pex.sym found, skipping pin reorder."; \
 	fi
+	python3 $(SCRIPTS_DIR)/check_pex_ports.py $(NET_PEX_DIR)/$(CELL)_klayout_pex_$(EXT_MODE).spice
 .PHONY: klayout-pex
 
 magic-pex: ## Run Parasitic Extraction with Magic of the CELL cell (usage: make magic-pex [CELL=<cellname>] [EXT_MODE=<1|2|3>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>])
@@ -371,30 +360,31 @@ magic-pex: ## Run Parasitic Extraction with Magic of the CELL cell (usage: make 
 	else \
 		echo "No symbol $(XSCHEM_SCH_DIR)/$(CELL)_pex.sym found, skipping pin reorder."; \
 	fi
+	python3 $(SCRIPTS_DIR)/check_pex_ports.py $(NET_PEX_DIR)/$(CELL)_magic_pex_$(EXT_MODE).spice
 .PHONY: magic-pex
 # ================================================================================================
 
 
 # Verify Targets
 klayout-verify: ## Verify CELL cell with KLayout (usage: make klayout-verify [CELL=<cellname>])
-	$(MAKE) klayout-lvs CELL=$(CELL)
 	$(MAKE) klayout-drc CELL=$(CELL)
+	$(MAKE) klayout-lvs CELL=$(CELL)
 	$(MAKE) klayout-pex CELL=$(CELL)
 .PHONY: klayout-verify
 
-klayout-verify-all: ## Verify all main subcells with KLayout (LVS, DRC, PEX)
+klayout-verify-all: ## Verify all main subcells with KLayout (DRC, LVS, PEX)
 	$(MAKE) klayout-verify CELL=iqmod_mfb_lpf
 	$(MAKE) klayout-verify CELL=iqmod_mixer
 	$(MAKE) klayout-verify CELL=iqmod_top
 .PHONY: klayout-verify-all
 
 magic-verify: ## Verify CELL cell with Magic (usage: make magic-verify [CELL=<cellname>])
-	$(MAKE) magic-lvs CELL=$(CELL)
 	$(MAKE) magic-drc CELL=$(CELL)
+	$(MAKE) magic-lvs CELL=$(CELL)
 	$(MAKE) magic-pex CELL=$(CELL)
 .PHONY: magic-verify
 
-magic-verify-all: ## Verify all main subcells with Magic (LVS, DRC, PEX)
+magic-verify-all: ## Verify all main subcells with Magic (DRC, LVS, PEX)
 	$(MAKE) magic-verify CELL=iqmod_mfb_lpf
 	$(MAKE) magic-verify CELL=iqmod_mixer
 	$(MAKE) magic-verify CELL=iqmod_top
@@ -402,10 +392,11 @@ magic-verify-all: ## Verify all main subcells with Magic (LVS, DRC, PEX)
 # ================================================================================================
 
 
-# Simulate, Build and Verify All Target
-all: ## Simulate, build and verify the TOP cell
-	$(MAKE) sim-all
+# Verify, Build and Simulate All Target
+all: ## Verify, build and simulate the TOP cell
 	$(MAKE) klayout-verify-all
 	$(MAKE) magic-verify-all
 	$(MAKE) build-top
+	$(MAKE) sim-all
 .PHONY: all
+# ================================================================================================
