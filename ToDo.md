@@ -11,7 +11,7 @@
     - [x] Circuit Design with `Xschem` and `Ngspice`
     - [x] Process Variation & Mismatch Simulation with `CACE`
     - [ ] Harmonic Balance (HB) Simulation with `VACASK`
-    - [x] Layout with `KLayout` (LVS, DRC, PEX)
+    - [x] Layout with `KLayout` (DRC, LVS, PEX)
     - [x] Post-Layout Simulation
 - Digital Core
     - [x] Digital Design of RISC-V CPU with `(System)Verilog`
@@ -30,7 +30,7 @@
     - [x] Filter Design with `Python`
     - [x] Circuit Design with `Xschem` and `Ngspice`
     - [x] Process Variation & Mismatch Simulation with `CACE`
-    - [x] Layout with `Magic` (LVS, DRC, PEX)
+    - [x] Layout with `Magic` (DRC, LVS, PEX)
     - [x] Post-Layout Simulation
 - Digital Core
     - [x] Digital Design of RISC-V CPU with `(System)Verilog`
