@@ -114,6 +114,7 @@ lint-verilog-all: ## Lint all Verilog source files (dsmod, cordic_iterative, lo_
 # Testbench for the Xschem simulation targets (default: <CELL>_tb_tran)
 # Override with: make <target> TB=<testbenchname>
 TB ?= $(CELL)_tb_tran
+
 sim-rtl-verilog: ## Run RTL simulation of CELL cell with Icarus Verilog (usage: make sim-rtl-verilog [CELL=<cellname>])
 	mkdir -p $(VERILOG_TB_DIR)/$(CELL)
 	iverilog -g2012 -DSIM -o $(VERILOG_TB_DIR)/$(CELL)/test_$(CELL) $(_SIM_SRCS) $(VERILOG_TB_DIR)/$(CELL)/$(CELL)_tb.$(_TB_EXT)
