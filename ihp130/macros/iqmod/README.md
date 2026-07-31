@@ -86,13 +86,6 @@
 │  │  ├─ 3rd_order_mfb_lpf_designer.mcdx
 │  │  ├─ 3rd_order_mfb_lpf_designer.py
 │  │  └─ biquad_mfb_lpf_designer.py
-│  ├─ 📁 plot_simulations/
-│  │  ├─ 📁 data/
-│  │  ├─ 📁 figures/
-│  │  ├─ ngspice2python.py
-│  │  ├─ plot_dsm_sine.py
-│  │  ├─ plot_iqmod_mfb_lpf.py
-│  │  └─ plot_iqmod_mfb_lpf_riscv.py
 │  ├─ 📁 pwm_generator/
 │  │  ├─ 📁 data/
 │  │  └─ pwm_generator.py
@@ -107,6 +100,13 @@
 │  └─ lay2img.py
 ├─ 📁 testbenches/
 │  └─ 📁 xschem/
+│     ├─ 📁 plot_simulations/
+│     │  ├─ 📁 data/
+│     │  ├─ 📁 figures/
+│     │  ├─ ngspice2python.py
+│     │  ├─ plot_dsm_sine.py
+│     │  ├─ plot_iqmod_mfb_lpf.py
+│     │  └─ plot_iqmod_mfb_lpf_riscv.py
 │     ├─ *_tb_*.sch
 │     ├─ iqmod_mfb_lpf_ota_core_tb_ac_ol.sch
 │     ├─ iqmod_mfb_lpf_riscv_tb_tran.sch
@@ -165,7 +165,7 @@ make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [THRESHOLD=<mOhm>] [MINRES=<m
 
 The Makefile defines a `_GDS_EXT` variable that auto-selects the layout file extension: it prefers `.gds` when available, and falls back to `.klay.gds` otherwise.
 
-- All LVS, DRC and PEX targets use `layout/<name>.$(_GDS_EXT)` and work with either `.gds` or `.klay.gds`:
+- All DRC, LVS and PEX targets use `layout/<name>.$(_GDS_EXT)` and work with either `.gds` or `.klay.gds`:
   - `klayout-lvs`, `magic-lvs`
   - `klayout-drc`, `magic-drc`
   - `klayout-pex`, `magic-pex`
