@@ -14,16 +14,13 @@
 **Computer Engineering, Julius-Maximilians-Universität, Würzburg, Germany
 
 > [!WARNING]
-> This repository is a Work in Progress.
-
-> [!IMPORTANT]
-> This repository requires the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) container with tag `2026.07` or later.
-
-> [!WARNING]
 > `make add-logo-fill` currently fails in the IIC-OSIC-TOOLS `2026.07` release. A PDK issue corrupts the
 > seal ring, which makes the KLayout filler abort with an internal error in `Region::holes`. The target is
 > therefore commented out in [`ihp130/Makefile`](https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/Makefile)
 > `:: build-top`. This will be fixed with the `2026.08` release of IIC-OSIC-TOOLS.
+
+> [!IMPORTANT]
+> This repository requires the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) container with tag `2026.07` or later.
 
 > [!TIP]
 > This repository is based on the [ihp-sg13g2-ams-chip-template](https://github.com/iic-jku/ihp-sg13g2-ams-chip-template) template repository. For a better understanding of the folder structure, how to use the Makefiles, and how to implement your own designs, it is recommended to go through this [tutorial](https://iic-jku.github.io/ihp-sg13g2-ams-chip-template/index.html).
