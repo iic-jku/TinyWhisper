@@ -471,9 +471,6 @@ Internally this executes (in order): `librelane-nodrc` → `copy-reports` → `c
 > `build-top` runs `librelane-nodrc` instead of `librelane` for the same reason the DRC reports are not copied: IHP's `metal1_pin_offgrid` rule trips on the pad ring (see [IHP-Open-PDK#683](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/683#issuecomment-4065791975)).
 > Once it is fixed upstream, `Makefile :: build-top` switches back to `librelane`.
 
-> [!NOTE]
-> `add-logo-fill` is currently commented out in `build-top` because the corrupted seal ring makes the KLayout filler abort (see the WARNING at the top of this README).
-
 
 ### Build All
 
@@ -488,6 +485,20 @@ make build-all
 > To build specific macros, use `make build-riscv`, `make build-iqmod`, or `make build-macros` to build all enabled macros separately.
 
 This is useful if you want to rebuild the chip from scratch. Clone the repository, enter the IIC-OSIC-TOOLS environment, and run `make build-all`.
+
+
+### Add Logo and Fill
+
+To add the TinyWhisper logo (PNG → GDS) and the fill structures on top of the LibreLane output (so the final GDS in `layout/` includes the artwork), run:
+
+```sh
+make add-logo-fill
+```
+
+This calls `scripts/add_logo_fill.sh` and writes `layout/tinywhisper_top_logo_fill.gds.gz`. The step is also called from `make build-top`.
+
+> [!NOTE]
+> In the future, it is planned to replace this script and Makefile target with a custom librelane step.
 
 
 ### Design Rule Check (DRC)
