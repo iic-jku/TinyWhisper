@@ -1,7 +1,7 @@
 * PEX produced on Sat Mar 28 08:15:50 PM CET 2026 using /foss/tools/sak/sak-pex.sh with m=1 and s=1
 * NGSPICE file created from iqmod_mfb_lpf_ota_core_hybrid_bm_pex.ext - technology: ihp-sg13g2
 
-.subckt iqmod_mfb_lpf_ota_core_hybrid_bm_pex VSS VDD vinp vinn voutn voutp
+.subckt iqmod_mfb_lpf_ota_core_hybrid_bm_pex voutp voutn vinn vinp VDD VSS
 + di_ota_en
 X0 iqmod_mfb_lpf_ota_core_hybrid_bm_pex_half_1.iqmod_mfb_lpf_ota_core_inv_NF6_2.vin iqmod_mfb_lpf_ota_core_hybrid_bm_pex_half_0.iqmod_mfb_lpf_ota_core_spdt_switch_0.do_spdt_ctrl_n iqmod_mfb_lpf_ota_core_hybrid_bm_pex_half_1.iqmod_mfb_lpf_ota_core_tg_1.v_a VDD sg13_lv_pmos ad=1.14p pd=6.38u as=1.14p ps=6.38u w=6u l=0.13u
 X1 VSS VSS VSS VSS sg13_lv_nmos ad=0.34p pd=2.68u as=1.04613n ps=1.5458m w=1u l=0.13u

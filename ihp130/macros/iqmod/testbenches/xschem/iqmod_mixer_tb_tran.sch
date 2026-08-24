@@ -177,13 +177,13 @@ N 700 -1100 700 -1080 {lab=vout_RF}
 N 700 -1080 700 -1060 {lab=vout_RF}
 N 700 -680 820 -680 {lab=vout_RF}
 N 700 -700 700 -680 {lab=vout_RF}
-C {devices/code.sym} 70 -1600 0 0 {name=NGSPICE
+C {devices/code.sym} 60 -1570 0 0 {name=NGSPICE
 only_toplevel=true
 value="
 .include ../../../netlist/pex/iqmod_mixer_pex.spice
 .param VDD=1.5
 .param Vcm=VDD/2
-.param temp=27
+.temp 27
 .param Cload=10p
 .param Rload=1k
 .param fsig=124.600e3
@@ -299,7 +299,7 @@ C {devices/vsource.sym} 1380 -170 0 0 {name=VDD value=\{VDD\}}
 C {devices/gnd.sym} 1380 -80 0 0 {name=l3 lab=GND}
 C {devices/launcher.sym} 1720 -1600 0 0 {name=h2
 descr="Simulate" 
-tclcommand="xschem save; xschem netlist; xschem simulate"
+tclcommand="xschem save; xschem netlist; file mkdir $netlist_dir; write_data [save_params] $netlist_dir/[file rootname [file tail [xschem get current_name]]].save; xschem simulate"
 }
 C {devices/launcher.sym} 1720 -1480 0 0 {name=h1
 descr="Load waves" 
@@ -395,3 +395,8 @@ C {iqmod_mixer_pex.sym} 520 -680 0 0 {name=x2
 }
 C {single2dm.sym} 540 -1480 0 0 {name=x4 gain=1}
 C {single2dm.sym} 1180 -1480 0 0 {name=x7 gain=1}
+C {devices/code_shown.sym} 60 -1690 0 0 {name=SAVE only_toplevel=true
+format="tcleval( @value )"
+value="
+.include [file rootname [file tail [xschem get schname]]].save
+"}

@@ -51,7 +51,7 @@ logx=0
 logy=0
 hilight_wave=-1
 linewidth_mult=4}
-T {Testbench for transient analysis - Transmission Gate} 560 -1690 0 0 1 1 {}
+T {Testbench for transient analysis - Transmission Gate} 550 -1720 0 0 1 1 {}
 T {TG is ON!} 1200 -1260 0 0 0.5 0.5 {}
 T {TG is OFF!} 1200 -935 0 0 0.5 0.5 {}
 N 860 -960 860 -920 {
@@ -138,7 +138,7 @@ C {devices/vdd.sym} 1160 -690 0 0 {name=l14 lab=VDD}
 C {devices/title-3.sym} 0 0 0 0 {name=l3 author="Simon Dorrer" rev=1.0 lock=true}
 C {devices/launcher.sym} 1620 -1490 0 0 {name=h2
 descr="Simulate" 
-tclcommand="xschem save; xschem netlist; xschem simulate"
+tclcommand="xschem save; xschem netlist; file mkdir $netlist_dir; write_data [save_params] $netlist_dir/[file rootname [file tail [xschem get current_name]]].save; xschem simulate"
 }
 C {devices/launcher.sym} 1620 -1370 0 0 {name=h1
 descr="Load waves" 
@@ -154,7 +154,7 @@ value="
 .include ../../../netlist/pex/iqmod_mixer_tg_pex.spice
 .param VDD=1.5
 .param Vcm=VDD/2
-.param temp=27
+.temp 27
 .param Cload=10p
 .options savecurrents klu method=gear reltol=1e-3 abstol=1e-15 gmin=1e-15
 .control
@@ -213,3 +213,8 @@ C {iqmod_mixer_tg_pex.sym} 1140 -1120 0 0 {name=x3
 }
 C {iqmod_mixer_tg_pex.sym} 1140 -800 0 0 {name=x4
 }
+C {devices/code_shown.sym} 1560 -1590 0 0 {name=SAVE only_toplevel=true
+format="tcleval( @value )"
+value="
+.include [file rootname [file tail [xschem get schname]]].save
+"}

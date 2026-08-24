@@ -109,7 +109,7 @@ value="
 .include ../../../netlist/pex/iqmod_mixer_se2diff_pex.spice
 .param VDD=1.5
 .param Vcm=VDD/2
-.param temp=27
+.temp 27
 .param flo=28e6
 .csparam flo=flo
 .param Rload=1k
@@ -139,7 +139,7 @@ C {devices/vsource.sym} 680 -830 0 0 {name=VDD value=\{VDD\}}
 C {devices/gnd.sym} 680 -740 0 0 {name=l3 lab=GND}
 C {devices/launcher.sym} 1700 -1600 0 0 {name=h2
 descr="Simulate" 
-tclcommand="xschem save; xschem netlist; xschem simulate"
+tclcommand="xschem save; xschem netlist; file mkdir $netlist_dir; write_data [save_params] $netlist_dir/[file rootname [file tail [xschem get current_name]]].save; xschem simulate"
 }
 C {lab_pin.sym} 820 -920 0 0 {name=p2 sig_type=std_logic lab=vin_LO}
 C {devices/capa.sym} 1360 -410 0 0 {name=C1
@@ -198,3 +198,8 @@ C {devices/gnd.sym} 1480 -340 0 0 {name=l42 lab=GND}
 C {vdd.sym} 1160 -1020 0 0 {name=l6 lab=VDD}
 C {iqmod_mixer_se2diff_pex.sym} 1160 -920 0 0 {name=x3
 }
+C {devices/code_shown.sym} 60 -1490 0 0 {name=SAVE only_toplevel=true
+format="tcleval( @value )"
+value="
+.include [file rootname [file tail [xschem get schname]]].save
+"}

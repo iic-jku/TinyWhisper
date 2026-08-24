@@ -73,7 +73,7 @@ C {devices/lab_wire.sym} 940 -960 0 0 {name=p2 sig_type=std_logic lab=vin_tg}
 C {devices/gnd.sym} 980 -580 0 0 {name=l1 lab=GND}
 C {devices/launcher.sym} 1700 -1030 0 0 {name=h2
 descr="Simulate" 
-tclcommand="xschem save; xschem netlist; xschem simulate"
+tclcommand="xschem save; xschem netlist; file mkdir $netlist_dir; write_data [save_params] $netlist_dir/[file rootname [file tail [xschem get current_name]]].save; xschem simulate"
 }
 C {devices/launcher.sym} 1700 -910 0 0 {name=h1
 descr="Load waves" 
@@ -90,7 +90,7 @@ value="
 .param VDD=1.5
 .csparam VDD=VDD
 .param Vcm=VDD/2
-.param temp=27
+.temp 27
 .param Cload=10p
 .options savecurrents method=gear reltol=1e-3 abstol=1e-15 gmin=1e-15
 .control
@@ -142,3 +142,8 @@ C {iqmod_mixer_tg_pex.sym} 1180 -1220 0 0 {name=x2
 spice_ignore=true}
 C {iqmod_mixer_tg_pex.sym} 1180 -960 0 0 {name=x3
 }
+C {devices/code_shown.sym} 40 -1130 0 0 {name=SAVE only_toplevel=true
+format="tcleval( @value )"
+value="
+.include [file rootname [file tail [xschem get schname]]].save
+"}

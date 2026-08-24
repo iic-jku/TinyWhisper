@@ -176,18 +176,18 @@ N 180 -500 220 -500 {lab=vinn_Q_sine}
 N 180 -360 220 -360 {lab=vinp_Q_sine}
 N 180 -1120 220 -1120 {lab=vinp_I_cosine}
 N 180 -980 220 -980 {lab=vinn_I_cosine}
-N 3140 -1800 3140 -1740 {lab=GND}
-N 3140 -1920 3140 -1860 {lab=VDD}
-N 3020 -1800 3020 -1740 {lab=GND}
-N 3020 -1920 3020 -1860 {lab=Vcm}
-N 2100 -1840 2100 -1820 {lab=LO_Q}
-N 2100 -1760 2100 -1740 {lab=GND}
-N 2540 -1840 2540 -1820 {lab=LO_QX}
-N 2540 -1760 2540 -1740 {lab=GND}
-N 2540 -2020 2540 -2000 {lab=LO_IX}
-N 2540 -1940 2540 -1920 {lab=GND}
-N 2100 -2020 2100 -2000 {lab=LO_I}
-N 2100 -1940 2100 -1920 {lab=GND}
+N 3140 -1940 3140 -1880 {lab=GND}
+N 3140 -2060 3140 -2000 {lab=VDD}
+N 3020 -1940 3020 -1880 {lab=GND}
+N 3020 -2060 3020 -2000 {lab=Vcm}
+N 2100 -1980 2100 -1960 {lab=LO_Q}
+N 2100 -1900 2100 -1880 {lab=GND}
+N 2540 -1980 2540 -1960 {lab=LO_QX}
+N 2540 -1900 2540 -1880 {lab=GND}
+N 2540 -2160 2540 -2140 {lab=LO_IX}
+N 2540 -2080 2540 -2060 {lab=GND}
+N 2100 -2160 2100 -2140 {lab=LO_I}
+N 2100 -2080 2100 -2060 {lab=GND}
 N 480 -1700 480 -1640 {lab=vinp_I_pwm}
 N 480 -1580 480 -1540 {lab=GND}
 N 400 -1580 400 -1540 {lab=GND}
@@ -288,7 +288,7 @@ value="
 .include ../../../netlist/pex/iqmod_top_pex.spice
 .param VDD=1.5
 .param Vcm=VDD/2
-.param temp=27
+.temp 27
 .param Cload=10p
 .param Rload=1k
 .param fsig=124.600e3
@@ -417,7 +417,7 @@ wrdata ../plot_simulations/data/iqmod_tb_tran_fft_filt.txt v(vout_RF_filt_spec_d
 "}
 C {devices/launcher.sym} 2600 -1620 0 0 {name=h2
 descr="Simulate" 
-tclcommand="xschem save; xschem netlist; xschem simulate"
+tclcommand="xschem save; xschem netlist; file mkdir $netlist_dir; write_data [save_params] $netlist_dir/[file rootname [file tail [xschem get current_name]]].save; xschem simulate"
 }
 C {devices/launcher.sym} 2600 -1500 0 0 {name=h1
 descr="Load waves" 
@@ -434,25 +434,25 @@ C {devices/lab_wire.sym} 180 -760 0 0 {name=l12 sig_type=std_logic lab=LO_IX}
 C {devices/lab_wire.sym} 180 -640 0 0 {name=l8 sig_type=std_logic lab=LO_Q}
 C {devices/lab_wire.sym} 180 -720 0 0 {name=l22 sig_type=std_logic lab=LO_QX
 }
-C {devices/vsource.sym} 3140 -1830 0 0 {name=VDD value=\{VDD\}}
-C {devices/gnd.sym} 3140 -1740 0 0 {name=l3 lab=GND}
-C {vdd.sym} 3140 -1920 0 0 {name=l7 lab=VDD}
-C {devices/gnd.sym} 2100 -1920 0 0 {name=l14 lab=GND}
-C {devices/lab_wire.sym} 2100 -2020 0 1 {name=l15 sig_type=std_logic lab=LO_I}
-C {devices/gnd.sym} 2540 -1920 0 0 {name=l9 lab=GND}
-C {devices/lab_wire.sym} 2540 -2020 0 1 {name=l10 sig_type=std_logic lab=LO_IX}
-C {devices/vsource.sym} 2100 -1970 0 0 {name=Vloi value="pulse(0 \{VDD\} 0 10p 10p \{0.25/flo\} \{1/flo\})"}
-C {devices/vsource.sym} 2540 -1970 0 0 {name=Vloix value="pulse(0 \{VDD\} \{0.50/flo\} 10p 10p \{0.25/flo\} \{1/flo\})"}
-C {devices/gnd.sym} 2100 -1740 0 0 {name=l23 lab=GND}
-C {devices/lab_wire.sym} 2100 -1840 0 1 {name=l24 sig_type=std_logic lab=LO_Q}
-C {devices/gnd.sym} 2540 -1740 0 0 {name=l27 lab=GND}
-C {devices/lab_wire.sym} 2540 -1840 0 1 {name=l28 sig_type=std_logic lab=LO_QX}
-C {devices/vsource.sym} 2540 -1790 0 0 {name=Vloqx value="pulse(0 \{VDD\} \{0.75/flo\} 10p 10p \{0.25/flo\} \{1/flo\})"}
-C {devices/vsource.sym} 3020 -1830 0 0 {name=Vcm value=\{Vcm\}
+C {devices/vsource.sym} 3140 -1970 0 0 {name=VDD value=\{VDD\}}
+C {devices/gnd.sym} 3140 -1880 0 0 {name=l3 lab=GND}
+C {vdd.sym} 3140 -2060 0 0 {name=l7 lab=VDD}
+C {devices/gnd.sym} 2100 -2060 0 0 {name=l14 lab=GND}
+C {devices/lab_wire.sym} 2100 -2160 0 1 {name=l15 sig_type=std_logic lab=LO_I}
+C {devices/gnd.sym} 2540 -2060 0 0 {name=l9 lab=GND}
+C {devices/lab_wire.sym} 2540 -2160 0 1 {name=l10 sig_type=std_logic lab=LO_IX}
+C {devices/vsource.sym} 2100 -2110 0 0 {name=Vloi value="pulse(0 \{VDD\} 0 10p 10p \{0.25/flo\} \{1/flo\})"}
+C {devices/vsource.sym} 2540 -2110 0 0 {name=Vloix value="pulse(0 \{VDD\} \{0.50/flo\} 10p 10p \{0.25/flo\} \{1/flo\})"}
+C {devices/gnd.sym} 2100 -1880 0 0 {name=l23 lab=GND}
+C {devices/lab_wire.sym} 2100 -1980 0 1 {name=l24 sig_type=std_logic lab=LO_Q}
+C {devices/gnd.sym} 2540 -1880 0 0 {name=l27 lab=GND}
+C {devices/lab_wire.sym} 2540 -1980 0 1 {name=l28 sig_type=std_logic lab=LO_QX}
+C {devices/vsource.sym} 2540 -1930 0 0 {name=Vloqx value="pulse(0 \{VDD\} \{0.75/flo\} 10p 10p \{0.25/flo\} \{1/flo\})"}
+C {devices/vsource.sym} 3020 -1970 0 0 {name=Vcm value=\{Vcm\}
 }
-C {devices/lab_pin.sym} 3020 -1920 1 0 {name=l34 sig_type=std_logic lab=Vcm}
-C {devices/gnd.sym} 3020 -1740 0 0 {name=l40 lab=GND}
-C {devices/vsource.sym} 2100 -1790 0 0 {name=Vloq value="pulse(0 \{VDD\} \{0.25/flo\} 10p 10p \{0.25/flo\} \{1/flo\})"}
+C {devices/lab_pin.sym} 3020 -2060 1 0 {name=l34 sig_type=std_logic lab=Vcm}
+C {devices/gnd.sym} 3020 -1880 0 0 {name=l40 lab=GND}
+C {devices/vsource.sym} 2100 -1930 0 0 {name=Vloq value="pulse(0 \{VDD\} \{0.25/flo\} 10p 10p \{0.25/flo\} \{1/flo\})"}
 C {devices/lab_pin.sym} 460 -2030 0 0 {name=l16 sig_type=std_logic lab=vin_I}
 C {devices/vsource.sym} 1400 -1980 0 1 {name=vsine spice_ignore=false value="sin(0 \{VDD/2\} \{fsig\})"
 }
@@ -554,3 +554,8 @@ C {iqmod_top_pex.sym} 560 -740 0 0 {name=x5
 }
 C {single2dm.sym} 620 -2020 0 0 {name=x6 gain=1}
 C {single2dm.sym} 1540 -2020 0 0 {name=x4 gain=1}
+C {devices/code_shown.sym} 2540 -1730 0 0 {name=SAVE only_toplevel=true
+format="tcleval( @value )"
+value="
+.include [file rootname [file tail [xschem get schname]]].save
+"}

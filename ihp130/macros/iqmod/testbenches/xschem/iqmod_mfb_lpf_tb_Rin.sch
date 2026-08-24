@@ -93,7 +93,7 @@ value="
 .include ../../../netlist/pex/iqmod_mfb_lpf_pex.spice
 .param VDD=1.5
 .param Vcm=VDD/2
-.param temp=27
+.temp 27
 .param Rin=250k
 .param Cload=10p
 .options savecurrents klu method=gear reltol=1e-3 abstol=1e-15 gmin=1e-15
@@ -152,7 +152,7 @@ C {devices/vsource.sym} 860 -490 0 0 {name=VDD value=\{VDD\}}
 C {devices/gnd.sym} 860 -420 0 0 {name=l3 lab=GND}
 C {devices/launcher.sym} 1700 -1360 0 0 {name=h2
 descr="Simulate" 
-tclcommand="xschem save; xschem netlist; xschem simulate"
+tclcommand="xschem save; xschem netlist; file mkdir $netlist_dir; write_data [save_params] $netlist_dir/[file rootname [file tail [xschem get current_name]]].save; xschem simulate"
 }
 C {title-3.sym} 0 0 0 0 {name=l2 author="Simon Dorrer" rev=1.0 lock=true}
 C {devices/launcher.sym} 1700 -1240 0 0 {name=h1
@@ -229,3 +229,8 @@ value="
 .lib cornerDIO.lib dio_tt
 "}
 C {single2dm.sym} 1020 -1400 0 0 {name=x6 gain=1}
+C {devices/code_shown.sym} 40 -1490 0 0 {name=SAVE only_toplevel=true
+format="tcleval( @value )"
+value="
+.include [file rootname [file tail [xschem get schname]]].save
+"}

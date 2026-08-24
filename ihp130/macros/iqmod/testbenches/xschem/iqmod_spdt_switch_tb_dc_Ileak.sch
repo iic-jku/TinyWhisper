@@ -124,7 +124,7 @@ value="
 .param VDD=1.5
 .csparam VDD=VDD
 .param Vcm=VDD/2
-.param temp=27
+.temp 27
 .options savecurrents klu method=gear reltol=1e-4 abstol=1e-15 gmin=1e-15
 .control
 save all
@@ -156,7 +156,7 @@ plot Ileak_ca
 .endc"}
 C {devices/launcher.sym} 1700 -1400 0 0 {name=h2
 descr="Simulate" 
-tclcommand="xschem save; xschem netlist; xschem simulate"
+tclcommand="xschem save; xschem netlist; file mkdir $netlist_dir; write_data [save_params] $netlist_dir/[file rootname [file tail [xschem get current_name]]].save; xschem simulate"
 }
 C {devices/launcher.sym} 1700 -1340 0 0 {name=h3
 descr="Annotate OP" 
@@ -190,3 +190,8 @@ C {iqmod_spdt_switch_pex.sym} 400 -500 0 0 {name=x3
 spice_ignore=true}
 C {iqmod_spdt_switch.sym} 400 -700 0 0 {name=x4
 spice_ignore=true}
+C {devices/code_shown.sym} 60 -1570 0 0 {name=SAVE only_toplevel=true
+format="tcleval( @value )"
+value="
+.include [file rootname [file tail [xschem get schname]]].save
+"}

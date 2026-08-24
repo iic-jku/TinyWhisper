@@ -353,7 +353,7 @@ value="
 .param VDD=1.5
 .csparam VDD=VDD
 .param Vcm=VDD/2
-.param temp=27
+.temp 27
 .param Cload=10p
 .param Rload=1k
 .param fclk=56e6
@@ -452,7 +452,7 @@ C {devices/vsource.sym} 2440 -1010 0 0 {name=VDD value=\{VDD\}}
 C {devices/gnd.sym} 2440 -940 0 0 {name=l3 lab=GND}
 C {devices/launcher.sym} 2500 -1330 0 0 {name=h2
 descr="Simulate" 
-tclcommand="xschem save; xschem netlist; xschem simulate"
+tclcommand="xschem save; xschem netlist; file mkdir $netlist_dir; write_data [save_params] $netlist_dir/[file rootname [file tail [xschem get current_name]]].save; xschem simulate"
 }
 C {title-2.sym} 0 0 0 0 {name=l2 author="Simon Dorrer" rev=1.0 lock=true}
 C {devices/launcher.sym} 2500 -1210 0 0 {name=h1
@@ -574,3 +574,8 @@ C {devices/lab_pin.sym} 3080 -720 0 1 {name=l19 sig_type=std_logic lab=ds_I_n
 C {devices/lab_pin.sym} 2380 -480 0 0 {name=l22 sig_type=std_logic lab=vinp}
 C {devices/lab_pin.sym} 2380 -400 0 0 {name=l24 sig_type=std_logic lab=vinn
 }
+C {devices/code_shown.sym} 1420 -70 0 0 {name=SAVE only_toplevel=true
+format="tcleval( @value )"
+value="
+.include [file rootname [file tail [xschem get schname]]].save
+"}

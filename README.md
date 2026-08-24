@@ -260,8 +260,7 @@ The chip design itself lives in [`ihp130/`](https://github.com/iic-jku/TinyWhisp
 │  ├─ 📁 scripts/
 │  │  ├─ add_logo_fill.sh
 │  │  ├─ add_rectangle.py
-│  │  ├─ check_pex_ports.py
-│  │  └─ lay2img.py
+│  │  └─ check_pex_ports.py
 │  ├─ 📁 testbenches/
 │  │  ├─ 📁 cocotb/
 │  │  └─ 📁 xschem/

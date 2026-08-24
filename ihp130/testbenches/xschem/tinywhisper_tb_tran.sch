@@ -263,7 +263,7 @@ value="
 * Gate-Level Analog Mixed Signal Simulation (.xspice)
 .include ../../../macros/riscv/netlist/xspice/riscv_top.xspice
 .param VDD=1.5
-.param temp=27
+.temp 27
 .param Cload=10p
 .param Rload=1k
 .param fclk=56e6
@@ -353,7 +353,7 @@ wrdata ../plot_simulations/data/tinywhisper_top_tb_tran_fft_filt.txt v(vout_RF_f
 C {tinywhisper.sym} 1540 -800 0 0 {name=x1}
 C {devices/launcher.sym} 2640 -2050 0 0 {name=h2
 descr="Simulate" 
-tclcommand="xschem save; xschem netlist; xschem simulate"
+tclcommand="xschem save; xschem netlist; file mkdir $netlist_dir; write_data [save_params] $netlist_dir/[file rootname [file tail [xschem get current_name]]].save; xschem simulate"
 }
 C {devices/launcher.sym} 2640 -1930 0 0 {name=h1
 descr="Load waves" 
@@ -432,3 +432,8 @@ C {devices/lab_wire.sym} 1940 -260 3 0 {name=p14 sig_type=std_logic lab=ds_Q_n}
 C {devices/gnd.sym} 2180 -280 0 0 {name=l6 lab=GND}
 C {devices/gnd.sym} 2180 -1320 0 0 {name=l8 lab=GND}
 C {title-2.sym} 0 0 0 0 {name=l9 author="Simon Dorrer" rev=1.0 lock=true}
+C {devices/code_shown.sym} 2870 -2180 0 0 {name=SAVE only_toplevel=true
+format="tcleval( @value )"
+value="
+.include [file rootname [file tail [xschem get schname]]].save
+"}

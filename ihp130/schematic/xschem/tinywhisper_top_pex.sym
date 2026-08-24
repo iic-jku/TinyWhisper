@@ -2,6 +2,7 @@ v {xschem version=3.4.8RC file_version=1.3}
 G {}
 K {type=primitive
 format="@name @pinlist @symname"
+spectre_format="@name ( @pinlist ) @symname"
 template="name=x1"
 }
 V {}
@@ -121,7 +122,6 @@ P 4 5 470 10 430 10 430 50 470 50 470 10 {fill = true}
 P 4 5 470 -50 430 -50 430 -10 470 -10 470 -50 {fill = true}
 P 4 5 470 -110 430 -110 430 -70 470 -70 470 -110 {fill = true}
 P 4 5 -430 430 430 430 430 -430 -430 -430 -430 430 {}
-T {PEX} -50 -110 0 0 1 1 {}
 T {bidir_PAD[1]} 276.5 -422.5 1 0 0.2 0.2 {}
 T {bidir_PAD[0]} 216.5 -422.5 1 0 0.2 0.2 {}
 T {bidir_PAD[3]} 396.5 -422.5 1 0 0.2 0.2 {}

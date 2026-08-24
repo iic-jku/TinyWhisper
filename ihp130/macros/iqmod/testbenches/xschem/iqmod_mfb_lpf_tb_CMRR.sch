@@ -140,13 +140,13 @@ N 1020 -1340 1020 -1320 {lab=VDD}
 N 980 -600 1020 -600 {lab=VDD}
 N 980 -620 980 -600 {lab=VDD}
 N 1020 -600 1020 -580 {lab=VDD}
-C {devices/code.sym} 70 -1580 0 0 {name=NGSPICE
+C {devices/code.sym} 70 -1480 0 0 {name=NGSPICE
 only_toplevel=true 
 value="
 .include ../../../netlist/pex/iqmod_mfb_lpf_pex.spice
 .param VDD=1.5
 .param Vcm=VDD/2
-.param temp=27
+.temp 27
 .param Cload=10p
 .param vphi=0.5
 .param f_min = 10m
@@ -220,7 +220,7 @@ C {iqmod_mfb_lpf_pex.sym} 2820 -240 0 0 {name=x3
 spice_ignore=true}
 C {devices/launcher.sym} 1720 -1600 0 0 {name=h2
 descr="Simulate" 
-tclcommand="xschem save; xschem netlist; xschem simulate"
+tclcommand="xschem save; xschem netlist; file mkdir $netlist_dir; write_data [save_params] $netlist_dir/[file rootname [file tail [xschem get current_name]]].save; xschem simulate"
 }
 C {devices/launcher.sym} 1720 -1480 0 0 {name=h1
 descr="Load waves" 
@@ -319,3 +319,8 @@ C {iqmod_mfb_lpf_pex.sym} 1000 -380 0 0 {name=x4
 }
 C {single2dm.sym} 340 -1120 0 0 {name=x6 gain=1}
 C {single2cm.sym} 340 -380 0 0 {name=x7 gain=1}
+C {devices/code_shown.sym} 80 -1610 0 0 {name=SAVE only_toplevel=true
+format="tcleval( @value )"
+value="
+.include [file rootname [file tail [xschem get schname]]].save
+"}

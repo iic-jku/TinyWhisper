@@ -91,7 +91,7 @@ value="
 .param VDD=1.5
 .csparam VDD=VDD
 .param Vcm=VDD/2
-.param temp=27
+.temp 27
 .param Cload=10p
 .options savecurrents klu method=gear reltol=1e-3 abstol=1e-12 gmin=1e-12
 .control
@@ -133,7 +133,7 @@ wrdata ../plot_simulations/data/iqmod_mfb_lpf_ota_core_tb_Vout.txt v(vinp) v(vou
 "}
 C {devices/launcher.sym} 1720 -1340 0 0 {name=h2
 descr="Simulate" 
-tclcommand="xschem save; xschem netlist; xschem simulate"
+tclcommand="xschem save; xschem netlist; file mkdir $netlist_dir; write_data [save_params] $netlist_dir/[file rootname [file tail [xschem get current_name]]].save; xschem simulate"
 }
 C {title-3.sym} 0 0 0 0 {name=l2 author="Simon Dorrer" rev=1.0 lock=true}
 C {devices/launcher.sym} 1720 -1220 0 0 {name=h1
@@ -194,3 +194,8 @@ value="
 .lib cornerDIO.lib dio_tt
 "}
 C {single2dm.sym} 1080 -1380 0 0 {name=x6 gain=1}
+C {devices/code_shown.sym} 40 -1410 0 0 {name=SAVE only_toplevel=true
+format="tcleval( @value )"
+value="
+.include [file rootname [file tail [xschem get schname]]].save
+"}
