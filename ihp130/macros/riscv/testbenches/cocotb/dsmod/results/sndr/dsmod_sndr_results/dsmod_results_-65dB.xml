@@ -1,11 +1,11 @@
 <testsuites name="results">
   <testsuite name="all" package="all">
-    <property name="random_seed" value="1777206303" />
-    <testcase name="dsmod_psd_test" classname="dsmod_cocotb" file="/foss/designs/TinyWhisper-archive/ihp130/macros/riscv/testbenches/cocotb/dsmod/dsmod_cocotb.py" lineno="81" time="0" sim_time_ns="0" ratio_time="0">
+    <property name="random_seed" value="1787655963" />
+    <testcase name="dsmod_psd_test" classname="dsmod_cocotb" file="/foss/designs/TinyWhisper/ihp130/macros/riscv/testbenches/cocotb/dsmod/dsmod_cocotb.py" lineno="69" time="0" sim_time_ns="0" ratio_time="0">
       <skipped />
     </testcase>
-    <testcase name="dsmod_sndr_single_test" classname="dsmod_cocotb" file="/foss/designs/TinyWhisper-archive/ihp130/macros/riscv/testbenches/cocotb/dsmod/dsmod_cocotb.py" lineno="194" time="134.4892246723175" sim_time_ns="17830382.0" ratio_time="132578.51730087417" />
-    <testcase name="dsmod_sndr_sweep_test" classname="dsmod_cocotb" file="/foss/designs/TinyWhisper-archive/ihp130/macros/riscv/testbenches/cocotb/dsmod/dsmod_cocotb.py" lineno="250" time="0" sim_time_ns="0" ratio_time="0">
+    <testcase name="dsmod_sndr_single_test" classname="dsmod_cocotb" file="/foss/designs/TinyWhisper/ihp130/macros/riscv/testbenches/cocotb/dsmod/dsmod_cocotb.py" lineno="182" time="44.60374617576599" sim_time_ns="4457774.0" ratio_time="99941.69508618511" />
+    <testcase name="dsmod_sndr_sweep_test" classname="dsmod_cocotb" file="/foss/designs/TinyWhisper/ihp130/macros/riscv/testbenches/cocotb/dsmod/dsmod_cocotb.py" lineno="238" time="0" sim_time_ns="0" ratio_time="0">
       <skipped />
     </testcase>
   </testsuite>

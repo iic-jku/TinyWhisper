@@ -1,4 +1,4 @@
-osr=256
+osr=64
 order=2
 nbit=30
 n_samples=254
