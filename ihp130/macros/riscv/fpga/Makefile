@@ -5,9 +5,9 @@
 # The boards themselves are the folders holding a Makefile, so adding one
 # is enough to make it selectable here. See ./README.md.
 
-# Target board (default: pico-ice)
+# Target board (default: ulx3s, the ECP5-85F has the room the iCE40UP5K lacks)
 # Override with: make <target> BOARD=<board>
-BOARD ?= pico-ice
+BOARD ?= ulx3s
 
 # Extra options for the sak-open.py file browser (e.g. --all to include build outputs)
 # Override with: make open OPEN_ARGS=<options>

@@ -1,0 +1,85 @@
+# SPDX-FileCopyrightText: 2025-2026 The TinyWhisper Team
+# SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
+#
+# ULX3S v2.0 pin map for riscv_top.
+# See https://github.com/emard/ulx3s for the board pinout, the sites below follow
+# doc/constraints/ulx3s_v20.lpf of that repository.
+#
+# The ds_*_i and lo_*_i inputs and the lo_*_oe outputs of riscv_top are not
+# constrained here, they only matter for the ASIC pad ring. nextpnr places them
+# on free pins because of --lpf-allow-unconstrained.
+
+# 25 MHz oscillator
+LOCATE COMP "clk" SITE "G2";
+IOBUF  PORT "clk" PULLMODE=NONE IO_TYPE=LVCMOS33;
+FREQUENCY PORT "clk" 25 MHZ;
+
+# BTN_PWRn, already inverted and therefore active low
+LOCATE COMP "reset" SITE "D6";
+IOBUF  PORT "reset" PULLMODE=UP IO_TYPE=LVCMOS33 DRIVE=4;
+
+# SPI SRAM on the J1 header, gp[0]/gn[0] and gp[1]/gn[1]
+LOCATE COMP "sclk"    SITE "B11";
+LOCATE COMP "sram_ce" SITE "C11";
+LOCATE COMP "si"      SITE "A10";
+LOCATE COMP "so"      SITE "A11";
+IOBUF  PORT "sclk"    PULLMODE=NONE IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF  PORT "sram_ce" PULLMODE=UP   IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF  PORT "si"      PULLMODE=NONE IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF  PORT "so"      PULLMODE=UP   IO_TYPE=LVCMOS33;
+
+# I2C on the J1 header, gp[2]/gn[2]. Both idle high, so both are pulled up.
+LOCATE COMP "scl" SITE "A9";
+LOCATE COMP "sda" SITE "B10";
+IOBUF  PORT "scl" PULLMODE=UP IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF  PORT "sda" PULLMODE=UP IO_TYPE=LVCMOS33 DRIVE=4;
+
+# UART on the on-board FTDI, so a host terminal reaches it over the same USB cable.
+# ftdi_rxd is the FPGA output, ftdi_txd the FPGA input.
+LOCATE COMP "tx" SITE "L4";
+LOCATE COMP "rx" SITE "M1";
+IOBUF  PORT "tx" PULLMODE=NONE IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF  PORT "rx" PULLMODE=UP   IO_TYPE=LVCMOS33;
+
+# GPIO inputs on the J1 header, gp[3]/gn[3] and gp[4]/gn[4].
+# gpio_in[0] is an active-high level interrupt, so the pins are pulled down:
+# a floating header pin must not latch a permanent external interrupt.
+LOCATE COMP "gpio_in[0]" SITE "B9";
+LOCATE COMP "gpio_in[1]" SITE "C10";
+LOCATE COMP "gpio_in[2]" SITE "A7";
+LOCATE COMP "gpio_in[3]" SITE "A8";
+IOBUF  PORT "gpio_in[0]" PULLMODE=DOWN IO_TYPE=LVCMOS33;
+IOBUF  PORT "gpio_in[1]" PULLMODE=DOWN IO_TYPE=LVCMOS33;
+IOBUF  PORT "gpio_in[2]" PULLMODE=DOWN IO_TYPE=LVCMOS33;
+IOBUF  PORT "gpio_in[3]" PULLMODE=DOWN IO_TYPE=LVCMOS33;
+
+# GPIO outputs on the four left-most on-board LEDs
+LOCATE COMP "gpio_out[0]" SITE "B2";
+LOCATE COMP "gpio_out[1]" SITE "C2";
+LOCATE COMP "gpio_out[2]" SITE "C1";
+LOCATE COMP "gpio_out[3]" SITE "D2";
+IOBUF  PORT "gpio_out[0]" PULLMODE=NONE IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF  PORT "gpio_out[1]" PULLMODE=NONE IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF  PORT "gpio_out[2]" PULLMODE=NONE IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF  PORT "gpio_out[3]" PULLMODE=NONE IO_TYPE=LVCMOS33 DRIVE=4;
+
+# Baseband and LO outputs on the J2 header. Every complementary pair sits on one
+# gp/gn pin pair, and the two delta-sigma pairs plus lo_I take the LVDS-capable
+# pairs gp/gn[8..10], so they can be switched to LVCMOS33D later without moving
+# a pin. gp/gn[11..13] are avoided, they are shared with the ESP32.
+LOCATE COMP "ds_I_p_o" SITE "A4";
+LOCATE COMP "ds_I_n_o" SITE "A5";
+LOCATE COMP "ds_Q_p_o" SITE "A2";
+LOCATE COMP "ds_Q_n_o" SITE "B1";
+LOCATE COMP "lo_I_o"   SITE "C4";
+LOCATE COMP "lo_Ix_o"  SITE "B4";
+LOCATE COMP "lo_Q_o"   SITE "A6";
+LOCATE COMP "lo_Qx_o"  SITE "B6";
+IOBUF  PORT "ds_I_p_o" PULLMODE=NONE IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF  PORT "ds_I_n_o" PULLMODE=NONE IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF  PORT "ds_Q_p_o" PULLMODE=NONE IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF  PORT "ds_Q_n_o" PULLMODE=NONE IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF  PORT "lo_I_o"   PULLMODE=NONE IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF  PORT "lo_Ix_o"  PULLMODE=NONE IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF  PORT "lo_Q_o"   PULLMODE=NONE IO_TYPE=LVCMOS33 DRIVE=4;
+IOBUF  PORT "lo_Qx_o"  PULLMODE=NONE IO_TYPE=LVCMOS33 DRIVE=4;

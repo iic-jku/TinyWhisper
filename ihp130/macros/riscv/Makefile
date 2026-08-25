@@ -437,7 +437,7 @@ magic-pex: ## Run Parasitic Extraction with Magic on the final GDS (usage: make 
 # writes a netlist far larger than the counter example of the template, so run it by hand when needed.
 all: ## Lint, build, verify and simulate the macro
 	$(MAKE) lint-verilog-all
-#	$(MAKE) build-fpga
+	$(MAKE) build-fpga
 	$(MAKE) build-top
 #	$(MAKE) magic-pex
 #	$(MAKE) klayout-pex

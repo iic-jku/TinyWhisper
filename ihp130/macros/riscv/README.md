@@ -43,7 +43,9 @@
 │     └─ signoff.sdc
 ├─ 📁 fpga/
 │  ├─ 📁 arch/                # one fragment per FPGA architecture (ice40, ecp5)
-│  ├─ 📁 pico-ice/            # per-board Makefile (device, programmer) and pin constraints
+│  ├─ 📁 icebreaker/          # per-board Makefile (device, programmer) and pin constraints
+│  ├─ 📁 pico-ice/
+│  ├─ 📁 ulx3s/
 │  ├─ Makefile                # dispatcher, selects the board with BOARD=
 │  ├─ dut.mk                  # RTL sources shared by all boards
 │  ├─ fpga.mk                 # the shared flow
@@ -402,11 +404,15 @@ This only works if the final GDS exists in `final/gds/`, so run `make copy-final
 
 ### Build FPGA
 
-Emulates the macro on an FPGA. The flow is split into a board-independent part and one folder per board, and `riscv_top` is synthesized directly onto board pins, without a board-top wrapper. One board is set up:
+Emulates the macro on an FPGA. The flow is split into a board-independent part and one folder per board, and `riscv_top` is synthesized directly onto board pins, without a board-top wrapper. Three boards are set up:
 
-| Board | FPGA | Toolchain |
-| --- | --- | --- |
-| pico-ice (default) | Lattice iCE40UP5K | Yosys -> nextpnr-ice40 -> icepack |
+| Board | FPGA | Toolchain | Programmer |
+| --- | --- | --- | --- |
+| ULX3S (default) | Lattice ECP5-85F | Yosys -> nextpnr-ecp5 -> ecppack | `openFPGALoader` |
+| pico-ice | Lattice iCE40UP5K | Yosys -> nextpnr-ice40 -> icepack | `dfu-util` |
+| iCEBreaker | Lattice iCE40UP5K | Yosys -> nextpnr-ice40 -> icepack | `iceprog` |
+
+The ULX3S is the default, because the macro no longer fits an iCE40UP5K: both iCE40 boards synthesize to 6132 ICESTORM_LCs against the 5280 the UP5K has and nextpnr stops with `Failed to expand region`, while the ECP5-85F takes the same design at 6.9% utilisation and closes timing at 51.0 MHz against its 25 MHz oscillator.
 
 To run the full flow (clean -> lint -> synthesis -> place-and-route -> bitstream) on the default board, run:
 
@@ -425,10 +431,10 @@ make -C fpga BOARD=<board> all          # the whole flow on another board
 ```
 
 > [!NOTE]
-> IIC-OSIC-TOOLS carries the build chain, so the bitstream builds inside the container. Only programming the board needs the host, since the container has no USB access: build the bitstream inside, then run `load_bitstream`/`flash_bitstream` from the host with `dfu-util`. See [`fpga/README.md`](fpga/README.md) for the toolchain notes, the pin assignment, and how to add a further board.
+> IIC-OSIC-TOOLS carries the build chain, so the bitstream builds inside the container. Only programming the board needs the host, since the container has no USB access: build the bitstream inside, then run `load_bitstream`/`flash_bitstream` from the host with the programmer of the board, `openFPGALoader` for the ULX3S. See [`fpga/README.md`](fpga/README.md) for the toolchain notes, the pin assignment of every board, and how to add a further one.
 
 > [!NOTE]
-> `build-fpga` is commented out in `make all`, because the RISC-V macro fills the iCE40UP5K almost completely and the place-and-route takes long. Run it by hand when a bitstream is needed.
+> `build-fpga` is part of `make all` again and builds the ULX3S bitstream. It was commented out while the default board was the pico-ice, whose iCE40UP5K the macro outgrew.
 
 
 ### Build Top
@@ -598,7 +604,7 @@ The riscv testbench [`testbenches/xschem/riscv_top_tb_tran.sch`](testbenches/xsc
 Lints, builds, verifies and simulates the whole macro:
 
 - `lint-verilog-all`
-- `build-fpga` (currently disabled in the `Makefile`, run manually if needed)
+- `build-fpga`
 - `build-top`
 - `magic-pex` (currently disabled in the `Makefile`, see below)
 - `sim-all`

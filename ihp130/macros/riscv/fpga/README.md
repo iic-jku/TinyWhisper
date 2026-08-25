@@ -7,48 +7,88 @@ The flow is driven by one shared Makefile fragment, [`fpga.mk`](fpga.mk), parame
 
 ## Supported Boards
 
-| Board | Directory | FPGA | Toolchain | Verified here |
-| --- | --- | --- | --- | --- |
-| pico-ice | [`pico-ice/`](pico-ice/) | Lattice iCE40UP5K | Yosys -> nextpnr-ice40 -> icepack | Bitstream built, default board |
+| Board | Directory | FPGA | Toolchain | Programmer | Verified here |
+| --- | --- | --- | --- | --- | --- |
+| ULX3S | [`ulx3s/`](ulx3s/) | Lattice ECP5-85F, CABGA381 | Yosys -> nextpnr-ecp5 -> ecppack | `openFPGALoader` | Default board, bitstream builds |
+| pico-ice | [`pico-ice/`](pico-ice/) | Lattice iCE40UP5K, SG48 | Yosys -> nextpnr-ice40 -> icepack | `dfu-util` | Place-and-route overflows, see below |
+| iCEBreaker | [`icebreaker/`](icebreaker/) | Lattice iCE40UP5K, SG48 | Yosys -> nextpnr-ice40 -> icepack | `iceprog` | Place-and-route overflows, see below |
+
+The ULX3S is the default board, because the macro no longer fits an iCE40UP5K. Both iCE40 boards currently synthesize to 6132 ICESTORM_LCs against the 5280 the UP5K has, 116%, and nextpnr stops with `Failed to expand region`. The numbers are identical on the two boards, the overflow is in the RTL and not in a pin map. The same design takes 5751 of the 83640 TRELLIS_COMBs of the ECP5-85F, 6.9%, and closes timing at 51.0 MHz against the 25 MHz oscillator.
+
+So the iCE40 boards stay useful once the macro shrinks below 5280 LCs again, and until then `make all` in the macro builds the ULX3S bitstream.
+
+The ASIC-only ports of `riscv_top` (`ds_*_i`, `lo_*_i`, `lo_I_oe`, `lo_Q_oe`) stay unconstrained in every pin file. They only matter for the pad ring, and `--pcf-allow-unconstrained` / `--lpf-allow-unconstrained` let nextpnr put them on free pins.
+
+Pin assignment of the ULX3S, see [`ulx3s/ulx3s.lpf`](ulx3s/ulx3s.lpf) for the full list:
+
+| Signal | Site | Note |
+| --- | --- | --- |
+| `clk` | G2 | 25 MHz oscillator |
+| `reset` | D6 | BTN_PWRn, already inverted and therefore active low |
+| `sclk`, `sram_ce`, `si`, `so` | B11, C11, A10, A11 | SPI SRAM on J1, `gp/gn[0]` and `gp/gn[1]` |
+| `scl`, `sda` | A9, B10 | I2C on J1, `gp/gn[2]` |
+| `tx`, `rx` | L4, M1 | UART on the on-board FTDI |
+| `gpio_in[3:0]` | B9, C10, A7, A8 | J1, `gp/gn[3]` and `gp/gn[4]`, pulled down |
+| `gpio_out[3:0]` | B2, C2, C1, D2 | the four left-most on-board LEDs |
+| `ds_I_p_o`, `ds_I_n_o`, `ds_Q_p_o`, `ds_Q_n_o` | A4, A5, A2, B1 | delta-sigma baseband outputs on J2, `gp/gn[8]` and `gp/gn[9]` |
+| `lo_I_o`, `lo_Ix_o`, `lo_Q_o`, `lo_Qx_o` | C4, B4, A6, B6 | LO outputs on J2, `gp/gn[10]` and `gp/gn[7]` |
+
+Every complementary output pair sits on one `gp`/`gn` pin pair. The two delta-sigma pairs and `lo_I`/`lo_Ix` take the LVDS-capable pairs `gp/gn[8..10]`, so switching them to `LVCMOS33D` later moves no pin. `gp/gn[11..13]` are avoided because they are shared with the ESP32.
 
 Pin assignment of the pico-ice, see [`pico-ice/pico-ice.pcf`](pico-ice/pico-ice.pcf) for the full list:
 
 | Signal | Pin | Note |
 | --- | --- | --- |
-| `clk_i` | 35 | 12 MHz oscillator |
-| `reset_i` | 10 | on-board push button |
-| `sclk_o`, `sram_ce_o`, `si_o`, `so_i` | 15, 37, 14, 17 | SPI SRAM |
-| `sda_io`, `scl_o` | 19, 18 | I2C |
-| `tx_o`, `rx_i` | 25, 27 | UART |
-| `gpio_in_i[3:0]`, `gpio_out_o[3:0]` | 31, 34, 38, 43 and 28, 32, 36, 42 | GPIO |
+| `clk` | 35 | 12 MHz oscillator |
+| `reset` | 10 | on-board push button, active low |
+| `sclk`, `sram_ce`, `si`, `so` | 15, 37, 14, 17 | SPI SRAM |
+| `sda`, `scl` | 19, 18 | I2C |
+| `tx`, `rx` | 25, 27 | UART |
+| `gpio_in[3:0]`, `gpio_out[3:0]` | 31, 34, 38, 43 and 28, 32, 36, 42 | GPIO |
 | `ds_I_p_o`, `ds_I_n_o`, `ds_Q_p_o`, `ds_Q_n_o` | 45, 47, 2, 4 | delta-sigma baseband outputs |
 | `lo_I_o`, `lo_Q_o`, `lo_Ix_o`, `lo_Qx_o` | 44, 46, 48, 3 | LO outputs |
 
-The `arch/` folder also carries an [`ecp5.mk`](arch/ecp5.mk) fragment (Yosys -> nextpnr-ecp5 -> ecppack), so an ECP5 board needs only its own folder, no new architecture fragment.
+Pin assignment of the iCEBreaker, see [`icebreaker/icebreaker.pcf`](icebreaker/icebreaker.pcf) for the full list:
+
+| Signal | Pin | Note |
+| --- | --- | --- |
+| `clk` | 35 | 12 MHz oscillator |
+| `reset` | 10 | S1 button, active low |
+| `sram_ce`, `si`, `so`, `sclk` | 4, 2, 47, 45 | SPI SRAM on PMOD 1A, top row, in the Digilent SPI pin order |
+| `scl`, `sda` | 46, 44 | I2C on PMOD 1A, bottom row |
+| `rx`, `tx` | 6, 9 | UART on the FT2232H channel B |
+| `gpio_in[3:0]`, `gpio_out[3:0]` | 43, 38, 34, 31 and 42, 36, 32, 28 | GPIO on PMOD 1B |
+| `ds_I_p_o`, `ds_I_n_o`, `ds_Q_p_o`, `ds_Q_n_o` | 27, 25, 21, 19 | delta-sigma baseband outputs on PMOD 2, top row |
+| `lo_I_o`, `lo_Q_o`, `lo_Ix_o`, `lo_Qx_o` | 26, 23, 20, 18 | LO outputs on PMOD 2, bottom row |
+
+`P1A7` (pin 3), `P1A8` (pin 48) and both on-board LEDs stay free on the iCEBreaker.
+
+> [!NOTE]
+> `riscv_top` derives the UART baud rate and the I2C clock divider from its `CLK_FREQ` parameter, which defaults to 56 MHz, and no board clocks the design at 56 MHz. The real rates therefore scale by `f_osc / 56 MHz`: 115200 baud becomes about 51.4 kBaud on the ULX3S at 25 MHz and about 24.7 kBaud on the two iCE40 boards at 12 MHz. Set the host terminal to the scaled rate, or override `CLK_FREQ` at synthesis time. This is not new with the ECP5 board, the pico-ice build has always run this way.
 
 
 ## Toolchain
 
 [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) ships the complete build chain: `verilator` and `yosys`, `nextpnr-ice40` with `icepack` for the iCE40, and `nextpnr-ecp5` with `ecppack` for the ECP5.
 
-Programming the board happens on the host, since the container has no USB access (`openFPGALoader` and `dfu-util` are not installed, and `iceprog`, which is, cannot reach a board): build the bitstream inside and run `load_bitstream`/`flash_bitstream` from a host installation of the board's programmer. The `visualize` and `visualize_generic` targets additionally need `netlistsvg`, `svgo` and `rsvg-convert`, which are not in the container either.
+Programming the board happens on the host, since the container has no USB access (`openFPGALoader` and `dfu-util` are not installed, and `iceprog`, which is, cannot reach a board): build the bitstream inside and run `load_bitstream`/`flash_bitstream` from a host installation of the board's programmer, which differs per board, see the table above. The `visualize` and `visualize_generic` targets additionally need `netlistsvg`, `svgo` and `rsvg-convert`, which are not in the container either.
 
 
 ## Picking a Board
 
-[`Makefile`](Makefile) in this folder is a dispatcher: it forwards every target it does not handle itself to `<BOARD>/Makefile`, defaulting to `BOARD ?= pico-ice`. Running the default board, another board, or the board directory directly are all equivalent:
+[`Makefile`](Makefile) in this folder is a dispatcher: it forwards every target it does not handle itself to `<BOARD>/Makefile`, defaulting to `BOARD ?= ulx3s`. Running the default board, another board, or the board directory directly are all equivalent:
 
 ```sh
-make all                     # pico-ice, the default
+make all                     # ulx3s, the default
 make BOARD=pico-ice all
-make -C pico-ice all
+make -C icebreaker all
 ```
 
 `BOARD` is validated against the folders that hold a `Makefile`, so a typo gives a list of what is available instead of a confusing error:
 
 ```console
 $ make BOARD=nosuchboard synthesis
-Unknown BOARD 'nosuchboard'. Available: pico-ice.
+Unknown BOARD 'nosuchboard'. Available: icebreaker pico-ice ulx3s.
 ```
 
 `help`, `open` and `clean` are handled by the dispatcher itself. `clean` deliberately cleans **every** board, not just `$(BOARD)`, so that `make clean` in the macro removes all FPGA outputs in one go.
@@ -73,15 +113,13 @@ TOP := riscv_top
 include ../dut.mk
 MODULES_SYNTH := $(DUT_SRCS)
 
-PCF_FILE := pico-ice.pcf
+PCF_FILE := ulx3s.lpf
 
-ARCH         := ice40
-ICE40_DEVICE := --up5k --package sg48
+ARCH        := ecp5
+ECP5_DEVICE := --85k --package CABGA381
 
-# DFU alt 0 is the SPI flash, alt 1 the FPGA's volatile configuration memory.
-# Must be `=`, not `:=`, since BITSTREAM is only defined later, by fpga.mk.
-LOAD_CMD  = dfu-util --alt 1 --download $(BITSTREAM)
-FLASH_CMD = dfu-util --alt 0 --download $(BITSTREAM) --reset
+OPENFPGALOADER_BOARD := ulx3s
+OPENFPGALOADER_FLAGS := --unprotect-flash
 
 include $(TOP_FPGA_DIR)/fpga.mk
 ```
@@ -161,7 +199,7 @@ Remove the generated files of every board, that is each `<board>/build/`:
 
 ```sh
 make clean
-make -C pico-ice clean   # only this board
+make -C ulx3s clean   # only this board
 ```
 
 
@@ -184,7 +222,7 @@ Run technology-mapped synthesis for the board's FPGA architecture. The Yosys `sy
 
 ```sh
 make synthesis
-make BOARD=pico-ice synthesis
+make BOARD=icebreaker synthesis
 ```
 
 Generate a generic synthesis netlist and Yosys graph:
@@ -221,7 +259,7 @@ make pr-gui
 ```
 
 > [!NOTE]
-> The RISC-V macro fills the iCE40UP5K almost completely, so the place-and-route takes long and can fail on a marginal seed. Run `make clean` and try again in that case.
+> The RISC-V macro currently overflows the iCE40UP5K, so `pr` fails on the pico-ice and on the iCEBreaker, see [Supported Boards](#supported-boards). Even when it fits, the UP5K place-and-route runs at over 99% utilisation, takes long and can fail on a marginal seed, in which case `make clean` and a retry help. The ECP5-85F of the ULX3S is nowhere near that tight.
 
 
 ### Bitstream Generation and Flash
@@ -241,7 +279,7 @@ make flash_bitstream   # into the board's flash, survives a power cycle
 
 > [!NOTE]
 > Neither target is part of `make all`, by design. Use them explicitly when you want to program the FPGA.
-> The pico-ice is programmed with `dfu-util`, not `iceprog`. Both flash iCE40 bitstreams, but they target different interfaces: `iceprog` speaks directly over SPI via an FTDI USB bridge (iCEstick, iCEBreaker, and so on), while `dfu-util` uses the USB DFU standard. On the pico-ice the RP2040 co-processor is the DFU bootloader and forwards the bitstream to the iCE40 flash (DFU alt 0) or to the FPGA's configuration memory (alt 1), which is why `iceprog` does not work on that board.
+> The pico-ice is programmed with `dfu-util`, not `iceprog`, unlike the iCEBreaker. Both flash iCE40 bitstreams, but they target different interfaces: `iceprog` speaks directly over SPI via an FTDI USB bridge (iCEstick, iCEBreaker, and so on), while `dfu-util` uses the USB DFU standard. On the pico-ice the RP2040 co-processor is the DFU bootloader and forwards the bitstream to the iCE40 flash (DFU alt 0) or to the FPGA's configuration memory (alt 1), which is why `iceprog` does not work on that board.
 
 
 ### Convert to Verilog
