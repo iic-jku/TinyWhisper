@@ -21,7 +21,7 @@ CELL ?= $(TOP)
 
 # PEX mode (1 = C-decoupled, 2 = C-coupled, 3 = full-RC)
 # Override with: make <target> EXT_MODE=<1|2|3>
-EXT_MODE ?= 3
+EXT_MODE ?= 1
 
 # full-RC extresist threshold in mOhm (sak-pex.sh -t, only used in EXT_MODE=3; default: 10000 = 10 Ohm)
 # Override with: make <target> THRESHOLD=<mOhm>
