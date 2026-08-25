@@ -488,7 +488,7 @@ module memory #(
       // The gate-level Xschem testbench riscv_top_tb_tran.sch has no SPI SRAM model.
       // Without it the CPU never fetches an instruction and the analog outputs stay flat.
       // make generate-xspice therefore skips the regeneration while this line is commented out.
-      freq_status[1:0] <= 2'b11;
+      // freq_status[1:0] <= 2'b11;
 
       state <= IDLE;
       uart_tx_en <= 0;
