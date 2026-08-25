@@ -294,7 +294,7 @@ Every component follows the same principle. The simulations always run last, so 
 
 | Makefile | `all` flow |
 | --- | --- |
-| [`macros/riscv/`](macros/riscv/) (digital) | lint -> build (FPGA and LibreLane) -> simulate. DRC and LVS run inside the LibreLane flow. The XSPICE model is a committed source file and is not rebuilt. |
+| [`macros/riscv/`](macros/riscv/) (digital) | lint -> build (FPGA and LibreLane) -> simulate. DRC and LVS run inside the LibreLane flow. The XSPICE model is a committed source file, rebuilt only when the riscv RTL enables it. |
 | [`macros/iqmod/`](macros/iqmod/) (analog) | verify (DRC, LVS, PEX) -> build (LEF, LIB, Verilog stub, GDS, render) -> simulate |
 | [`macros/coupled_resonator_lc_bpf/`](macros/coupled_resonator_lc_bpf/) (schematic-only) | simulate |
 | [`ip/*`](ip/) (bondpad, logos) | build -> verify (DRC) |

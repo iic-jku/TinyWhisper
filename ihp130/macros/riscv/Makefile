@@ -312,7 +312,9 @@ symbol-check: ## Check <CELL>.sym against the powered netlist ports, runs inside
 
 
 # Generate XSPICE Target
-# Note that these commands should not be run in `build-top` or `all`, since this XSPICE file is generated once with specific CPU settings for a more convenient simulation.
+# This XSPICE file is generated once with specific CPU settings for a more convenient simulation, so a build must not overwrite it by accident.
+# The guard below is what makes it safe to call from `build-top`: with the stock RTL the target prints a message and does nothing, and it only regenerates when the RTL actually carries those settings.
+# Called from `build-top` the RTL check is exact rather than a proxy, because the LibreLane run earlier in the same `build-top` hardened that very RTL, and `copy-netlist` put its extracted netlist in place just before.
 # FREQ_FREERUN_ON is non-empty while that line is active. The guard below skips the regeneration when it is commented out, so a stray `make generate-xspice` cannot overwrite the committed model with a dead-CPU one.
 FREQ_FREERUN_ON := $(filter-out 0,$(shell grep -cE "^[[:space:]]*freq_status\[1:0\][[:space:]]*<=[[:space:]]*2'b11;" $(SRC_DIR)/memory.sv 2>/dev/null))
 
@@ -339,12 +341,12 @@ build-fpga: ## Build target for FPGA usage
 .PHONY: build-fpga
 
 # TODO: `make librelane-magicdrc` is used instead of `make librelane` until the KLayout DRC issues are resolved.
-build-top: ## Build macro (run LibreLane with only Magic DRC checks, copy reports, copy final files, copy netlists, generate XSPICE model, copy render, and render final GDS)
+build-top: ## Build macro (run LibreLane with only Magic DRC checks, copy reports, copy final files, copy netlists, generate XSPICE model if the RTL enables it, copy render, and render final GDS)
 	$(MAKE) librelane-magicdrc
 	$(MAKE) copy-reports
 	$(MAKE) copy-final
 	$(MAKE) copy-netlist
-#	$(MAKE) generate-xspice
+	$(MAKE) generate-xspice
 	$(MAKE) copy-render
 	$(MAKE) render-gds
 #	$(MAKE) librelane-openroad
