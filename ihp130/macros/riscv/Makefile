@@ -38,6 +38,16 @@ EV_PRECISION ?= 5
 # Override with: make <target> WAVEFORM_VIEWER=<gtkwave|surfer>
 WAVEFORM_VIEWER ?= gtkwave
 
+# Target of the dsmod cocotb Makefile that sim-rtl-cocotb runs for CELL=dsmod
+# all      = baseline configuration only (DSMOD_ORDER=2, DSMOD_OSR=64), minutes
+# all_runs = full order/OSR sweep, regenerates every committed figure, hours
+# Override with: make <target> DSMOD_TARGET=<all|all_runs>
+DSMOD_TARGET ?= all
+
+# Same for sim-all, and therefore for all, which regenerates the complete figure set
+# Override with: make <target> DSMOD_TARGET_SIM_ALL=<all|all_runs>
+DSMOD_TARGET_SIM_ALL ?= all_runs
+
 # Extra options for the sak-open.py file browser (e.g. --all to include build outputs)
 # Override with: make open OPEN_ARGS=<options>
 OPEN_ARGS ?=
@@ -101,7 +111,7 @@ _TB_EXT = $(if $(wildcard $(VERILOG_TB_DIR)/$(CELL)/$(CELL)_tb.sv),sv,v)
 
 # Help Target
 help: ## Show this help message
-	@echo 'Usage: make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>] [WAVEFORM_VIEWER=<gtkwave|surfer>] [TB=<testbenchname>] [OPEN_ARGS=<options>] [FORCE=1]'
+	@echo 'Usage: make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>] [WAVEFORM_VIEWER=<gtkwave|surfer>] [TB=<testbenchname>] [DSMOD_TARGET=<all|all_runs>] [DSMOD_TARGET_SIM_ALL=<all|all_runs>] [OPEN_ARGS=<options>] [FORCE=1]'
 	@echo ''
 	@echo 'Available targets:'
 	@grep -E '^[a-zA-Z0-9_.-]+:.*## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  %-20s %s\n", $$1, $$2}'
@@ -111,6 +121,8 @@ help: ## Show this help message
 	@echo 'THRESHOLD/MINRES/MINDELAY are full-RC (EXT_MODE=3) extresist settings for magic-pex (defaults 10000 mOhm / 1000 mOhm / 1 ps).'
 	@echo 'WAVEFORM_VIEWER defaults to gtkwave. Use surfer to launch Surfer instead.'
 	@echo 'TB selects the Xschem testbench for sim-gl-xschem (default: <CELL>_tb_tran).'
+	@echo 'DSMOD_TARGET selects the dsmod cocotb target for sim-rtl-cocotb CELL=dsmod (default all = baseline ORDER=2/OSR=64).'
+	@echo 'DSMOD_TARGET_SIM_ALL is the same for sim-all and all (default all_runs = every order/OSR figure, takes hours).'
 	@echo 'OPEN_ARGS passes extra options to sak-open.py for the open target (e.g. --all).'
 	@echo 'FORCE=1 lets symbol-gl overwrite an existing symbol instead of refusing.'
 .PHONY: help
@@ -161,9 +173,9 @@ sim-view-verilog: ## View CELL cell Verilog simulation waveforms (usage: make si
 	fi
 .PHONY: sim-view-verilog
 
-sim-rtl-cocotb: ## Run RTL simulation of CELL cell with cocotb (usage: make sim-rtl-cocotb [CELL=<cellname>])
+sim-rtl-cocotb: ## Run RTL simulation of CELL cell with cocotb (usage: make sim-rtl-cocotb [CELL=<cellname>] [DSMOD_TARGET=<all|all_runs>])
 	@if [ "$(CELL)" = "dsmod" ]; then \
-		$(MAKE) -C $(COCOTB_DIR)/$(CELL) all; \
+		$(MAKE) -C $(COCOTB_DIR)/$(CELL) $(DSMOD_TARGET); \
 	else \
 		cd $(COCOTB_DIR)/$(CELL) && python3 $(CELL)_tb.py; \
 	fi
@@ -197,7 +209,7 @@ sim-gl-xschem: ## Run gate-level simulation of CELL cell with Xschem in batch mo
 
 sim-all: ## Simulate the macro (RTL Verilog + RTL/GL cocotb + GL Xschem for riscv_top)
 	$(MAKE) sim-rtl-verilog CELL=dsmod
-	$(MAKE) sim-rtl-cocotb CELL=dsmod
+	$(MAKE) sim-rtl-cocotb CELL=dsmod DSMOD_TARGET=$(DSMOD_TARGET_SIM_ALL)
 	$(MAKE) sim-rtl-verilog
 	$(MAKE) sim-rtl-cocotb
 	$(MAKE) sim-gl-cocotb
@@ -433,7 +445,7 @@ magic-pex: ## Run Parasitic Extraction with Magic on the final GDS (usage: make 
 
 
 # Lint, Build, Verify and Simulate All Target
-# TODO: `magic-pex` is not part of `all` yet. A full-RC extraction of the whole RISC-V macro takes hours and
+# `magic-pex` is not part of `all` yet. A full-RC extraction of the whole RISC-V macro takes hours and
 # writes a netlist far larger than the counter example of the template, so run it by hand when needed.
 all: ## Lint, build, verify and simulate the macro
 	$(MAKE) lint-verilog-all

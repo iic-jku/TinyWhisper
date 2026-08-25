@@ -245,9 +245,12 @@ For `CELL=dsmod`, the simulation delegates to the sub-Makefile in `testbenches/c
 For all other cells the Python runner is invoked directly.
 
 ```sh
-make sim-rtl-cocotb               # run riscv_top RTL cocotb simulation
-make sim-rtl-cocotb CELL=dsmod    # run dsmod cocotb test suite
+make sim-rtl-cocotb                                    # run riscv_top RTL cocotb simulation
+make sim-rtl-cocotb CELL=dsmod                         # run the dsmod suite for the baseline ORDER=2 / OSR=64
+make sim-rtl-cocotb CELL=dsmod DSMOD_TARGET=all_runs   # run the dsmod suite for all orders and OSRs
 ```
+
+`DSMOD_TARGET` selects which target of the dsmod sub-Makefile is run. `all` (the default) regenerates the figures of one configuration only, `all_runs` sweeps `DSMOD_ORDER` over 1 and 2 and `DSMOD_OSR` over 32, 64, 128 and 256, which regenerates every figure committed under `testbenches/cocotb/dsmod/results/`. `sim-all` uses `all_runs`.
 
 See `testbenches/cocotb/dsmod/README.md` for `dsmod`-specific configuration options and environment variables.
 
@@ -303,7 +306,7 @@ make sim-all
 This executes the following targets in order:
 
 1. `sim-rtl-verilog CELL=dsmod`
-2. `sim-rtl-cocotb CELL=dsmod`
+2. `sim-rtl-cocotb CELL=dsmod DSMOD_TARGET=all_runs`
 3. `sim-rtl-verilog` (default: `riscv_top`)
 4. `sim-rtl-cocotb` (default: `riscv_top`)
 5. `sim-gl-cocotb` (default: `riscv_top`)
