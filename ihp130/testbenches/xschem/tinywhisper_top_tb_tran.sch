@@ -200,17 +200,26 @@ N 1420 -630 1420 -570 {lab=GND}
 N 1420 -750 1480 -750 {lab=vout_RF}
 N 1680 -750 1740 -750 {lab=vout_RF_filt}
 N 1740 -790 1740 -750 {lab=vout_RF_filt}
+N 920 -300 920 -200 {lab=GND}
+N 560 -300 560 -200 {lab=GND}
+N 440 -300 440 -200 {lab=GND}
 N 260 -420 260 -200 {lab=GND}
 N 260 -600 320 -600 {lab=GND}
 N 260 -720 320 -720 {lab=GND}
 N 260 -720 260 -600 {lab=GND}
+N 560 -1260 560 -1200 {lab=GND}
 N 440 -1260 560 -1260 {lab=GND}
 N 260 -1020 260 -720 {lab=GND}
+N 440 -1260 440 -1200 {lab=GND}
 N 260 -1260 440 -1260 {lab=GND}
 N 1280 -360 1280 -200 {lab=GND}
+N 1220 -600 1280 -600 {lab=GND}
 N 1280 -900 1280 -600 {lab=GND}
+N 1220 -480 1280 -480 {lab=GND}
 N 1280 -600 1280 -480 {lab=GND}
+N 1220 -900 1280 -900 {lab=GND}
 N 1280 -1020 1280 -900 {lab=GND}
+N 1220 -1020 1280 -1020 {lab=GND}
 N 1220 -1140 1280 -1140 {lab=GND}
 N 1280 -1080 1280 -1020 {lab=GND}
 N 1220 -1080 1280 -1080 {lab=GND}
@@ -219,10 +228,16 @@ N 1220 -360 1280 -360 {lab=GND}
 N 1280 -420 1280 -360 {lab=GND}
 N 1220 -420 1280 -420 {lab=GND}
 N 1280 -480 1280 -420 {lab=GND}
+N 1220 -960 1320 -960 {lab=VDD}
+N 1220 -540 1320 -540 {lab=VDD}
+N 1320 -960 1320 -540 {lab=VDD}
 N 220 -660 320 -660 {lab=VDD}
+N 500 -1300 500 -1200 {lab=VDD}
+N 860 -1300 860 -1200 {lab=VDD}
 N 220 -1300 220 -660 {lab=VDD}
 N 180 -1140 320 -1140 {lab=clock}
 N 180 -1080 320 -1080 {lab=reset_n}
+N 1320 -1300 1320 -960 {lab=VDD}
 N 1220 -840 1360 -840 {lab=vout_RF}
 N 1360 -840 1360 -780 {lab=vout_RF}
 N 1220 -780 1360 -780 {lab=vout_RF}
@@ -232,6 +247,7 @@ N 1220 -660 1360 -660 {lab=vout_RF}
 N 1360 -750 1360 -720 {lab=vout_RF}
 N 1360 -750 1420 -750 {lab=vout_RF}
 N 1360 -780 1360 -750 {lab=vout_RF}
+N 920 -1260 920 -1200 {lab=GND}
 N 800 -1260 920 -1260 {lab=GND}
 N 620 -1260 620 -1200 {lab=GND}
 N 560 -1260 620 -1260 {lab=GND}
@@ -241,12 +257,17 @@ N 740 -1260 740 -1200 {lab=GND}
 N 680 -1260 740 -1260 {lab=GND}
 N 800 -1260 800 -1200 {lab=GND}
 N 740 -1260 800 -1260 {lab=GND}
+N 380 -1300 380 -1200 {lab=VIO}
 N 800 -300 800 -160 {lab=gpio_3}
 N 740 -300 740 -160 {lab=gpio_2}
 N 680 -300 680 -160 {lab=gpio_1}
 N 620 -300 620 -160 {lab=gpio_0}
 N 220 -240 500 -240 {lab=VDD}
 N 220 -660 220 -240 {lab=VDD}
+N 500 -300 500 -240 {lab=VDD}
+N 860 -300 860 -240 {lab=VDD}
+N 860 -240 1320 -240 {lab=VDD}
+N 1320 -540 1320 -240 {lab=VDD}
 N 180 -480 320 -480 {lab=i2c_scl}
 N 180 -360 320 -360 {lab=uart_tx}
 N 180 -840 320 -840 {lab=spi_sram_ce}
@@ -266,6 +287,7 @@ N 1040 -1340 1040 -1200 {lab=ds_I_n}
 N 1100 -1340 1100 -1200 {lab=lo_I}
 N 1160 -1340 1160 -1200 {lab=lo_Ix}
 N 180 -780 320 -780 {lab=VIO}
+N 380 -300 380 -160 {lab=VIO}
 N 2520 -2080 2520 -2040 {lab=VIO}
 N 2520 -1980 2520 -1940 {lab=GND}
 C {devices/code.sym} 2850 -2060 0 0 {name=NGSPICE
@@ -424,10 +446,16 @@ C {devices/lab_wire.sym} 620 -160 3 0 {name=p3 sig_type=std_logic lab=gpio_0}
 C {devices/lab_wire.sym} 680 -160 3 0 {name=p4 sig_type=std_logic lab=gpio_1}
 C {devices/lab_wire.sym} 740 -160 3 0 {name=p5 sig_type=std_logic lab=gpio_2}
 C {devices/lab_wire.sym} 800 -160 3 0 {name=p6 sig_type=std_logic lab=gpio_3}
+C {devices/gnd.sym} 920 -200 0 0 {name=l4 lab=GND}
 C {title-2.sym} 0 0 0 0 {name=l9 author="Simon Dorrer" rev=1.0 lock=true}
+C {devices/gnd.sym} 560 -200 0 0 {name=l12 lab=GND}
+C {devices/gnd.sym} 440 -200 0 0 {name=l13 lab=GND}
 C {devices/gnd.sym} 260 -200 0 0 {name=l14 lab=GND}
 C {devices/gnd.sym} 1280 -200 0 1 {name=l17 lab=GND}
 C {vdd.sym} 220 -1300 0 0 {name=l16 lab=VDD}
+C {vdd.sym} 860 -1300 0 0 {name=l15 lab=VDD}
+C {vdd.sym} 500 -1300 0 0 {name=l18 lab=VDD}
+C {vdd.sym} 1320 -1300 0 0 {name=l19 lab=VDD}
 C {devices/lab_wire.sym} 980 -1340 3 1 {name=p20 sig_type=std_logic lab=ds_I_p}
 C {devices/lab_wire.sym} 1040 -1340 3 1 {name=p21 sig_type=std_logic lab=ds_I_n}
 C {devices/lab_wire.sym} 1100 -1340 3 1 {name=p23 sig_type=std_logic lab=lo_I}
@@ -452,7 +480,9 @@ C {devices/vsource.sym} 2520 -2010 0 0 {name=VIO value=\{IOVDD\}}
 C {devices/gnd.sym} 2520 -1940 0 0 {name=l2 lab=GND
 value=\{IOVDD\}}
 C {devices/lab_wire.sym} 2520 -2080 3 1 {name=p26 sig_type=std_logic lab=VIO}
+C {devices/lab_wire.sym} 380 -1300 3 1 {name=p8 sig_type=std_logic lab=VIO}
 C {devices/lab_wire.sym} 180 -780 0 0 {name=p16 sig_type=std_logic lab=VIO}
+C {devices/lab_wire.sym} 380 -160 3 0 {name=p19 sig_type=std_logic lab=VIO}
 C {tinywhisper_top.sym} 770 -750 0 0 {name=x1}
 C {devices/code_shown.sym} 2620 -2330 0 0 {name=SAVE only_toplevel=true
 format="tcleval( @value )"
