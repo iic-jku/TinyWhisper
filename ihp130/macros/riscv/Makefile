@@ -312,11 +312,23 @@ symbol-check: ## Check <CELL>.sym against the powered netlist ports, runs inside
 
 
 # Generate XSPICE Target
-generate-xspice: ## Generate XSPICE model from the LibreLane-extracted SPICE netlist
+# Note that these commands should not be run in `build-top` or `all`, since this XSPICE file is generated once with specific CPU settings for a more convenient simulation.
+# FREQ_FREERUN_ON is non-empty while that line is active. The guard below skips the regeneration when it is commented out, so a stray `make generate-xspice` cannot overwrite the committed model with a dead-CPU one.
+FREQ_FREERUN_ON := $(filter-out 0,$(shell grep -cE "^[[:space:]]*freq_status\[1:0\][[:space:]]*<=[[:space:]]*2'b11;" $(SRC_DIR)/memory.sv 2>/dev/null))
+
+generate-xspice: ## Generate XSPICE model from the LibreLane-extracted SPICE netlist (skipped while rtl/memory.sv has the free-running frequency generation commented out)
+ifeq ($(FREQ_FREERUN_ON),)
+	@echo "Skipping generate-xspice: freq_status[1:0] <= 2'b11; is commented out in $(SRC_DIR)/memory.sv."
+	@echo "The committed $(XSPICE_DIR)/$(TOP).xspice was generated with that line active. Regenerating now would give"
+	@echo "a model whose CPU never starts, because the gate-level Xschem testbench has no SPI SRAM model."
+	@echo "To regenerate on purpose: uncomment the line, re-run 'make librelane-magicdrc' and 'make copy-netlist',"
+	@echo "then 'make generate-xspice', and comment the line back afterwards."
+else
 	$(MAKE) symbol-check CELL=$(TOP)
 	mkdir -p $(XSPICE_DIR)
 	python3 $(SCRIPTS_DIR)/spi2xspice.py $(PDK_ROOT)/$(PDK)/libs.ref/sg13g2_stdcell/lib/sg13g2_stdcell_typ_1p50V_25C.lib -io_time=500p -time=50p -idelay=5p -odelay=50p -cload=250f $(NET_SPICE_DIR)/${TOP}.spice $(XSPICE_DIR)/${TOP}.xspice
 	sak-pin-reorder.py $(XSCHEM_SCH_DIR)/${TOP}.sym $(XSPICE_DIR)/${TOP}.xspice --format xspice
+endif
 .PHONY: generate-xspice
 # ================================================================================================
 
@@ -332,7 +344,7 @@ build-top: ## Build macro (run LibreLane with only Magic DRC checks, copy report
 	$(MAKE) copy-reports
 	$(MAKE) copy-final
 	$(MAKE) copy-netlist
-	$(MAKE) generate-xspice
+#	$(MAKE) generate-xspice
 	$(MAKE) copy-render
 	$(MAKE) render-gds
 #	$(MAKE) librelane-openroad
@@ -436,7 +448,8 @@ all: ## Lint, build, verify and simulate the macro
 clean: ## Delete all generated files and folders (LibreLane runs, final, netlists, render, reports, simulation and FPGA outputs)
 	rm -rf $(LIBRELANE_DIR)/runs $(FLOW_FINAL_DIR)
 	rm -rf $(FINAL_DIR)
-	rm -rf $(NET_NL_DIR) $(NET_PNL_DIR) $(NET_SPICE_DIR) $(XSPICE_DIR) $(NET_PEX_DIR)
+	rm -rf $(NET_NL_DIR) $(NET_PNL_DIR) $(NET_SPICE_DIR) $(NET_PEX_DIR)
+#	rm -rf $(XSPICE_DIR)
 	rm -rf $(RENDER_IMG_DIR)
 	rm -rf $(REPORT_DIR)
 	rm -rf $(XSCHEM_SCH_DIR)/simulations $(XSCHEM_TB_DIR)/simulations

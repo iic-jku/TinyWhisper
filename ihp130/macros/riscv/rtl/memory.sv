@@ -484,6 +484,10 @@ module memory #(
       // tries to read its first instruction. Setting [1:0] to 11 disables the reset and start the frequency generation.
       // The default Cordic values defined in the reset logic of the freq_generator will be used. Be sure to change them according
       // to your needs!
+      // The committed netlist/xspice/riscv_top.xspice was generated with this line active.
+      // The gate-level Xschem testbench riscv_top_tb_tran.sch has no SPI SRAM model.
+      // Without it the CPU never fetches an instruction and the analog outputs stay flat.
+      // make generate-xspice therefore skips the regeneration while this line is commented out.
       // freq_status[1:0] <= 2'b11;
 
       state <= IDLE;

@@ -287,11 +287,7 @@ Every testbench pulls in a FET `.save` file through its `SAVE` code block (for e
 The simulation runs in **batch mode**: the target netlists the testbench with `xschem netlist` and then invokes `ngspice -b` directly instead of using `xschem simulate`. `xschem simulate` would spawn an interactive ngspice in a terminal detached from `make`: the target would return immediately, the result would never be checked, and the process (with its X server) would leak. Running the simulator directly makes `make` block until the run finishes and see its exit status.
 
 > [!NOTE]
-> This flow expects the generated XSPICE model in `netlist/xspice/riscv_top.xspice`. It is generated automatically by `make build-top` (right after `copy-netlist`), so it always matches the current LibreLane run. To regenerate it manually, run:
->
-> ```sh
-> make generate-xspice
-> ```
+> This flow expects the XSPICE model in `netlist/xspice/riscv_top.xspice`. It is a committed source file rather than a build product: it was generated once with the free-running frequency generation enabled in [`rtl/memory.sv`](rtl/memory.sv), because this testbench has no SPI SRAM model and the CPU would otherwise never fetch an instruction. `build-top` therefore does not regenerate it, and `make generate-xspice` skips while that line is commented out. See [Generate XSPICE File](#generate-xspice-file).
 
 
 #### Run All Simulations
@@ -437,11 +433,14 @@ make -C fpga BOARD=<board> all          # the whole flow on another board
 
 ### Build Top
 
-To build the macro with LibreLane, copy its reports, copy the final output files, copy netlists, generate the XSPICE model, copy the render, and render the final GDS, run:
+To build the macro with LibreLane, copy its reports, copy the final output files, copy netlists, copy the render, and render the final GDS, run:
 
 ```sh
 make build-top
 ```
+
+> [!NOTE]
+> `generate-xspice` is deliberately **not** part of `build-top`. The committed XSPICE model is a source file that was generated once from a modified `rtl/memory.sv`, see [Generate XSPICE File](#generate-xspice-file).
 
 
 ### Design Rule Check (DRC) & Layout Versus Schematic (LVS)
@@ -486,7 +485,7 @@ make symbol-check                  # check riscv_top.sym
 make symbol-check CELL=<cellname>  # check the symbol of another cell
 ```
 
-`symbol-check` compares the committed symbol against the same powered netlist and fails if it no longer describes the macro. It runs as the first step of `generate-xspice`, so every build that produces an XSPICE model has verified the symbol first, and a design that grew a port fails there instead of somewhere downstream.
+`symbol-check` compares the committed symbol against the same powered netlist and fails if it no longer describes the macro. It runs as the first step of `generate-xspice`. Since `generate-xspice` is no longer part of `build-top`, no build runs it on its own any more, so run `make symbol-check` by hand after changing a port. It also fires the next time the XSPICE model is regenerated on purpose.
 
 `sak-pin-reorder.py` already refuses to reorder what it cannot map: it fails on a pin count mismatch, on a `sim_pinname` naming a port the netlist does not have, and on two pins claiming the same port. `symbol-check` adds the case it cannot see and two it has no data for:
 
@@ -604,7 +603,7 @@ Lints, builds, verifies and simulates the whole macro:
 - `magic-pex` (currently disabled in the `Makefile`, see below)
 - `sim-all`
 
-Linting runs first to fail fast on structural RTL issues. The simulations run **after** the build, so the gate-level simulations (`sim-gl-cocotb`, `sim-gl-xschem`) run on the netlists and the XSPICE model produced by this build, not on those of a previous one. `magic-pex` and `klayout-pex` are commented out in the recipe: a full-RC extraction of the whole RISC-V macro takes hours and no testbench in this macro consumes the result, so run it by hand when a post-layout netlist is needed (see [Parasitic Extraction (PEX)](#parasitic-extraction-pex)). The DRC and LVS verification is done within the LibreLane flow.
+Linting runs first to fail fast on structural RTL issues. The simulations run **after** the build, so `sim-gl-cocotb` runs on the netlists produced by this build, not on those of a previous one. `sim-gl-xschem` is the exception: it reads the committed XSPICE model, which `build-top` does not regenerate, see [Generate XSPICE File](#generate-xspice-file). `magic-pex` and `klayout-pex` are commented out in the recipe: a full-RC extraction of the whole RISC-V macro takes hours and no testbench in this macro consumes the result, so run it by hand when a post-layout netlist is needed (see [Parasitic Extraction (PEX)](#parasitic-extraction-pex)). The DRC and LVS verification is done within the LibreLane flow.
 
 ```sh
 make all
@@ -625,9 +624,14 @@ This builds the XSPICE model **directly from the LibreLane-extracted SPICE netli
 2. `scripts/spi2xspice.py` replaces every standard cell with an XSPICE primitive (`d_lut`, `d_dff`, …), taking the pin order from the inline black-box `.subckt` stubs in the extracted netlist and the logic functions from the Liberty file.
 3. `sak-pin-reorder.py` (installed in the IIC-OSIC-TOOLS container) reorders the resulting `.subckt` ports to match the Xschem symbol in `schematic/xschem/riscv_top.sym`. Magic sorts the top-level ports alphabetically, so the pins are mapped **by name**: every pin in the symbol carries a `sim_pinname=<netlist_name>` property.
 
-> [!NOTE]
-> This target runs automatically as part of `make build-top` (right after `copy-netlist`), so the XSPICE model always matches the netlists of the current LibreLane run. The simulation timing parameters (`-io_time`, `-time`, `-idelay`, `-odelay`, `-cload`) are pinned in the Makefile, so regeneration is deterministic.
-> Conversion pipeline: check the Xschem symbol → extracted SPICE (`.spice`) → XSPICE (`.xspice`) → reorder pins according to the Xschem symbol.
+The committed model predates this target and does not match its output. Its header says it was written by `vlog2Spice` from the structural netlist, it carries none of the black-box `.subckt` stubs, and its supply ports are `a_VPWR` and `a_VGND` instead of the `a_VDD` and `a_VSS` of the extracted netlist. Its port order does match the symbol, which is what the positional Xschem instance line needs. Regenerating it with this target therefore produces a different, extraction-derived file.
+
+> [!IMPORTANT]
+> This target is **not** part of `make build-top` or `make all`, and it is guarded. `netlist/xspice/riscv_top.xspice` is a committed source file, generated once with the free-running frequency generation enabled in [`rtl/memory.sv`](rtl/memory.sv), the `freq_status[1:0] <= 2'b11;` line described by the NOTE there. The gate-level Xschem testbench has no SPI SRAM model, so with the stock RTL the CPU never fetches an instruction and the analog outputs stay flat. While that line is commented out the target prints a message and does nothing, so a stray run cannot overwrite the committed model.
+>
+> To regenerate it on purpose: uncomment the line, re-run `make librelane-magicdrc` and `make copy-netlist`, then `make generate-xspice`, and comment the line back afterwards. The guard greps `rtl/memory.sv` for the active assignment, so it is independent of where in the file the line sits, but it reads the RTL rather than the extracted netlist the model is built from, so it catches the common accident without proving that the last LibreLane run used the setting.
+>
+> The simulation timing parameters (`-io_time`, `-time`, `-idelay`, `-odelay`, `-cload`) are pinned in the Makefile, so regeneration is deterministic. Conversion pipeline: check the Xschem symbol -> extracted SPICE (`.spice`) -> XSPICE (`.xspice`) -> reorder pins according to the Xschem symbol.
 
 
 ### Clean
@@ -636,7 +640,7 @@ This builds the XSPICE model **directly from the LibreLane-extracted SPICE netli
 
 - `flow/librelane/runs/` and `flow/final/` (LibreLane run directories and the saved views)
 - `final/` (GDS, LEF, Liberty, NL, PNL, SPEF and Verilog header deliverables)
-- `netlist/` (NL, PNL, SPICE, XSPICE and the extracted PEX netlists)
+- `netlist/` (NL, PNL, SPICE and the extracted PEX netlists). `netlist/xspice/` is deliberately kept, see the note below.
 - `render/img/` (the layout renders)
 - `verification/` (the reports copied from the last LibreLane run)
 - `schematic/xschem/simulations/` and `testbenches/xschem/simulations/`
@@ -654,4 +658,4 @@ make all
 > Most of these outputs are committed in this repository, so `make clean` leaves a large deletion set in `git status`. Run `git restore .` to get the tracked ones back if you did not mean to remove them. The LibreLane run directories under `flow/librelane/runs/` are **not** tracked and cannot be restored that way.
 
 > [!NOTE]
-> The Xschem testbench `.include`s the XSPICE model `netlist/xspice/riscv_top.xspice`, and the gate-level cocotb run needs the netlists in `final/` and `netlist/`. Directly after `make clean`, run `make build-top` (or the full `make all`) once before `make sim-gl-xschem` or `make sim-gl-cocotb`, otherwise the includes fail. The chip top-level testbenches and the iqmod system-level testbench include the same XSPICE model, so they need it as well.
+> The Xschem testbench `.include`s the XSPICE model `netlist/xspice/riscv_top.xspice`, and the gate-level cocotb run needs the netlists in `final/` and `netlist/`. `make clean` deletes the netlists, which `make build-top` restores, but it keeps the XSPICE model on purpose, because no target regenerates that one from the committed RTL. If it is lost anyway, bring it back with `git restore ihp130/macros/riscv/netlist/xspice`. The chip top-level testbenches and the iqmod system-level testbench include the same XSPICE model, so they need it as well.

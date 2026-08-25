@@ -35,6 +35,7 @@
 │  ├─ floorplan.md
 │  ├─ pinout.md
 │  ├─ pinout.pdf
+│  ├─ README.md
 │  └─ specifications.md
 ├─ 📁 flow/
 │  ├─ 📁 artistic/
@@ -274,7 +275,7 @@ All `simulations/` folders are generated and git-ignored.
 ### Which File Is Used
 
 - The Makefile targets always name one explicitly with `--rcfile`, so a target behaves the same from any working directory.
-- Inside the container, [`.designinit`](../.designinit) wraps `xschem` so that a plain `xschem <file>` from anywhere uses `schematic/xschem/xschemrc`.
+- Inside the container, [`.designinit`](../.designinit) only exports the PDK variables. It does not wrap `xschem`, so a plain `xschem <file>` uses whatever the current directory provides.
 - Starting Xschem from within one of the nine folders picks up that folder's file, which is the normal interactive case.
 
 
@@ -293,7 +294,7 @@ Every component follows the same principle. The simulations always run last, so 
 
 | Makefile | `all` flow |
 | --- | --- |
-| [`macros/riscv/`](macros/riscv/) (digital) | lint -> build (FPGA and LibreLane, including the XSPICE model) -> simulate. DRC and LVS run inside the LibreLane flow. |
+| [`macros/riscv/`](macros/riscv/) (digital) | lint -> build (FPGA and LibreLane) -> simulate. DRC and LVS run inside the LibreLane flow. The XSPICE model is a committed source file and is not rebuilt. |
 | [`macros/iqmod/`](macros/iqmod/) (analog) | verify (DRC, LVS, PEX) -> build (LEF, LIB, Verilog stub, GDS, render) -> simulate |
 | [`macros/coupled_resonator_lc_bpf/`](macros/coupled_resonator_lc_bpf/) (schematic-only) | simulate |
 | [`ip/*`](ip/) (bondpad, logos) | build -> verify (DRC) |
@@ -562,7 +563,7 @@ The following command builds the `riscv` digital macro:
 make build-riscv
 ```
 
-For each digital macro this dispatches to its in-tree `make all`, which runs the macro's full flow: lint, build (FPGA and LibreLane, including netlists and the XSPICE model), verify (DRC and LVS within the LibreLane flow) and simulate. The simulations run after the build, so the gate-level simulations run on the netlists produced by this build.
+For each digital macro this dispatches to its in-tree `make all`, which runs the macro's full flow: lint, build (FPGA and LibreLane, including netlists), verify (DRC and LVS within the LibreLane flow) and simulate. The simulations run after the build, so the gate-level simulations run on the netlists produced by this build.
 
 The FPGA part of that build emulates the macro on a [pico-ice](https://pico-ice.tinyvision.ai/) board (Lattice iCE40UP5K). The flow is split into a board-independent part and one folder per board, selected with `BOARD=`, so a further board is one folder with its `Makefile` and pin constraints. See [macros/riscv/fpga/README.md](macros/riscv/fpga/README.md) for the pin assignment, the toolchain notes, and how to add one.
 
@@ -923,7 +924,7 @@ To keep the runtime low while still covering the full toolchain, the regression 
 - KLayout DRC (`sak-drc.sh`) is skipped inside the LibreLane runs, but is still exercised in the bondpad and logo IP builds, and in the iqmod `klayout-verify`.
 - Only **one** logo (`sg13g2_ip__jku`) is regenerated. It is the only step that exercises the PNG to GDS flow. The other logos (`sg13g2_ip__jku_names`, `sg13g2_ip__ce`, `sg13g2_ip__ce_names`) use an identical toolchain and reuse their committed views.
 - Exactly **one** Xschem testbench (`iqmod_mfb_lpf_tb_ac_cl`) and **one** CACE parameter set (the AC VDD sweep `ac_params` of `iqmod_mfb_lpf.yaml`, no Monte Carlo) are run. Swap `ac_params` for `ac_mc_params` / `ac_mm_params` in the target to also exercise the Monte Carlo flow.
-- In the default `regression` the riscv macro is **not re-hardened**: `librelane-magicdrc` (the full RTL-to-GDS of the CPU, ≈2 h wall clock), the flows that depend on its fresh outputs (`copy-final`, the gate-level cocotb simulation `sim-gl-cocotb` with ≈12 min for the full suite, `generate-xspice` and the gate-level Xschem simulation `sim-gl-xschem`) and the Icarus RTL testbench (`sim-rtl-verilog`) only run in `regression-nightly` (`NIGHTLY_REGRESSION=1`). In the default variant the riscv macro is covered at RTL (lint + cocotb, which also exercises Icarus as its simulator), and the LibreLane flow itself is still exercised by the chip top-level `librelane-nodrc` run. A fast gate-level smoke run of a single test (≈20 s) is available via `COCOTB_TEST_FILTER=test_cpu_fibonacci_fast make sim-gl-cocotb`.
+- In the default `regression` the riscv macro is **not re-hardened**: `librelane-magicdrc` (the full RTL-to-GDS of the CPU, ≈2 h wall clock), the flows that depend on its fresh outputs (`copy-final`, the gate-level cocotb simulation `sim-gl-cocotb` with ≈12 min for the full suite, `generate-xspice`, which is called for consistency with the template but skips itself while the riscv RTL carries its stock settings, and the gate-level Xschem simulation `sim-gl-xschem`) and the Icarus RTL testbench (`sim-rtl-verilog`) only run in `regression-nightly` (`NIGHTLY_REGRESSION=1`). In the default variant the riscv macro is covered at RTL (lint + cocotb, which also exercises Icarus as its simulator), and the LibreLane flow itself is still exercised by the chip top-level `librelane-nodrc` run. A fast gate-level smoke run of a single test (≈20 s) is available via `COCOTB_TEST_FILTER=test_cpu_fibonacci_fast make sim-gl-cocotb`.
 
 The regression runs bottom-up: first the iqmod and riscv macros, then the top-level assembly (submodules, bondpad, logo) and finally the chip top-level LibreLane run that integrates the macros and IP. In `regression-nightly`, `copy-final` copies the freshly hardened `flow/final/` views into `macros/riscv/final/`, so the gate-level flows and the chip top-level use the freshly built outputs; in the default `regression` the chip top-level integrates the committed views in `macros/riscv/final/` instead.
 
@@ -950,7 +951,7 @@ The following flows are only covered by `regression-nightly`:
 | Icarus Verilog with the plain SystemVerilog testbench | `sim-rtl-verilog` |
 | LibreLane macro hardening + Magic sign-off DRC (≈2 h) | `librelane-magicdrc` + `copy-final` |
 | cocotb gate-level | `sim-gl-cocotb` (manual smoke run: `COCOTB_TEST_FILTER=test_cpu_fibonacci_fast make sim-gl-cocotb`) |
-| `verilog2sym.py` (Xschem symbol check) + `spi2xspice.py` + `sak-pin-reorder.py` (XSPICE model) | `generate-xspice` |
+| `verilog2sym.py` (Xschem symbol check) + `spi2xspice.py` + `sak-pin-reorder.py` (XSPICE model) | `generate-xspice`, **skipped by its guard** while `macros/riscv/rtl/memory.sv` carries its stock settings, so these three are only exercised when the model is regenerated on purpose |
 | Xschem gate-level (ngspice + xspice) | `sim-gl-xschem` |
 
 The FPGA flow (Yosys + nextpnr-ice40 + icepack, riscv `build-fpga`) is not part of either regression variant and must be run manually.
@@ -987,4 +988,4 @@ make all
 > Most of these outputs are committed in this repository, so `make clean` leaves a large deletion set in `git status`. Run `git restore .` to get the tracked ones back if you did not mean to remove them. The LibreLane run directories under `flow/librelane/runs/` are **not** tracked and cannot be restored that way.
 
 > [!NOTE]
-> The chip top-level testbenches include the riscv XSPICE model `macros/riscv/netlist/xspice/riscv_top.xspice`, which `clean-all` removes. Run `make build-riscv` once before `make sim-gl-xschem`, otherwise the include fails. Since `build-all` does not call `build-macros` (see [Build All](#build-all)), `make all` alone does not bring it back either.
+> The chip top-level testbenches include the riscv XSPICE model `macros/riscv/netlist/xspice/riscv_top.xspice`. `clean-all` keeps it on purpose: it is a committed source file that no target regenerates from the committed RTL, so neither `make build-riscv` nor `make all` could bring it back. If it is lost anyway, restore it with `git restore ihp130/macros/riscv/netlist/xspice` before `make sim-gl-xschem`, otherwise the include fails.
