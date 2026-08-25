@@ -489,3 +489,7 @@ format="tcleval( @value )"
 value="
 .include [file rootname [file tail [xschem get schname]]].save
 "}
+C {tinywhisper_top_pex.sym} 3990 -570 0 0 {name=x2
+spice_ignore=true}
+C {tinywhisper_top.sym} 3990 -1610 0 0 {name=x4
+spice_ignore=true}
