@@ -198,6 +198,16 @@ At most 400 buttons are drawn at once, because each one is an X window, and what
 > This target needs a display. Run it inside the container's VNC/noVNC desktop or over X11 forwarding. In a shell-only container it stops with `cannot open a window`. The `.png` and `.pdf` buttons hand the file to the desktop's registered handler, so those two need the full VNC/noVNC session and do not work over a bare X forward.
 
 
+### Layout Sources and the Exported Tapeout GDS
+
+Every `layout/<cell>.klay.gds` is a source of truth. It is the KLayout editing source: it references the PDK PCells and pulls its sub-cells in as libraries through the sibling `layout/<cell>.klay.klib`, so every device is still live and editable. Only `iqmod_top` also has a flat `layout/iqmod_top.gds`, exported from `layout/iqmod_top.klay.gds` with `File > Export Layout For Tapeout`, which resolves every PCell and library reference into a static cell. That export is what the build targets read and what the chip consumes, because they always use `layout/<name>.gds`. Every other cell has no flat file, so the DRC, LVS and PEX targets fall back to its `.klay.gds` and there is nothing to keep in step.
+
+> [!IMPORTANT]
+> Re-export `iqmod_top.gds` after every change to `iqmod_top.klay.gds`, and never hand-edit it. Keeping the two in step by editing both is how they drift apart, and the drift is invisible because the build targets only look at the exported file while `klayout-drc` and friends can be pointed at either one.
+
+The export re-evaluates the PCells against the **installed** PDK, so device geometry can change even though nobody touched the editing source, and the exported file is the only place that shows it. The sibling SG13CMOS5L chip template hit this for real: for the identical stored parameters its `SG13_dev` `pmos` draws the `NWell` (`31/0`) 0.11 µm tighter on every side than the geometry frozen into its exported GDS, which broke a hand-drawn `NWell` strap and produced four `NW.b1` markers (min. PWell width between NWell regions) that no sign-off target saw. Measured on the 2026.08 container, the SG13G2 PDK used here still draws the wider well, so the two are not interchangeable: a layout carried between the PDKs has to be re-exported under the target PDK and re-checked, not copied. Re-run DRC, LVS and PEX after every export.
+
+
 ### Layout File Extension Usage
 
 The Makefile defines a `_GDS_EXT` variable that auto-selects the layout file extension: it prefers `.gds` when available, and falls back to `.klay.gds` otherwise.
