@@ -69,6 +69,19 @@ set_input_delay -min 0 -clock $clocks $clk_core_inout_ports
 set_input_delay -max $input_delay_value -clock $clocks $clk_core_inout_ports
 set_output_delay $output_delay_value -clock $clocks $clk_core_inout_ports
 
+# LO and delta-sigma monitor pads (bidir_PAD[0..7]).
+# These drive a probe or the board, no off-chip receiver latches them with clk_PAD, so the default
+# IO_DELAY_CONSTRAINT budget of 20 % of the clock period is not a real requirement here.
+# The LO generator registers are also clocked off the inverted clock for quadrature, which makes
+# these half-cycle paths that only get period/2, so the full-period budget is doubly pessimistic.
+# 1 ns of external delay leaves room for board flight time and still keeps the paths constrained.
+set lo_ds_ports [get_ports {
+	bidir_PAD[0] bidir_PAD[1] bidir_PAD[2] bidir_PAD[3]
+	bidir_PAD[4] bidir_PAD[5] bidir_PAD[6] bidir_PAD[7]
+}]
+
+set_output_delay 1.0 -clock $clocks $lo_ds_ports
+
 set cap_load [expr $::env(OUTPUT_CAP_LOAD) / 1000.0]
 puts "\[INFO] Setting load to: $cap_load"
 set_load $cap_load [all_outputs]
