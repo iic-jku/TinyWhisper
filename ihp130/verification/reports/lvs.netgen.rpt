@@ -546,9 +546,9 @@ Cell tinywhisper_top (1) disconnected node: jku_names/(no pins)
 Subcircuit summary:
 Circuit 1: tinywhisper_top                 |Circuit 2: tinywhisper_top                 
 -------------------------------------------|-------------------------------------------
-sg13g2_decap_8 (56088->1)                  |sg13g2_decap_8 (56088->1)                  
-sg13g2_decap_4 (684->1)                    |sg13g2_decap_4 (684->1)                    
-sg13g2_fill_1 (569->1)                     |sg13g2_fill_1 (569->1)                     
+sg13g2_decap_8 (56086->1)                  |sg13g2_decap_8 (56086->1)                  
+sg13g2_decap_4 (685->1)                    |sg13g2_decap_4 (685->1)                    
+sg13g2_fill_1 (570->1)                     |sg13g2_fill_1 (570->1)                     
 sg13g2_Filler200 (60)                      |sg13g2_Filler200 (60)                      
 sg13g2_fill_2 (84->1)                      |sg13g2_fill_2 (84->1)                      
 sg13g2_ip__ce_names (1)                    |sg13g2_ip__ce_names (1)                    
@@ -556,7 +556,7 @@ sg13g2_IOPadInOut30mA (9)                  |sg13g2_IOPadInOut30mA (9)
 sg13g2_Filler2000 (60)                     |sg13g2_Filler2000 (60)                     
 sg13g2_ip__bondpad_70x70 (56)              |sg13g2_ip__bondpad_70x70 (56)              
 sg13g2_Filler1000 (60)                     |sg13g2_Filler1000 (60)                     
-sg13g2_dlygate4sd3_1 (21)                  |sg13g2_dlygate4sd3_1 (21)                  
+sg13g2_dlygate4sd3_1 (22)                  |sg13g2_dlygate4sd3_1 (22)                  
 sg13g2_IOPadVss (9)                        |sg13g2_IOPadVss (9)                        
 sg13g2_IOPadAnalog (8)                     |sg13g2_IOPadAnalog (8)                     
 sg13g2_IOPadOut30mA (9)                    |sg13g2_IOPadOut30mA (9)                    
@@ -570,8 +570,8 @@ sg13g2_ip__ce (1)                          |sg13g2_ip__ce (1)
 sg13g2_ip__jku_names (1)                   |sg13g2_ip__jku_names (1)                   
 sg13g2_IOPadIOVss (3)                      |sg13g2_IOPadIOVss (3)                      
 sg13g2_IOPadIOVdd (3)                      |sg13g2_IOPadIOVdd (3)                      
-Number of devices: 327                     |Number of devices: 327                     
-Number of nets: 114                        |Number of nets: 114                        
+Number of devices: 328                     |Number of devices: 328                     
+Number of nets: 115                        |Number of nets: 115                        
 ---------------------------------------------------------------------------------------
 Resolving symmetries by property value.
 Resolving symmetries by pin name.

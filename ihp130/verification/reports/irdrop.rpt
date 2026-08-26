@@ -1,4 +1,4 @@
-+ analyze_power_grid -net VDD -voltage_file /foss/designs/TinyWhisper/ihp130/flow/librelane/runs/RUN_2026-08-24_23-15-06/55-openroad-irdropreport/net-VDD.csv
++ analyze_power_grid -net VDD -voltage_file /foss/designs/TinyWhisper/ihp130/flow/librelane/runs/RUN_2026-08-26_14-42-56/55-openroad-irdropreport/net-VDD.csv
 [INFO PSM-0040] All shapes on net VDD are connected.
 ########## IR report #################
 Net              : VDD
@@ -11,7 +11,7 @@ Average IR drop  : 8.45e-05 V
 Worstcase IR drop: 2.10e-04 V
 Percentage drop  : 0.01 %
 ######################################
-+ analyze_power_grid -net VSS -voltage_file /foss/designs/TinyWhisper/ihp130/flow/librelane/runs/RUN_2026-08-24_23-15-06/55-openroad-irdropreport/net-VSS.csv
++ analyze_power_grid -net VSS -voltage_file /foss/designs/TinyWhisper/ihp130/flow/librelane/runs/RUN_2026-08-26_14-42-56/55-openroad-irdropreport/net-VSS.csv
 [INFO PSM-0040] All shapes on net VSS are connected.
 ########## IR report #################
 Net              : VSS
