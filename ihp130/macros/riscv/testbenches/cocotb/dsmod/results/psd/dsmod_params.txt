@@ -1,6 +1,6 @@
 clk_freq=56000000.0
-osr=256
-sine_freq=8171.08154296875
+osr=64
+sine_freq=8117.67578125
 n_samples=4096
 amplitude=0.7079457843841379
 nbit=30

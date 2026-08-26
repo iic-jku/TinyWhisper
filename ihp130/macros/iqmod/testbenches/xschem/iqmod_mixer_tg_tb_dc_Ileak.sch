@@ -76,7 +76,7 @@ value="
 .csparam VDD=VDD
 .param Vcm=VDD/2
 .csparam Vcm=Vcm
-.param temp=27
+.temp 27
 .param Cload=10p
 .options savecurrents klu method=gear reltol=1e-3 abstol=1e-15 gmin=1e-15
 .control
@@ -109,7 +109,7 @@ wrdata ../plot_simulations/data/iqmod_mixer_tg_tb_dc_Ileak.txt v(Ileak_w_dummy)
 .endc"}
 C {devices/launcher.sym} 1680 -1080 0 0 {name=h2
 descr="Simulate" 
-tclcommand="xschem save; xschem netlist; xschem simulate"
+tclcommand="xschem save; xschem netlist; file mkdir $netlist_dir; write_data [save_params] $netlist_dir/[file rootname [file tail [xschem get current_name]]].save; xschem simulate"
 }
 C {devices/launcher.sym} 1680 -960 0 0 {name=h1
 descr="Load waves" 
@@ -144,3 +144,8 @@ C {iqmod_mixer_tg_pex.sym} 1120 -1200 0 0 {name=x2
 spice_ignore=true}
 C {iqmod_mixer_tg_pex.sym} 1120 -860 0 0 {name=x3
 }
+C {devices/code_shown.sym} 60 -1330 0 0 {name=SAVE only_toplevel=true
+format="tcleval( @value )"
+value="
+.include [file rootname [file tail [xschem get schname]]].save
+"}

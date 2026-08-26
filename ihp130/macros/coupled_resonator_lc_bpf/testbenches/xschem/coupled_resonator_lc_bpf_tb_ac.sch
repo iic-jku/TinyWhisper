@@ -62,7 +62,7 @@ C {devices/code_shown.sym} 60 -1350 0 0 {name=NGSPICE
 only_toplevel=true
 lock=true
 value="
-.param temp=27
+.temp 27
 .param Rin=1k
 .param Rload=1k
 .options savecurrents klu method=gear reltol=1e-3 abstol=1e-15 gmin=1e-15
@@ -115,7 +115,7 @@ quit
 "}
 C {devices/launcher.sym} 1720 -1360 0 0 {name=h2
 descr="Simulate" 
-tclcommand="xschem save; xschem netlist; xschem simulate"
+tclcommand="xschem save; xschem netlist; file mkdir $netlist_dir; write_data [save_params] $netlist_dir/[file rootname [file tail [xschem get current_name]]].save; xschem simulate"
 }
 C {title-3.sym} 0 0 0 0 {name=l2 author="Simon Dorrer" rev=1.0 lock=true}
 C {devices/launcher.sym} 1720 -1240 0 0 {name=h1
@@ -156,3 +156,8 @@ value="
 .lib cornerDIO.lib dio_tt
 "}
 C {coupled_resonator_lc_bpf_1k_1k.sym} 1180 -920 0 0 {name=x1}
+C {devices/code_shown.sym} 60 -1470 0 0 {name=SAVE only_toplevel=true
+format="tcleval( @value )"
+value="
+.include [file rootname [file tail [xschem get schname]]].save
+"}

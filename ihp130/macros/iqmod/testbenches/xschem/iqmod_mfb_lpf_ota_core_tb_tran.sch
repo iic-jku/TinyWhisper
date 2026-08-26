@@ -167,7 +167,7 @@ value="
 .param VDD=1.5
 .csparam VDD=VDD
 .param Vcm=VDD/2
-.param temp=27
+.temp 27
 .param fsig=400e3
 .csparam fsig=fsig
 .param Cload=10p
@@ -240,7 +240,7 @@ wrdata ../plot_simulations/data/iqmod_mfb_lpf_ota_core_tb_tran.txt
 "}
 C {devices/launcher.sym} 1700 -1590 0 0 {name=h2
 descr="Simulate" 
-tclcommand="xschem save; xschem netlist; xschem simulate"
+tclcommand="xschem save; xschem netlist; file mkdir $netlist_dir; write_data [save_params] $netlist_dir/[file rootname [file tail [xschem get current_name]]].save; xschem simulate"
 }
 C {title-3.sym} 0 0 0 0 {name=l2 author="Simon Dorrer" rev=1.0 lock=true}
 C {devices/launcher.sym} 1700 -1470 0 0 {name=h1
@@ -322,7 +322,8 @@ C {devices/gnd.sym} 1440 -480 0 0 {name=l4 lab=GND}
 C {devices/gnd.sym} 1520 -480 0 0 {name=l6 lab=GND}
 C {devices/code_shown.sym} 820 -1490 0 0 {name=SAVE only_toplevel=true
 format="tcleval( @value )"
-value=".include [file rootname [xschem get schname]].save
+value="
+.include [file rootname [file tail [xschem get schname]]].save
 "}
 C {devices/lab_pin.sym} 1520 -420 0 1 {name=l34 sig_type=std_logic lab=vout_cm}
 C {devices/vcvs.sym} 1520 -350 0 0 {name=E8 value=0.5}

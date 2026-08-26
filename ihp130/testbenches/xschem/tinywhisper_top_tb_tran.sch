@@ -293,11 +293,11 @@ N 2520 -1980 2520 -1940 {lab=GND}
 C {devices/code.sym} 2850 -2060 0 0 {name=NGSPICE
 only_toplevel=true 
 value="
-*.include ../../../netlist/pex/tinywhisper_top_pex.spice
+.include ../../../netlist/pex/tinywhisper_top_magic_pex_1.spice
 .include ../../../macros/riscv/netlist/xspice/riscv_top.xspice
 .param IOVDD=3.3
 .param VDD=1.5
-.param temp=27
+.temp 27
 .param Cload=10p
 .param Rload=1k
 .param fclk=56e6
@@ -388,7 +388,7 @@ wrdata ../plot_simulations/data/tinywhisper_top_tb_tran_fft_filt.txt v(vout_RF_f
 "}
 C {devices/launcher.sym} 2680 -2050 0 0 {name=h2
 descr="Simulate" 
-tclcommand="xschem save; xschem netlist; xschem simulate"
+tclcommand="xschem save; xschem netlist; file mkdir $netlist_dir; write_data [save_params] $netlist_dir/[file rootname [file tail [xschem get current_name]]].save; xschem simulate"
 }
 C {devices/launcher.sym} 2680 -1930 0 0 {name=h1
 descr="Load waves" 
@@ -465,10 +465,14 @@ C {devices/lab_wire.sym} 1100 -160 3 0 {name=p14 sig_type=std_logic lab=lo_Q}
 C {devices/lab_wire.sym} 1160 -160 3 0 {name=p25 sig_type=std_logic lab=lo_Qx}
 C {devices/lab_wire.sym} 1040 -160 3 0 {name=p15 sig_type=std_logic lab=ds_Q_n}
 C {devices/lab_wire.sym} 180 -540 0 0 {name=p9 sig_type=std_logic lab=i2c_sda}
-C {code_shown.sym} 2620 -2190 0 0 {name=PAD_MODELS
+C {code_shown.sym} 2620 -2230 0 0 {name=PAD_MODELS
 only_toplevel=true
 value="tcleval(
-.include $::PDK_ROOT/$::PDK/libs.ref/sg13g2_io/spice/sg13g2_io.spi
+* The PDK sg13g2_io.spi changed its subcircuit pin order in May 2026, but the
+* PDK Xschem pad symbols still carry the old order, which mis-wires the whole
+* padframe. Use the repo copy, which matches the symbols and is also the one
+* LibreLane and cocotb use.
+.include ../../../ip/sg13g2_io_custom/spice/sg13g2_io.spi
 )"
 spice_ignore=false
       }
@@ -480,3 +484,12 @@ C {devices/lab_wire.sym} 380 -1300 3 1 {name=p8 sig_type=std_logic lab=VIO}
 C {devices/lab_wire.sym} 180 -780 0 0 {name=p16 sig_type=std_logic lab=VIO}
 C {devices/lab_wire.sym} 380 -160 3 0 {name=p19 sig_type=std_logic lab=VIO}
 C {tinywhisper_top.sym} 770 -750 0 0 {name=x1}
+C {devices/code_shown.sym} 2620 -2330 0 0 {name=SAVE only_toplevel=true
+format="tcleval( @value )"
+value="
+.include [file rootname [file tail [xschem get schname]]].save
+"}
+C {tinywhisper_top_pex.sym} 3990 -570 0 0 {name=x2
+spice_ignore=true}
+C {tinywhisper_top.sym} 3990 -1610 0 0 {name=x4
+spice_ignore=true}

@@ -78,7 +78,4 @@ pex_*.tcl
 /ihp130/macros/riscv/schematic/xschem/simulations
 /ihp130/macros/riscv/testbenches/xschem/simulations
 /ihp130/macros/decoupling
-/ihp130/macros/riscv/fpga/riscv_top_viz.json
-/ihp130/macros/riscv/fpga/riscv_top_generic*
-/ihp130/macros/riscv/fpga/riscv_top*.svg
-/ihp130/macros/riscv/fpga/riscv_top*.pdf
+/ihp130/macros/riscv/fpga/*/build/

@@ -18,6 +18,18 @@ CELL ?= $(TOP)
 # Override with: make <target> EXT_MODE=<1|2|3>
 EXT_MODE ?= 3
 
+# full-RC extresist threshold in mOhm (sak-pex.sh -t, only used in EXT_MODE=3; default: 10000 = 10 Ohm)
+# Override with: make <target> THRESHOLD=<mOhm>
+THRESHOLD ?= 10000
+
+# full-RC extresist minres in mOhm (sak-pex.sh -r, only used in EXT_MODE=3; default: 1000 = 1 Ohm)
+# Override with: make <target> MINRES=<mOhm>
+MINRES ?= 1000
+
+# full-RC extresist mindelay in ps (sak-pex.sh -y, only used in EXT_MODE=3; default: 1; 0 = gate by resistance)
+# Override with: make <target> MINDELAY=<ps>
+MINDELAY ?= 1
+
 # Floating-point precision (significant digits) for xschem's ev function
 # Override with: make <target> EV_PRECISION=<digits>
 EV_PRECISION ?= 5
@@ -25,6 +37,20 @@ EV_PRECISION ?= 5
 # Set the waveform viewer GTKWave or Surfer (default: gtkwave)
 # Override with: make <target> WAVEFORM_VIEWER=<gtkwave|surfer>
 WAVEFORM_VIEWER ?= gtkwave
+
+# Target of the dsmod cocotb Makefile that sim-rtl-cocotb runs for CELL=dsmod
+# all      = baseline configuration only (DSMOD_ORDER=2, DSMOD_OSR=64), minutes
+# all_runs = full order/OSR sweep, regenerates every committed figure, hours
+# Override with: make <target> DSMOD_TARGET=<all|all_runs>
+DSMOD_TARGET ?= all
+
+# Same for sim-all, and therefore for all, which regenerates the complete figure set
+# Override with: make <target> DSMOD_TARGET_SIM_ALL=<all|all_runs>
+DSMOD_TARGET_SIM_ALL ?= all_runs
+
+# Extra options for the sak-open.py file browser (e.g. --all to include build outputs)
+# Override with: make open OPEN_ARGS=<options>
+OPEN_ARGS ?=
 
 # Folder structure
 COCOTB_DIR      := testbenches/cocotb
@@ -39,9 +65,11 @@ NET_NL_DIR    	:= netlist/nl
 NET_PNL_DIR  	:= netlist/pnl
 NET_SPICE_DIR 	:= netlist/spice
 XSPICE_DIR  	:= netlist/xspice
+NET_PEX_DIR   	:= netlist/pex
 LIBRELANE_DIR 	:= flow/librelane
 FLOW_FINAL_DIR 	:= flow/final
 FINAL_DIR      	:= final
+LAY_DIR        	:= final/gds
 
 # Variables for simulation and linting targets
 # constants.sv defines the shared opcode/funct localparams and must compile before any module that uses them,
@@ -77,21 +105,34 @@ _SIM_SRCS = $(if $(filter $(CELL),$(TOP)),$(MODULES_SIM),$(or $(wildcard $(SRC_D
 # Source files for lint-verilog: constants + all synthesis sources for TOP, constants.sv + single-file (auto-detecting .sv/.v) otherwise
 _LINT_SRCS = $(if $(filter $(CELL),$(TOP)),$(SRC_DIR)/constants.sv $(MODULES_SYNTH),$(SRC_DIR)/constants.sv $(or $(wildcard $(SRC_DIR)/$(CELL).sv),$(SRC_DIR)/$(CELL).v))
 
-# Testbench extension: sv for TOP, v otherwise (dot is added at use site)
-_TB_EXT = $(if $(filter $(CELL),$(TOP)),sv,v)
+# Testbench extension: prefers <CELL>_tb.sv, falls back to <CELL>_tb.v (dot is added at use site)
+_TB_EXT = $(if $(wildcard $(VERILOG_TB_DIR)/$(CELL)/$(CELL)_tb.sv),sv,v)
 
 
 # Help Target
 help: ## Show this help message
-	@echo 'Usage: make <target> [CELL=<cellname>] [WAVEFORM_VIEWER=<gtkwave|surfer>]'
+	@echo 'Usage: make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>] [WAVEFORM_VIEWER=<gtkwave|surfer>] [TB=<testbenchname>] [DSMOD_TARGET=<all|all_runs>] [DSMOD_TARGET_SIM_ALL=<all|all_runs>] [OPEN_ARGS=<options>] [FORCE=1]'
 	@echo ''
 	@echo 'Available targets:'
 	@grep -E '^[a-zA-Z0-9_.-]+:.*## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  %-20s %s\n", $$1, $$2}'
 	@echo ''
 	@echo 'CELL defaults to $(TOP). Override to lint or simulate subcells.'
+	@echo 'EXT_MODE defaults to 3 (full-RC). 1=C-decoupled, 2=C-coupled.'
+	@echo 'THRESHOLD/MINRES/MINDELAY are full-RC (EXT_MODE=3) extresist settings for magic-pex (defaults 10000 mOhm / 1000 mOhm / 1 ps).'
 	@echo 'WAVEFORM_VIEWER defaults to gtkwave. Use surfer to launch Surfer instead.'
 	@echo 'TB selects the Xschem testbench for sim-gl-xschem (default: <CELL>_tb_tran).'
+	@echo 'DSMOD_TARGET selects the dsmod cocotb target for sim-rtl-cocotb CELL=dsmod (default all = baseline ORDER=2/OSR=64).'
+	@echo 'DSMOD_TARGET_SIM_ALL is the same for sim-all and all (default all_runs = every order/OSR figure, takes hours).'
+	@echo 'OPEN_ARGS passes extra options to sak-open.py for the open target (e.g. --all).'
+	@echo 'FORCE=1 lets symbol-gl overwrite an existing symbol instead of refusing.'
 .PHONY: help
+# ================================================================================================
+
+
+# Open Target
+open: ## Open the design files of this folder in the sak-open.py file browser (needs the VNC/X11 desktop)
+	sak-open.py $(OPEN_ARGS) .
+.PHONY: open
 # ================================================================================================
 
 
@@ -132,9 +173,9 @@ sim-view-verilog: ## View CELL cell Verilog simulation waveforms (usage: make si
 	fi
 .PHONY: sim-view-verilog
 
-sim-rtl-cocotb: ## Run RTL simulation of CELL cell with cocotb (usage: make sim-rtl-cocotb [CELL=<cellname>])
+sim-rtl-cocotb: ## Run RTL simulation of CELL cell with cocotb (usage: make sim-rtl-cocotb [CELL=<cellname>] [DSMOD_TARGET=<all|all_runs>])
 	@if [ "$(CELL)" = "dsmod" ]; then \
-		$(MAKE) -C $(COCOTB_DIR)/$(CELL) all; \
+		$(MAKE) -C $(COCOTB_DIR)/$(CELL) $(DSMOD_TARGET); \
 	else \
 		cd $(COCOTB_DIR)/$(CELL) && python3 $(CELL)_tb.py; \
 	fi
@@ -160,6 +201,7 @@ sim-gl-xschem: ## Run gate-level simulation of CELL cell with Xschem in batch mo
 		xschem set netlist_type spice; \
 		set netlist_dir $(abspath $(XSCHEM_TB_DIR)/simulations); \
 		xschem save; \
+		write_data [save_params] $(abspath $(XSCHEM_TB_DIR)/simulations)/$(TB).save; \
 		xschem netlist \
 	' $(TB).sch
 	cd $(XSCHEM_TB_DIR)/simulations && ngspice -b $(TB).spice
@@ -167,7 +209,7 @@ sim-gl-xschem: ## Run gate-level simulation of CELL cell with Xschem in batch mo
 
 sim-all: ## Simulate the macro (RTL Verilog + RTL/GL cocotb + GL Xschem for riscv_top)
 	$(MAKE) sim-rtl-verilog CELL=dsmod
-	$(MAKE) sim-rtl-cocotb CELL=dsmod
+	$(MAKE) sim-rtl-cocotb CELL=dsmod DSMOD_TARGET=$(DSMOD_TARGET_SIM_ALL)
 	$(MAKE) sim-rtl-verilog
 	$(MAKE) sim-rtl-cocotb
 	$(MAKE) sim-gl-cocotb
@@ -261,21 +303,46 @@ copy-render: ## Copy macro render from the last LibreLane run to render/img/
 .PHONY: copy-render
 # ================================================================================================
 
+
 # Render Target
-render-gds: ## Render an image from the final GDS using lay2img.py
+render-gds: ## Render images from the final GDS using sak-render.py
 	mkdir -p $(RENDER_IMG_DIR)/
-	python3 $(SCRIPTS_DIR)/lay2img.py $(FINAL_DIR)/gds/${TOP}.gds $(RENDER_IMG_DIR)/${TOP}.png --width 2048 --oversampling 4
+	sak-render.py -t ihp-sg13g2 -w 2048 -s 4 -o $(RENDER_IMG_DIR)/${TOP} $(FINAL_DIR)/gds/${TOP}.gds
 .PHONY: render-gds
 # ================================================================================================
 
 
+# Xschem Symbol Targets
+symbol-gl: ## Scaffold <CELL>.sym for a new macro, once, from the powered netlist ports (usage: make symbol-gl [CELL=<cellname>] [FORCE=1])
+	python3 $(SCRIPTS_DIR)/verilog2sym.py $(NET_PNL_DIR)/$(CELL).pnl.v $(XSCHEM_SCH_DIR)/$(CELL).sym $(if $(FORCE),--force)
+.PHONY: symbol-gl
+
+symbol-check: ## Check <CELL>.sym against the powered netlist ports, runs inside generate-xspice (usage: make symbol-check [CELL=<cellname>])
+	python3 $(SCRIPTS_DIR)/verilog2sym.py $(NET_PNL_DIR)/$(CELL).pnl.v $(XSCHEM_SCH_DIR)/$(CELL).sym --check
+.PHONY: symbol-check
+# ================================================================================================
+
+
 # Generate XSPICE Target
-# Runs as part of `build-top` (after `copy-netlist`) so the XSPICE model always matches the
-# netlists of the current LibreLane run. Can also be run standalone to regenerate the model.
-generate-xspice: ## Generate XSPICE model from the LibreLane-extracted SPICE netlist
+# This XSPICE file is generated once with specific CPU settings for a more convenient simulation, so a build must not overwrite it by accident.
+# The guard below is what makes it safe to call from `build-top`: with the stock RTL the target prints a message and does nothing, and it only regenerates when the RTL actually carries those settings.
+# Called from `build-top` the RTL check is exact rather than a proxy, because the LibreLane run earlier in the same `build-top` hardened that very RTL, and `copy-netlist` put its extracted netlist in place just before.
+# FREQ_FREERUN_ON is non-empty while that line is active. The guard below skips the regeneration when it is commented out, so a stray `make generate-xspice` cannot overwrite the committed model with a dead-CPU one.
+FREQ_FREERUN_ON := $(filter-out 0,$(shell grep -cE "^[[:space:]]*freq_status\[1:0\][[:space:]]*<=[[:space:]]*2'b11;" $(SRC_DIR)/memory.sv 2>/dev/null))
+
+generate-xspice: ## Generate XSPICE model from the LibreLane-extracted SPICE netlist (skipped while rtl/memory.sv has the free-running frequency generation commented out)
+ifeq ($(FREQ_FREERUN_ON),)
+	@echo "Skipping generate-xspice: freq_status[1:0] <= 2'b11; is commented out in $(SRC_DIR)/memory.sv."
+	@echo "The committed $(XSPICE_DIR)/$(TOP).xspice was generated with that line active. Regenerating now would give"
+	@echo "a model whose CPU never starts, because the gate-level Xschem testbench has no SPI SRAM model."
+	@echo "To regenerate on purpose: uncomment the line, re-run 'make librelane-magicdrc' and 'make copy-netlist',"
+	@echo "then 'make generate-xspice', and comment the line back afterwards."
+else
+	$(MAKE) symbol-check CELL=$(TOP)
 	mkdir -p $(XSPICE_DIR)
 	python3 $(SCRIPTS_DIR)/spi2xspice.py $(PDK_ROOT)/$(PDK)/libs.ref/sg13g2_stdcell/lib/sg13g2_stdcell_typ_1p50V_25C.lib -io_time=500p -time=50p -idelay=5p -odelay=50p -cload=250f $(NET_SPICE_DIR)/${TOP}.spice $(XSPICE_DIR)/${TOP}.xspice
 	sak-pin-reorder.py $(XSCHEM_SCH_DIR)/${TOP}.sym $(XSPICE_DIR)/${TOP}.xspice --format xspice
+endif
 .PHONY: generate-xspice
 # ================================================================================================
 
@@ -286,7 +353,7 @@ build-fpga: ## Build target for FPGA usage
 .PHONY: build-fpga
 
 # TODO: `make librelane-magicdrc` is used instead of `make librelane` until the KLayout DRC issues are resolved.
-build-top: ## Build macro (run LibreLane with only Magic DRC checks, copy reports, copy final files, copy netlists, generate XSPICE model, copy render, and render final GDS)
+build-top: ## Build macro (run LibreLane with only Magic DRC checks, copy reports, copy final files, copy netlists, generate XSPICE model if the RTL enables it, copy render, and render final GDS)
 	$(MAKE) librelane-magicdrc
 	$(MAKE) copy-reports
 	$(MAKE) copy-final
@@ -304,12 +371,105 @@ build-top: ## Build macro (run LibreLane with only Magic DRC checks, copy report
 # ================================================================================================
 
 
+# PEX Targets
+symbol-pex: ## Build the Xschem PEX symbol <CELL>_pex.sym from <CELL>.sym (usage: make symbol-pex [CELL=<cellname>])
+	@if [ ! -f $(XSCHEM_SCH_DIR)/$(CELL).sym ]; then \
+		echo "No symbol $(XSCHEM_SCH_DIR)/$(CELL).sym found, skipping PEX symbol generation."; \
+	else \
+		sed 's/type=subcircuit/type=primitive/' $(XSCHEM_SCH_DIR)/$(CELL).sym > $(XSCHEM_SCH_DIR)/$(CELL)_pex.sym; \
+		if ! grep -q 'type=primitive' $(XSCHEM_SCH_DIR)/$(CELL)_pex.sym; then \
+			rm -f $(XSCHEM_SCH_DIR)/$(CELL)_pex.sym; \
+			echo "ERROR: $(XSCHEM_SCH_DIR)/$(CELL).sym declares neither type=subcircuit nor type=primitive!"; \
+			exit 1; \
+		fi; \
+		echo "Wrote $(XSCHEM_SCH_DIR)/$(CELL)_pex.sym (copy of $(CELL).sym with type=primitive)."; \
+	fi
+.PHONY: symbol-pex
+
+klayout-pex: ## Run Parasitic Extraction with KPEX on the final GDS (usage: make klayout-pex [CELL=<cellname>] [EXT_MODE=<1|2|3>])
+	@if [ ! -f $(LAY_DIR)/$(CELL).gds ]; then \
+		echo "No layout $(LAY_DIR)/$(CELL).gds found. Run 'make build-top' (or 'make copy-final') first."; \
+		exit 1; \
+	fi
+	mkdir -p $(NET_PEX_DIR)
+	$(MAKE) symbol-pex CELL=$(CELL)
+	PDK_UNDERSCORED=$$(echo $$PDK | sed -e 's/-/_/g'); \
+	case $(EXT_MODE) in \
+		1) echo "WARNING: KPEX does not support C-decoupled (C) mode yet, using C-coupled (CC) mode instead."; KPEX_MODE=CC ;; \
+		2) KPEX_MODE=CC ;; \
+		3) KPEX_MODE=RC ;; \
+		*) echo "Invalid EXT_MODE: $(EXT_MODE). Use 1, 2, or 3."; exit 1;; \
+	esac; \
+	kpex \
+	--pdk $$PDK_UNDERSCORED \
+	--cell $(CELL) \
+	--schematic $(NET_SPICE_DIR)/$(CELL).spice \
+	--gds $(LAY_DIR)/$(CELL).gds \
+	--magic \
+	--magic_mode $$KPEX_MODE \
+	--out_dir $(NET_PEX_DIR) \
+	--out_spice $(NET_PEX_DIR)/$(CELL)_klayout_pex_$(EXT_MODE).spice
+#	--2.5D
+#	--mode $$KPEX_MODE
+	sed -i 's/$(CELL)/$(CELL)_pex/g' $(NET_PEX_DIR)/$(CELL)_klayout_pex_$(EXT_MODE).spice
+	rm -rf $(NET_PEX_DIR)/$(CELL)__$(CELL)
+	rm -f $(CELL).nodes $(CELL).sim
+	@if [ -f $(XSCHEM_SCH_DIR)/$(CELL)_pex.sym ]; then \
+		echo "Reordering pins in $(CELL)_klayout_pex_$(EXT_MODE).spice to match $(CELL)_pex.sym..."; \
+		sak-pin-reorder.py $(XSCHEM_SCH_DIR)/$(CELL)_pex.sym $(NET_PEX_DIR)/$(CELL)_klayout_pex_$(EXT_MODE).spice --format spice; \
+	else \
+		echo "No symbol $(XSCHEM_SCH_DIR)/$(CELL)_pex.sym found, skipping pin reorder."; \
+	fi
+	python3 $(SCRIPTS_DIR)/check_pex_ports.py $(NET_PEX_DIR)/$(CELL)_klayout_pex_$(EXT_MODE).spice
+.PHONY: klayout-pex
+
+magic-pex: ## Run Parasitic Extraction with Magic on the final GDS (usage: make magic-pex [CELL=<cellname>] [EXT_MODE=<1|2|3>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>])
+	@if [ ! -f $(LAY_DIR)/$(CELL).gds ]; then \
+		echo "No layout $(LAY_DIR)/$(CELL).gds found. Run 'make build-top' (or 'make copy-final') first."; \
+		exit 1; \
+	fi
+	mkdir -p $(NET_PEX_DIR)
+	$(MAKE) symbol-pex CELL=$(CELL)
+	sak-pex.sh -d -m $(EXT_MODE) -n $(CELL)_pex -t $(THRESHOLD) -r $(MINRES) -y $(MINDELAY) -w $(NET_PEX_DIR) $(LAY_DIR)/$(CELL).gds
+	mv $(NET_PEX_DIR)/$(CELL).pex.spice $(NET_PEX_DIR)/$(CELL)_magic_pex_$(EXT_MODE).spice
+	rm -f $(NET_PEX_DIR)/pex_$(CELL).tcl
+	@if [ -f $(XSCHEM_SCH_DIR)/$(CELL)_pex.sym ]; then \
+		echo "Reordering pins in $(CELL)_magic_pex_$(EXT_MODE).spice to match $(CELL)_pex.sym..."; \
+		sak-pin-reorder.py $(XSCHEM_SCH_DIR)/$(CELL)_pex.sym $(NET_PEX_DIR)/$(CELL)_magic_pex_$(EXT_MODE).spice --format spice; \
+	else \
+		echo "No symbol $(XSCHEM_SCH_DIR)/$(CELL)_pex.sym found, skipping pin reorder."; \
+	fi
+	python3 $(SCRIPTS_DIR)/check_pex_ports.py $(NET_PEX_DIR)/$(CELL)_magic_pex_$(EXT_MODE).spice
+.PHONY: magic-pex
+# ================================================================================================
+
+
 # Lint, Build, Verify and Simulate All Target
+# `magic-pex` is not part of `all` yet. A full-RC extraction of the whole RISC-V macro takes hours and
+# writes a netlist far larger than the counter example of the template, so run it by hand when needed.
 all: ## Lint, build, verify and simulate the macro
 	$(MAKE) lint-verilog-all
-#	$(MAKE) build-fpga
+	$(MAKE) build-fpga
 	$(MAKE) build-top
+#	$(MAKE) magic-pex
+#	$(MAKE) klayout-pex
 	$(MAKE) sim-all
 .PHONY: all
 # ================================================================================================
 
+
+# Clean Target
+clean: ## Delete all generated files and folders (LibreLane runs, final, netlists, render, reports, simulation and FPGA outputs)
+	rm -rf $(LIBRELANE_DIR)/runs $(FLOW_FINAL_DIR)
+	rm -rf $(FINAL_DIR)
+	rm -rf $(NET_NL_DIR) $(NET_PNL_DIR) $(NET_SPICE_DIR) $(NET_PEX_DIR)
+#	rm -rf $(XSPICE_DIR)
+	rm -rf $(RENDER_IMG_DIR)
+	rm -rf $(REPORT_DIR)
+	rm -rf $(XSCHEM_SCH_DIR)/simulations $(XSCHEM_TB_DIR)/simulations
+	rm -rf $(COCOTB_DIR)/*/sim_build $(COCOTB_DIR)/*/dsmod_sim_build
+	rm -rf $(SCRIPTS_DIR)/__pycache__ $(COCOTB_DIR)/__pycache__ $(COCOTB_DIR)/*/__pycache__
+	rm -f $(VERILOG_TB_DIR)/*/*.vcd
+	$(MAKE) -C fpga clean
+.PHONY: clean
+# ================================================================================================

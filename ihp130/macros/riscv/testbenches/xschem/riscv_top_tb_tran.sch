@@ -195,7 +195,7 @@ value="
 * Gate-Level Analog Mixed Signal Simulation (.xspice)
 .include ../../../netlist/xspice/riscv_top.xspice
 .param VDD=1.5
-.param temp=27
+.temp 27
 .param fclk=56e6
 .csparam fclk=fclk
 .options savecurrents klu method=gear reltol=1e-4 abstol=1e-15 gmin=1e-15
@@ -226,7 +226,7 @@ C {devices/vsource.sym} 1220 -1650 0 0 {name=VDD value=\{VDD\}}
 C {devices/gnd.sym} 1220 -1580 0 0 {name=l3 lab=GND}
 C {devices/launcher.sym} 2600 -2130 0 0 {name=h2
 descr="Simulate" 
-tclcommand="xschem save; xschem netlist; xschem simulate"
+tclcommand="xschem save; xschem netlist; file mkdir $netlist_dir; write_data [save_params] $netlist_dir/[file rootname [file tail [xschem get current_name]]].save; xschem simulate"
 }
 C {devices/launcher.sym} 2600 -2010 0 0 {name=h1
 descr="Load waves" 
@@ -289,3 +289,8 @@ C {devices/lab_wire.sym} 2240 -880 0 1 {name=p25 sig_type=std_logic lab=lo_Qx}
 C {devices/gnd.sym} 2200 -380 0 0 {name=l6 lab=GND}
 C {riscv_top.sym} 1220 -900 0 0 {name=x1}
 C {devices/lab_wire.sym} 2240 -1400 0 1 {name=p26 sig_type=std_logic lab=analog_en}
+C {devices/code_shown.sym} 80 -2230 0 0 {name=SAVE only_toplevel=true
+format="tcleval( @value )"
+value="
+.include [file rootname [file tail [xschem get schname]]].save
+"}

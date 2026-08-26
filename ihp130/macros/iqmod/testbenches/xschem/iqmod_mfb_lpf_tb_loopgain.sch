@@ -201,7 +201,7 @@ value="
 .include ../../../netlist/pex/iqmod_mfb_lpf_ota_core_hybrid_bm_pex.spice
 .param VDD=1.5
 .param Vcm=VDD/2
-.param temp=27
+.temp 27
 .param Cload=10p
 .param R1=238e3
 .param R2=285e3
@@ -278,7 +278,7 @@ C {devices/vsource.sym} 1860 -1810 0 0 {name=VDD value=\{VDD\}}
 C {devices/gnd.sym} 1860 -1740 0 0 {name=l3 lab=GND}
 C {devices/launcher.sym} 1120 -1860 0 0 {name=h2
 descr="Simulate" 
-tclcommand="xschem save; xschem netlist; xschem simulate"
+tclcommand="xschem save; xschem netlist; file mkdir $netlist_dir; write_data [save_params] $netlist_dir/[file rootname [file tail [xschem get current_name]]].save; xschem simulate"
 }
 C {devices/launcher.sym} 1120 -1800 0 0 {name=h3
 descr="Annotate OP" 
@@ -508,3 +508,8 @@ C {iqmod_mfb_lpf_ota_core_hybrid_bm_pex.sym} 1900 -1320 0 0 {name=x1
 }
 C {iqmod_mfb_lpf_ota_core_hybrid_bm_pex.sym} 1900 -580 0 0 {name=x4
 }
+C {devices/code_shown.sym} 40 -1890 0 0 {name=SAVE only_toplevel=true
+format="tcleval( @value )"
+value="
+.include [file rootname [file tail [xschem get schname]]].save
+"}

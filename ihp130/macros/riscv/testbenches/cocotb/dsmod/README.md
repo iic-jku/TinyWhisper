@@ -27,7 +27,7 @@ pip3.13 install cocotb numpy scipy matplotlib find_libpython
 | `dsmod_plot_sndr.py`  | SNDR post-processing and plotting            |
 | `dsmod_ramp_cocotb.py`| Cocotb ramp interpolation test               |
 | `dsmod_plot_ramp.py`  | Ramp interpolation analysis and plotting     |
-| `Makefile`            | Make targets: `help`, `sim`, `psd`, `sndr`, `ramp`, `clean`, `all`, `all_runs` |
+| `Makefile`            | Make targets: `help`, `sim`, `psd`, `sndr`, `ramp`, `clean`, `clean-config`, `all`, `all_runs` |
 
 
 ## Fixed Test Parameters
@@ -86,6 +86,12 @@ Removes the full `results/` tree (including `results/psd/`, `results/sndr/`, and
 
 ```sh
 make clean
+```
+
+`clean-config` removes only the artefacts of one `DSMOD_ORDER`/`DSMOD_OSR` combination, so the figures of the other combinations stay in place. This is what `all` uses, which is why a single-configuration run no longer deletes the results of the full sweep.
+
+```sh
+make clean-config DSMOD_ORDER=2 DSMOD_OSR=64
 ```
 
 
@@ -178,11 +184,14 @@ Generated outputs in `results/ramp/`:
 
 ## All
 
-Runs `clean`, then `psd`, `sndr`, and `ramp` in sequence with fixed baseline settings (`DSMOD_ORDER=2`, `DSMOD_OSR=64`):
+Runs `clean-config`, then `psd`, `sndr`, and `ramp` in sequence for a single configuration (default `DSMOD_ORDER=2`, `DSMOD_OSR=64`):
 
 ```sh
 make all PYTHON_BIN=python3.13
+make all DSMOD_ORDER=1 DSMOD_OSR=256
 ```
+
+Only the figures of the selected configuration are replaced. To regenerate every figure, use `all_runs`.
 
 
 ## All Runs
@@ -196,4 +205,4 @@ Runs `clean`, then executes `psd`, `sndr`, and `ramp` for all combinations:
 make all_runs PYTHON_BIN=python3.13
 ```
 
-This target performs a full characterization sweep and can take significantly longer than `make all`.
+This target performs a full characterization sweep and can take significantly longer than `make all`. It is what the macro-level `make sim-all` (and therefore `make all` in `ihp130/macros/riscv/`) invokes, so a macro build regenerates all committed figures instead of only the baseline configuration.

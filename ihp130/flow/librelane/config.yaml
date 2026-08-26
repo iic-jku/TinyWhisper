@@ -328,7 +328,7 @@ MACROS:
     lef:
       - dir::../../macros/iqmod/final/lef/iqmod_top.lef
     vh:
-      - dir::../../macros/iqmod/final/vh/iqmod_top.v
+      - dir::../../macros/iqmod/final/vh/iqmod_top.vh
 #   lib:
 #     "*":
 #       - dir::../macros/iqmod/final/lib/iqmod_top.lib
@@ -346,7 +346,7 @@ MACROS:
     lef:
       - dir::../../ip/sg13g2_ip__ce/final/lef/sg13g2_ip__ce.lef
     vh:
-      - dir::../../ip/sg13g2_ip__ce/final/vh/sg13g2_ip__ce.v
+      - dir::../../ip/sg13g2_ip__ce/final/vh/sg13g2_ip__ce.vh
     lib:
       "*":
         - dir::../../ip/sg13g2_ip__ce/final/lib/sg13g2_ip__ce.lib
@@ -361,7 +361,7 @@ MACROS:
     lef:
       - dir::../../ip/sg13g2_ip__ce_names/final/lef/sg13g2_ip__ce_names.lef
     vh:
-      - dir::../../ip/sg13g2_ip__ce_names/final/vh/sg13g2_ip__ce_names.v
+      - dir::../../ip/sg13g2_ip__ce_names/final/vh/sg13g2_ip__ce_names.vh
     lib:
       "*":
         - dir::../../ip/sg13g2_ip__ce_names/final/lib/sg13g2_ip__ce_names.lib
@@ -376,7 +376,7 @@ MACROS:
     lef:
       - dir::../../ip/sg13g2_ip__jku/final/lef/sg13g2_ip__jku.lef
     vh:
-      - dir::../../ip/sg13g2_ip__jku/final/vh/sg13g2_ip__jku.v
+      - dir::../../ip/sg13g2_ip__jku/final/vh/sg13g2_ip__jku.vh
     lib:
       "*":
         - dir::../../ip/sg13g2_ip__jku/final/lib/sg13g2_ip__jku.lib
@@ -391,7 +391,7 @@ MACROS:
     lef:
       - dir::../../ip/sg13g2_ip__jku_names/final/lef/sg13g2_ip__jku_names.lef
     vh:
-      - dir::../../ip/sg13g2_ip__jku_names/final/vh/sg13g2_ip__jku_names.v
+      - dir::../../ip/sg13g2_ip__jku_names/final/vh/sg13g2_ip__jku_names.vh
     lib:
       "*":
         - dir::../../ip/sg13g2_ip__jku_names/final/lib/sg13g2_ip__jku_names.lib

@@ -147,7 +147,7 @@ value="
 .options savecurrents klu method=gear reltol=1e-4 abstol=1e-15 gmin=1e-15
 .param VDD=1.5
 .param Vcm=VDD/2
-.param temp=27
+.temp 27
 .param Cload=10p
 .control
 
@@ -209,7 +209,7 @@ wrdata ../plot_simulations/data/iqmod_mfb_lpf_ota_core_tb_CMRR.txt
 "}
 C {devices/launcher.sym} 1720 -1600 0 0 {name=h2
 descr="Simulate" 
-tclcommand="xschem save; xschem netlist; xschem simulate"
+tclcommand="xschem save; xschem netlist; file mkdir $netlist_dir; write_data [save_params] $netlist_dir/[file rootname [file tail [xschem get current_name]]].save; xschem simulate"
 }
 C {title-3.sym} 0 0 0 0 {name=l2 author="Simon Dorrer" rev=1.0 lock=true}
 C {devices/launcher.sym} 1720 -1480 0 0 {name=h1
@@ -313,3 +313,8 @@ C {iqmod_mfb_lpf_ota_core_hybrid_bm_pex.sym} 1160 -500 0 0 {name=x4
 }
 C {single2dm.sym} 700 -1220 0 0 {name=x6 gain=1}
 C {single2cm.sym} 700 -500 0 0 {name=x7 gain=1}
+C {devices/code_shown.sym} 40 -1510 0 0 {name=SAVE only_toplevel=true
+format="tcleval( @value )"
+value="
+.include [file rootname [file tail [xschem get schname]]].save
+"}

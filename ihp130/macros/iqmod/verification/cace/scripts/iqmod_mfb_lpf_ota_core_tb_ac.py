@@ -26,31 +26,33 @@ def postprocess(results: dict[str, list], conditions: dict[str, Any]) -> dict[st
     Adc_ol_dB_arr = []
     for Adc_ol_dB in results['Adc_ol_dB']:
         Adc_ol_dB_arr.append(Adc_ol_dB)
-    print(f'Adc_ol_dB_arr = {Adc_ol_dB_arr}')
+    # Do not print from this hook. CACE 2.11.0 redirects stdout into its rich logger while the
+    # script runs, and the logger writes back to stdout, so any print recurses without end.
+    # print(f'Adc_ol_dB_arr = {Adc_ol_dB_arr}')
     
     # Delete statistical outliers in Adc_ol_dB_arr
     Adc_ol_dB_arr = [val for val in Adc_ol_dB_arr if -10 <= val <= 60]
-    print(f'Adc_ol_dB_arr = {Adc_ol_dB_arr}')
+    # print(f'Adc_ol_dB_arr = {Adc_ol_dB_arr}')
     
     # Iterate over fcu MC results
     fcu_arr = []
     for fcu in results['fcu']:
         fcu_arr.append(fcu)
-    print(f'fcu_arr = {fcu_arr}')
+    # print(f'fcu_arr = {fcu_arr}')
     
     # Delete statistical outliers in fcu_arr
     fcu_arr = [val for val in fcu_arr if 1 <= val <= 1e9]
-    print(f'fcu_arr = {fcu_arr}')
+    # print(f'fcu_arr = {fcu_arr}')
     
     # Iterate over CMRR_dc_dB MC results
     CMRR_dc_dB_arr = []
     for CMRR_dc_dB in results['CMRR_dc_dB']:
         CMRR_dc_dB_arr.append(CMRR_dc_dB)
-    print(f'CMRR_dc_dB_arr = {CMRR_dc_dB_arr}')
+    # print(f'CMRR_dc_dB_arr = {CMRR_dc_dB_arr}')
     
     # Delete statistical outliers in CMRR_dc_dB_arr
     CMRR_dc_dB_arr = [val for val in CMRR_dc_dB_arr if 1 <= val <= 200]
-    print(f'CMRR_dc_dB_arr = {CMRR_dc_dB_arr}')
+    # print(f'CMRR_dc_dB_arr = {CMRR_dc_dB_arr}')
     
     # # Iterate over PSRR_dc_dB MC results
     # PSRR_dc_dB_arr = []

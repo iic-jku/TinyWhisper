@@ -91,6 +91,7 @@ module tinywhisper_top (clk_PAD,
  wire net19;
  wire net20;
  wire net21;
+ wire net22;
 
  sg13g2_decap_8 FILLER_0_0 ();
  sg13g2_decap_8 FILLER_0_1001 ();
@@ -43739,9 +43740,9 @@ module tinywhisper_top (clk_PAD,
  sg13g2_decap_8 FILLER_334_956 ();
  sg13g2_decap_8 FILLER_334_963 ();
  sg13g2_decap_8 FILLER_334_970 ();
- sg13g2_decap_8 FILLER_334_977 ();
+ sg13g2_decap_4 FILLER_334_977 ();
  sg13g2_decap_8 FILLER_334_98 ();
- sg13g2_decap_8 FILLER_334_984 ();
+ sg13g2_fill_1 FILLER_334_981 ();
  sg13g2_decap_8 FILLER_334_991 ();
  sg13g2_decap_8 FILLER_334_998 ();
  sg13g2_decap_8 FILLER_33_0 ();
@@ -57849,6 +57850,8 @@ module tinywhisper_top (clk_PAD,
     .X(net20));
  sg13g2_dlygate4sd3_1 hold21 (.A(\i_tinywhisper_core.rst_n ),
     .X(net21));
+ sg13g2_dlygate4sd3_1 hold22 (.A(\i_tinywhisper_core.input_in[1] ),
+    .X(net22));
  sg13g2_dlygate4sd3_1 hold3 (.A(net13),
     .X(net3));
  sg13g2_dlygate4sd3_1 hold4 (.A(net15),
@@ -57861,7 +57864,7 @@ module tinywhisper_top (clk_PAD,
     .X(net7));
  sg13g2_dlygate4sd3_1 hold8 (.A(net21),
     .X(net8));
- sg13g2_dlygate4sd3_1 hold9 (.A(\i_tinywhisper_core.input_in[1] ),
+ sg13g2_dlygate4sd3_1 hold9 (.A(net22),
     .X(net9));
  iqmod_top \i_tinywhisper_core.iqmod_top  (.di_spdt_ctrl_Q(\i_tinywhisper_core.Q_ae ),
     .di_spdt_ctrl_I(\i_tinywhisper_core.I_ae ),

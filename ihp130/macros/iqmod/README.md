@@ -24,7 +24,7 @@
 │  ├─ 📁 lib/
 │  │  └─ iqmod_top.lib
 │  └─ 📁 vh/
-│     └─ iqmod_top.v
+│     └─ iqmod_top.vh
 ├─ 📁 layout/
 │  ├─ *.gds
 │  ├─ *.klay.gds
@@ -80,6 +80,7 @@
 │     ├─ iqmod_top_pex.sym
 │     └─ xschemrc
 ├─ 📁 scripts/
+│  ├─ check_boundary.py
 │  ├─ check_pex_ports.py
 │  ├─ 📁 filter_designer/
 │  │  ├─ 📁 figures/
@@ -89,15 +90,14 @@
 │  ├─ 📁 pwm_generator/
 │  │  ├─ 📁 data/
 │  │  └─ pwm_generator.py
-│  ├─ 📁 sizing/
-│  │  ├─ 📁 figures/
-│  │  ├─ lookup_commands.ipynb
-│  │  ├─ sizing_inverter_based_ota_barthelemy.ipynb
-│  │  ├─ sizing_inverter_based_ota_hybrid_bm.ipynb
-│  │  ├─ sizing_inverter_based_ota_hybrid_bn.ipynb
-│  │  ├─ sizing_inverter_based_ota_manfredini.ipynb
-│  │  └─ sizing_inverter_based_ota_nauta.ipynb
-│  └─ lay2img.py
+│  └─ 📁 sizing/
+│     ├─ 📁 figures/
+│     ├─ lookup_commands.ipynb
+│     ├─ sizing_inverter_based_ota_barthelemy.ipynb
+│     ├─ sizing_inverter_based_ota_hybrid_bm.ipynb
+│     ├─ sizing_inverter_based_ota_hybrid_bn.ipynb
+│     ├─ sizing_inverter_based_ota_manfredini.ipynb
+│     └─ sizing_inverter_based_ota_nauta.ipynb
 ├─ 📁 testbenches/
 │  └─ 📁 xschem/
 │     ├─ 📁 plot_simulations/
@@ -152,13 +152,60 @@ make
 make help
 ```
 
-For the `sim-xschem` target, `TB=<testbenchname>` is required.
+The `sim-xschem` target accepts an optional `TB=<testbenchname>` parameter (default: `<CELL>_tb_tran`), and `sim-view-xschem` an optional `SCRIPT=<scriptname>` parameter (default: `plot_<CELL>`).
 
 All targets that operate on a specific cell accept an optional `CELL=<cellname>` parameter. The default is the top-level cell (`iqmod_top`).
 
 ```sh
-make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>] [DRC_LEVEL=<precheck|macro|regular>] [EV_PRECISION=<digits>]
+make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>] [DRC_LEVEL=<precheck|macro|regular>] [EV_PRECISION=<digits>] [TB=<testbenchname>] [SCRIPT=<scriptname>] [OPEN_ARGS=<options>]
 ```
+
+
+### Open the Design Files
+
+Opens a file browser for this folder with `sak-open.py` from the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS), one button per design file, grouped by directory:
+
+```sh
+make open
+```
+
+Clicking a button launches the matching tool in the file's own directory, so Xschem finds its `simulations/` folder and KLayout its run outputs where they belong:
+
+| File type | Tool |
+| --- | --- |
+| `.sch`, `.sym` | Xschem |
+| `.gds`, `.gds.gz`, `.oas`, `.oas.gz` | KLayout in edit mode |
+| `.mag` | Magic |
+| `.vcd`, `.fst`, `.gtkw` | GTKWave |
+| `.raw` | gaw (ngspice rawfile) |
+| `.png`, `.pdf` | the desktop's handler (`xdg-open`) |
+| `.sv`, `.svh`, `.v`, `.vh`, `.vhd`, `.vhdl`, `.spice`, `.cir`, `.sp`, `.cdl`, `.sdc`, `.lef`, `.lib`, `.tcl`, `.mk`, `.yaml`, `.json`, `.py`, `.qmd`, `.tex`, `.md` and `Makefile` | gvim |
+
+Only these types get a button. Files with any other extension (`.sh`, `.svg`, `.pcf`, `.save`, `.rpt`, `.txt`, `.csv` and so on) are not listed.
+
+Schematics and symbols that belong to one design unit share a single tabbed Xschem instance instead of one process per click. The unit is the nearest ancestor holding a `Makefile`, so this macro gets its own instance and every tab writes its netlists to the folder this macro's `xschemrc` pins, see [Xschem Configuration](../../README.md#xschem-configuration).
+
+The tree is rescanned every 15 s, so files a running flow produces appear on their own and are highlighted for a minute. Generated directories are skipped by default: `runs/`, `sim_build/`, `obj_dir/`, `simulations/`, `__pycache__/`, `_freeze/` and `.git/`. The Xschem `simulations/` folder is one of them, so the `.raw` files show up only with `--all`. Pass extra options with `OPEN_ARGS`:
+
+```sh
+make open OPEN_ARGS=--all              # include the build outputs
+make open OPEN_ARGS="--prune backups"  # skip one more directory name
+```
+
+At most 400 buttons are drawn at once, because each one is an X window, and what is left out is stated at the end of the list. That cap is easy to hit with `--all`, which pulls in the CACE run directories and every simulation output of this macro. Narrow it with `--prune` when that happens.
+
+> [!NOTE]
+> This target needs a display. Run it inside the container's VNC/noVNC desktop or over X11 forwarding. In a shell-only container it stops with `cannot open a window`. The `.png` and `.pdf` buttons hand the file to the desktop's registered handler, so those two need the full VNC/noVNC session and do not work over a bare X forward.
+
+
+### Layout Sources and the Exported Tapeout GDS
+
+Every `layout/<cell>.klay.gds` is a source of truth. It is the KLayout editing source: it references the PDK PCells and pulls its sub-cells in as libraries through the sibling `layout/<cell>.klay.klib`, so every device is still live and editable. Only `iqmod_top` also has a flat `layout/iqmod_top.gds`, exported from `layout/iqmod_top.klay.gds` with `File > Export Layout For Tapeout`, which resolves every PCell and library reference into a static cell. That export is what the build targets read and what the chip consumes, because they always use `layout/<name>.gds`. Every other cell has no flat file, so the DRC, LVS and PEX targets fall back to its `.klay.gds` and there is nothing to keep in step.
+
+> [!IMPORTANT]
+> Re-export `iqmod_top.gds` after every change to `iqmod_top.klay.gds`, and never hand-edit it. Keeping the two in step by editing both is how they drift apart, and the drift is invisible because the build targets only look at the exported file while `klayout-drc` and friends can be pointed at either one.
+
+The export re-evaluates the PCells against the **installed** PDK, so device geometry can change even though nobody touched the editing source, and the exported file is the only place that shows it. The sibling SG13CMOS5L chip template hit this for real: for the identical stored parameters its `SG13_dev` `pmos` draws the `NWell` (`31/0`) 0.11 µm tighter on every side than the geometry frozen into its exported GDS, which broke a hand-drawn `NWell` strap and produced four `NW.b1` markers (min. PWell width between NWell regions) that no sign-off target saw. Measured on the 2026.08 container, the SG13G2 PDK used here still draws the wider well, so the two are not interchangeable: a layout carried between the PDKs has to be re-exported under the target PDK and re-checked, not copied. Re-run DRC, LVS and PEX after every export.
 
 
 ### Layout File Extension Usage
@@ -171,6 +218,7 @@ The Makefile defines a `_GDS_EXT` variable that auto-selects the layout file ext
   - `klayout-pex`, `magic-pex`
 
 - Build targets always use `layout/<name>.gds`:
+  - `check-boundary`
   - `lef`
   - `copy-gds`
   - `render-gds`
@@ -184,10 +232,11 @@ The target netlists the testbench with `xschem netlist` and then invokes `ngspic
 
 Because the run is headless, the `plot` commands in a testbench's `.control` block are a no-op and no plot windows appear. Every testbench instead exports its results with `wrdata` to `testbenches/xschem/plot_simulations/data/`, from where they are plotted with `sim-view-xschem`.
 
-The testbench name **must** be specified via the `TB` variable:
+The testbench is selected with the `TB` variable, given without the `.sch` extension (default: `<CELL>_tb_tran`):
 
 ```sh
-make sim-xschem TB=<testbenchname>
+make sim-xschem                     # run the default testbench (iqmod_top_tb_tran)
+make sim-xschem TB=<testbenchname>  # run another testbench
 ```
 
 For example:
@@ -203,16 +252,19 @@ make sim-xschem TB=iqmod_mixer_tb_tran
 
 All available testbench schematics are located in `testbenches/xschem/`. Generated netlists are written to `testbenches/xschem/simulations/`.
 
+Every testbench pulls in a FET `.save` file through its `SAVE` code block (for example `.include iqmod_top_tb_tran.save`). That file lists the operating-point parameters of every transistor (`ids`, `gm`, `gds`, `vth` and so on), which the `annotate_fet_params` symbols and the `Annotate OP` launcher read back from the raw file. The include uses the bare file name, so it resolves inside `testbenches/xschem/simulations/`, where ngspice runs. Both `sim-xschem` and the schematic's `Simulate` launcher write the file on every run, so it always matches the devices currently in the schematic and a fresh clone needs no manual export. Xschem's **IHP > Create FET .save file** menu entry writes the same file by hand.
+
 
 ### Plot Xschem Simulation Results
 
-Plots simulation results using a macro-specific plotting script in `testbenches/xschem/plot_simulations/`, selected by `SCRIPT` (given without the `.py` extension):
+Plots simulation results using a macro-specific plotting script in `testbenches/xschem/plot_simulations/`, selected by `SCRIPT`, given without the `.py` extension (default: `plot_<CELL>`):
 
 ```sh
-make sim-view-xschem SCRIPT=<scriptname>
+make sim-view-xschem                      # run the default plotting script (plot_iqmod_top)
+make sim-view-xschem SCRIPT=<scriptname>  # run another plotting script
 ```
 
-The target runs `SHOW_PLOTS=1 python3 testbenches/xschem/plot_simulations/<SCRIPT>.py`. Every script writes its figures to `testbenches/xschem/plot_simulations/figures/`. Run through `sim-view-xschem`, the plot windows additionally open when a display is available (i.e. the container's X/VNC session). Headless, only the figures are written.
+The target runs `SHOW_PLOTS=1 python3 testbenches/xschem/plot_simulations/<SCRIPT>.py`. Every script writes its figures to `testbenches/xschem/plot_simulations/figures/`. Run through `sim-view-xschem`, the script additionally opens the plot windows when a display is available (e.g. the container's X/VNC session). Headless, only the figures are written.
 
 For example:
 
@@ -262,11 +314,22 @@ make sim-all
 
 ### Build Top Cell
 
-Builds the top-level cell deliverables in sequence: LEF export, LIB generation, Verilog stub generation, GDS copy, and layout image rendering:
+Builds the top-level cell deliverables in sequence: PR boundary check, LEF export, LIB generation, Verilog stub generation, GDS copy, and layout image rendering:
 
 ```sh
 make build-top
 ```
+
+
+### PR Boundary Check
+
+Checks that the top cell of `layout/<TOP>.gds` draws the PR boundary box on layer 189 (`prBoundary`). `build-top` runs it first:
+
+```sh
+make check-boundary
+```
+
+The chip flow derives the bounding box of every macro from this layer: Magic maps all datatypes of layer 189 to its boundary, and LibreLane's `Magic.StreamOut` runs `get_bbox.tcl` on every macro it places. A layout without the box fails the whole chip build with `Failed to extract PR boundary from GDSII view of macro '<TOP>'`, two flows away from the layout that caused it. Treat the box as part of the layout: never delete it as clutter, keep it in the KLayout editing source (`<TOP>.klay.gds`) so every re-export carries it, and hide it at render time with `sak-render.py -x` if it spoils a chip shot. The check runs [`scripts/check_boundary.py`](scripts/check_boundary.py), which also warns when the drawn geometry extends beyond the boundary box.
 
 
 ### Export LEF
@@ -289,10 +352,18 @@ make lib
 
 ### Verilog Stub
 
-Generates a Verilog stub (`final/vh/<TOP>.v`) for top-level integration into the LibreLane flow by parsing pins from the Magic PEX netlist (`netlist/pex/<TOP>_magic_pex.spice`).
+Generates a Verilog stub (`final/vh/<TOP>.vh`) for top-level integration into the LibreLane flow by parsing pins from an extracted PEX netlist in `netlist/pex/`.
 
 The `verilog` target:
-- requires `netlist/pex/<TOP>_magic_pex.spice` (run `make magic-pex` first)
+- requires one of the following PEX files (run `make magic-pex` or `make klayout-pex` first):
+  - `netlist/pex/<TOP>_magic_pex_1.spice`
+  - `netlist/pex/<TOP>_magic_pex_2.spice`
+  - `netlist/pex/<TOP>_magic_pex_3.spice`
+  - `netlist/pex/<TOP>_klayout_pex_1.spice`
+  - `netlist/pex/<TOP>_klayout_pex_2.spice`
+  - `netlist/pex/<TOP>_klayout_pex_3.spice`
+  - `netlist/pex/<TOP>_pex.spice` (the committed netlist of this macro)
+- auto-selects the first existing file from the list above
 - reads the `.subckt <TOP>_pex` pin list (including continuation lines)
 - emits recognized supply pins (`VDD`, `VSS`, `VPWR`, `VGND`, `VNB`, `VPB`) as `inout` under `` `ifdef USE_POWER_PINS ``
 - classifies signal pins by prefix: `di_*` as `input`, `do_*` as `output`, others as `inout`
@@ -313,7 +384,7 @@ make copy-gds
 
 ### Render Layout Image
 
-Renders the top-level layout GDS with `scripts/lay2img.py` and saves the two images `iqmod_top_black.png` and `iqmod_top_white.png` in `render/img/`:
+Renders the top-level layout GDS with `sak-render.py` from the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) and saves the two images `iqmod_top_black.png` and `iqmod_top_white.png` (2048 px wide, 4x oversampling) in `render/img/`:
 
 ```sh
 make render-gds
@@ -394,6 +465,32 @@ make magic-lvs CELL=iqmod_top
 ```
 
 
+### Build Xschem PEX Symbol
+
+Builds the Xschem symbol the PEX flow needs, `schematic/xschem/<CELL>_pex.sym`, from the regular cell symbol `schematic/xschem/<CELL>.sym`:
+
+```sh
+make symbol-pex                  # build iqmod_top_pex.sym from iqmod_top.sym
+make symbol-pex CELL=<cellname>  # build the PEX symbol of another cell
+```
+
+The generated symbol is a verbatim copy of `<CELL>.sym` with a single change: `type=subcircuit` becomes `type=primitive`. Everything else (pin boxes and their order, `format`, `spectre_format`, `template`, graphics) is inherited, which is exactly what the PEX flow needs:
+
+- **`type=primitive`** stops Xschem from descending into a schematic of the same name. There is no `<CELL>_pex.sch`, so the instance line is emitted as it stands and the subcircuit comes from the `.include`d PEX netlist instead.
+- **`format="@name @pinlist @symname"`** makes the instance reference `@symname`, which resolves to `<CELL>_pex`, exactly the `.subckt` name the PEX flow writes.
+- **The pin order** is what `sak-pin-reorder.py` reorders the extracted netlist to, so it has to be the one of the cell symbol.
+
+`symbol-pex` runs automatically at the start of `klayout-pex` and `magic-pex`, so the symbol is rebuilt from the current `<CELL>.sym` before every extraction and cannot go stale when a pin is added, removed or renamed. Calling it by hand is only needed to refresh the symbol without re-running an extraction. Anything added to the generated file by hand is lost at the next extraction, so make the change in `<CELL>.sym` instead.
+
+If `<CELL>.sym` does not exist, the target prints a note and does nothing, which leaves the PEX targets running without a pin reorder just as before. It fails only when `<CELL>.sym` declares neither `type=subcircuit` nor `type=primitive`.
+
+The committed `netlist/pex/<CELL>_pex.spice` netlists that the testbenches include were reordered against these generated symbols, so their `.subckt` pin order and the `_pex.sym` pin order agree.
+
+> [!NOTE]
+> Every symbol in this project also carries `spectre_format="@name ( @pinlist ) @symname"`. Xschem writes that line itself whenever a symbol is built from a schematic's pin list (key `a`, `make_sym.awk`), and it is read **only** by the Spectre netlister, which is also the one that drives VACASK (`xschem.tcl` configures `vacask "$N"` as the default simulator for `netlist_type spectre`). The SPICE netlister used for ngspice ignores it, so it has no effect on any target in this Makefile.
+> Do not strip it: without it, instances of the symbol are **silently dropped** from a Spectre/VACASK netlist and the `subckt` line of the symbol itself comes out with an empty port list, with no warning at all.
+
+
 ### Parasitic Extraction (PEX)
 
 Runs parasitic extraction on the layout in `layout/`. The extracted SPICE netlist is written to `netlist/pex/`. Both `klayout-pex` and `magic-pex` use `layout/<CELL>.$(_GDS_EXT)` (`.gds` if present, otherwise `.klay.gds`).
@@ -411,7 +508,7 @@ The `EXT_MODE` parameter selects the extraction mode:
 
 The `.subckt` name in the extracted SPICE file is `<CELL>_pex`: `magic-pex` sets it directly via the `sak-pex.sh` option `-n <CELL>_pex`, while for `klayout-pex` it is automatically renamed from `<CELL>` (kpex).
 
-If a matching Xschem symbol (`schematic/xschem/<CELL>_pex.sym`) exists, the `.subckt` pin order in the extracted SPICE file is automatically reordered with `sak-pin-reorder.py` (installed in the IIC-OSIC-TOOLS container) to match the symbol's pin positions. This ensures the PEX netlist can be used directly with the corresponding Xschem symbol for simulation regardless of the selected `EXT_MODE`.
+Both targets start by running `symbol-pex` (see above), so `schematic/xschem/<CELL>_pex.sym` always reflects the current cell symbol. The `.subckt` pin order in the extracted SPICE file is then reordered with `sak-pin-reorder.py` (installed in the IIC-OSIC-TOOLS container) to match that symbol's pin positions. This ensures the PEX netlist can be used directly with the corresponding Xschem symbol for simulation regardless of the selected `EXT_MODE`.
 
 Both targets finish by running [`scripts/check_pex_ports.py`](scripts/check_pex_ports.py) on the netlist they just wrote. It verifies that every pin of the `.subckt` really reaches the circuit, and fails the target otherwise. Two cases are caught:
 
@@ -497,3 +594,28 @@ make all
 ```
 
 Verification runs first because DRC/LVS/PEX produce the fresh, pin-reordered PEX netlists from the current layout. The build follows, since the Verilog stub reads its pins from a PEX netlist. The simulations run **last**, so the testbenches include the PEX netlists produced by this run, not by a previous one.
+
+
+### Clean
+
+`make clean` deletes all generated files and folders. The sources stay untouched: the schematics, symbols and testbenches, the layout in `layout/`, the scripts, the CACE configuration and templates, and `render/blender/`. Deleted are:
+
+- `final/` (GDS, LEF, Liberty and Verilog stub deliverables)
+- `netlist/` (schematic, layout and PEX netlists)
+- `render/img/` (the layout renders)
+- `verification/drc/` and `verification/lvs/` (DRC and LVS reports)
+- `schematic/xschem/simulations/`, `testbenches/xschem/simulations/` and the `plot_simulations/` outputs (`data/`, `figures/`, `__pycache__/`)
+- the CACE outputs under `verification/cace/` (`_runs/`, `_docs/`, `netlist/`, `results/`, `templates/simulations/`)
+
+Every target recreates the folders it writes to, so a clean rebuild is:
+
+```sh
+make clean
+make all
+```
+
+> [!WARNING]
+> Most of these outputs are committed in this repository, so `make clean` leaves a large deletion set in `git status`. Run `git restore .` to get them back if you did not mean to remove them.
+
+> [!NOTE]
+> Nearly every Xschem testbench `.include`s a PEX netlist from `netlist/pex/` (the committed `<cell>_pex.spice` files, which cover more cells than the three `*-verify-all` targets extract), and `make verilog` reads its pin list from one as well. After `make clean`, restore them with `git restore netlist/pex` or re-extract the cells you need with `make magic-pex CELL=<cellname>` before `make sim-xschem`, `make sim-all` or `make build-top`, otherwise the include fails. The system-level testbench `iqmod_mfb_lpf_riscv_tb_tran.sch` additionally needs the riscv XSPICE model, see [`macros/riscv/README.md`](../riscv/README.md).

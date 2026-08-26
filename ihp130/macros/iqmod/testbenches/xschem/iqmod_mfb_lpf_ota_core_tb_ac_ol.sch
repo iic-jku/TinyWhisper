@@ -90,7 +90,7 @@ value="
 .include ../../../netlist/pex/iqmod_mfb_lpf_ota_core_hybrid_bm_pex.spice
 .param VDD=1.5
 .param Vcm=VDD/2
-.param temp=27
+.temp 27
 .param Cload=10p
 .options savecurrents klu method=gear reltol=1e-4 abstol=1e-15 gmin=1e-15
 .control
@@ -156,7 +156,7 @@ wrdata ../plot_simulations/data/iqmod_mfb_lpf_ota_core_tb_ac_ol.txt v(Aol_dB) v(
 "}
 C {devices/launcher.sym} 1700 -1280 0 0 {name=h2
 descr="Simulate" 
-tclcommand="xschem save; xschem netlist; xschem simulate"
+tclcommand="xschem save; xschem netlist; file mkdir $netlist_dir; write_data [save_params] $netlist_dir/[file rootname [file tail [xschem get current_name]]].save; xschem simulate"
 }
 C {title-3.sym} 0 0 0 0 {name=l2 author="Simon Dorrer" rev=1.0 lock=true}
 C {devices/launcher.sym} 1700 -1160 0 0 {name=h1
@@ -225,3 +225,8 @@ value="
 C {iqmod_mfb_lpf_ota_core_hybrid_bm_pex.sym} 1020 -660 0 0 {name=x1
 }
 C {single2dm.sym} 1020 -1060 0 0 {name=x6 gain=1}
+C {devices/code_shown.sym} 60 -1570 0 0 {name=SAVE only_toplevel=true
+format="tcleval( @value )"
+value="
+.include [file rootname [file tail [xschem get schname]]].save
+"}

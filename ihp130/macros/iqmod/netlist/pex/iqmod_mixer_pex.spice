@@ -1,7 +1,7 @@
 * PEX produced on Sat Mar 28 07:07:32 PM CET 2026 using /foss/tools/sak/sak-pex.sh with m=1 and s=1
 * NGSPICE file created from iqmod_mixer_pex.ext - technology: ihp-sg13g2
 
-.subckt iqmod_mixer_pex vinp_IF VDD vinp_LO vinn_IF VSS vinn_LO voutp_RF
+.subckt iqmod_mixer_pex vinp_IF vinn_IF voutp_RF vinp_LO vinn_LO VDD VSS
 + voutn_RF
 X0 VSS iqmod_mixer_pex_half_1.iqmod_mixer_pex_se2diff_0.iqmod_mixer_pex_se2diff_half_tg$1_0.iqmod_mixer_pex_se2diff_inv_NF18$4_0.vout iqmod_mixer_pex_half_1.iqmod_mixer_pex_tg_0.di_tg_ctrl_n VSS sg13_lv_nmos ad=0.19p pd=1.38u as=0.19p ps=1.38u w=1u l=0.13u
 X1 voutp_RF iqmod_mixer_pex_half_1.iqmod_mixer_pex_tg_0.di_tg_ctrl_n voutp_RF VSS sg13_lv_nmos ad=0.57p pd=3.38u as=93.24p ps=0.91908m w=3u l=0.13u

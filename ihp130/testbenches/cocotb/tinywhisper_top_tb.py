@@ -748,20 +748,20 @@ def tinywhisper_top_runner():
 
     sources += [
         # Macro models
-        root_path / "macros/iqmod/final/vh/iqmod_top.v",
+        root_path / "macros/iqmod/final/vh/iqmod_top.vh",
 
         # IO pad models
         # Path(pdk_root) / pdk / "libs.ref/sg13g2_io/verilog/sg13g2_io.v",
 
         # Bondpads
-        root_path / "ip/sg13g2_ip__bondpad_70x70/final/vh/sg13g2_ip__bondpad_70x70.v",
+        root_path / "ip/sg13g2_ip__bondpad_70x70/final/vh/sg13g2_ip__bondpad_70x70.vh",
         root_path / "ip/sg13g2_io_custom/verilog/sg13g2_io.v",
 
         # Custom IPs
-        root_path / "ip/sg13g2_ip__ce/final/vh/sg13g2_ip__ce.v",
-        root_path / "ip/sg13g2_ip__jku/final/vh/sg13g2_ip__jku.v",
-        root_path / "ip/sg13g2_ip__ce_names/final/vh/sg13g2_ip__ce_names.v",
-        root_path / "ip/sg13g2_ip__jku_names/final/vh/sg13g2_ip__jku_names.v",
+        root_path / "ip/sg13g2_ip__ce/final/vh/sg13g2_ip__ce.vh",
+        root_path / "ip/sg13g2_ip__jku/final/vh/sg13g2_ip__jku.vh",
+        root_path / "ip/sg13g2_ip__ce_names/final/vh/sg13g2_ip__ce_names.vh",
+        root_path / "ip/sg13g2_ip__jku_names/final/vh/sg13g2_ip__jku_names.vh",
     ]
 
     build_args = []

@@ -1,0 +1,54 @@
+# SPDX-FileCopyrightText: 2025-2026 The TinyWhisper Team
+# SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
+#
+# iCEBreaker pin map for riscv_top.
+# See https://github.com/icebreaker-fpga/icebreaker for the board pinout, the pin
+# numbers below follow the reference icebreaker.pcf of the icestorm examples.
+#
+# The ds_*_i and lo_*_i inputs and the lo_*_oe outputs of riscv_top are not
+# constrained here, they only matter for the ASIC pad ring. nextpnr places them
+# on free pins because of --pcf-allow-unconstrained.
+
+# 12 MHz oscillator
+set_frequency  clk      12
+set_io -nowarn clk      35
+
+# S1 button, active low
+set_io -nowarn reset    10
+
+# SPI SRAM on PMOD 1A, top row, in the Digilent SPI pin order (CS, MOSI, MISO, SCK)
+set_io -nowarn sram_ce   4
+set_io -nowarn si        2
+set_io -nowarn so       47
+set_io -nowarn sclk     45
+
+# I2C on PMOD 1A, bottom row. P1A7 (3) and P1A8 (48) stay free.
+set_io -nowarn scl      46
+set_io -nowarn sda      44
+
+# UART on the FT2232H channel B, so a host terminal reaches it over the same USB cable
+set_io -nowarn rx        6
+set_io -nowarn tx        9
+
+# GPIO on PMOD 1B, inputs on the top row, outputs on the bottom row.
+# gpio_in[0] is an active-high level interrupt, tie it low when unused.
+set_io gpio_in[0]  43
+set_io gpio_in[1]  38
+set_io gpio_in[2]  34
+set_io gpio_in[3]  31
+set_io gpio_out[0] 42
+set_io gpio_out[1] 36
+set_io gpio_out[2] 32
+set_io gpio_out[3] 28
+
+# Delta-sigma baseband outputs on PMOD 2, top row
+set_io ds_I_p_o 27
+set_io ds_I_n_o 25
+set_io ds_Q_p_o 21
+set_io ds_Q_n_o 19
+
+# LO outputs on PMOD 2, bottom row
+set_io lo_I_o   26
+set_io lo_Q_o   23
+set_io lo_Ix_o  20
+set_io lo_Qx_o  18
