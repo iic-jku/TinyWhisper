@@ -48,7 +48,7 @@ SPDX-FileCopyrightText = "2025-2026 The TinyWhisper Team"
 SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
 
 [[annotations]]
-path = ["ihp130/macros/*/README.md", "ihp130/macros/*/final/**", "ihp130/macros/*/layout/**", "ihp130/macros/*/netlist/**", "ihp130/macros/*/render/**", "ihp130/macros/*/schematic/**", "ihp130/macros/*/testbenches/**"]
+path = ["ihp130/macros/README.md", "ihp130/macros/*/README.md", "ihp130/macros/*/final/**", "ihp130/macros/*/layout/**", "ihp130/macros/*/netlist/**", "ihp130/macros/*/render/**", "ihp130/macros/*/schematic/**", "ihp130/macros/*/testbenches/**"]
 SPDX-FileCopyrightText = "2025-2026 The TinyWhisper Team"
 SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
 

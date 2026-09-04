@@ -208,7 +208,10 @@ The chip design itself lives in [`ihp130/`](https://github.com/iic-jku/TinyWhisp
 │  ├─ 📁 macros/
 │  │  ├─ 📁 coupled_resonator_lc_bpf/
 │  │  ├─ 📁 iqmod/
-│  │  └─ 📁 riscv/
+│  │  ├─ 📁 riscv/
+│  │  ├─ 📁 scripts/
+│  │  ├─ Makefile
+│  │  └─ README.md
 │  ├─ 📁 netlist/
 │  │  ├─ 📁 layout/
 │  │  ├─ 📁 nl/
