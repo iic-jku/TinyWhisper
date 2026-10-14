@@ -32,15 +32,23 @@ LOGO_CORE_MARGIN_BOTTOM=110
 
 # Fill distances in um between the generated filler shapes (smaller distance = higher fill density).
 # The PDK defaults (M1/M2: 1.5, M3-M5: 2.0, TM1/TM2: 3.05) leave the top level too sparse and the
-# KLayout DRC min-density checks fail. The values below fix these filler errors.
-# DRC limits: M1Fil.b-M5Fil.b min filler space = 0.42 um; TM1Fil.c/TM2Fil.c (filler to drawn
-# TopMetal, 3.0 um) is unaffected as it is handled by the exclusion sizing in the fill macro.
+# KLayout DRC min-density checks fail. The global density windows of the regular KLayout DRC are
+# 35 to 60 percent on Metal1 to Metal5, 35 to 55 percent on Activ, at least 15 percent on GatPoly and
+# 25 to 70 percent on TopMetal1 and TopMetal2. Measured on this chip with the values below: Activ 45.6,
+# GatPoly 21.0, Metal1 52.1, Metal2 46.5, Metal3 53.9, Metal4 56.1, Metal5 54.9, TopMetal1 36.7 and
+# TopMetal2 39.1 percent. Metal5 gets a larger distance than Metal1 to Metal4, because 0.75 um puts it
+# at 61.5 percent. Metal3 keeps 0.75 um, because 1.25 um puts two 800 x 800 um windows left of the core
+# center at 20.9 and 21.3 percent, below the 25 percent minimum of M3Fil.h (26.4 and 26.6 with 0.75 um).
+# DRC limits: M1Fil.b-M5Fil.b min filler space = 0.42 um. TM1Fil.b/TM2Fil.b min filler space = 3.0 um,
+# so TopMetal stays at the PDK default of 3.05 (2.0 gave 61285 TM1Fil.b/TM2Fil.b violations).
+# TM1Fil.c/TM2Fil.c (filler to drawn TopMetal, 3.0 um) is unaffected as it is handled by the exclusion
+# sizing in the fill macro.
 FILL_DIST_M1=0.75
 FILL_DIST_M2=0.75
 FILL_DIST_M3=0.75
 FILL_DIST_M4=0.75
-FILL_DIST_M5=0.75
-FILL_DIST_TM=2.0   # shared by TopMetal1 and TopMetal2
+FILL_DIST_M5=1.25
+FILL_DIST_TM=3.05  # shared by TopMetal1 and TopMetal2
 
 # meerkat.py expects die-relative margins from layout origin (0,0)
 LOGO_MARGIN_LEFT=$((CORE_LLX + LOGO_CORE_MARGIN_LEFT))
@@ -178,6 +186,18 @@ PDK_ROOT="$FILL_PDK_DIR" klayout -zz \
     -rd output_file="${GDS_OUT_FILL}" \
     -r $PDKPATH/libs.tech/klayout/tech/scripts/filler.py \
     "${GDS_OUT}"
+
+# Add the die outline on prBoundary.drawing (189/0) to the finished top cell.
+# The density checks of the regular KLayout DRC deck take the chip area from the 189/0 polygons
+# whenever any exist. A LibreLane chip carries 189/0 only inside the macros it places (its own die
+# area is on 189/4), so without the outline the deck divides the layer areas of the whole die by the
+# bounding box of the macro boundaries and reports false maximum-density violations on every layer.
+echo "[INFO] Adding the die outline on prBoundary.drawing (189/0)..."
+klayout -zz \
+    -rd "gds_file=$GDS_OUT_FILL" \
+    -rd "layer=189/0" \
+    -rd "margin=0" \
+    -r add_rectangle.py
 
 # Cleanup intermediate files
 rm -rf "$FILL_PDK_DIR"
