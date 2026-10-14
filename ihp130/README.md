@@ -102,19 +102,22 @@
 │  │  ├─ 📁 verification/
 │  │  ├─ Makefile
 │  │  └─ README.md
-│  └─ 📁 riscv/
-│     ├─ 📁 final/
-│     ├─ 📁 flow/
-│     ├─ 📁 fpga/
-│     ├─ 📁 netlist/
-│     ├─ 📁 render/
-│     ├─ 📁 rtl/
-│     ├─ 📁 schematic/
-│     ├─ 📁 scripts/
-│     ├─ 📁 testbenches/
-│     ├─ 📁 verification/
-│     ├─ Makefile
-│     └─ README.md
+│  ├─ 📁 riscv/
+│  │  ├─ 📁 final/
+│  │  ├─ 📁 flow/
+│  │  ├─ 📁 fpga/
+│  │  ├─ 📁 netlist/
+│  │  ├─ 📁 render/
+│  │  ├─ 📁 rtl/
+│  │  ├─ 📁 schematic/
+│  │  ├─ 📁 scripts/
+│  │  ├─ 📁 testbenches/
+│  │  ├─ 📁 verification/
+│  │  ├─ Makefile
+│  │  └─ README.md
+│  ├─ 📁 scripts/
+│  ├─ Makefile
+│  └─ README.md
 ├─ 📁 netlist/
 │  ├─ 📁 layout/
 │  │  └─ tinywhisper_top.spice
@@ -281,7 +284,7 @@ All `simulations/` folders are generated and git-ignored.
 
 ## Makefile Structure
 
-The whole flow is driven by Makefiles. The top-level `Makefile` builds the chip, and every component under [`macros/`](macros/) and [`ip/`](ip/) has its own `Makefile` and `README.md` following the same conventions (`make help`, `make all`, and so on). You can run each component from the top level or directly from inside its own folder.
+The whole flow is driven by Makefiles. The top-level `Makefile` builds the chip, and every component under [`macros/`](macros/) and [`ip/`](ip/) has its own `Makefile` and `README.md` following the same conventions (`make help`, `make all`, and so on). You can run each component from the top level or directly from inside its own folder. The `macros/` folder also has a `Makefile` of its own with one target, `make macro FROM=<macro> NAME=<name>`, which starts a new macro as a renamed copy of an existing one, see [macros/README.md](macros/README.md#start-a-new-macro-from-an-existing-one).
 
 At the top level, `make all` runs four steps in this order:
 
@@ -312,6 +315,26 @@ The default Make target is `help`, so running `make` prints usage and all availa
 ```sh
 make
 make help
+```
+
+
+### PDK Guard
+
+Every target except `help`, `clean` and `clean-all` needs the `ihp-sg13g2` PDK. A wrong `$PDK`, for example `ihp-sg13cmos5l`, silently mixes technologies: LibreLane hardens against the wrong tech LEF and standard cells, DRC and LVS run against the wrong rule deck, Magic reads the wrong `magicrc`, and the results look valid. The Makefile therefore compares `$PDK` against `REQUIRED_PDK` once when it is parsed, before any target runs:
+
+```sh
+$ sak-pdk ihp-sg13cmos5l
+$ make librelane
+Makefile:28: *** PDK is "ihp-sg13cmos5l", but this chip needs "ihp-sg13g2". Run `sak-pdk ihp-sg13g2` in this shell and retry, or pass REQUIRED_PDK= to skip this check.  Stop.
+```
+
+The check is a parse-time conditional at the top of the Makefile, not a prerequisite of each target, so it costs nothing and cannot be forgotten when a target is added. `help`, `clean` and `clean-all` are exempt, so the usage text and the cleanup still work under any PDK. `open` is not exempt: it launches Xschem, KLayout and Magic, which all read the selected PDK. The macro and IP Makefiles carry the same guard, so the recursive `make -C` calls of `build-all` are checked as well.
+
+Switch the PDK with `sak-pdk ihp-sg13g2`, which also sets `PDKPATH`, `KLAYOUT_PATH`, `SPICE_USERINIT_DIR` and `STD_CELL_LIBRARY`. To run a single target against another PDK anyway, pass an empty `REQUIRED_PDK`:
+
+```sh
+make <target> REQUIRED_PDK=          # skip the check
+make <target> REQUIRED_PDK=<pdk>     # require a different PDK
 ```
 
 

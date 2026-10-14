@@ -14,7 +14,7 @@
 **Computer Engineering, Julius-Maximilians-Universität, Würzburg, Germany
 
 > [!IMPORTANT]
-> This repository requires the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) container with tag `2026.08` or later.
+> This repository requires the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) container with tag `2026.09` or later.
 
 > [!TIP]
 > This repository is based on the [ihp-sg13g2-ams-chip-template](https://github.com/iic-jku/ihp-sg13g2-ams-chip-template) template repository. For a better understanding of the folder structure, how to use the Makefiles, and how to implement your own designs, it is recommended to go through this [tutorial](https://iic-jku.github.io/ihp-sg13g2-ams-chip-template/index.html).
@@ -208,7 +208,10 @@ The chip design itself lives in [`ihp130/`](https://github.com/iic-jku/TinyWhisp
 │  ├─ 📁 macros/
 │  │  ├─ 📁 coupled_resonator_lc_bpf/
 │  │  ├─ 📁 iqmod/
-│  │  └─ 📁 riscv/
+│  │  ├─ 📁 riscv/
+│  │  ├─ 📁 scripts/
+│  │  ├─ Makefile
+│  │  └─ README.md
 │  ├─ 📁 netlist/
 │  │  ├─ 📁 layout/
 │  │  ├─ 📁 nl/
