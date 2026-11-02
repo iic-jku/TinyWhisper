@@ -693,7 +693,7 @@ make klayout-drc CELL=tinywhisper_top
 make klayout-drc CELL=tinywhisper_top DRC_LEVEL=regular
 ```
 
-**Magic DRC** runs a Magic DRC with all subcells flattened (`sak-drc.sh -f "*"`):
+**Magic DRC** runs a Magic DRC of the hierarchical layout (`sak-drc.sh -m`):
 
 ```sh
 make magic-drc

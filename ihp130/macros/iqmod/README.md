@@ -431,7 +431,7 @@ make klayout-drc CELL=iqmod_top
 make klayout-drc CELL=iqmod_top DRC_LEVEL=regular
 ```
 
-**Magic DRC** runs a Magic DRC with all subcells flattened (`sak-drc.sh -f "*"`):
+**Magic DRC** runs a Magic DRC of the hierarchical layout (`sak-drc.sh -m`). KLayout DRC is the signoff check. On `iqmod_top`, Magic's sg13g2 deck currently reports NBL.e, NBL.f, MIM.e and pSD.e/f markers that the KLayout deck does not (see [#8](https://github.com/iic-jku/TinyWhisper/issues/8)):
 
 ```sh
 make magic-drc
