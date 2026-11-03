@@ -44,6 +44,7 @@
 
 ### ihp-sg13g2
 
+- [ ] look into "disable cross-coupling inverter in LO logic?"
 - [ ] update changes from `ihp-sg13g2-ams-chip-template` to `TinyWhisper`
 - [ ] find a better way of linking `xschemrc` files and `.designinit` --> see ihp-sg13g2-ams-chip-template
 - [ ] clean up top-level LVS (Magic + Netgen) --> see ihp-sg13g2-ams-chip-template
