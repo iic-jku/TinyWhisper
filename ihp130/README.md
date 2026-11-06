@@ -181,7 +181,9 @@
 ├─ 📁 scripts/
 │  ├─ add_logo_fill.sh
 │  ├─ add_rectangle.py
-│  └─ check_pex_ports.py
+│  ├─ check_pex_ports.py
+│  ├─ test_tie_pex_substrate.py
+│  └─ tie_pex_substrate.py
 ├─ 📁 testbenches/
 │  ├─ 📁 cocotb/
 │  │  ├─ tinywhisper_top_tb.gtkw
@@ -885,13 +887,21 @@ python3 scripts/check_pex_ports.py netlist/pex/tinywhisper_top_magic_pex_3.spice
 python3 scripts/check_pex_ports.py -v netlist/pex/*.spice     # -v also prints the size of each subcircuit
 ```
 
-**KLayout PEX** currently uses `kpex` with the Magic extraction engine (the 2.5D engine is work in progress):
+**KLayout PEX** uses the 2.5D engine of `kpex` (`kpex extract --2.5D`), which needs kpex 0.9.0 or later:
 
 ```sh
 make klayout-pex
 make klayout-pex CELL=tinywhisper_top
 make klayout-pex CELL=tinywhisper_top EXT_MODE=3
 ```
+
+On top of the extraction the target does three things:
+
+- It passes the CDL netlist of `klayout-lvs-netlist` as schematic, so that kpex checks its own LVS netlist against the device classes and totals of the schematic. A cell without a schematic gets a dummy one.
+- It reduces the full-RC netlist with TICER (`--reduce ticer`), which leaves far fewer elements and a faster simulation, and ngspice with `klu` can lose the operating point of an unreduced netlist (resistors below 1 mOhm).
+- It ties the substrate port `sub!` of the 2.5D netlist to `PEX_SUB_NET` (default `VSS`, [`scripts/tie_pex_substrate.py`](scripts/tie_pex_substrate.py)), as Magic ties the substrate to `VSS`, so the netlist keeps the pins of `<CELL>_pex.sym`.
+
+The chip top-level has not been extracted with the 2.5D engine yet. `riscv_top` alone had not finished `EXT_MODE=1` after 5 h, so verify the digital part of `tinywhisper_top` with a gate-level simulation instead, see the warning in [`macros/riscv/README.md`](macros/riscv/README.md#parasitic-extraction-pex).
 
 **Magic PEX** uses `sak-pex.sh`, which extracts the parasitics with Magic (C-decoupled, C-coupled, or full-RC):
 
@@ -1045,7 +1055,7 @@ The following tools and flows are checked by both variants:
 | PNG to GDS logo generation, KLayout DRC, gdscheck DRC | `sg13g2_ip__jku all` (single logo) |
 | Xschem + ngspice (analog simulation) | iqmod `sim-xschem` (`iqmod_mfb_lpf_tb_ac_cl`) |
 | CACE (+ ngspice) | iqmod CACE, single parameter set (`ac_params`) |
-| KLayout DRC (`sak-drc.sh`) + KLayout LVS (`sak-lvs.sh`) + KLayout PEX (`kpex`) | iqmod `klayout-verify CELL=iqmod_top` |
+| KLayout DRC (`sak-drc.sh`) + KLayout LVS (`sak-lvs.sh`) + KLayout PEX (`kpex`) | iqmod `klayout-verify CELL=iqmod_top EXT_MODE=2` |
 | Magic extract + Netgen LVS (`sak-lvs.sh`) + Magic PEX (`sak-pex.sh`) | iqmod `magic-verify CELL=iqmod_top` |
 | Magic LEF export + LIB + Verilog stub + `sak-render.py` render | iqmod `build-top` |
 | Verilator lint | riscv `lint-verilog-all` |
