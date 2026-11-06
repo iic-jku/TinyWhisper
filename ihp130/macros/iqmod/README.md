@@ -477,7 +477,7 @@ make gdscheck-drc-all
 > | `iqmod_mixer` | 26716 | 8 | 4 | 0 |
 > | `iqmod_top` | 91752 | 16 | 8 | 144 |
 >
-> Until the fixes are in the container, `magic-drc` and `gdscheck-drc` fail on these cells, and the Magic DRC stops `magic-verify` and `make all`, which does not run gdscheck. See the [top-level README](../../README.md#design-rule-check-drc) for the background.
+> Until the fixes are in the container, `magic-drc` and `gdscheck-drc` fail on these cells. `magic-verify` and `make all` leave the Magic DRC out, and gdscheck stops `make all`. See the [top-level README](../../README.md#design-rule-check-drc) for the background.
 
 
 ### Export Schematic Netlist for LVS
@@ -632,7 +632,7 @@ make klayout-verify-all
 
 ### Verify with Magic
 
-**Verify a single cell** by running DRC, LVS, and PEX in sequence. A failing step stops the sequence, and until the fixes for the `pmos` guard ring are in the container that is the Magic DRC (see [Design Rule Check (DRC)](#design-rule-check-drc)):
+**Verify a single cell** by running LVS and PEX in sequence. The Magic DRC stays out of this target for now (see [Design Rule Check (DRC)](#design-rule-check-drc)), `make magic-drc` runs it:
 
 ```sh
 make magic-verify
@@ -648,7 +648,7 @@ make magic-verify-all
 
 ### Verify, Build and Simulate All
 
-Runs the full flow in sequence: KLayout verification, Magic verification, top-level build deliverables, and simulations (`klayout-verify-all`, `magic-verify-all`, `build-top`, `sim-all`):
+Runs the full flow in sequence: KLayout verification, gdscheck DRC, Magic verification, top-level build deliverables, and simulations (`klayout-verify-all`, `gdscheck-drc-all`, `magic-verify-all`, `build-top`, `sim-all`):
 
 ```sh
 make all

@@ -526,8 +526,9 @@ klayout-verify: ## Verify CELL cell with KLayout (usage: make klayout-verify [CE
 	$(MAKE) klayout-pex CELL=$(CELL)
 .PHONY: klayout-verify
 
-magic-verify: ## Verify CELL cell with Magic (usage: make magic-verify [CELL=<cellname>])
-	$(MAKE) magic-drc CELL=$(CELL)
+magic-verify: ## Verify CELL cell with Magic, LVS and PEX (usage: make magic-verify [CELL=<cellname>])
+# The flows leave the Magic DRC out until the foundry cells are clean in it, make magic-drc still runs it
+#	$(MAKE) magic-drc CELL=$(CELL)
 	$(MAKE) magic-lvs CELL=$(CELL)
 	$(MAKE) magic-pex CELL=$(CELL)
 .PHONY: magic-verify
@@ -547,8 +548,8 @@ all: ## Build, verify, simulate and package the whole chip
 # Magic stops on the foundry cells of the chip, so its DRC stays out until they are clean
 #	$(MAKE) magic-drc CELL=$(TOP)
 #	$(MAKE) magic-drc CELL=$(TOP)_logo_fill
-	$(MAKE) gdscheck-drc CELL=$(TOP)
-	$(MAKE) gdscheck-drc CELL=$(TOP)_logo_fill
+	$(MAKE) klayout-drc-regular
+	$(MAKE) gdscheck-drc-regular
 #	$(MAKE) klayout-verify
 #	$(MAKE) magic-verify
 #	$(MAKE) sim-all
@@ -589,7 +590,7 @@ regression: ## Regression test target for IIC-OSIC-TOOLS (usage: make regression
 	$(MAKE) -C $(MACROS_DIR)/iqmod sim-xschem TB=iqmod_mfb_lpf_tb_ac_cl
 # 	ONE CACE run: the lightweight AC VDD sweep (no Monte-Carlo) to keep runtime short.
 	cd $(MACROS_DIR)/iqmod/verification/cace && cace iqmod_mfb_lpf.yaml -p ac_params && rm -rf _runs _docs netlist
-# 	KLayout & Magic DRC, LVS and PEX of the iqmod_top cell.
+# 	KLayout DRC, LVS and PEX and Magic LVS and PEX of the iqmod_top cell.
 	$(MAKE) -C $(MACROS_DIR)/iqmod klayout-verify CELL=iqmod_top
 	$(MAKE) -C $(MACROS_DIR)/iqmod magic-verify CELL=iqmod_top
 	$(MAKE) -C $(MACROS_DIR)/iqmod build-top
@@ -608,8 +609,8 @@ regression: ## Regression test target for IIC-OSIC-TOOLS (usage: make regression
 # 	Top-level assembly
 	$(MAKE) init-submodules
 	$(MAKE) build-bondpad
-# 	gdscheck DRC of a cell it passes, so that a broken gdscheck fails the regression.
-	$(MAKE) -C $(IP_DIR)/sg13g2_ip__bondpad_70x70 gdscheck-drc
+# 	Magic DRC of a cell it passes, so that a broken Magic fails the regression.
+	$(MAKE) -C $(IP_DIR)/sg13g2_ip__bondpad_70x70 magic-drc
 	$(MAKE) -C $(IP_DIR)/sg13g2_ip__jku all
 # 	librelane-nodrc: full RTL-to-GDS. DRC is skipped for runtime.
 	$(MAKE) librelane-nodrc
