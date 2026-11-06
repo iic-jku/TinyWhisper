@@ -60,6 +60,7 @@ make -C macros/riscv sim-rtl-cocotb                 # riscv RTL simulation
 make -C macros/iqmod sim-xschem TB=iqmod_mfb_lpf_tb_ac_cl   # one Xschem/ngspice testbench
 make -C macros/iqmod klayout-verify CELL=iqmod_top  # KLayout DRC, LVS, PEX
 make -C macros/iqmod magic-verify CELL=iqmod_top    # Magic DRC, Netgen LVS, Magic PEX
+make -C macros/iqmod gdscheck-drc CELL=iqmod_top    # gdscheck DRC
 make build-top                                      # chip LibreLane run, copy-back, logo and fill, render
 make regression                                     # tool/flow smoke test, reuses the committed riscv views
 ```
@@ -84,7 +85,8 @@ make regression                                     # tool/flow smoke test, reus
 - Most build outputs are committed (GDS, netlists, reports, renders, `final/` views). Targets overwrite them, and `make clean` and `make clean-all` delete them. Check `git status` after a run, commit only what the change needs, and `git restore` the rest.
 - `make release` defaults to `VERSION=2.0.0` and overwrites the committed `ihp130/release/v.2.0.0/`. Never run it without an explicit new `VERSION`.
 - `ihp130/macros/riscv/netlist/xspice/riscv_top.xspice` is a committed source that no target rebuilds from the stock RTL. `generate-xspice` skips itself while `freq_status[1:0] <= 2'b11;` is commented out in `rtl/memory.sv`. Leave that guard alone.
-- `build-top` runs `librelane-nodrc` on purpose: IHP's `metal1_pin_offgrid` rule fails on the pad ring (TODO in `ihp130/Makefile`). Run DRC separately with `make magic-drc` or `make klayout-drc-regular`.
+- `build-top` runs `librelane-nodrc` on purpose: IHP's `metal1_pin_offgrid` rule fails on the pad ring (TODO in `ihp130/Makefile`). Run DRC separately with `make magic-drc`, `make klayout-drc-regular` or the matching `gdscheck-drc-*` targets. `DRC_JOBS=<n>` caps the KLayout processes and sets the gdscheck threads (default 4 and every CPU). More than 4 only pays off for the full chip on a server.
+- KLayout is the sign-off DRC. Magic and gdscheck flag IHP's own cells (the nBuLay ring of the `pmos` guard ring PCell, IHP-Open-PDK#954, fixed in gdscheck after 0.2.0, and, for Magic, the IO pads read hierarchically), so until the upstream fixes are in the image `magic-verify` and `make regression` stop at Magic, and `make all` leaves the chip's Magic DRC out. Fix such a report upstream, not with make's `-` prefix in a flow. Keep `-f` patterns for Magic away from the top cell: `sak-drc.sh` refuses one that matches it, because Magic would check an empty cell.
 - `build-all` does not rebuild the macros. The chip integrates the committed views in `macros/riscv/final/` and `macros/iqmod/final/`.
 - Third-party files keep their own license (see `REUSE.toml`): `ihp130/ip/sg13g2_io_custom/`, `ihp130/testbenches/xschem/models/`, the IHP cell netlists `sg13g2_io.spi` and `sg13g2_stdcell.spice` in `ihp130/verification/lvs/`, and the EUROPRACTICE package GDS in `ihp130/packaging/layout/`.
 
