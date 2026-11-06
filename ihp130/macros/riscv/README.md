@@ -104,6 +104,7 @@
 ├─ 📁 scripts/
 │  ├─ check_pex_ports.py
 │  ├─ spi2xspice.py
+│  ├─ tie_pex_substrate.py
 │  └─ verilog2sym.py
 ├─ 📁 testbenches/
 │  ├─ 📁 cocotb/
@@ -585,7 +586,7 @@ make magic-pex CELL=riscv_top
 make magic-pex CELL=riscv_top EXT_MODE=1
 ```
 
-**KLayout PEX** uses `kpex`, which runs Magic internally for the extraction itself:
+**KLayout PEX** uses the 2.5D engine of `kpex` (`kpex extract --2.5D`), which needs kpex 0.7.0 or later:
 
 ```sh
 make klayout-pex
@@ -596,6 +597,10 @@ make klayout-pex CELL=riscv_top EXT_MODE=1
 > For `klayout-pex`, `EXT_MODE=1` (C-decoupled) is not yet supported by kpex and automatically falls back to `EXT_MODE=2` (CC) with a warning.
 
 Both targets read `final/gds/<CELL>.gds`, so **`make build-top` (or at least `make copy-final`) has to have run first**. They abort with a clear message if the GDS is missing, instead of failing somewhere inside the extractor. Unlike the analog macro there is no Xschem schematic to hand to kpex as the reference netlist, so `klayout-pex` passes the LibreLane-extracted `netlist/spice/<CELL>.spice` instead.
+
+`klayout-pex` reduces the full-RC netlist with TICER (`--reduce ticer`). It also ties the substrate port `sub!` of the 2.5D netlist to `PEX_SUB_NET` (default `VSS`, [`scripts/tie_pex_substrate.py`](scripts/tie_pex_substrate.py)), as Magic ties the substrate to `VSS`, so the netlist keeps the pins of `<CELL>_pex.sym`.
+
+`klayout-pex` has not been run on `riscv_top` yet. Expect a long run: the far smaller `counter_top` of the SG13G2 template takes 47 min in `EXT_MODE=2`.
 
 For full-RC extraction (`EXT_MODE=3`), `magic-pex` additionally exposes the three `extresist` tuning parameters of `sak-pex.sh`. They are ignored in `EXT_MODE=1`/`2`:
 
