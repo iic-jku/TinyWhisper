@@ -9,7 +9,7 @@ When adding or reorganizing a macro, mirror the template layout and its per-macr
 
 ## Environment
 
-- Run every flow inside the IIC-OSIC-TOOLS container (https://github.com/iic-jku/IIC-OSIC-TOOLS), tag `2026.09` or later (`README.md`). CI uses `hpretl/iic-osic-tools:latest`.
+- Run every flow inside the IIC-OSIC-TOOLS container (https://github.com/iic-jku/IIC-OSIC-TOOLS), tag `2026.11` or later (`README.md`). CI uses `hpretl/iic-osic-tools:latest`.
 - The PDK is `ihp-sg13g2`. `.designinit` exports `PDK` and the related variables, and `sak-pdk ihp-sg13g2` switches a running shell.
 - The chip, macro and IP Makefiles check `$PDK` when they are parsed: every target except `help` and the clean targets aborts if it is not `ihp-sg13g2`. Fix the PDK instead of passing `REQUIRED_PDK=`.
 - After cloning, run `make init-submodules` in `ihp130/`. It fetches `ihp130/flow/artistic` (ArtistIC) and the two submodules under `software/c_toolchain/`.
