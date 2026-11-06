@@ -36,6 +36,7 @@
 │  └─ 📁 vh/
 │     └─ riscv_top.vh
 ├─ 📁 flow/
+│  ├─ 📁 eqy/                 # .gitignore'd: EQY script and work folder of make lec
 │  └─ 📁 librelane/
 │     ├─ config.yaml
 │     ├─ impl.sdc
@@ -620,6 +621,23 @@ The riscv testbench [`testbenches/xschem/riscv_top_tb_tran.sch`](testbenches/xsc
 
 > [!WARNING]
 > A full-RC extraction of the whole RISC-V macro takes hours in the IIC-OSIC-TOOLS container and writes a netlist far larger than the one of the template's counter. This is why `magic-pex` and `klayout-pex` are commented out in `make all` and nothing in this repository consumes the extracted netlist. Run them by hand when a post-layout netlist is needed.
+
+
+### Logic Equivalence Check
+
+A gate-level simulation checks the netlist only for the stimuli of its testbench. A logic equivalence check (LEC) proves with a formal solver that the netlist does what the RTL does, for every input sequence.
+
+```sh
+make lec                         # final/nl/riscv_top.nl.v against the RTL
+make lec LEC_NETLIST=<netlist>   # another netlist, e.g. the synthesis netlist of a run
+make lec LEC_TIMEOUT=<seconds>   # another time limit per partition (default: 300)
+make lec LEC_JOBS=<n>            # partitions proved in parallel (default: 4)
+```
+
+`lec` writes an [EQY](https://github.com/YosysHQ/eqy) script to `flow/eqy/riscv_top.eqy` and runs it in `flow/eqy/work/`. EQY pairs the registers of both designs by name, splits the design into partitions, proves each of them, and exits with 0 only when all of them are equivalent. The script is the one of the counter macro in the chip templates, with two additions the CPU needs: `memory_map`, because EQY cannot partition the memory that yosys-slang keeps for the register file, and `splitnets`, because the netlist keeps single-bit register names. `clk2fflogic` makes the clock an input of the proof, and `sram_sim.sv` stays out because it is a simulation model.
+
+> [!WARNING]
+> `lec` does not pass on this macro yet, so it is not part of `make all` and there is no `lec-mutant` target, which would pass on any failing partition. On the committed netlist it proves 220 of 264 partitions in about 8 minutes, and 44 fail: `memory_i.freq_inst.Z_o` (30), `memory_i.i2c_master_mc` (7), `memory_i.uart_receiver` (5), `rd_alu` and the largest partition (about 79500 cells, with `analog_en` and the reset of the frequency generator). The cause of the failures is still open. They stay with a reset cycle at the start on both sides and with either front end, except `rd_alu`, which passes through `read_verilog -sv`. The state register `memory_i.uart_receiver.fsm_state` has 3 bits in the RTL and 4 in the netlist, so synthesis re-encoded it, and a match by name cannot compare that. The committed netlist was built with `freq_status[1:0] <= 2'b11;` active in `rtl/memory.sv`, and `lec` does not show that yet: it gives the same verdicts with and without that line.
 
 
 ### Lint, Build, Verify and Simulate All

@@ -65,6 +65,18 @@ DSMOD_TARGET ?= all
 # Override with: make <target> DSMOD_TARGET_SIM_ALL=<all|all_runs>
 DSMOD_TARGET_SIM_ALL ?= all_runs
 
+# Gate-level netlist that lec proves equivalent to the RTL (default: the committed final netlist)
+# Override with: make lec LEC_NETLIST=<netlist>
+LEC_NETLIST ?= final/nl/$(TOP).nl.v
+
+# Time limit of lec per partition in seconds, a partition that runs into it counts as not proved
+# Override with: make lec LEC_TIMEOUT=<seconds>
+LEC_TIMEOUT ?= 300
+
+# Partitions lec proves in parallel
+# Override with: make lec LEC_JOBS=<n>
+LEC_JOBS ?= 4
+
 # Extra options for the sak-open.py file browser (e.g. --all to include build outputs)
 # Override with: make open OPEN_ARGS=<options>
 OPEN_ARGS ?=
@@ -141,6 +153,9 @@ help: ## Show this help message
 	@echo 'DSMOD_TARGET selects the dsmod cocotb target for sim-rtl-cocotb CELL=dsmod (default all = baseline ORDER=2/OSR=64).'
 	@echo 'DSMOD_TARGET_SIM_ALL is the same for sim-all and all (default all_runs = every order/OSR figure, takes hours).'
 	@echo 'OPEN_ARGS passes extra options to sak-open.py for the open target (e.g. --all).'
+	@echo 'LEC_NETLIST selects the netlist for lec (default: final/nl/$(TOP).nl.v).'
+	@echo 'LEC_TIMEOUT sets the time limit of lec per partition in seconds (default: 300).'
+	@echo 'LEC_JOBS sets the partitions lec proves in parallel (default: 4).'
 	@echo 'FORCE=1 lets symbol-gl overwrite an existing symbol instead of refusing.'
 	@echo 'REQUIRED_PDK defaults to $(REQUIRED_PDK). Every target except help and clean aborts if $$PDK differs.'
 .PHONY: help
@@ -462,6 +477,55 @@ magic-pex: ## Run Parasitic Extraction with Magic on the final GDS (usage: make 
 # ================================================================================================
 
 
+# Logic Equivalence Check Target
+LEC_DIR := flow/eqy
+LEC_LIB := $(PDK_ROOT)/$(PDK)/libs.ref/sg13g2_stdcell/lib/sg13g2_stdcell_typ_1p20V_25C.lib
+
+# Read the RTL with the other front end than synthesis (USE_SLANG in config.yaml),
+# so that a front end that misreads the RTL cannot do so on both sides
+ifneq ($(shell grep -Eis '^[[:space:]]*USE_SLANG:[[:space:]]*true' $(LIBRELANE_DIR)/config.yaml),)
+LEC_GOLD_READ := 'read_verilog -sv $(abspath $(SRC_DIR)/constants.sv $(MODULES_SYNTH))'
+else
+LEC_GOLD_READ := 'plugin -i slang' 'read_slang --single-unit --top $(TOP) $(abspath $(SRC_DIR)/constants.sv $(MODULES_SYNTH))'
+endif
+
+# memory_map because EQY cannot partition the memory slang keeps for the register file.
+# splitnets because the netlist keeps single-bit register names, and EQY pairs registers by name.
+# clk2fflogic on both sides makes the clock an input of the proof, and the design uses both clock edges.
+lec: ## Prove the gate-level netlist equivalent to the RTL with EQY (usage: make lec [LEC_NETLIST=<netlist>] [LEC_TIMEOUT=<seconds>] [LEC_JOBS=<n>])
+	@if [ ! -f $(LEC_NETLIST) ]; then \
+		echo "No netlist $(LEC_NETLIST) found. Run 'make build-top' (or 'make copy-final') first."; \
+		exit 1; \
+	fi
+	rm -rf $(LEC_DIR)/work
+	mkdir -p $(LEC_DIR)
+	@printf '%s\n' \
+		'[gold]' \
+		$(LEC_GOLD_READ) \
+		'hierarchy -check -top $(TOP)' \
+		'proc' \
+		'memory_map' \
+		'flatten -noscopeinfo' \
+		'splitnets -format []' \
+		'clk2fflogic' \
+		'' \
+		'[gate]' \
+		'read_liberty -ignore_miss_func $(LEC_LIB)' \
+		'read_verilog $(abspath $(LEC_NETLIST))' \
+		'hierarchy -check -top $(TOP)' \
+		'flatten -noscopeinfo' \
+		'select -assert-none t:sg13g2_*' \
+		'clk2fflogic' \
+		'' \
+		'[strategy sby]' \
+		'use sby' \
+		'timeout $(LEC_TIMEOUT)' \
+		'engine abc pdr' > $(LEC_DIR)/$(TOP).eqy
+	cd $(LEC_DIR) && eqy -j $(LEC_JOBS) -f $(TOP).eqy -d work
+.PHONY: lec
+# ================================================================================================
+
+
 # Lint, Build, Verify and Simulate All Target
 # `magic-pex` is not part of `all` yet. A full-RC extraction of the whole RISC-V macro takes hours and
 # writes a netlist far larger than the counter example of the template, so run it by hand when needed.
@@ -478,7 +542,7 @@ all: ## Lint, build, verify and simulate the macro
 
 # Clean Target
 clean: ## Delete all generated files and folders (LibreLane runs, final, netlists, render, reports, simulation and FPGA outputs)
-	rm -rf $(LIBRELANE_DIR)/runs $(FLOW_FINAL_DIR)
+	rm -rf $(LIBRELANE_DIR)/runs $(FLOW_FINAL_DIR) $(LEC_DIR)
 	rm -rf $(FINAL_DIR)
 	rm -rf $(NET_NL_DIR) $(NET_PNL_DIR) $(NET_SPICE_DIR) $(NET_PEX_DIR)
 #	rm -rf $(XSPICE_DIR)
