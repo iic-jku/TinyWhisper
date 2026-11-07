@@ -2,6 +2,8 @@
 
 ## ihp-sg13g2 TinyWhisper
 
+- [ ] fix the Magic DRC upstream and comment its lines back in (`magic-verify`, the IP `all`, `make all`)
+- [ ] get gdscheck to pass in `make all`: `NBL.f` of `iqmod` once a release with https://github.com/aesc-silicon/gdscheck/pull/51 is in the image, `Slt.c` and `Slt.i` of the Metal5 plate of `sg13g2_ip__ce`, and the `TV1`, `TM1` and `TM2` hits on the chip
 - [x] Padframe & setup using the following template: https://github.com/IHP-GmbH/ihp-sg13g2-librelane-template
 
 - Analog Front-End — IQ Modulator
