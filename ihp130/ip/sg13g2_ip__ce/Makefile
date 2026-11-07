@@ -64,6 +64,7 @@ DRC_RPT_DIR := verification/drc
 # Logo parameters
 IMG_FILE    := logo/ce_logo.png
 IMG_SIZE_PX ?= 750
+# Block size in microns. The 3 holes in ce_logo.png that keep Slt.c and Slt.i clean are single pixels, another size can drop them.
 BLOCK_SIZE  ?= 100
 # Pixel size in microns. Must be >= minimum layer width to avoid DRC violations.
 PIXEL_SIZE  ?= 0.25
