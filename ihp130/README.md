@@ -53,6 +53,14 @@
 │  │  ├─ 📁 verification/
 │  │  ├─ Makefile
 │  │  └─ README.md
+│  ├─ 📁 sg13g2_ip__rfpad_70x70/
+│  │  ├─ 📁 final/
+│  │  ├─ 📁 netlist/
+│  │  ├─ 📁 schematic/
+│  │  ├─ 📁 script/
+│  │  ├─ 📁 verification/
+│  │  ├─ Makefile
+│  │  └─ README.md
 │  ├─ 📁 sg13g2_ip__ce/
 │  │  ├─ 📁 final/
 │  │  ├─ 📁 logo/
@@ -212,6 +220,7 @@ Xschem reads exactly one `xschemrc` at start-up, and that file decides which sym
 | --- | --- |
 | [`schematic/xschem/xschemrc`](schematic/xschem/xschemrc) | chip top-level schematics |
 | [`testbenches/xschem/xschemrc`](testbenches/xschem/xschemrc) | chip top-level testbenches |
+| [`ip/sg13g2_ip__rfpad_70x70/schematic/xschem/xschemrc`](ip/sg13g2_ip__rfpad_70x70/schematic/xschem/xschemrc) | RF pad schematic |
 | [`macros/iqmod/schematic/xschem/xschemrc`](macros/iqmod/schematic/xschem/xschemrc) | iqmod schematics |
 | [`macros/iqmod/testbenches/xschem/xschemrc`](macros/iqmod/testbenches/xschem/xschemrc) | iqmod testbenches |
 | [`macros/iqmod/verification/cace/templates/xschemrc`](macros/iqmod/verification/cace/templates/xschemrc) | CACE testbench templates |
@@ -288,7 +297,7 @@ The whole flow is driven by Makefiles. The top-level `Makefile` builds the chip,
 
 At the top level, `make all` runs four steps in this order:
 
-1. `build-all` initialises the submodules and builds every component by calling its own `all` target: bondpad, logos, macros, and finally the chip assembly with `build-top` (LibreLane, copy-back of all artifacts, logo and fill insertion, final GDS render).
+1. `build-all` initialises the submodules and builds every component by calling its own `all` target: bondpad, RF pad, logos, macros, and finally the chip assembly with `build-top` (LibreLane, copy-back of all artifacts, logo and fill insertion, final GDS render).
 2. `klayout-drc-regular` (the sign-off deck) and `gdscheck-drc-regular` run the DRC of the final `tinywhisper_top_logo_fill` GDS. A violation stops `make all`, and gdscheck reports violations on this chip (see [Design Rule Check (DRC)](#design-rule-check-drc)). `magic-drc` is left out until IHP's IO pads are clean in Magic.
 3. `sim-all` runs the top-level RTL and gate-level simulations on the netlists produced by this build.
 4. `bondplan` generates the bonding diagram, the bondwires, and the pin table.
@@ -300,7 +309,7 @@ Every component follows the same principle. The simulations always run last, so 
 | [`macros/riscv/`](macros/riscv/) (digital) | lint -> build (FPGA and LibreLane) -> simulate. DRC and LVS run inside the LibreLane flow. The XSPICE model is a committed source file, rebuilt only when the riscv RTL enables it. |
 | [`macros/iqmod/`](macros/iqmod/) (analog) | verify (DRC, LVS, PEX) -> build (LEF, LIB, Verilog stub, GDS, render) -> simulate |
 | [`macros/coupled_resonator_lc_bpf/`](macros/coupled_resonator_lc_bpf/) (schematic-only) | simulate |
-| [`ip/*`](ip/) (bondpad, logos) | build -> verify (DRC) |
+| [`ip/*`](ip/) (bondpad, RF pad, logos) | build -> verify (DRC, and LVS on the RF pad) |
 | top level | build -> verify (DRC) -> simulate -> package |
 
 The following sections describe the top-level targets in detail. The macro and IP targets are documented in the `README.md` of the respective subfolder.
@@ -561,6 +570,15 @@ make build-bondpad
 ```
 
 
+### Build RF Pad
+
+To build the [RF pad](ip/sg13g2_ip__rfpad_70x70/README.md) in the `ip` folder, run the following command. The chip does not use it by default, the README of the IP lists what a chip needs for it.
+
+```sh
+make build-rfpad
+```
+
+
 ### Build Logos
 
 To build the logos in the `ip` folder, run the following command:
@@ -626,7 +644,7 @@ Internally this executes (in order): `librelane-nodrc` -> `copy-reports` -> `cop
 
 ### Build All
 
-To initialise submodules, build the bondpad, build the logos, build the macros, and run the full `build-top` flow, run:
+To initialise submodules, build the bondpad and the RF pad, build the logos, build the macros, and run the full `build-top` flow, run:
 
 ```sh
 make build-all
@@ -1008,13 +1026,13 @@ This target also runs automatically in continuous integration: the [`regression`
 To keep the runtime low while still covering the full toolchain, the regression makes the following trade-offs:
 
 - The chip top-level runs `librelane-nodrc`. All DRC checks are skipped to save runtime on the large top-level assembly. The macros and IP blocks are DRC-checked individually beforehand, so this only leaves the top-level routing/fill unchecked.
-- KLayout DRC (`sak-drc.sh`) is skipped inside the LibreLane runs, but is still exercised in the bondpad and logo IP builds, and in the iqmod `klayout-verify`.
-- Magic DRC (`sak-drc.sh -m`) runs once, as `magic-drc` of the bondpad, which passes it, so a broken Magic fails the regression. gdscheck DRC (`sak-drc.sh -g`) runs in the bondpad and logo IP builds.
+- KLayout DRC (`sak-drc.sh`) is skipped inside the LibreLane runs, but is still exercised in the bondpad, RF pad and logo IP builds, and in the iqmod `klayout-verify`.
+- Magic DRC (`sak-drc.sh -m`) runs once, as `magic-drc` of the bondpad, which passes it, so a broken Magic fails the regression. gdscheck DRC (`sak-drc.sh -g`) runs in the bondpad, RF pad and logo IP builds.
 - Only **one** logo (`sg13g2_ip__jku`) is regenerated. It is the only step that exercises the PNG to GDS flow. The other logos (`sg13g2_ip__jku_names`, `sg13g2_ip__ce`, `sg13g2_ip__ce_names`) use an identical toolchain and reuse their committed views.
 - Exactly **one** Xschem testbench (`iqmod_mfb_lpf_tb_ac_cl`) and **one** CACE parameter set (the AC VDD sweep `ac_params` of `iqmod_mfb_lpf.yaml`, no Monte Carlo) are run. Swap `ac_params` for `ac_mc_params` / `ac_mm_params` in the target to also exercise the Monte Carlo flow.
 - In the default `regression` the riscv macro is **not re-hardened**: `librelane-magicdrc` (the full RTL-to-GDS of the CPU, ≈2 h wall clock), the flows that depend on its fresh outputs (`copy-final`, the gate-level cocotb simulation `sim-gl-cocotb` with ≈12 min for the full suite, `generate-xspice`, which is called for consistency with the template but skips itself while the riscv RTL carries its stock settings, and the gate-level Xschem simulation `sim-gl-xschem`) and the Icarus RTL testbench (`sim-rtl-verilog`) only run in `regression-nightly` (`NIGHTLY_REGRESSION=1`). In the default variant the riscv macro is covered at RTL (lint + cocotb, which also exercises Icarus as its simulator), and the LibreLane flow itself is still exercised by the chip top-level `librelane-nodrc` run. A fast gate-level smoke run of a single test (≈20 s) is available via `COCOTB_TEST_FILTER=test_cpu_fibonacci_fast make sim-gl-cocotb`.
 
-The regression runs bottom-up: first the iqmod and riscv macros, then the top-level assembly (submodules, bondpad, logo) and finally the chip top-level LibreLane run that integrates the macros and IP. In `regression-nightly`, `copy-final` copies the freshly hardened `flow/final/` views into `macros/riscv/final/`, so the gate-level flows and the chip top-level use the freshly built outputs; in the default `regression` the chip top-level integrates the committed views in `macros/riscv/final/` instead.
+The regression runs bottom-up: first the iqmod and riscv macros, then the top-level assembly (submodules, bondpad, RF pad, logo) and finally the chip top-level LibreLane run that integrates the macros and IP. In `regression-nightly`, `copy-final` copies the freshly hardened `flow/final/` views into `macros/riscv/final/`, so the gate-level flows and the chip top-level use the freshly built outputs; in the default `regression` the chip top-level integrates the committed views in `macros/riscv/final/` instead.
 
 The following tools and flows are checked by both variants:
 
@@ -1023,6 +1041,7 @@ The following tools and flows are checked by both variants:
 | git submodules | `init-submodules` |
 | KLayout scripting (bondpad generator), KLayout DRC, gdscheck DRC | `build-bondpad` |
 | Magic DRC (`sak-drc.sh -m`) | bondpad `magic-drc` |
+| KLayout generator with connectivity checks, KLayout LVS of a generated cell | `build-rfpad` |
 | PNG to GDS logo generation, KLayout DRC, gdscheck DRC | `sg13g2_ip__jku all` (single logo) |
 | Xschem + ngspice (analog simulation) | iqmod `sim-xschem` (`iqmod_mfb_lpf_tb_ac_cl`) |
 | CACE (+ ngspice) | iqmod CACE, single parameter set (`ac_params`) |
