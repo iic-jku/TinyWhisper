@@ -311,6 +311,10 @@ build-bondpad: ## Build the bondpad in ip/sg13g2_ip__bondpad_70x70/
 	@$(MAKE) -C $(IP_DIR)/sg13g2_ip__bondpad_70x70 all
 .PHONY: build-bondpad
 
+build-rfpad: ## Build the RF pad in ip/sg13g2_ip__rfpad_70x70/
+	@$(MAKE) -C $(IP_DIR)/sg13g2_ip__rfpad_70x70 all
+.PHONY: build-rfpad
+
 build-logos: ## Build the logos in ip/sg13g2_ip__jku*/ and ip/sg13g2_ip__ce*/
 	@$(MAKE) -C $(IP_DIR)/sg13g2_ip__jku all
 	@$(MAKE) -C $(IP_DIR)/sg13g2_ip__jku_names all
@@ -352,9 +356,10 @@ build-top: ## Build the chip (LibreLane, copy reports/GDS/netlist/render, add lo
 # TODO: Enable `make build-macros`. For now, this is not possible: the RISC-V CPU is built with nix-shell and the
 # top-level is built with the `next` release of IIC-OSIC-TOOLS due to
 # https://github.com/FPGA-Research/heichips25-tapeout/blob/8944926f1f49e382616fbdd150e356bbdcf23b8c/nix/disable_auto_taper.patch#L4.
-build-all: ## Build the bondpad, logos, macros and the chip top-level
+build-all: ## Build the bondpad, RF pad, logos, macros and the chip top-level
 	$(MAKE) init-submodules
 	$(MAKE) build-bondpad
+	$(MAKE) build-rfpad
 	$(MAKE) build-logos
 # 	$(MAKE) build-macros
 	$(MAKE) build-top
@@ -611,6 +616,7 @@ regression: ## Regression test target for IIC-OSIC-TOOLS (usage: make regression
 	$(MAKE) build-bondpad
 # 	Magic DRC of a cell it passes, so that a broken Magic fails the regression.
 	$(MAKE) -C $(IP_DIR)/sg13g2_ip__bondpad_70x70 magic-drc
+	$(MAKE) build-rfpad
 	$(MAKE) -C $(IP_DIR)/sg13g2_ip__jku all
 # 	librelane-nodrc: full RTL-to-GDS. DRC is skipped for runtime.
 	$(MAKE) librelane-nodrc
@@ -644,6 +650,7 @@ clean: ## Delete all generated chip top-level files and folders (LibreLane runs,
 clean-all: ## Delete all generated files of the chip top-level, the IPs and the macros
 	$(MAKE) clean
 	$(MAKE) -C $(IP_DIR)/sg13g2_ip__bondpad_70x70 clean
+	$(MAKE) -C $(IP_DIR)/sg13g2_ip__rfpad_70x70 clean
 	$(MAKE) -C $(IP_DIR)/sg13g2_ip__jku clean
 	$(MAKE) -C $(IP_DIR)/sg13g2_ip__jku_names clean
 	$(MAKE) -C $(IP_DIR)/sg13g2_ip__ce clean

@@ -20,7 +20,7 @@ When adding or reorganizing a macro, mirror the template layout and its per-macr
 | --- | --- |
 | `ihp130/` | The chip: `Makefile`, `README.md` (documents every target), `rtl/` (pad ring `tinywhisper_top.sv`, `tinywhisper_core.sv`), `flow/librelane/`, `layout/`, `netlist/`, `schematic/xschem/`, `testbenches/`, `verification/`, `packaging/` (bondplan), `release/v.<version>/` |
 | `ihp130/macros/<name>/` | One macro per folder: `riscv` (digital), `iqmod` (analog), `coupled_resonator_lc_bpf` (schematic-only). `ihp130/macros/README.md` compares them. |
-| `ihp130/ip/<name>/` | Bondpad and logo blocks, each with `Makefile` and `README.md`, plus the third-party pad cells in `sg13g2_io_custom/` |
+| `ihp130/ip/<name>/` | Bondpad, RF pad and logo blocks, each with `Makefile` and `README.md`, plus the third-party pad cells in `sg13g2_io_custom/` |
 | `software/` | C toolchain for the RISC-V core and the Python WSPR reference (`software/README.md`) |
 | `doc/` | Quarto documentation site |
 | `sky130/` | Legacy sky130 test chip, kept for reference and not maintained |
@@ -40,7 +40,7 @@ Inside a macro, folders exist only where the macro kind needs them:
 
 ## Makefiles
 
-- `ihp130/`, every macro and every bondpad or logo IP has its own `Makefile` and `README.md`. The `README.md` documents each target. Read it before changing a flow.
+- `ihp130/`, every macro and every bondpad, RF pad or logo IP has its own `Makefile` and `README.md`. The `README.md` documents each target. Read it before changing a flow.
 - Each of these Makefiles sets `.DEFAULT_GOAL := help`, and `make help` lists every target from its `## ` comment. Give every new target a `## ` comment.
 - Variables are set with `?=` and overridden on the command line, for example `CELL=<cell>`, `TB=<testbench>`, `EXT_MODE=<1|2|3>`, `WAVEFORM_VIEWER=surfer`.
 - cocotb testbenches are self-contained Python runners (`cocotb_tools.runner.get_runner`). The targets run `python3 <cell>_tb.py` in the testbench folder, with `GL=1` for gate level. The exception is `macros/riscv/testbenches/cocotb/dsmod/`, which has its own `Makefile` that includes cocotb's `Makefile.sim`.

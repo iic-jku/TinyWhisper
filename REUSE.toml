@@ -43,7 +43,7 @@ SPDX-FileCopyrightText = "2025-2026 The TinyWhisper Team"
 SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
 
 [[annotations]]
-path = ["ihp130/ip/*/README.md", "ihp130/ip/*/final/**", "ihp130/ip/*/logo/**", "ihp130/ip/*/verification/**"]
+path = ["ihp130/ip/*/README.md", "ihp130/ip/*/final/**", "ihp130/ip/*/logo/**", "ihp130/ip/*/netlist/**", "ihp130/ip/*/schematic/**", "ihp130/ip/*/verification/**"]
 SPDX-FileCopyrightText = "2025-2026 The TinyWhisper Team"
 SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
 
