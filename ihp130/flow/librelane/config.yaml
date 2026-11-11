@@ -216,6 +216,9 @@ PDN_CFG: dir::pdn_cfg.tcl
 # Custom Pad Files for PADBARE
 PAD_LEFS: dir::../../ip/sg13g2_io_custom/lef/sg13g2_io.lef
 PAD_VERILOG_MODELS: dir::../../ip/sg13g2_io_custom/verilog/sg13g2_io.v
+# The custom IO Liberty files are listed in LIB below. Clear the PDK PAD_LIBS,
+# which name the stock IO cells (no padbare port) and would be read on top.
+PAD_LIBS: {}
 
 # Technology LIBs
 LIB:
