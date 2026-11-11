@@ -12,7 +12,7 @@ This sheet lists the known deviations of the first TinyWhisper silicon from its 
 | Shipped GDS | `ihp130/gds/SoC4219.gds.gz` on `IHP-TO-2026-03`, identical to [`release/v.1.0.0/gds/SoC4219.gds.gz`](../release/v.1.0.0/gds/) |
 | MD5 of the shipped `.gz` | `1ae88675097f8dd8c7bb68c965c5a6d4` |
 | MD5 of the unzipped GDS | `52c7bafd6d992a4c171a50bdc9ca3d73` |
-| Package | QFN-48, 56 pads (8 downbonded to the exposed pad) |
+| Package | QFN-48, 56 pads (the 12 VSS and IOVSS pads downbonded to the exposed pad) |
 
 The design on `main` and in release `v.2.0.0` is **not** this silicon:
 
@@ -428,5 +428,5 @@ The RTL on `main` is logically equivalent to the silicon. File and line referenc
 
 ### TW-D03: Pinout and downbond documentation
 
-- [`pinout.md`](pinout.md) is still a placeholder. The pad-to-QFN mapping is in [`../packaging/result.md`](../packaging/result.md). That report was generated for `v.2.0.0` on 2026-10-14, and the pad order is the same as on `SoC4219`. Confirm the QFN pin numbers against the bonding diagram used for the `SoC4219` assembly before the first PCB is drawn.
-- The eight exposed-pad downbonds are 6 x VSS and 2 x IOVSS (`../packaging/config.yaml`), not 8 x VSS as `doc/index.qmd` says.
+- [`pinout.md`](pinout.md) is still a placeholder. The pad-to-QFN mapping is in [`../packaging/result.md`](../packaging/result.md). That report was generated for `v.2.0.0`, and the pad order is the same as on `SoC4219`. Confirm the QFN pin numbers against the bonding diagram used for the `SoC4219` assembly before the first PCB is drawn.
+- VSS and IOVSS have no pad-to-lead wire: all 9 VSS and 3 IOVSS pads are downbonded to the exposed pad, and the leads 15 (IOVSS), 27, 34 and 46 (VSS) are bonded to it (`../packaging/config.yaml`).
