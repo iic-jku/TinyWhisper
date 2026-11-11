@@ -81,6 +81,16 @@ Since the analog front-end is an IQ modulator, it supports not only WSPR but als
 
 ### Tapeout
 
+TinyWhisper was taped out in the IHP open-silicon MPW run of March 2026 as `SoC4219`. The die photo below shows a fabricated chip, with the TopMetal2 logo on top of the core. It is followed by renders of the final layout and of the TopMetal2 logo.
+
+<p align="center">
+  <a href="fig/tinywhisper_die.JPG">
+    <img src="fig/tinywhisper_die.JPG" alt="Die photo of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm), taped out in March 2026" width=70%>
+  </a>
+  <br>
+  <em>Die photo of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm), taped out in March 2026.</em>
+</p>
+
 <p align="center">
   <a href="fig/tinywhisper_top_black.png">
     <img src="fig/tinywhisper_top_black.png" alt="Chip render of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm)" width=70%>
@@ -113,7 +123,7 @@ The bonding diagram below is generated fully automatically with `make bondplan` 
 
 ### Outlook
 
-The chip is still in production and is expected to be delivered in December 2026. The ASIC is just the beginning of a broader open-hardware project. The next step is to design a [PCB](https://github.com/iic-jku/TinyWhisper/tree/main/pcb) that includes all necessary external components: switchable bandpass filters for each RF band, an RF amplifier, a crystal oscillator as the clock source, external SRAM, voltage regulators for the various supply voltages, a display, controls, an SMA connector for the antenna, and a USB interface for configuration. The packaged chip will be soldered onto this board and then [characterized](https://github.com/iic-jku/TinyWhisper/tree/main/measurements).
+Bare dies of the March 2026 tapeout are back from fabrication, see the die photo in the Tapeout section above. The ASIC is just the beginning of a broader open-hardware project. The next step is to design a [PCB](https://github.com/iic-jku/TinyWhisper/tree/main/pcb) that includes all necessary external components: switchable bandpass filters for each RF band, an RF amplifier, a crystal oscillator as the clock source, external SRAM, voltage regulators for the various supply voltages, a display, controls, an SMA connector for the antenna, and a USB interface for configuration. The packaged chip will be soldered onto this board and then [characterized](https://github.com/iic-jku/TinyWhisper/tree/main/measurements).
 
 Building on this PCB, a compact, 3D-printable [enclosure](https://github.com/iic-jku/TinyWhisper/tree/main/enclosure) is planned that accommodates the board together with a small battery and is robust enough for outdoor use during field tests and SOTA activations.
 
