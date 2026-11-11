@@ -20,6 +20,14 @@
 > This repository is based on the [ihp-sg13g2-ams-chip-template](https://github.com/iic-jku/ihp-sg13g2-ams-chip-template) template repository. For a better understanding of the folder structure, how to use the Makefiles, and how to implement your own designs, it is recommended to go through this [tutorial](https://iic-jku.github.io/ihp-sg13g2-ams-chip-template/index.html).
 
 <p align="center">
+  <a href="doc/fig/tinywhisper_die.JPG">
+    <img src="doc/fig/tinywhisper_die.JPG" alt="Die photo of the ihp-sg13cmos TinyWhisper ASIC (2mm x 2mm), taped out in March 2026" width=70%>
+  </a>
+  <br>
+  <em>Die photo of the ihp-sg13cmos TinyWhisper ASIC (2mm x 2mm), taped out in March 2026.</em>
+</p>
+
+<p align="center">
   <a href="doc/fig/tinywhisper_top_black.png">
     <img src="doc/fig/tinywhisper_top_black.png" alt="Chip render of the ihp-sg13cmos TinyWhisper ASIC (2mm x 2mm)" width=70%>
   </a>
@@ -102,7 +110,7 @@ TinyWhisper demonstrates what is possible with current open-source tools and ope
 
 ## Description
 
-TinyWhisper is a compact WSPR transmitter realized with the ihp-sg13cmos PDK. The 2 mm x 2 mm chip operates at a core supply voltage of 1.5 V and an I/O supply voltage of 3.3 V. The chip is [packaged](https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/packaging) in a QFN-48 package with a total of 56 pins, eight of which are VSS pins connected directly to the package VSS. All documentation, presentations, design files, and future updates are publicly available [here](https://github.com/iic-jku/TinyWhisper/tree/main/presentations). The block diagram is shown below. A render of the final chip layout is shown above, with the digital part placed on the left side of the chip and the analog part on the right. A custom logo on the topmost metal layer, generated with the tool [ArtistIC](https://arxiv.org/abs/2502.02626), is also shown above.
+TinyWhisper is a compact WSPR transmitter realized with the ihp-sg13cmos PDK. The 2 mm x 2 mm chip operates at a core supply voltage of 1.5 V and an I/O supply voltage of 3.3 V. The chip is [packaged](https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/packaging) in a QFN-48 package with a total of 56 pins, eight of which are VSS pins connected directly to the package VSS. All documentation, presentations, design files, and future updates are publicly available [here](https://github.com/iic-jku/TinyWhisper/tree/main/presentations). The block diagram is shown below. A render of the final chip layout is shown above, with the digital part placed on the left side of the chip and the analog part on the right. A custom logo on the topmost metal layer, generated with the tool [ArtistIC](https://arxiv.org/abs/2502.02626), is also shown above. The die photo at the top shows a fabricated chip of the March 2026 tapeout (`SoC4219`), with the TopMetal2 logo on top of the core.
 
 <p align="center">
   <a href="doc/fig/tinywhisper_blockdiagramm.png">
@@ -139,7 +147,7 @@ Since the analog front-end is an IQ modulator, it supports not only WSPR but als
 
 ### Outlook
 
-The chip is still in production and is expected to be delivered in December 2026. The ASIC is just the beginning of a broader open-hardware project. The next step is to design a [PCB](https://github.com/iic-jku/TinyWhisper/tree/main/pcb) that includes all necessary external components: switchable bandpass filters for each RF band, an RF amplifier, a crystal oscillator as the clock source, external SRAM, voltage regulators for the various supply voltages, a display, controls, an SMA connector for the antenna, and a USB interface for configuration. The packaged chip will be soldered onto this board and then [characterized](https://github.com/iic-jku/TinyWhisper/tree/main/measurements).
+Bare dies of the March 2026 tapeout are back from fabrication, see the die photo at the top. The ASIC is just the beginning of a broader open-hardware project. The next step is to design a [PCB](https://github.com/iic-jku/TinyWhisper/tree/main/pcb) that includes all necessary external components: switchable bandpass filters for each RF band, an RF amplifier, a crystal oscillator as the clock source, external SRAM, voltage regulators for the various supply voltages, a display, controls, an SMA connector for the antenna, and a USB interface for configuration. The packaged chip will be soldered onto this board and then [characterized](https://github.com/iic-jku/TinyWhisper/tree/main/measurements).
 
 Building on this PCB, a compact, 3D-printable [enclosure](https://github.com/iic-jku/TinyWhisper/tree/main/enclosure) is planned that accommodates the board together with a small battery and is robust enough for outdoor use during field tests and SOTA activations.
 
@@ -179,6 +187,7 @@ The chip design itself lives in [`ihp130/`](https://github.com/iic-jku/TinyWhisp
 │  │  ├─ Makefile
 │  │  ├─ tinywhisper_blockdiagramm.png
 │  │  ├─ tinywhisper_bondplan_white.png
+│  │  ├─ tinywhisper_die.JPG
 │  │  ├─ tinywhisper_top_black.png
 │  │  ├─ tinywhisper_top_black_TM2.png
 │  │  └─ tinywhisper_top_white.png
@@ -233,6 +242,9 @@ The chip design itself lives in [`ihp130/`](https://github.com/iic-jku/TinyWhisp
 │  │  │  ├─ 📁 gds/
 │  │  │  │  └─ SoC4219.gds.gz
 │  │  │  └─ 📁 img/
+│  │  │     ├─ tinywhisper_die_1.JPG
+│  │  │     ├─ tinywhisper_die_2.JPG
+│  │  │     ├─ tinywhisper_die_3.JPG
 │  │  │     ├─ tinywhisper_top_black.png
 │  │  │     └─ tinywhisper_top_white.png
 │  │  └─ 📁 v.2.0.0/
