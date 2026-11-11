@@ -52,6 +52,10 @@ PACKAGE_PIN_LABEL_LAYER: "211/0"  # numbered pin texts next to their leads
 PACKAGE_PIN_LABEL_OFFSET: 250     # um; pin number distance outside the
                                   # package outline
 PACKAGE_PIN_LABEL_SIZE: 180       # um; pin number font size
+# The EUROPRACTICE drawing has no paddle. QP Technologies' open-molded
+# QP-QFN48-7MM-0.50MM (dwg 500363 rev A) has the same 6.325 mm cavity and a
+# 5.300 mm paddle, with the lead tips 0.150 mm off it (mold compound).
+PACKAGE_PADDLE: 5300              # um
 
 # --- Die placement -----------------------------------------------------------
 # location: lower-left corner of the (oriented) die outline, in um, relative
@@ -75,6 +79,10 @@ BONDWIRE_LEAD_SITE: 0.5           # bond point on lead: 0 = tip .. 1 = far end
 BONDWIRE_MAX_LENGTH: 3500         # um; warn above this
 BONDWIRE_MAX_SKEW: 30             # deg; warn if a wire lands skewed on its lead
 EPAD_WIRE_LENGTH: 500             # um; length of exposed-pad downbond stubs
+EPAD_LEAD_WIRE_LENGTH: 500        # um, lead to cavity, inward along the lead
+EPAD_DIE_CLEARANCE: 100           # um, a cavity landing stays this far off the die
+EPAD_PADDLE_CLEARANCE: 50         # um, and this far inside the paddle edge
+EPAD_LANDING_GAP: 100             # um, pad downbond to its lead bond's landing
 
 # Guarded (sensitive) wires: warn if any other wire comes closer than
 # GUARD_SPACING. Entries are pins or [groups]; wires within one group
@@ -140,8 +148,7 @@ SHEET_TEXT_SCALE:
 # Package pin number -> die pad name (TopMetal2.text label on the pad).
 # A list bonds several wires to one lead. Use ~ (null) for NC pins.
 # Duplicate names (VDD/VSS/...) are resolved by shortest-wire assignment.
-# EPAD: downbonds to the exposed pad, drawn from leftover pads with the
-# given names, parallel to the neighboring wires.
+# Nets in EPAD_NETS below get no pad-to-lead wire.
 PINOUT:
   # Left side, top to bottom (pins 1-12)
   1:  "clk_PAD"                   # clk
@@ -159,8 +166,8 @@ PINOUT:
 
   # Bottom side, left to right (pins 13-24)
   13: "IOVDD"                     # IOVDD
-  14: "IOVSS"                     # IOVSS
-  15: "VDD"                       # VDD
+  14: "VDD"                       # VDD
+  15: "IOVSS"                     # IOVSS
   16: "output_PAD[0]"             # GPIO_o[0]
   17: "output_PAD[1]"             # GPIO_o[1]
   18: "output_PAD[2]"             # GPIO_o[2]
@@ -199,6 +206,9 @@ PINOUT:
   47: "VDD"                       # VDD
   48: "IOVDD"                     # IOVDD
 
-  # Downbonds to the exposed pad (die attach paddle, package GND):
-  # all remaining VSS / IOVSS pads
-  EPAD: ["VSS", "VSS", "VSS", "VSS", "VSS", "VSS", "IOVSS", "IOVSS"]
+# VSS and IOVSS are bonded only through the cavity: each of their 12 pads
+# downbonds to the paddle and each of their 4 leads (15, 27, 34, 46) bonds to
+# the paddle, so no wire runs pad to lead. A bond from the VSS lead to the
+# cavity is what the EUROPRACTICE Packaging Design Rules 2024 (item 8) ask
+# for when VSS should reach the substrate through the cavity.
+EPAD_NETS: ["VSS", "IOVSS"]
