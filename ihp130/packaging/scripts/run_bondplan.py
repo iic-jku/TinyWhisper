@@ -857,10 +857,11 @@ def assign_wires(cfg, pads, pkg, die_box):
     # An EPAD_NETS pad aims at a landing of its own net's lead-to-cavity
     # bonds, nearest pairs first, so pad, paddle and lead read as one line.
     # A stub parallel to its neighbours can converge on a signal wire.
-    aim = {}
+    aim, lead_of = {}, {}
     pairs = []
     landings = [w["p0"] for w in wires if w.get("cavity")]
     nets = [w["net"] for w in wires if w.get("cavity")]
+    leads = [w["pin"] for w in wires if w.get("cavity")]
     for net in epad_nets:
         for pad in pads_by_name.get(net, []):
             if pad.get("used"):
@@ -875,6 +876,7 @@ def assign_wires(cfg, pads, pkg, die_box):
             done_pads.add(pid)
             done_lands.add(j)
             aim[pid] = landings[j]
+            lead_of[pid] = leads[j]
 
     def clearance(p0, p1, skip=None):
         """Smallest centreline distance to the wires drawn so far, um."""
@@ -908,7 +910,11 @@ def assign_wires(cfg, pads, pkg, die_box):
                 direction, length = aimed, a_len
         p1 = (pad["x"] + length * direction[0],
               pad["y"] + length * direction[1])
+        # A downbond counts as the lead it is paired with in GUARDED_PINS, so
+        # a ground pad between guarded pads keeps the exemption its
+        # pad-to-lead wire had.
         wire = {"pin": "EPAD", "name": name, "cavity": True,
+                "lead": lead_of.get(id(pad)),
                 "p0": (pad["x"], pad["y"]), "p1": p1, "length": length}
         wire_geometry(wire)                     # bearing only, no lead skew
         wires.append(wire)
@@ -1295,7 +1301,8 @@ def check_wires(cfg, wires):
                 wire["min_gap"] = min(gap, wire.get("min_gap", float("inf")))
             # guarded wires need GUARD_SPACING to everything outside
             # their own guard group
-            ga, gb = guards.get(a["pin"]), guards.get(b["pin"])
+            ga = guards.get(a.get("lead") or a["pin"])
+            gb = guards.get(b.get("lead") or b["pin"])
             if ((ga is not None or gb is not None) and ga != gb
                     and gap < guard_gap):
                 warn("guard spacing: pin %s (%s) has only %.1f um to "
