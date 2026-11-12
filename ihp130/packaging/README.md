@@ -102,6 +102,7 @@ EPAD_LANDING_GAP: 100             # um, pad downbond to its lead bond's landing
 
 - A lead-to-cavity bond runs `EPAD_LEAD_WIRE_LENGTH` inward along the lead axis, so its skew is 0.
 - A pad downbond aims at the nearest landing of its own net's lead-to-cavity bonds and stops `EPAD_LANDING_GAP` short of it. It keeps that direction only if it clears the other wires at least as well as a stub parallel to its neighbouring wires, otherwise it takes the parallel stub.
+- A downbond counts as the lead it is paired with in `GUARDED_PINS`, so a ground pad between guarded pads keeps the exemption its pad-to-lead wire had.
 - Every cavity landing must lie on the paddle, `EPAD_PADDLE_CLEARANCE` inside its edge, and `EPAD_DIE_CLEARANCE` off the die, or the run aborts. Without `PACKAGE_PADDLE` the lead tips stand in for the paddle edge, which overestimates it on QFN48: the leads stop 150 um short of the paddle.
 
 ### Guarded Wires
