@@ -295,7 +295,8 @@ value="
 .csparam fsig=fsig
 .param flo=28e6
 .csparam flo=flo
-.options savecurrents klu method=gear reltol=1e-3 abstol=1e-12 gmin=1e-12 rshunt=1e12
+* KLU (option klu) does not converge on the full-RC PEX netlist with ngspice-47, Sparse 1.3 does
+.options savecurrents method=gear reltol=1e-3 abstol=1e-12 gmin=1e-12 rshunt=1e12
 .control
 
 save all
