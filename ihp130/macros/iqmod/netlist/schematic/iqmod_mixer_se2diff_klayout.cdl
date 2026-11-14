@@ -1,0 +1,76 @@
+** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/xschem/iqmod_mixer_se2diff.sch
+.subckt iqmod_mixer_se2diff VDD vin voutp VSS voutn
+*.PININFO vin:I VDD:B VSS:B voutp:O voutn:O
+x3 VDD VDD VSS net2 vse VSS iqmod_mixer_se2diff_tg_NF6
+x8 VDD vscale1n vscale2p VSS iqmod_mixer_se2diff_inv_NF18
+x5 VDD vcrossp vcrossn VSS iqmod_mixer_se2diff_inv_NF2
+x6 VDD vcrossn vcrossp VSS iqmod_mixer_se2diff_inv_NF2
+x2 VDD net1 vcrossp VSS iqmod_mixer_se2diff_inv_NF6
+x4 VDD net2 vcrossn VSS iqmod_mixer_se2diff_inv_NF6
+x7 VDD vcrossp vscale1n VSS iqmod_mixer_se2diff_inv_NF6
+x1 VDD vse net1 VSS iqmod_mixer_se2diff_inv_NF6
+x9 VDD vscale2p voutp VSS iqmod_mixer_se2diff_inv_NF54
+x10 VDD vcrossn vscale1p VSS iqmod_mixer_se2diff_inv_NF6
+x11 VDD vscale1p vscale2n VSS iqmod_mixer_se2diff_inv_NF18
+x12 VDD vscale2n voutn VSS iqmod_mixer_se2diff_inv_NF54
+x13 VDD vin vse VSS iqmod_mixer_se2diff_inv_NF2
+x14 VDD vin vse VSS iqmod_mixer_se2diff_inv_NF2
+.ends
+
+* expanding   symbol:  iqmod_mixer_se2diff_tg_NF6.sym # of pins=6
+** sym_path: /foss/designs/TinyWhisper/.claude/worktrees/magical-kare-6a0ff5/ihp130/macros/iqmod/schematic/xschem/iqmod_mixer_se2diff_tg_NF6.sym
+** sch_path: /foss/designs/TinyWhisper/.claude/worktrees/magical-kare-6a0ff5/ihp130/macros/iqmod/schematic/xschem/iqmod_mixer_se2diff_tg_NF6.sch
+.subckt iqmod_mixer_se2diff_tg_NF6 VDD di_tg_ctrl VSS v_b v_a di_tg_ctrl_n
+*.PININFO v_a:B v_b:B VDD:B VSS:B di_tg_ctrl:I di_tg_ctrl_n:I
+MM2 v_a di_tg_ctrl_n v_b VDD sg13_lv_pmos w=18.0u l=0.13u ng=6
+MM1 v_a di_tg_ctrl v_b VSS sg13_lv_nmos w=6.0u l=0.13u ng=6
+.ends
+
+
+* expanding   symbol:  iqmod_mixer_se2diff_inv_NF18.sym # of pins=4
+** sym_path: /foss/designs/TinyWhisper/.claude/worktrees/magical-kare-6a0ff5/ihp130/macros/iqmod/schematic/xschem/iqmod_mixer_se2diff_inv_NF18.sym
+** sch_path: /foss/designs/TinyWhisper/.claude/worktrees/magical-kare-6a0ff5/ihp130/macros/iqmod/schematic/xschem/iqmod_mixer_se2diff_inv_NF18.sch
+.subckt iqmod_mixer_se2diff_inv_NF18 VDD vin vout VSS
+*.PININFO vin:I VDD:B VSS:B vout:B
+MM1 vout vin VSS VSS sg13_lv_nmos w=18.0u l=0.13u ng=18
+MM2 vout vin VDD VDD sg13_lv_pmos w=54.0u l=0.13u ng=18
+MMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2
+MMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=6.0u l=0.13u ng=2
+.ends
+
+
+* expanding   symbol:  iqmod_mixer_se2diff_inv_NF2.sym # of pins=4
+** sym_path: /foss/designs/TinyWhisper/.claude/worktrees/magical-kare-6a0ff5/ihp130/macros/iqmod/schematic/xschem/iqmod_mixer_se2diff_inv_NF2.sym
+** sch_path: /foss/designs/TinyWhisper/.claude/worktrees/magical-kare-6a0ff5/ihp130/macros/iqmod/schematic/xschem/iqmod_mixer_se2diff_inv_NF2.sch
+.subckt iqmod_mixer_se2diff_inv_NF2 VDD vin vout VSS
+*.PININFO vin:I VDD:B VSS:B vout:B
+MM1 vout vin VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2
+MM2 vout vin VDD VDD sg13_lv_pmos w=6.0u l=0.13u ng=2
+MMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2
+MMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=6.0u l=0.13u ng=2
+.ends
+
+
+* expanding   symbol:  iqmod_mixer_se2diff_inv_NF6.sym # of pins=4
+** sym_path: /foss/designs/TinyWhisper/.claude/worktrees/magical-kare-6a0ff5/ihp130/macros/iqmod/schematic/xschem/iqmod_mixer_se2diff_inv_NF6.sym
+** sch_path: /foss/designs/TinyWhisper/.claude/worktrees/magical-kare-6a0ff5/ihp130/macros/iqmod/schematic/xschem/iqmod_mixer_se2diff_inv_NF6.sch
+.subckt iqmod_mixer_se2diff_inv_NF6 VDD vin vout VSS
+*.PININFO vin:I VDD:B VSS:B vout:B
+MM1 vout vin VSS VSS sg13_lv_nmos w=6.0u l=0.13u ng=6
+MM2 vout vin VDD VDD sg13_lv_pmos w=18.0u l=0.13u ng=6
+MMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2
+MMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=6.0u l=0.13u ng=2
+.ends
+
+
+* expanding   symbol:  iqmod_mixer_se2diff_inv_NF54.sym # of pins=4
+** sym_path: /foss/designs/TinyWhisper/.claude/worktrees/magical-kare-6a0ff5/ihp130/macros/iqmod/schematic/xschem/iqmod_mixer_se2diff_inv_NF54.sym
+** sch_path: /foss/designs/TinyWhisper/.claude/worktrees/magical-kare-6a0ff5/ihp130/macros/iqmod/schematic/xschem/iqmod_mixer_se2diff_inv_NF54.sch
+.subckt iqmod_mixer_se2diff_inv_NF54 VDD vin vout VSS
+*.PININFO vin:I VDD:B VSS:B vout:B
+MM1 vout vin VSS VSS sg13_lv_nmos w=54.0u l=0.13u ng=54
+MM2 vout vin VDD VDD sg13_lv_pmos w=162.0u l=0.13u ng=54
+MMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2
+MMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=6.0u l=0.13u ng=2
+.ends
+

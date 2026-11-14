@@ -1,0 +1,8 @@
+** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/xschem/iqmod_mixer_tg.sch
+.subckt iqmod_mixer_tg VDD di_tg_ctrl VSS v_b v_a di_tg_ctrl_n
+*.PININFO v_a:B v_b:B di_tg_ctrl:I di_tg_ctrl_n:I VDD:B VSS:B
+MM1 v_a di_tg_ctrl v_b VSS sg13_lv_nmos w=108.0u l=0.13u ng=36
+MM2 v_a di_tg_ctrl_n v_b VDD sg13_lv_pmos w=324.0u l=0.13u ng=36
+MMdummy2 v_b di_tg_ctrl v_b VDD sg13_lv_pmos w=162.0u l=0.13u ng=18
+MMdummy1 v_b di_tg_ctrl_n v_b VSS sg13_lv_nmos w=54.0u l=0.13u ng=18
+.ends
