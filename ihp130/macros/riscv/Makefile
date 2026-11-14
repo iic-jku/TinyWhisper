@@ -128,7 +128,7 @@ _TB_EXT = $(if $(wildcard $(VERILOG_TB_DIR)/$(CELL)/$(CELL)_tb.sv),sv,v)
 
 # Help Target
 help: ## Show this help message
-	@echo 'Usage: make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>] [WAVEFORM_VIEWER=<gtkwave|surfer>] [TB=<testbenchname>] [DSMOD_TARGET=<all|all_runs>] [DSMOD_TARGET_SIM_ALL=<all|all_runs>] [OPEN_ARGS=<options>] [FORCE=1]'
+	@echo 'Usage: make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>] [WAVEFORM_VIEWER=<gtkwave|surfer>] [GL_TESTS=<regex>] [SDF_CORNER=<corner>] [SDF_TRIPLE=<min|typ|max>] [TB=<testbenchname>] [DSMOD_TARGET=<all|all_runs>] [DSMOD_TARGET_SIM_ALL=<all|all_runs>] [OPEN_ARGS=<options>] [FORCE=1]'
 	@echo ''
 	@echo 'Available targets:'
 	@grep -E '^[a-zA-Z0-9_.-]+:.*## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  %-20s %s\n", $$1, $$2}'
@@ -137,6 +137,9 @@ help: ## Show this help message
 	@echo 'EXT_MODE defaults to 3 (full-RC). 1=C-decoupled, 2=C-coupled.'
 	@echo 'THRESHOLD/MINRES/MINDELAY are full-RC (EXT_MODE=3) extresist settings for magic-pex (defaults 10000 mOhm / 1000 mOhm / 1 ps).'
 	@echo 'WAVEFORM_VIEWER defaults to gtkwave. Use surfer to launch Surfer instead.'
+	@echo 'GL_TESTS selects the cocotb tests of sim-gl-cocotb and sim-gl-sdf-cocotb by a regular expression (default: $(GL_TESTS)).'
+	@echo 'SDF_CORNER selects the LibreLane corner of the SDF file for sim-gl-sdf-cocotb (default: $(SDF_CORNER)).'
+	@echo 'SDF_TRIPLE selects the min, typ or max value of each SDF delay for sim-gl-sdf-cocotb (default: typ).'
 	@echo 'TB selects the Xschem testbench for sim-gl-xschem (default: <CELL>_tb_tran).'
 	@echo 'DSMOD_TARGET selects the dsmod cocotb target for sim-rtl-cocotb CELL=dsmod (default all = baseline ORDER=2/OSR=64).'
 	@echo 'DSMOD_TARGET_SIM_ALL is the same for sim-all and all (default all_runs = every order/OSR figure, takes hours).'
@@ -173,6 +176,15 @@ lint-verilog-all: ## Lint all Verilog source files (dsmod, cordic_iterative, lo_
 # Testbench for the Xschem simulation targets (default: <CELL>_tb_tran)
 # Override with: make <target> TB=<testbenchname>
 TB ?= $(CELL)_tb_tran
+# cocotb tests of the gate-level simulations, a regular expression (default: the Fibonacci program, all tests take about 11 h on the netlist)
+# Override with: make <target> GL_TESTS=<regex>
+GL_TESTS ?= test_cpu_fibonacci_fast
+# LibreLane corner of the SDF file for sim-gl-sdf-cocotb (default: DEFAULT_CORNER of flow/librelane/config.yaml)
+# Override with: make sim-gl-sdf-cocotb SDF_CORNER=<corner>
+SDF_CORNER ?= nom_typ_1p50V_25C
+# Value of each min:typ:max delay in the SDF file for sim-gl-sdf-cocotb (iverilog -T)
+# Override with: make sim-gl-sdf-cocotb SDF_TRIPLE=<min|typ|max>
+SDF_TRIPLE ?= typ
 
 sim-rtl-verilog: ## Run RTL simulation of CELL cell with Icarus Verilog (usage: make sim-rtl-verilog [CELL=<cellname>])
 	mkdir -p $(VERILOG_TB_DIR)/$(CELL)
@@ -199,9 +211,13 @@ sim-rtl-cocotb: ## Run RTL simulation of CELL cell with cocotb (usage: make sim-
 	fi
 .PHONY: sim-rtl-cocotb
 
-sim-gl-cocotb: ## Run gate-level simulation of CELL cell with cocotb (usage: make sim-gl-cocotb [CELL=<cellname>])
-	cd $(COCOTB_DIR)/$(CELL) && GL=1 python3 $(CELL)_tb.py
+sim-gl-cocotb: ## Run gate-level simulation of CELL cell with cocotb (usage: make sim-gl-cocotb [CELL=<cellname>] [GL_TESTS=<regex>])
+	cd $(COCOTB_DIR)/$(CELL) && GL=1 COCOTB_TEST_FILTER='$(GL_TESTS)' python3 $(CELL)_tb.py
 .PHONY: sim-gl-cocotb
+
+sim-gl-sdf-cocotb: ## Run timed gate-level simulation of CELL cell with cocotb and the SDF delays of one corner (usage: make sim-gl-sdf-cocotb [CELL=<cellname>] [GL_TESTS=<regex>] [SDF_CORNER=<corner>] [SDF_TRIPLE=<min|typ|max>])
+	cd $(COCOTB_DIR)/$(CELL) && GL=1 SDF=1 SDF_CORNER=$(SDF_CORNER) SDF_TRIPLE=$(SDF_TRIPLE) COCOTB_TEST_FILTER='$(GL_TESTS)' python3 $(CELL)_tb.py
+.PHONY: sim-gl-sdf-cocotb
 
 sim-view-cocotb: ## View CELL cell cocotb simulation waveforms (usage: make sim-view-cocotb [CELL=<cellname>] [WAVEFORM_VIEWER=<gtkwave|surfer>])
 	@if [ "$(WAVEFORM_VIEWER)" = "gtkwave" ]; then \
@@ -225,12 +241,13 @@ sim-gl-xschem: ## Run gate-level simulation of CELL cell with Xschem in batch mo
 	cd $(XSCHEM_TB_DIR)/simulations && ngspice -b $(TB).spice
 .PHONY: sim-gl-xschem
 
-sim-all: ## Simulate the macro (RTL Verilog + RTL/GL cocotb + GL Xschem for riscv_top)
+sim-all: ## Simulate the macro (RTL Verilog + RTL/GL/timed GL cocotb + GL Xschem for riscv_top)
 	$(MAKE) sim-rtl-verilog CELL=dsmod
 	$(MAKE) sim-rtl-cocotb CELL=dsmod DSMOD_TARGET=$(DSMOD_TARGET_SIM_ALL)
 	$(MAKE) sim-rtl-verilog
 	$(MAKE) sim-rtl-cocotb
 	$(MAKE) sim-gl-cocotb
+	$(MAKE) sim-gl-sdf-cocotb
 	$(MAKE) sim-gl-xschem
 .PHONY: sim-all
 # ================================================================================================
@@ -289,7 +306,7 @@ copy-reports: ## Copy yosys, antenna, STA, power, IR-drop, DRC, LVS and manufact
 	cp $(LIBRELANE_DIR)/runs/${RUN_TAG}/*-misc-reportmanufacturability/manufacturability.rpt $(REPORT_DIR)/manufacturability.rpt
 .PHONY: copy-reports
 
-copy-final: ## Copy final output gds, lef, lib, nl, pnl, spef, and vh folders from the last LibreLane run to final/
+copy-final: ## Copy final output gds, lef, lib, nl, pnl, sdf, spef, and vh folders from the last LibreLane run to final/
 	rm -rf $(FINAL_DIR)/
 	mkdir -p $(FINAL_DIR)/
 	cp -r $(FLOW_FINAL_DIR)/gds  $(FINAL_DIR)/gds
@@ -297,6 +314,7 @@ copy-final: ## Copy final output gds, lef, lib, nl, pnl, spef, and vh folders fr
 	cp -r $(FLOW_FINAL_DIR)/lib  $(FINAL_DIR)/lib
 	cp -r $(FLOW_FINAL_DIR)/nl   $(FINAL_DIR)/nl
 	cp -r $(FLOW_FINAL_DIR)/pnl  $(FINAL_DIR)/pnl
+	cp -r $(FLOW_FINAL_DIR)/sdf  $(FINAL_DIR)/sdf
 	cp -r $(FLOW_FINAL_DIR)/spef $(FINAL_DIR)/spef
 	cp -r $(FLOW_FINAL_DIR)/vh   $(FINAL_DIR)/vh
 .PHONY: copy-final
