@@ -1,26 +1,26 @@
-183. Printing statistics.
+176. Printing statistics.
 
 === riscv_top ===
 
         +----------Local Count, excluding submodules.
         | 
-    12820 wires
-    15957 wire bits
-      235 public wires
-     3164 public wire bits
+    12267 wires
+    17050 wire bits
+      295 public wires
+     3625 public wire bits
        37 ports
        43 port bits
-    15739 cells
-      505   $_ANDNOT_
-     3190   $_AND_
+    16229 cells
+      675   $_ANDNOT_
+     3127   $_AND_
       582   $_DFFE_PP_
        74   $_DFF_P_
-     1772   $_MUX_
-     4259   $_NAND_
-      355   $_NOR_
-       98   $_NOT_
-      635   $_ORNOT_
-      985   $_OR_
+     2401   $_MUX_
+     3098   $_NAND_
+      746   $_NOR_
+      446   $_NOT_
+      324   $_ORNOT_
+     1390   $_OR_
        28   $_SDFFCE_PN0P_
         1   $_SDFFE_NN0P_
        16   $_SDFFE_PN0N_
@@ -31,8 +31,8 @@
         5   $_SDFF_NN0_
       366   $_SDFF_PN0_
        32   $_SDFF_PP0_
-      616   $_XNOR_
-      796   $_XOR_
+      496   $_XNOR_
+      998   $_XOR_
 
    Area for cell type $_ANDNOT_ is unknown!
    Area for cell type $_AND_ is unknown!
