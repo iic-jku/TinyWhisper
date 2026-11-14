@@ -1,0 +1,572 @@
+<!doctype html>
+<!--
+SPDX-FileCopyrightText: 2026 The TinyWhisper Team
+SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
+Description: Template of the TinyWhisper chip dashboard, filled by gen_dashboard.py into doc/dashboard.html.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TinyWhisper Chip Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+/* Layout: one column of cards, two-up grids that stack at phone width. */
+:root {
+  --tw-bg: #f6f8fb; --tw-panel: #ffffff; --tw-fg: #17202b; --tw-fg-muted: #5a6775; --tw-line: #dde3ea;
+  --tw-ok: #1d7a46; --tw-warn: #a66300; --tw-bad: #b42318;
+  --tw-c0: #447099; --tw-c1: #d08a2e; --tw-c2: #6b9b5e; --tw-c3: #8c7aa8;
+  --tw-text-secondary: #5a6775; --tw-chart-axis: #a9b4c0; --tw-chart-grid: #e7ecf1; --tw-chart-ref: #7d8a98; --tw-chart-critical: #c8463a;
+  --tw-popover: #ffffff; --tw-popover-border: #cfd7df; --tw-popover-shadow: 0 4px 14px rgba(23, 32, 43, .12);
+  --tw-font: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; --tw-font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --tw-fs-caption: .8125rem; --tw-fs-body: .9375rem; --tw-fs-heading: 1.25rem; --tw-fs-title: 2rem; --tw-fw-medium: 600;
+  --tw-gap-xs: 4px; --tw-gap-sm: 8px; --tw-gap-md: 16px; --tw-gap-xl: 32px; --tw-pad-sm: 8px; --tw-pad-lg: 18px; --tw-radius: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tw-bg: #0f1720; --tw-panel: #17212c; --tw-fg: #e6edf3; --tw-fg-muted: #9aa8b6; --tw-line: #2a3644;
+    --tw-ok: #5cc98a; --tw-warn: #e3a64a; --tw-bad: #f07a6e;
+    --tw-c0: #7fa8d1; --tw-c1: #e5a957; --tw-c2: #8cc27c; --tw-c3: #b3a3cf;
+    --tw-text-secondary: #9aa8b6; --tw-chart-axis: #4a5868; --tw-chart-grid: #222d39; --tw-chart-ref: #8a98a8; --tw-chart-critical: #f07a6e;
+    --tw-popover: #1d2935; --tw-popover-border: #33414f; --tw-popover-shadow: 0 4px 14px rgba(0, 0, 0, .45);
+    color-scheme: dark;
+  }
+}
+body { margin: 0; background: var(--tw-bg); color: var(--tw-fg); font-family: var(--tw-font); font-size: var(--tw-fs-body); }
+#dash-root { max-width: 1200px; margin: 0 auto; padding-block: 24px 48px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+#dash-root .tw-top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--tw-gap-sm); font-size: var(--tw-fs-caption); color: var(--tw-fg-muted); margin-bottom: var(--tw-gap-md); }
+#dash-root .tw-top a { color: var(--tw-c0); }
+#dash-root a:focus-visible { outline: 2px solid var(--tw-c0); outline-offset: 2px; }
+#dash-root .tw { display: flex; flex-direction: column; gap: var(--tw-gap-xl); font-family: var(--tw-font); color: var(--tw-fg); }
+#dash-root .tw h1 { font-family: var(--tw-font-display); font-weight: 400; font-size: var(--tw-fs-title); margin: 0; text-wrap: balance; }
+#dash-root .tw h2 { font-size: var(--tw-fs-heading); font-weight: var(--tw-fw-medium); margin: 0; text-wrap: balance; }
+#dash-root .tw h3 { font-size: var(--tw-fs-body); font-weight: var(--tw-fw-medium); margin: 0; }
+#dash-root .tw-sub, #dash-root .tw-note { color: var(--tw-fg-muted); font-size: var(--tw-fs-caption); margin: 0; }
+#dash-root .tw-lede { margin: 0; max-width: 70ch; line-height: 1.5; }
+#dash-root .tw-head { display: flex; flex-direction: column; gap: var(--tw-gap-sm); }
+#dash-root .tw-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--tw-gap-md); }
+#dash-root .tw-card { background: var(--tw-panel); border: 1px solid var(--tw-line); border-radius: var(--tw-radius); padding: var(--tw-pad-lg); display: flex; flex-direction: column; gap: var(--tw-gap-xs); min-width: 0; }
+#dash-root .tw-kpi-label { color: var(--tw-fg-muted); font-size: var(--tw-fs-caption); text-transform: uppercase; letter-spacing: .04em; }
+#dash-root .tw-kpi-val { font-family: var(--tw-font-display); font-weight: 400; font-size: 2rem; font-variant-numeric: tabular-nums; line-height: 1.1; }
+#dash-root .tw-kpi-unit { font-size: var(--tw-fs-body); color: var(--tw-fg-muted); margin-left: 2px; }
+#dash-root .tw-section { display: flex; flex-direction: column; gap: var(--tw-gap-md); }
+#dash-root .tw-section-head { display: flex; flex-direction: column; gap: var(--tw-gap-xs); border-bottom: 1px solid var(--tw-line); padding-bottom: var(--tw-pad-sm); }
+#dash-root .tw-grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: var(--tw-gap-md); }
+#dash-root .tw-chart { position: relative; min-height: 240px; width: 100%; }
+#dash-root .tw-chart svg { display: block; width: 100%; overflow: visible; }
+#dash-root .tw-chart text { fill: var(--tw-text-secondary); font-size: var(--tw-fs-caption); font-family: var(--tw-font); }
+#dash-root .tw-chart .tw-axis path, #dash-root .tw-chart .tw-axis line { stroke: var(--tw-chart-axis); }
+#dash-root .tw-chart .tw-grid line { stroke: var(--tw-chart-grid); }
+#dash-root .tw-chart .tw-grid path { display: none; }
+#dash-root .tw-chart .tw-ref { stroke: var(--tw-chart-ref); stroke-dasharray: 4 3; }
+#dash-root .tw-tip { position: absolute; pointer-events: none; background: var(--tw-popover); border: 1px solid var(--tw-popover-border); box-shadow: var(--tw-popover-shadow); border-radius: var(--tw-radius); padding: 6px 8px; font-size: var(--tw-fs-caption); font-variant-numeric: tabular-nums; white-space: nowrap; z-index: 5; color: var(--tw-fg); }
+#dash-root .tw-legend { display: flex; flex-wrap: wrap; gap: var(--tw-gap-md); font-size: var(--tw-fs-caption); color: var(--tw-fg-muted); }
+#dash-root .tw-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+#dash-root .tw-tablewrap { overflow-x: auto; }
+#dash-root .tw table { border-collapse: collapse; width: 100%; font-size: var(--tw-fs-caption); font-variant-numeric: tabular-nums; }
+#dash-root .tw th { text-align: left; color: var(--tw-fg-muted); font-weight: var(--tw-fw-medium); border-bottom: 1px solid var(--tw-line); padding: 6px 8px; white-space: nowrap; }
+#dash-root .tw td { border-bottom: 1px solid var(--tw-line); padding: 6px 8px; vertical-align: top; }
+#dash-root .tw td.tw-num, #dash-root .tw th.tw-num { text-align: right; }
+#dash-root .tw td.tw-src { color: var(--tw-fg-muted); word-break: break-all; min-width: 160px; }
+#dash-root .tw-pill { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: var(--tw-fs-caption); font-weight: var(--tw-fw-medium); border: 1px solid currentColor; white-space: nowrap; }
+#dash-root .tw-pill.pass { color: var(--tw-ok); }
+#dash-root .tw-pill.warn { color: var(--tw-warn); }
+#dash-root .tw-pill.fail { color: var(--tw-bad); }
+#dash-root .tw-pill.open { color: var(--tw-fg-muted); }
+#dash-root .tw-chips { display: flex; flex-wrap: wrap; gap: var(--tw-gap-sm); }
+#dash-root .tw-chip { display: flex; align-items: baseline; gap: 6px; padding: 4px 10px; border-radius: var(--tw-radius); border: 1px solid var(--tw-line); font-size: var(--tw-fs-caption); }
+#dash-root .tw-chip b { font-size: var(--tw-fs-body); font-variant-numeric: tabular-nums; }
+#dash-root .tw-chip.crit b { color: var(--tw-bad); }
+#dash-root .tw-chip.maj b { color: var(--tw-warn); }
+#dash-root .tw-flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: var(--tw-gap-xs); font-size: var(--tw-fs-caption); }
+#dash-root .tw-flow span { padding: 6px 10px; border-radius: var(--tw-radius); border: 1px solid var(--tw-line); background: var(--tw-bg); }
+#dash-root .tw-flow span.ana { border-style: dashed; }
+#dash-root .tw-flow em { align-self: center; color: var(--tw-fg-muted); font-style: normal; }
+#dash-root [data-dash-source-state=refreshing] { opacity: .5; }
+#dash-root details summary { cursor: pointer; color: var(--tw-fg-muted); font-size: var(--tw-fs-caption); }
+</style>
+</head>
+<body>
+<div id="dash-root">
+
+<div class="tw-top"><a href="index.html">← TinyWhisper documentation</a><span>Generated __STAMP__ by ihp130/scripts/gen_dashboard.py</span></div>
+<div class="tw">
+  <header class="tw-head" id="overview">
+    <h1>TinyWhisper chip dashboard</h1>
+    <p class="tw-sub">IHP SG13G2 130 nm · 2 × 2 mm WSPR short-wave transmitter · taped out March 2026 (SoC4219) · data from the committed repo outputs</p>
+    <p class="tw-lede"><b data-draw="lede-pass" data-source="signoff_counts" data-field="pass" data-row="0">—</b> of <b data-draw="lede-total" data-source="signoff_counts" data-field="total" data-row="0">—</b> sign-off checks pass outright across chip, RISC-V and IQ modulator. Timing closes at every corner with <b data-draw="lede-setup" data-source="sta_worst" data-field="setup_wns_ns" data-row="0">—</b> ns worst setup slack on the core. The analog risk is filter corner spread: <b data-draw="lede-yield" data-source="lpf_yield">—</b> % of 200 Monte Carlo samples meet f<sub>c</sub> ≥ 350 kHz. Analog supply power has not been simulated yet. Silicon is back but not measured yet.</p>
+    <div class="tw-flow" aria-label="Signal chain, solid boxes digital, dashed boxes analog">
+      <span>RV32E core</span><em>→</em><span>30-bit NCO + CORDIC (I/Q)</span><em>→</em><span>ΔΣ modulator, order 1/2, OSR 32–256</span><em>→</em><span class="ana">SPDT select</span><em>→</em><span class="ana">3rd-order MFB LPF, 400 kHz</span><em>→</em><span class="ana">Passive TG mixer, 25 % LO</span><em>→</em><span class="ana">Off-chip BPF + PA</span>
+    </div>
+  </header>
+
+  <div class="tw-kpis" id="kpis">
+    <div class="tw-card" id="kpi-setup"><span class="tw-kpi-label">Core setup slack, worst corner</span><span class="tw-kpi-val"><span data-draw="kpi-setup" data-source="sta_worst" data-field="setup_wns_ns" data-row="0">—</span><span class="tw-kpi-unit">ns</span></span><span class="tw-note">17 ns clock (56 MHz), 0 setup or hold violations</span></div>
+    <div class="tw-card" id="kpi-power"><span class="tw-kpi-label">Core power, typ 1.5 V 25 °C</span><span class="tw-kpi-val"><span data-draw="kpi-power" data-source="riscv_sta" data-field="power_mw" data-where="corner=nom_typ_1p50V_25C">—</span><span class="tw-kpi-unit">mW</span></span><span class="tw-note">Post-PnR estimate, riscv_top only</span></div>
+    <div class="tw-card" id="kpi-cells"><span class="tw-kpi-label">Core std cells</span><span class="tw-kpi-val"><span data-draw="kpi-cells" data-source="cell_total">—</span></span><span class="tw-note">Yosys stat after synthesis</span></div>
+    <div class="tw-card" id="kpi-fc"><span class="tw-kpi-label">LPF corner, nominal</span><span class="tw-kpi-val"><span data-draw="kpi-fc" data-source="analog_nominal" data-field="value" data-where="block=MFB%20LPF&amp;metric=-3%20dB%20corner">—</span></span><span class="tw-note">tt, 27 °C, 1.5 V ngspice</span></div>
+    <div class="tw-card" id="kpi-yield"><span class="tw-kpi-label">LPF f<sub>c</sub> ≥ 350 kHz yield</span><span class="tw-kpi-val"><span data-draw="kpi-yield" data-source="lpf_yield">—</span><span class="tw-kpi-unit">%</span></span><span class="tw-note">CACE, 200 samples</span></div>
+    <div class="tw-card" id="kpi-rf"><span class="tw-kpi-label">RF output, 10 m band</span><span class="tw-kpi-val"><span data-draw="kpi-rf" data-source="rf_out" data-field="pout_dbm" data-row="0">—</span><span class="tw-kpi-unit">dBm</span></span><span class="tw-note"><span data-draw="kpi-rf-uw" data-source="rf_out" data-field="pout_uw" data-row="0">—</span> µW into 1 kΩ after the 28 MHz BPF, PEX tran</span></div>
+  </div>
+
+  <section class="tw-section" id="analog">
+    <div class="tw-section-head">
+      <h2>Analog: IQ modulator (iqmod_top, 337 × 142 µm)</h2>
+      <p class="tw-sub">Per channel: SPDT input select, fully differential 3rd-order Butterworth MFB low-pass with Barthelemy/Manfredini inverter OTA, passive transmission-gate mixer.</p>
+    </div>
+    <div class="tw-grid2">
+      <div class="tw-card" id="bode-card">
+        <h3>MFB filter and OTA magnitude response</h3>
+        <p class="tw-note">The filter corner sits at 400 kHz and the 56 MHz clock image is pushed far down. Dashed lines mark the 400 kHz target and the 56 MHz clock.</p>
+        <div class="tw-legend"><span><i style="background: var(--tw-c0)"></i>MFB LPF closed loop</span><span><i style="background: var(--tw-c1)"></i>OTA open loop</span></div>
+        <div class="tw-chart" data-draw="bode" data-source="analog_ac" id="bode"></div>
+      </div>
+      <div class="tw-card" id="mc-card">
+        <h3>Monte Carlo spread of the filter corner</h3>
+        <p class="tw-note">200 CACE samples. Bars below the 350 kHz limit are red.</p>
+        <div class="tw-chart" data-draw="mc-hist" data-source="cace_mc" id="mc-hist"></div>
+      </div>
+    </div>
+    <div class="tw-card" id="cace-card">
+      <h3>CACE specs over 200 samples</h3>
+      <div class="tw-tablewrap">
+        <table data-source="cace_summary" data-row-key="id" id="cace-table">
+          <thead><tr><th data-field="block">Block</th><th data-field="spec">Spec</th><th data-field="limit">Limit</th><th class="tw-num" data-field="min">Min</th><th class="tw-num" data-field="mean">Mean</th><th class="tw-num" data-field="max">Max</th><th class="tw-num" data-field="pass_pct">Pass %</th><th>Status</th></tr></thead>
+          <tbody data-draw="cace-body"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="tw-card" id="analog-nom-card">
+      <h3>Nominal simulation results</h3>
+      <div class="tw-tablewrap">
+        <table data-source="analog_nominal" data-row-key="block,metric" id="analog-nom-table">
+          <thead><tr><th data-field="block">Block</th><th data-field="metric">Metric</th><th data-field="value">Value</th><th data-field="source">Data file</th></tr></thead>
+          <tbody data-draw="anom-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="tw-section" id="digital">
+    <div class="tw-section-head">
+      <h2>Digital: RISC-V SoC (riscv_top, 700 × 1130 µm)</h2>
+      <p class="tw-sub">Multi-cycle RV32E + Zicsr core, 16 × 32-bit registers, code in external SPI SRAM. UART 115200, I²C 100 kHz, 4 + 4 GPIO, timer, external and UART interrupts. DSP chain: 30-bit NCO, 30-iteration CORDIC, ΔΣ modulator, 4-phase LO divider.</p>
+    </div>
+    <div class="tw-grid2">
+      <div class="tw-card" id="sta-card">
+        <h3>Post-PnR slack per corner (ns)</h3>
+        <div class="tw-legend"><span><i style="background: var(--tw-c0)"></i>Setup WNS</span><span><i style="background: var(--tw-c1)"></i>Hold WNS</span></div>
+        <div class="tw-chart" data-draw="sta" data-source="riscv_sta" id="sta"></div>
+      </div>
+      <div class="tw-card" id="power-card">
+        <h3>Power per corner, by group (mW)</h3>
+        <div class="tw-legend"><span><i style="background: var(--tw-c0)"></i>Sequential</span><span><i style="background: var(--tw-c1)"></i>Combinational</span><span><i style="background: var(--tw-c2)"></i>Clock</span></div>
+        <div class="tw-chart" data-draw="power" data-source="riscv_sta" id="power"></div>
+      </div>
+      <div class="tw-card" id="cells-card">
+        <h3>Standard-cell area by function (µm²)</h3>
+        <p class="tw-note">Flip-flops take the most area: the CORDIC, NCO, ΔΣ and peripheral registers are 30 bits wide.</p>
+        <div class="tw-chart" data-draw="cells" data-source="riscv_cells" id="cells"></div>
+      </div>
+      <div class="tw-card" id="rtl-card">
+        <h3>RTL size by file</h3>
+        <p class="tw-note"><span data-draw="rtl-total" data-source="rtl_total">—</span> lines in 20 files. memory.sv holds the MMIO map at 0x800000.</p>
+        <div class="tw-legend"><span><i style="background: var(--tw-c0)"></i>CPU / SoC</span><span><i style="background: var(--tw-c1)"></i>DSP</span><span><i style="background: var(--tw-c2)"></i>Peripheral</span><span><i style="background: var(--tw-c3)"></i>Sim only</span></div>
+        <div class="tw-chart" data-draw="rtl" data-source="riscv_rtl" id="rtl"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tw-section" id="system">
+    <div class="tw-section-head">
+      <h2>System and sign-off</h2>
+      <p class="tw-sub">WSPR band plan, chip-level facts, and the state of every verification step.</p>
+    </div>
+    <div class="tw-grid2">
+      <div class="tw-card" id="bands-card">
+        <h3>WSPR band plan</h3>
+        <p class="tw-note">RF = LO + IF. The NCO generates the IF tone. The LO is the 56 MHz clock divided down.</p>
+        <div class="tw-tablewrap">
+          <table data-source="bands" data-row-key="band" id="bands-table">
+            <thead><tr><th data-field="band">Band</th><th class="tw-num" data-field="rf_mhz">RF (MHz)</th><th class="tw-num" data-field="lo_mhz">LO (MHz)</th><th class="tw-num" data-field="if_khz">IF (kHz)</th><th class="tw-num" data-field="lo_div">LO div</th></tr></thead>
+            <tbody data-draw="bands-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="tw-card" id="specs-card">
+        <h3>Chip facts</h3>
+        <div class="tw-tablewrap">
+          <table data-source="chip_specs" data-row-key="item" id="specs-table">
+            <thead><tr><th data-field="item">Item</th><th data-field="value">Value</th></tr></thead>
+            <tbody data-draw="specs-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="tw-card" id="signoff-card">
+      <h3>Sign-off status</h3>
+      <div class="tw-tablewrap">
+        <table data-source="signoff" data-row-key="block,check,tool" id="signoff-table">
+          <thead><tr><th data-field="block">Block</th><th data-field="check">Check</th><th data-field="tool">Tool</th><th data-field="result">Result</th><th data-field="status">Status</th><th data-field="source">Report</th></tr></thead>
+          <tbody data-draw="signoff-body"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="tw-card" id="errata-card">
+      <h3>Known errata (ihp130/doc/errata.md)</h3>
+      <div class="tw-chips" data-draw="errata" data-source="errata"></div>
+      <p class="tw-note">Example: TW-E01, sram_ce is active high but the APS6404L SRAM on the PCB needs active low.</p>
+    </div>
+  </section>
+
+  <details id="notes">
+    <summary>Definitions and caveats</summary>
+    <p class="tw-note">WNS is the worst negative slack. A positive value means timing is met. Yield is the share of CACE samples whose -3 dB corner is at or above 350 kHz. CACE ran at tt and 27 °C with a 1.2 to 1.8 V supply sweep. Process corners and temperature are commented out in the yaml, so this is not a full PVT sweep. Core power excludes the pads and the analog macro. RF output power is the average of v(vout_RF_filt)² / 1 kΩ over 8 µs of the committed iqmod_top_tb_tran waveform (PEX netlist, tt, 1.5 V, 28 MHz LO), behind the 1 kΩ / 1 kΩ coupled-resonator band-pass. The testbench also measures supply power, but that run was never kept, and no lab measurement exists yet.</p>
+  </details>
+</div>
+
+<script id="tw-data" type="application/json">__DATA__</script>
+<script>
+// Minimal stand-in for the artifact runtime: static datasets, memoized calcs, drawings rerun on resize.
+(function () {
+  const DATA = JSON.parse(document.getElementById('tw-data').textContent);
+  const calcs = {}, draws = [];
+  window.dash = {
+    colors: ['var(--tw-c0)', 'var(--tw-c1)', 'var(--tw-c2)', 'var(--tw-c3)'],
+    data(id) {
+      if (id in DATA) return { status: 'ok', data: DATA[id] };
+      const c = calcs[id];
+      if (!c) return { status: 'missing', data: [] };
+      if (!('v' in c)) c.v = c.fn(...c.inputs.map((i) => window.dash.data(i).data));
+      return { status: 'ok', data: c.v };
+    },
+    calc(id, o) { calcs[id] = o; },
+    draw(name, fn) { draws.push([name, fn]); },
+    runDraws() { draws.forEach(([n, fn]) => document.querySelectorAll('[data-draw="' + n + '"]').forEach((el) => fn(el))); },
+  };
+  let t = 0, lastW = window.innerWidth;
+  window.addEventListener('resize', () => { if (window.innerWidth === lastW) return; lastW = window.innerWidth; clearTimeout(t); t = setTimeout(() => window.dash.runDraws(), 150); });
+})();
+</script>
+<script>
+(function () {
+  const root = document.querySelector('#dash-root .tw');
+  if (root) void dash.colors;
+
+  dash.calc('cace_summary', {
+    title: 'CACE spec summary',
+    description: 'Min, mean, max and pass share of each CACE spec over the Monte Carlo samples.',
+    inputs: ['cace_mc'],
+    fn: (cace_mc) => {
+      const lim = [
+        ['lpf-adc', 'MFB LPF', 'Closed-loop DC gain (dB)', 'Adc_cl_dB', -1, 1, '−1 to +1 dB'],
+        ['lpf-fc', 'MFB LPF', '-3 dB corner (kHz)', 'fcu_khz', 350, null, '≥ 350 kHz'],
+        ['lpf-cmrr', 'MFB LPF', 'CMRR at DC (dB)', 'CMRR_dc_dB', 25, null, '≥ 25 dB'],
+        ['ota-adc', 'OTA core', 'Open-loop DC gain (dB)', 'Adc_ol_dB', 20, null, '≥ 20 dB'],
+        ['ota-fc', 'OTA core', '-3 dB corner (kHz)', 'fcu_khz', 3000, null, '≥ 3 MHz'],
+        ['ota-cmrr', 'OTA core', 'CMRR at DC (dB)', 'CMRR_dc_dB', 45, null, '≥ 45 dB'],
+      ];
+      return lim.map(([id, block, spec, col, lo, hi, limit]) => {
+        const v = cace_mc.filter((r) => r.block === block).map((r) => Number(r[col])).filter((x) => Number.isFinite(x));
+        const ok = v.filter((x) => x >= lo && (hi === null || x <= hi)).length;
+        const r2 = (x) => Math.round(x * 100) / 100;
+        return { id, block, spec, limit, n: v.length, min: r2(d3.min(v)), mean: r2(d3.mean(v)), max: r2(d3.max(v)), pass_pct: v.length ? r2(100 * ok / v.length) : null };
+      });
+    },
+  });
+
+  dash.calc('lpf_yield', {
+    title: 'LPF corner yield',
+    description: 'Share of MFB LPF Monte Carlo samples with the -3 dB corner at or above 350 kHz.',
+    inputs: ['cace_mc'],
+    fn: (cace_mc) => {
+      const v = cace_mc.filter((r) => r.block === 'MFB LPF').map((r) => Number(r.fcu_khz));
+      return v.length ? Math.round(1000 * v.filter((x) => x >= 350).length / v.length) / 10 : null;
+    },
+  });
+
+  dash.calc('sta_worst', {
+    title: 'Core worst-case timing',
+    description: 'Worst setup and hold slack and total violations over all post-PnR corners of riscv_top.',
+    inputs: ['riscv_sta'],
+    fn: (riscv_sta) => [{
+      setup_wns_ns: d3.min(riscv_sta, (r) => Number(r.setup_wns_ns)),
+      hold_wns_ns: d3.min(riscv_sta, (r) => Number(r.hold_wns_ns)),
+      violations: d3.sum(riscv_sta, (r) => Number(r.setup_vio) + Number(r.hold_vio)),
+    }],
+  });
+
+  dash.calc('cell_total', {
+    title: 'Core cell count',
+    description: 'Sum of standard cells over all function groups in riscv_top.',
+    inputs: ['riscv_cells'],
+    fn: (riscv_cells) => d3.sum(riscv_cells, (r) => Number(r.cells)),
+  });
+
+  dash.calc('rtl_total', {
+    title: 'RTL line total',
+    description: 'Sum of lines over all RTL files of the riscv macro.',
+    inputs: ['riscv_rtl'],
+    fn: (riscv_rtl) => d3.sum(riscv_rtl, (r) => Number(r.lines)),
+  });
+
+  dash.calc('signoff_counts', {
+    title: 'Sign-off tally',
+    description: 'Number of sign-off rows with status pass, and all rows.',
+    inputs: ['signoff'],
+    fn: (signoff) => [{ pass: signoff.filter((r) => r.status === 'pass').length, total: signoff.length }],
+  });
+
+  const fmt = (x, d) => (x === null || x === undefined || !Number.isFinite(Number(x))) ? '—' : d3.format(',.' + d + 'f')(Number(x));
+  function val(name, id, get, digits) {
+    dash.draw(name, (el) => {
+      const s = dash.data(id);
+      el.classList.toggle('dash-skeleton', s.status === 'loading');
+      if (s.status !== 'ok' || s.data === null) { el.textContent = '—'; return; }
+      const v = get(s.data);
+      el.textContent = typeof v === 'number' ? fmt(v, digits) : (v ?? '—');
+    });
+  }
+  val('lede-pass', 'signoff_counts', (d) => d[0] && d[0].pass, 0);
+  val('lede-total', 'signoff_counts', (d) => d[0] && d[0].total, 0);
+  val('lede-setup', 'sta_worst', (d) => d[0] && d[0].setup_wns_ns, 2);
+  val('lede-yield', 'lpf_yield', (d) => d, 1);
+  val('kpi-setup', 'sta_worst', (d) => d[0] && d[0].setup_wns_ns, 2);
+  val('kpi-power', 'riscv_sta', (d) => { const r = d.find((x) => x.corner === 'nom_typ_1p50V_25C'); return r ? Number(r.power_mw) : null; }, 1);
+  val('kpi-cells', 'cell_total', (d) => d, 0);
+  val('kpi-fc', 'analog_nominal', (d) => { const r = d.find((x) => x.block === 'MFB LPF' && x.metric === '-3 dB corner'); return r ? String(r.value).replace(/\s*\(.*\)\s*$/, '') : null; }, 0);
+  val('kpi-yield', 'lpf_yield', (d) => d, 1);
+  val('rtl-total', 'rtl_total', (d) => d, 0);
+  val('kpi-rf', 'rf_out', (d) => d[0] && Number(d[0].pout_dbm), 1);
+  val('kpi-rf-uw', 'rf_out', (d) => d[0] && Number(d[0].pout_uw), 1);
+
+  function failMsg(el, s) {
+    el.replaceChildren();
+    if (s.status === 'error' || s.status === 'missing') { const p = document.createElement('p'); p.className = 'tw-note'; p.textContent = 'Failed to load'; el.append(p); }
+    else el.textContent = '—';
+  }
+  function tip(el) {
+    let t = el.querySelector('.tw-tip');
+    if (!t) { t = document.createElement('div'); t.className = 'tw-tip'; t.hidden = true; el.append(t); }
+    return {
+      show(lines, x, y) {
+        t.replaceChildren(...lines.map((l) => { const d = document.createElement('div'); d.textContent = l; return d; }));
+        t.hidden = false;
+        const w = el.clientWidth, tw = t.offsetWidth;
+        t.style.left = Math.max(0, Math.min(w - tw, x + 12)) + 'px';
+        t.style.top = Math.max(0, y - 10) + 'px';
+      },
+      hide() { t.hidden = true; },
+    };
+  }
+
+  function table(name, id, cols, keyCols) {
+    dash.draw(name, (tb) => {
+      const s = dash.data(id);
+      tb.replaceChildren();
+      if (s.status !== 'ok' || !Array.isArray(s.data)) return;
+      s.data.forEach((r) => {
+        const tr = document.createElement('tr');
+        if (keyCols && keyCols.length > 1) tr.setAttribute('data-key', keyCols.map((k) => encodeURIComponent(String(r[k]))).join(','));
+        cols.forEach((c) => {
+          const td = document.createElement('td');
+          if (c.num) td.className = 'tw-num';
+          if (c.src) td.className = 'tw-src';
+          if (c.pill) {
+            const st = c.pill(r);
+            const sp = document.createElement('span'); sp.className = 'tw-pill ' + st; sp.textContent = st; td.append(sp);
+          } else {
+            const v = r[c.f];
+            td.textContent = c.num ? fmt(v, c.d ?? 2) : (v ?? '—');
+          }
+          tr.append(td);
+        });
+        tb.append(tr);
+      });
+    });
+  }
+  table('cace-body', 'cace_summary', [{ f: 'block' }, { f: 'spec' }, { f: 'limit' }, { f: 'min', num: 1 }, { f: 'mean', num: 1 }, { f: 'max', num: 1 }, { f: 'pass_pct', num: 1, d: 1 }, { pill: (r) => r.pass_pct >= 100 ? 'pass' : r.pass_pct >= 95 ? 'warn' : 'fail' }]);
+  table('anom-body', 'analog_nominal', [{ f: 'block' }, { f: 'metric' }, { f: 'value' }, { f: 'source', src: 1 }], ['block', 'metric']);
+  table('bands-body', 'bands', [{ f: 'band' }, { f: 'rf_mhz', num: 1, d: 4 }, { f: 'lo_mhz', num: 1, d: 1 }, { f: 'if_khz', num: 1, d: 1 }, { f: 'lo_div', num: 1, d: 0 }]);
+  table('specs-body', 'chip_specs', [{ f: 'item' }, { f: 'value' }]);
+  table('signoff-body', 'signoff', [{ f: 'block' }, { f: 'check' }, { f: 'tool' }, { f: 'result' }, { pill: (r) => r.status }, { f: 'source', src: 1 }], ['block', 'check', 'tool']);
+
+  dash.draw('errata', (el) => {
+    const s = dash.data('errata');
+    el.replaceChildren();
+    if (s.status !== 'ok') { el.textContent = '—'; return; }
+    const cls = { Critical: 'crit', Major: 'maj', Minor: '' };
+    s.data.forEach((r) => {
+      const c = document.createElement('span'); c.className = 'tw-chip ' + (cls[r.severity] || '');
+      const b = document.createElement('b'); b.textContent = fmt(r.count, 0);
+      b.setAttribute('data-source', 'errata'); b.setAttribute('data-field', 'count'); b.setAttribute('data-where', 'severity=' + encodeURIComponent(r.severity));
+      c.append(b, document.createTextNode(r.severity));
+      el.append(c);
+    });
+  });
+
+  function axisStyle(g) { g.classed('tw-axis', true); g.selectAll('text').attr('fill', null).attr('font-size', null).attr('font-family', null); }
+  function maxLabel(svg, labels) {
+    const t = svg.append('text').attr('visibility', 'hidden');
+    let m = 0; labels.forEach((l) => { t.text(l); m = Math.max(m, t.node().getComputedTextLength()); });
+    t.remove(); return m;
+  }
+
+  dash.draw('bode', (el) => {
+    const s = dash.data('analog_ac');
+    if (s.status !== 'ok') return failMsg(el, s);
+    el.replaceChildren();
+    const W = Math.max(260, el.clientWidth), H = 260, m = { t: 10, r: 14, b: 34, l: 44 };
+    const svg = d3.select(el).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', 'Magnitude in dB versus frequency for the MFB filter and the OTA');
+    const x = d3.scaleLog().domain([1e3, 1e8]).range([m.l, W - m.r]);
+    const y = d3.scaleLinear().domain([-140, 40]).range([H - m.b, m.t]);
+    const yt = [-120, -80, -40, 0, 40];
+    svg.append('g').attr('class', 'tw-grid').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).tickValues(yt).tickSize(-(W - m.l - m.r)).tickFormat(''));
+    const xt = W < 420 ? [1e3, 1e5, 1e7] : [1e3, 1e4, 1e5, 1e6, 1e7, 1e8];
+    svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).tickValues(xt).tickFormat((d) => d3.format('.0s')(d) + 'Hz')).call(axisStyle);
+    svg.append('g').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).tickValues(yt)).call(axisStyle);
+    svg.append('text').attr('x', 4).attr('y', m.t).attr('dy', '0.7em').text('dB');
+    [[4e5, '400 kHz'], [5.6e7, '56 MHz']].forEach(([f, l]) => {
+      svg.append('line').attr('class', 'tw-ref').attr('x1', x(f)).attr('x2', x(f)).attr('y1', m.t).attr('y2', H - m.b);
+      svg.append('text').attr('x', x(f) - 4).attr('y', m.t + 10).attr('text-anchor', 'end').text(l);
+    });
+    const series = [['MFB LPF closed loop', 0], ['OTA open loop', 1]];
+    const line = d3.line().x((d) => x(d.freq_hz)).y((d) => y(Math.max(-140, d.gain_db)));
+    const by = d3.group(s.data, (d) => d.series);
+    series.forEach(([name, i]) => {
+      const pts = by.get(name) || [];
+      svg.append('path').attr('d', line(pts)).attr('fill', 'none').style('stroke', dash.colors[i]).attr('stroke-width', 2);
+    });
+    const tt = tip(el);
+    const dots = series.map(([, i]) => svg.append('circle').attr('r', 3.5).style('fill', dash.colors[i]).attr('visibility', 'hidden'));
+    svg.append('rect').attr('x', m.l).attr('y', m.t).attr('width', W - m.l - m.r).attr('height', H - m.t - m.b).attr('fill', 'transparent')
+      .on('pointermove', (ev) => {
+        const [px, py] = d3.pointer(ev);
+        const f = x.invert(px);
+        const lines = [d3.format('.3s')(f) + 'Hz'];
+        series.forEach(([name], k) => {
+          const pts = by.get(name) || []; if (!pts.length) return;
+          const p = pts.reduce((a, b) => Math.abs(Math.log(b.freq_hz / f)) < Math.abs(Math.log(a.freq_hz / f)) ? b : a);
+          dots[k].attr('cx', x(p.freq_hz)).attr('cy', y(Math.max(-140, p.gain_db))).attr('visibility', 'visible');
+          lines.push(name + ': ' + d3.format('.1f')(p.gain_db) + ' dB');
+        });
+        tt.show(lines, px * el.clientWidth / W, py * el.clientWidth / W);
+      })
+      .on('pointerleave', () => { tt.hide(); dots.forEach((d) => d.attr('visibility', 'hidden')); });
+  });
+
+  dash.draw('mc-hist', (el) => {
+    const s = dash.data('cace_mc');
+    if (s.status !== 'ok') return failMsg(el, s);
+    el.replaceChildren();
+    const v = s.data.filter((r) => r.block === 'MFB LPF').map((r) => Number(r.fcu_khz));
+    if (!v.length) { el.textContent = '—'; return; }
+    const W = Math.max(260, el.clientWidth), H = 260, m = { t: 36, r: 14, b: 34, l: 36 };
+    const svg = d3.select(el).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', 'Histogram of the MFB filter corner frequency over 200 Monte Carlo samples, with the 350 kHz limit');
+    const lo = Math.min(340, Math.floor(d3.min(v) / 10) * 10), hi = Math.ceil(d3.max(v) / 10) * 10;
+    const x = d3.scaleLinear().domain([lo, hi]).range([m.l, W - m.r]);
+    const bins = d3.bin().domain([lo, hi]).thresholds(d3.range(lo, hi + 1, 10))(v);
+    const y = d3.scaleLinear().domain([0, d3.max(bins, (b) => b.length)]).nice().range([H - m.b, m.t]);
+    svg.append('g').attr('class', 'tw-grid').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(4).tickSize(-(W - m.l - m.r)).tickFormat(''));
+    svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(Math.max(3, Math.floor(W / 90))).tickFormat((d) => d + ' kHz')).call(axisStyle);
+    svg.append('g').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(4)).call(axisStyle);
+    const tt = tip(el);
+    const k = () => el.clientWidth / W;
+    svg.append('g').selectAll('rect').data(bins).join('rect')
+      .attr('x', (b) => x(b.x0) + 1).attr('width', (b) => Math.max(0, x(b.x1) - x(b.x0) - 2))
+      .attr('y', (b) => y(b.length)).attr('height', (b) => y(0) - y(b.length))
+      .style('fill', (b) => b.x0 < 350 ? 'var(--tw-chart-critical)' : dash.colors[0])
+      .on('pointermove', (ev, b) => { const [px, py] = d3.pointer(ev, el); tt.show([`${b.x0}–${b.x1} kHz`, `${b.length} samples`], px, py); })
+      .on('pointerleave', () => tt.hide());
+    svg.append('line').attr('class', 'tw-ref').attr('x1', x(350)).attr('x2', x(350)).attr('y1', m.t - 6).attr('y2', H - m.b);
+    svg.append('text').attr('x', x(350)).attr('y', 4).attr('dy', '0.7em').text('limit 350 kHz');
+    svg.append('text').attr('x', W - m.r).attr('y', 18).attr('dy', '0.7em').attr('text-anchor', 'end').text(`mean ${d3.format('.0f')(d3.mean(v))}, σ ${d3.format('.0f')(d3.deviation(v))} kHz`);
+    void k;
+  });
+
+  function hbars(el, rows, labelOf, parts, opts) {
+    el.replaceChildren();
+    const W = Math.max(260, el.clientWidth);
+    const rowH = opts.stack ? 26 : 13 * parts.length + 12;
+    const H = rows.length * rowH + 36;
+    const svg = d3.select(el).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', opts.aria);
+    const labels = rows.map(labelOf);
+    const m = { t: 6, r: 52, b: 26, l: maxLabel(svg, labels) + 8 };
+    const total = (r) => opts.stack ? d3.sum(parts, (p) => Number(r[p.f])) : d3.max(parts, (p) => Number(r[p.f]));
+    const x = d3.scaleLinear().domain([0, d3.max(rows, total) || 1]).nice().range([m.l, W - m.r]);
+    const y = d3.scaleBand().domain(labels).range([m.t, H - m.b]).padding(0.2);
+    const nt = Math.max(2, Math.floor((W - m.l - m.r) / 80));
+    svg.append('g').attr('class', 'tw-grid').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(nt).tickSize(-(H - m.t - m.b)).tickFormat(''));
+    svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(nt).tickFormat(opts.tick)).call(axisStyle);
+    svg.append('g').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).tickSize(0).tickPadding(6)).call(axisStyle).call((g) => g.select('.domain').remove());
+    const tt = tip(el);
+    rows.forEach((r, ri) => {
+      let acc = 0;
+      const bh = opts.stack ? y.bandwidth() : y.bandwidth() / parts.length;
+      parts.forEach((p, pi) => {
+        const v = Number(r[p.f]);
+        const yy = y(labels[ri]) + (opts.stack ? 0 : pi * bh);
+        const x0 = opts.stack ? x(acc) : x(0);
+        const x1 = opts.stack ? x(acc + v) : x(v);
+        svg.append('rect').attr('x', x0).attr('y', yy).attr('height', Math.max(1, bh - 1)).attr('width', Math.max(0, x1 - x0))
+          .style('fill', p.color ? p.color(r) : dash.colors[pi])
+          .on('pointermove', (ev) => { const [px, py] = d3.pointer(ev, el); tt.show(opts.tip(r), px, py); })
+          .on('pointerleave', () => tt.hide());
+        if (!opts.stack && opts.endLabel) svg.append('text').attr('x', x1 + 4).attr('y', yy + bh / 2).attr('dy', '0.35em').text(opts.endLabel(v, r));
+        if (opts.stack) acc += v;
+      });
+      if (opts.stack && opts.endLabel) svg.append('text').attr('x', x(acc) + 4).attr('y', y(labels[ri]) + y.bandwidth() / 2).attr('dy', '0.35em').text(opts.endLabel(acc, r));
+    });
+  }
+  const cornerLabel = (c) => c.replace('nom_', '').replace(/_/g, ' ').replace('1p', '1.').replace('m40C', '−40C');
+
+  dash.draw('sta', (el) => {
+    const s = dash.data('riscv_sta');
+    if (s.status !== 'ok') return failMsg(el, s);
+    const rows = [...s.data].sort((a, b) => a.setup_wns_ns - b.setup_wns_ns);
+    hbars(el, rows, (r) => cornerLabel(r.corner), [{ f: 'setup_wns_ns' }, { f: 'hold_wns_ns' }], {
+      aria: 'Setup and hold worst slack in ns for each riscv_top corner', tick: (d) => d, endLabel: (v) => d3.format('.2f')(v),
+      tip: (r) => [cornerLabel(r.corner), `setup ${d3.format('.3f')(r.setup_wns_ns)} ns`, `hold ${d3.format('.3f')(r.hold_wns_ns)} ns`, `max-slew violations ${r.max_slew_vio}`],
+    });
+  });
+
+  dash.draw('power', (el) => {
+    const s = dash.data('riscv_sta');
+    if (s.status !== 'ok') return failMsg(el, s);
+    const rows = [...s.data].sort((a, b) => b.power_mw - a.power_mw);
+    hbars(el, rows, (r) => cornerLabel(r.corner), [{ f: 'seq_mw' }, { f: 'comb_mw' }, { f: 'clock_mw' }], {
+      stack: true, aria: 'Power in mW per corner split into sequential, combinational and clock', tick: (d) => d,
+      endLabel: (v, r) => d3.format('.1f')(r.power_mw),
+      tip: (r) => [cornerLabel(r.corner), `total ${d3.format('.2f')(r.power_mw)} mW`, `sequential ${r.seq_mw} mW`, `combinational ${r.comb_mw} mW`, `clock ${r.clock_mw} mW`],
+    });
+  });
+
+  dash.draw('cells', (el) => {
+    const s = dash.data('riscv_cells');
+    if (s.status !== 'ok') return failMsg(el, s);
+    const tot = d3.sum(s.data, (r) => r.area_um2);
+    hbars(el, s.data, (r) => r.group, [{ f: 'area_um2' }], {
+      aria: 'Standard cell area by function group in riscv_top', tick: (d) => d3.format('~s')(d),
+      endLabel: (v) => d3.format('.0%')(v / tot),
+      tip: (r) => [r.group, `${d3.format(',')(r.cells)} cells`, `${d3.format(',.0f')(r.area_um2)} µm²`],
+    });
+  });
+
+  dash.draw('rtl', (el) => {
+    const s = dash.data('riscv_rtl');
+    if (s.status !== 'ok') return failMsg(el, s);
+    const gi = { 'CPU / SoC': 0, DSP: 1, Peripheral: 2, 'Sim only': 3 };
+    const rows = [...s.data].sort((a, b) => b.lines - a.lines);
+    hbars(el, rows, (r) => r.file, [{ f: 'lines', color: (r) => dash.colors[gi[r.group] ?? 0] }], {
+      aria: 'Lines of code per RTL file of the riscv macro', tick: (d) => d, endLabel: (v) => v,
+      tip: (r) => [r.file, `${r.lines} lines`, r.group],
+    });
+  });
+})();
+</script>
+<script>window.dash.runDraws();</script>
+</div>
+</body>
+</html>
