@@ -63,6 +63,14 @@ async def start_up(dut, program_path):
     global CPU_CLK_FREQ
     """Startup sequence"""
     await set_defaults(dut, program_path)
+    # Drive every input to its idle level: an undriven input is X in the netlist, while the RTL takes an X
+    # condition as false (gpio_in[0] is the external interrupt, so X there took a trap on the netlist)
+    dut.gpio_in.value = 0
+    dut.rx.value = 1
+    dut.sda_i.value = 1
+    dut.so.value = 0
+    for name in ("lo_I_i", "lo_Ix_i", "lo_Q_i", "lo_Qx_i", "ds_I_n_i", "ds_I_p_i", "ds_Q_n_i", "ds_Q_p_i"):
+        getattr(dut, name).value = 0
     await start_clock(dut.clk, CPU_CLK_FREQ)
     await reset(dut.reset, dut.clk)
 
