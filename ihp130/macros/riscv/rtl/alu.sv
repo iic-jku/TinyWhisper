@@ -35,7 +35,7 @@ module alu (
 
       casez({funct7, funct3, opcode})
         {FUNCT7_ADD, FUNCT3_ADD, OP_RTYPE},
-        {DONT_CARES, FUNCT3_ADDI, OP_ITYPE}: begin
+        {`DONT_CARES, FUNCT3_ADDI, OP_ITYPE}: begin
           rd = a + b;
         end
 
@@ -44,17 +44,17 @@ module alu (
         end
 
         {FUNCT7_AND, FUNCT3_AND, OP_RTYPE},
-        {DONT_CARES, FUNCT3_ANDI, OP_ITYPE}: begin
+        {`DONT_CARES, FUNCT3_ANDI, OP_ITYPE}: begin
           rd = a & b;
         end
 
         {FUNCT7_OR, FUNCT3_OR, OP_RTYPE},
-        {DONT_CARES, FUNCT3_ORI, OP_ITYPE}: begin
+        {`DONT_CARES, FUNCT3_ORI, OP_ITYPE}: begin
           rd = a | b;
         end
 
         {FUNCT7_XOR, FUNCT3_XOR, OP_RTYPE},
-        {DONT_CARES, FUNCT3_XORI, OP_ITYPE}: begin
+        {`DONT_CARES, FUNCT3_XORI, OP_ITYPE}: begin
           rd = a ^ b;
         end
 
@@ -63,12 +63,12 @@ module alu (
         // end
 
         {FUNCT7_SLT, FUNCT3_SLT, OP_RTYPE},
-        {DONT_CARES, FUNCT3_SLTI, OP_ITYPE}: begin
+        {`DONT_CARES, FUNCT3_SLTI, OP_ITYPE}: begin
           rd = ($signed(a) < $signed(b)) ? 32'h00000001 : 32'h00000000;
         end
 
         {FUNCT7_SLTU, FUNCT3_SLTU, OP_RTYPE},
-        {DONT_CARES, FUNCT3_SLTIU, OP_ITYPE}: begin
+        {`DONT_CARES, FUNCT3_SLTIU, OP_ITYPE}: begin
           rd = ($unsigned(a) < $unsigned(b)) ? 32'h00000001 : 32'h00000000;
         end
 
@@ -92,8 +92,8 @@ module alu (
           rd = 0;
         end
 
-        {DONT_CARES, FUNCT3_CSRR, OP_CSR},
-        {DONT_CARES, FUNCT3_CSRW, OP_CSR}: begin
+        {`DONT_CARES, FUNCT3_CSRR, OP_CSR},
+        {`DONT_CARES, FUNCT3_CSRW, OP_CSR}: begin
           rd = 0;
         end
 
