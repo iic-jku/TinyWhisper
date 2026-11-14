@@ -40,7 +40,7 @@ CURATED = {
         ("iqmod_top", "LVS", "Netgen", "Unique match, rhigh mm_ok property only", "warn", "ihp130/macros/iqmod/verification/lvs/iqmod_top.magic.lvs/iqmod_top.lvs.out"),
         ("iqmod_top", "PEX", "Magic", "Full RC: 11,755 C, 42,373 R", "pass", "ihp130/macros/iqmod/netlist/pex/"),
         ("MFB LPF", "CACE fc >= 350 kHz", "ngspice MC", "min 345.5 kHz in 200 samples", "warn", "ihp130/macros/iqmod/verification/cace/scripts/iqmod_mfb_lpf_tb_ac.csv"),
-        ("iqmod_top", "Supply power", "ngspice", "Not simulated yet: iqmod_top_tb_tran prints PDD, never run with results kept", "open", "ihp130/macros/iqmod/testbenches/xschem/iqmod_top_tb_tran.sch"),
+        ("iqmod_top", "Supply power", "ngspice", "24.4 mW (schematic). PEX tran fails to find an operating point", "warn", "ihp130/macros/iqmod/testbenches/xschem/iqmod_top_tb_tran.sch"),
         ("Silicon", "Lab measurement", "-", "Dies back (SoC4219), not measured yet", "open", "measurements/README.md"),
     ],
     "chip_specs": [
@@ -69,6 +69,8 @@ CURATED = {
         ("OTA (B/M inverter)", "CMRR / PSRR (DC)", "68.3 / 29.8 dB", "iqmod_mfb_lpf_ota_core_tb_CMRR.txt, _PSRR.txt"),
         ("OTA (B/M inverter)", "Output swing", "0.076 to 1.44 V", "iqmod_mfb_lpf_ota_core_tb_Vout.txt"),
         ("Mixer TG", "Ron over 0 to 1.5 V", "4.6 to 12.4 Ω", "iqmod_mixer_tg_tb_dc_Ron.txt"),
+        ("iqmod_top", "Supply power, 10 m band tran", "24.4 mW at 1.5 V (schematic)", "iqmod_top_tb_tran with the schematic netlist, ngspice-47, IIC-OSIC-TOOLS latest"),
+        ("iqmod_top", "RF output and efficiency (schematic)", "71.3 µW, 0.29 %", "iqmod_top_tb_tran with the schematic netlist, ngspice-47, IIC-OSIC-TOOLS latest"),
         ("Mixer TG", "Size N / P", "108 / 324 µm, L 0.13 µm", "ihp130/macros/iqmod/netlist/schematic/iqmod_top_magic.spice"),
     ],
 }

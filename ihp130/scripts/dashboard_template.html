@@ -96,7 +96,7 @@ body { margin: 0; background: var(--tw-bg); color: var(--tw-fg); font-family: va
   <header class="tw-head" id="overview">
     <h1>TinyWhisper chip dashboard</h1>
     <p class="tw-sub">IHP SG13G2 130 nm · 2 × 2 mm WSPR short-wave transmitter · taped out March 2026 (SoC4219) · data from the committed repo outputs</p>
-    <p class="tw-lede"><b data-draw="lede-pass" data-source="signoff_counts" data-field="pass" data-row="0">—</b> of <b data-draw="lede-total" data-source="signoff_counts" data-field="total" data-row="0">—</b> sign-off checks pass outright across chip, RISC-V and IQ modulator. Timing closes at every corner with <b data-draw="lede-setup" data-source="sta_worst" data-field="setup_wns_ns" data-row="0">—</b> ns worst setup slack on the core. The analog risk is filter corner spread: <b data-draw="lede-yield" data-source="lpf_yield">—</b> % of 200 Monte Carlo samples meet f<sub>c</sub> ≥ 350 kHz. Analog supply power has not been simulated yet. Silicon is back but not measured yet.</p>
+    <p class="tw-lede"><b data-draw="lede-pass" data-source="signoff_counts" data-field="pass" data-row="0">—</b> of <b data-draw="lede-total" data-source="signoff_counts" data-field="total" data-row="0">—</b> sign-off checks pass outright across chip, RISC-V and IQ modulator. Timing closes at every corner with <b data-draw="lede-setup" data-source="sta_worst" data-field="setup_wns_ns" data-row="0">—</b> ns worst setup slack on the core. The analog risk is filter corner spread: <b data-draw="lede-yield" data-source="lpf_yield">—</b> % of 200 Monte Carlo samples meet f<sub>c</sub> ≥ 350 kHz. The analog block draws <b data-draw="lede-pdd" data-source="analog_nominal" data-field="value" data-where="block=iqmod_top&amp;metric=Supply%20power%2C%2010%20m%20band%20tran">—</b> from the 1.5 V supply in the schematic-level transient. Silicon is back but not measured yet.</p>
     <div class="tw-flow" aria-label="Signal chain, solid boxes digital, dashed boxes analog">
       <span>RV32E core</span><em>→</em><span>30-bit NCO + CORDIC (I/Q)</span><em>→</em><span>ΔΣ modulator, order 1/2, OSR 32–256</span><em>→</em><span class="ana">SPDT select</span><em>→</em><span class="ana">3rd-order MFB LPF, 400 kHz</span><em>→</em><span class="ana">Passive TG mixer, 25 % LO</span><em>→</em><span class="ana">Off-chip BPF + PA</span>
     </div>
@@ -223,7 +223,7 @@ body { margin: 0; background: var(--tw-bg); color: var(--tw-fg); font-family: va
 
   <details id="notes">
     <summary>Definitions and caveats</summary>
-    <p class="tw-note">WNS is the worst negative slack. A positive value means timing is met. Yield is the share of CACE samples whose -3 dB corner is at or above 350 kHz. CACE ran at tt and 27 °C with a 1.2 to 1.8 V supply sweep. Process corners and temperature are commented out in the yaml, so this is not a full PVT sweep. Core power excludes the pads and the analog macro. RF output power is the average of v(vout_RF_filt)² / 1 kΩ over 8 µs of the committed iqmod_top_tb_tran waveform (PEX netlist, tt, 1.5 V, 28 MHz LO), behind the 1 kΩ / 1 kΩ coupled-resonator band-pass. The testbench also measures supply power, but that run was never kept, and no lab measurement exists yet.</p>
+    <p class="tw-note">WNS is the worst negative slack. A positive value means timing is met. Yield is the share of CACE samples whose -3 dB corner is at or above 350 kHz. CACE ran at tt and 27 °C with a 1.2 to 1.8 V supply sweep. Process corners and temperature are commented out in the yaml, so this is not a full PVT sweep. Core power excludes the pads and the analog macro. RF output power is the average of v(vout_RF_filt)² / 1 kΩ over 8 µs of the committed iqmod_top_tb_tran waveform (PEX netlist, tt, 1.5 V, 28 MHz LO), behind the 1 kΩ / 1 kΩ coupled-resonator band-pass. Supply power and the schematic RF figure come from the same testbench run on the schematic netlist, because the extracted netlist fails to find an operating point with ngspice-47 in the current IIC-OSIC-TOOLS image. No lab measurement exists yet.</p>
   </details>
 </div>
 
@@ -339,6 +339,7 @@ body { margin: 0; background: var(--tw-bg); color: var(--tw-fg); font-family: va
   val('kpi-fc', 'analog_nominal', (d) => { const r = d.find((x) => x.block === 'MFB LPF' && x.metric === '-3 dB corner'); return r ? String(r.value).replace(/\s*\(.*\)\s*$/, '') : null; }, 0);
   val('kpi-yield', 'lpf_yield', (d) => d, 1);
   val('rtl-total', 'rtl_total', (d) => d, 0);
+  val('lede-pdd', 'analog_nominal', (d) => { const r = d.find((x) => x.block === 'iqmod_top' && x.metric === 'Supply power, 10 m band tran'); return r ? String(r.value).replace(/\s*\(.*\)\s*$/, '').replace(/ at .*$/, '') : null; }, 0);
   val('kpi-rf', 'rf_out', (d) => d[0] && Number(d[0].pout_dbm), 1);
   val('kpi-rf-uw', 'rf_out', (d) => d[0] && Number(d[0].pout_uw), 1);
 
