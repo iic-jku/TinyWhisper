@@ -10,17 +10,22 @@ from cocotb.clock import Clock
 from cocotb.triggers import Timer, Edge, RisingEdge, FallingEdge, ClockCycles
 from cocotb.handle import Immediate
 from cocotb.types import LogicArray, Logic, Range
-from cocotb_tools.runner import get_runner
+from cocotb_tools.runner import get_results, get_runner
 
 sim = os.getenv("SIM", "icarus")
 pdk_root = os.getenv("PDK_ROOT", Path("~/.ciel").expanduser())
 pdk = os.getenv("PDK", "ihp-sg13g2")
 scl = os.getenv("SCL", "sg13g2_stdcell")
 gl = os.getenv("GL", False)
+# SDF=1 adds the delays of the SDF file of SDF_CORNER to the netlist, SDF_TRIPLE selects the min, typ or max value of each delay.
+sdf        = os.getenv("SDF", "0").strip().lower() in ("1", "true", "yes", "on")
+sdf_corner = os.getenv("SDF_CORNER", "nom_typ_1p50V_25C")
+sdf_triple = os.getenv("SDF_TRIPLE", "typ")
 
 hdl_toplevel = "riscv_top"
 
 CPU_CLK_FREQ = 56  # MHz
+# The tests step the bus models below at the falling edge of clk, so that the inputs they drive cannot race the clock tree of the timed netlist
 
 mem = {}
 async def set_defaults(dut, program_path):
@@ -42,12 +47,13 @@ async def start_clock(clock, freq=20):
     cocotb.start_soon(c.start())
 
 
-async def reset(reset, active_low=True, time_ns=1000):
+async def reset(reset, clk, active_low=True, time_ns=1000):
     """Reset dut"""
     cocotb.log.info("Reset asserted...")
 
     reset.value = not active_low
     await Timer(time_ns, "ns")
+    await FallingEdge(clk)
     reset.value = active_low
 
     cocotb.log.info("Reset deasserted.")
@@ -58,7 +64,7 @@ async def start_up(dut, program_path):
     """Startup sequence"""
     await set_defaults(dut, program_path)
     await start_clock(dut.clk, CPU_CLK_FREQ)
-    await reset(dut.reset)
+    await reset(dut.reset, dut.clk)
 
 state = "RECV_COMMAND"
 WRITE_CMD = 2
@@ -394,7 +400,7 @@ async def test_cpu_fibonacci_fast(dut):
 
     # Wait for a number of clock cycles
     for i in range(18000):
-        await ClockCycles(dut.clk, 1)
+        await FallingEdge(dut.clk)
 
         await do_spi(dut)
 
@@ -426,7 +432,7 @@ async def test_cpu_analog_enables(dut):
 
     # Wait for a number of clock cycles
     for i in range(100000):
-        await ClockCycles(dut.clk, 1)
+        await FallingEdge(dut.clk)
         await do_spi(dut)
 
         # HACK: This code writes some input to the bidir pads in the first part of the test
@@ -476,7 +482,7 @@ async def test_cpu_uart_tx(dut):
     # Wait for a number of clock cycles
     # for i in range(150000):
     for i in range(100000):
-        await ClockCycles(dut.clk, 1)
+        await FallingEdge(dut.clk)
 
         await do_spi(dut)
         await do_uart_rx(dut)
@@ -512,7 +518,7 @@ async def test_cpu_uart_rx(dut):
 
     # Wait for a number of clock cycles
     for i in range(200000):
-        await ClockCycles(dut.clk, 1)
+        await FallingEdge(dut.clk)
 
         if i >= next_i:
             if uart_tx_enable == 0 and counter < len(to_send) - 1:
@@ -551,7 +557,7 @@ async def test_cpu_i2c_rw(dut):
 
     # Wait for a number of clock cycles
     for i in range(250000):
-        await ClockCycles(dut.clk, 1)
+        await FallingEdge(dut.clk)
 
         await do_spi(dut)
         await do_uart_rx(dut)
@@ -583,7 +589,7 @@ async def test_cpu_i2c_mc(dut):
 
     # Wait for a number of clock cycles
     for i in range(100000):
-        await ClockCycles(dut.clk, 1)
+        await FallingEdge(dut.clk)
 
         await do_spi(dut)
         await do_uart_rx(dut)
@@ -614,7 +620,7 @@ async def test_cpu_gpio(dut):
     print(dut.gpio_out.get())
     assert dut.gpio_out.get() == 0b0000
     for i in range(5000):
-        await ClockCycles(dut.clk, 1)
+        await FallingEdge(dut.clk)
         await do_spi(dut)
 
     # Check the end result of the counter
@@ -626,7 +632,7 @@ async def test_cpu_gpio(dut):
     # Wait for a number of clock cycles
 
     for i in range(5000):
-        await ClockCycles(dut.clk, 1)
+        await FallingEdge(dut.clk)
         await do_spi(dut)
 
     # Check the end result of the counter
@@ -647,7 +653,7 @@ async def test_cpu_wspr(dut):
     logger.info("Testing WSPR")
 
     for i in range(300000):
-        await ClockCycles(dut.clk, 1)
+        await FallingEdge(dut.clk)
         await do_spi(dut)
 
         if i == 19000:
@@ -676,7 +682,8 @@ def riscv_top_runner():
         # sources.append(proj_path / f"../final/nl/{hdl_toplevel}.nl.v")
         sources.append(proj_path / f"../../../final/nl/riscv_top.nl.v")
 
-        defines = {"USE_POWER_PINS": False}
+        # Unpowered netlist: USE_POWER_PINS must NOT be defined at all
+        # (passing USE_POWER_PINS=False would still define the macro).
     else:
         sources.append(proj_path / "../../../rtl/constants.sv")
         sources.append(proj_path / "../../../rtl/riscv_top.sv")
@@ -698,7 +705,9 @@ def riscv_top_runner():
         sources.append(proj_path / "../../../rtl/cordic_slice.v")
         sources.append(proj_path / "../../../rtl/instructioncounter.sv")
 
+    toplevel   = hdl_toplevel
     build_args = []
+    plusargs   = []
 
     if sim == "icarus":
         # For debugging
@@ -706,13 +715,26 @@ def riscv_top_runner():
         build_args = ["-DSIM"]
         pass
 
+    if gl and sdf:
+        if sim != "icarus":
+            raise SystemExit("The timed gate-level simulation (SDF=1) needs SIM=icarus.")
+        sdf_file = proj_path / f"../../../final/sdf/{sdf_corner}/{hdl_toplevel}__{sdf_corner}.sdf"
+        if not sdf_file.is_file():
+            raise SystemExit(f"No SDF file {sdf_file} found. Run 'make build-top' (or 'make copy-final') first.")
+        # The wrapper instantiates the netlist and annotates the SDF file. -gspecify keeps the delays of the cell
+        # models, -ginterconnect the wire delays of the layout, and -T selects the value of each min:typ:max delay.
+        toplevel   = f"{hdl_toplevel}_sdf"
+        sources   += [proj_path / f"{toplevel}.sv"]
+        build_args = ["-DSIM", "-gspecify", "-ginterconnect", f"-T{sdf_triple}"]
+        plusargs   = [f"+SDF={sdf_file.resolve()}"]
+
     if sim == "verilator":
         build_args = ["--timing", "--trace", "--trace-fst", "--trace-structs"]
 
     runner = get_runner(sim)
     runner.build(
         sources=sources,
-        hdl_toplevel=hdl_toplevel,
+        hdl_toplevel=toplevel,
         defines=defines,
         always=True,
         includes=includes,
@@ -721,14 +743,17 @@ def riscv_top_runner():
         timescale=("1ns", "1fs")
     )
 
-    plusargs = []
-
-    runner.test(
-        hdl_toplevel=hdl_toplevel,
+    results_xml = runner.test(
+        hdl_toplevel=toplevel,
         test_module="riscv_top_tb,",
         plusargs=plusargs,
         waves=True,
     )
+
+    # Outside pytest a failing test leaves the exit status at 0, so check the results
+    num_tests, num_failed = get_results(results_xml)
+    if num_failed:
+        raise SystemExit(f"FAIL: {num_failed} of {num_tests} tests failed")
 
 
 if __name__ == "__main__":
