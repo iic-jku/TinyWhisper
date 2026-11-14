@@ -605,7 +605,7 @@ regression: ## Regression test target for IIC-OSIC-TOOLS (usage: make regression
 	$(MAKE) -C $(MACROS_DIR)/iqmod sim-xschem TB=iqmod_mfb_lpf_tb_ac_cl
 # 	ONE CACE run: the lightweight AC VDD sweep (no Monte-Carlo) to keep runtime short.
 	cd $(MACROS_DIR)/iqmod/verification/cace && cace iqmod_mfb_lpf.yaml -p ac_params && rm -rf _runs _docs netlist
-# 	KLayout DRC, LVS and PEX and Magic LVS and PEX of the iqmod_top cell. kpex extracts C-coupled, its full-RC run takes 100 min.
+# 	KLayout DRC, LVS and PEX and Magic LVS and PEX of the iqmod_top cell. kpex extracts C-coupled, as its full-RC run takes 100 min, so its device check only warns.
 	$(MAKE) -C $(MACROS_DIR)/iqmod klayout-verify CELL=iqmod_top EXT_MODE=2
 	$(MAKE) -C $(MACROS_DIR)/iqmod magic-verify CELL=iqmod_top
 	$(MAKE) -C $(MACROS_DIR)/iqmod build-top
