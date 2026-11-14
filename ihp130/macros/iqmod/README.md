@@ -82,6 +82,7 @@
 ├─ 📁 scripts/
 │  ├─ check_boundary.py
 │  ├─ check_pex_ports.py
+│  ├─ tie_pex_substrate.py
 │  ├─ 📁 filter_designer/
 │  │  ├─ 📁 figures/
 │  │  ├─ 3rd_order_mfb_lpf_designer.mcdx
@@ -583,13 +584,19 @@ python3 scripts/check_pex_ports.py netlist/pex/iqmod_top_pex.spice
 python3 scripts/check_pex_ports.py -v netlist/pex/*.spice     # -v also prints the size of each subcircuit
 ```
 
-**KLayout PEX** uses `kpex` with the Magic extraction engine currently (2.5D engine is work in progress):
+**KLayout PEX** uses the 2.5D engine of `kpex` (`kpex extract --2.5D`), which needs kpex 0.9.0 or later:
 
 ```sh
 make klayout-pex
 make klayout-pex CELL=iqmod_top
 make klayout-pex CELL=iqmod_top EXT_MODE=3
 ```
+
+On top of the extraction the target does three things:
+
+- It passes the CDL netlist of `klayout-lvs-netlist` as schematic, so that kpex checks its own LVS netlist against the device classes and totals of the schematic. A mismatch fails the target in full-RC (`EXT_MODE=3`) and is only a warning in C-coupled mode (`EXT_MODE=1` and `2`). A cell without a schematic gets a dummy one.
+- It reduces the full-RC netlist with TICER (`--reduce ticer`), which leaves far fewer elements and a faster simulation, and ngspice with `klu` can lose the operating point of an unreduced netlist (resistors below 1 mOhm).
+- It ties the substrate port `sub!` of the 2.5D netlist to `PEX_SUB_NET` (default `VSS`, [`scripts/tie_pex_substrate.py`](scripts/tie_pex_substrate.py)), as Magic ties the substrate to `VSS`, so the netlist keeps the pins of `<CELL>_pex.sym`.
 
 **Magic PEX** uses `sak-pex.sh`, which extracts the parasitics with Magic (C-decoupled, C-coupled, or full-RC):
 
