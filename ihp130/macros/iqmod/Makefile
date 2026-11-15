@@ -33,6 +33,10 @@ CELL ?= $(TOP)
 # Override with: make <target> EXT_MODE=<1|2|3>
 EXT_MODE ?= 3
 
+# KPEX netlist reduction in EXT_MODE=3 (none, floating = merge floating islands and remove capacitor-only nodes, ticer = floating plus TICER node elimination)
+# Override with: make klayout-pex KPEX_REDUCE=<none|floating|ticer>
+KPEX_REDUCE ?= ticer
+
 # full-RC extresist threshold in mOhm (sak-pex.sh -t, only used in EXT_MODE=3; default: 10000 = 10 Ohm)
 # Override with: make <target> THRESHOLD=<mOhm>
 THRESHOLD ?= 10000
@@ -376,30 +380,33 @@ symbol-pex: ## Build the Xschem PEX symbol <CELL>_pex.sym from <CELL>.sym (usage
 	fi
 .PHONY: symbol-pex
 
-klayout-pex: ## Run Parasitic Extraction with KPEX of the CELL cell (usage: make klayout-pex [CELL=<cellname>] [EXT_MODE=<1|2|3>])
+klayout-pex: ## Run Parasitic Extraction with KPEX 0.9 (2.5D engine) of the CELL cell (usage: make klayout-pex [CELL=<cellname>] [EXT_MODE=<1|2|3>] [KPEX_REDUCE=<none|floating|ticer>])
 	mkdir -p $(NET_PEX_DIR)
 	$(MAKE) symbol-pex CELL=$(CELL)
-	PDK_UNDERSCORED=$$(echo $$PDK | sed -e 's/-/_/g'); \
+	@if [ ! -f $(NET_SCH_DIR)/$(CELL)_klayout.cdl ]; then $(MAKE) klayout-lvs-netlist CELL=$(CELL); fi
+	rm -rf $(NET_PEX_DIR)/kpex_$(CELL)
 	case $(EXT_MODE) in \
-		1) echo "WARNING: KPEX does not support C-decoupled (C) mode yet, using C-coupled (CC) mode instead."; KPEX_MODE=CC ;; \
-		2) KPEX_MODE=CC ;; \
-		3) KPEX_MODE=RC ;; \
+		1) echo "WARNING: KPEX does not support C-decoupled (C) mode yet, using C-coupled (CC) mode instead."; KPEX_MODE=CC; RED=none ;; \
+		2) KPEX_MODE=CC; RED=none ;; \
+		3) KPEX_MODE=RC; RED=$(KPEX_REDUCE) ;; \
 		*) echo "Invalid EXT_MODE: $(EXT_MODE). Use 1, 2, or 3."; exit 1;; \
 	esac; \
-	kpex \
-	--pdk $$PDK_UNDERSCORED \
+	kpex extract \
+	--pdk $$PDK \
 	--cell $(CELL) \
-	--schematic $(XSCHEM_SCH_DIR)/$(CELL).sch \
 	--gds $(LAY_DIR)/$(CELL).$(_GDS_EXT) \
-	--magic \
-	--magic_mode $$KPEX_MODE \
-	--out_dir $(NET_PEX_DIR) \
-	--out_spice $(NET_PEX_DIR)/$(CELL)_klayout_pex_$(EXT_MODE).spice
-#	--2.5D
-#	--mode $$KPEX_MODE
-	sed -i 's/$(CELL)/$(CELL)_pex/g' $(NET_PEX_DIR)/$(CELL)_klayout_pex_$(EXT_MODE).spice
-	rm -rf $(NET_PEX_DIR)/$(CELL)__$(CELL)
-	rm -f $(CELL).nodes $(CELL).sim
+	--schematic $(NET_SCH_DIR)/$(CELL)_klayout.cdl \
+	--2.5D \
+	--mode $$KPEX_MODE \
+	--blackbox y \
+	--reduce $$RED \
+	--out-dir $(NET_PEX_DIR)/kpex_$(CELL) || exit 1; \
+	run=$(NET_PEX_DIR)/kpex_$(CELL)/$(CELL)__$(CELL); \
+	net=$$run/$(CELL)_k25d_pex_netlist_reduced.spice; \
+	[ -f $$net ] || net=$$run/$(CELL)_k25d_pex_netlist.spice; \
+	python3 $(SCRIPTS_DIR)/kpex_to_pex.py $$net $(NET_PEX_DIR)/$(CELL)_klayout_pex_$(EXT_MODE).spice --cell $(CELL) \
+		--note "PEX produced on $$(date) using $$(kpex --version) with --2.5D --mode $$KPEX_MODE --blackbox y --reduce $$RED"
+	rm -rf $(NET_PEX_DIR)/kpex_$(CELL)
 	@if [ -f $(XSCHEM_SCH_DIR)/$(CELL)_pex.sym ]; then \
 		echo "Reordering pins in $(CELL)_klayout_pex_$(EXT_MODE).spice to match $(CELL)_pex.sym..."; \
 		sak-pin-reorder.py $(XSCHEM_SCH_DIR)/$(CELL)_pex.sym $(NET_PEX_DIR)/$(CELL)_klayout_pex_$(EXT_MODE).spice --format spice; \
