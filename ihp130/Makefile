@@ -20,7 +20,7 @@ TOP = tinywhisper_top
 REQUIRED_PDK ?= ihp-sg13g2
 
 # Goals that do not read the PDK
-PDK_FREE_GOALS = help clean clean-all
+PDK_FREE_GOALS = help clean clean-all dashboard
 
 ifneq ($(REQUIRED_PDK),)
 ifneq ($(filter-out $(PDK_FREE_GOALS),$(or $(MAKECMDGOALS),$(.DEFAULT_GOAL))),)
@@ -503,6 +503,13 @@ magic-verify: ## Verify CELL cell with Magic (usage: make magic-verify [CELL=<ce
 bondplan: ## Generate the bondplan (die in package + bondwires + pin table) in packaging/ (usage: make bondplan [VERSION=<version>])
 	cd $(PACKAGING_DIR) && python3 scripts/run_bondplan.py config.yaml VERSION=$(VERSION)
 .PHONY: bondplan
+# ================================================================================================
+
+
+# Dashboard Target
+dashboard: ## Build the chip dashboard doc/dashboard.html from the committed simulation data and reports
+	python3 $(SCRIPTS_DIR)/gen_dashboard.py
+.PHONY: dashboard
 # ================================================================================================
 
 

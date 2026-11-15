@@ -907,6 +907,17 @@ See [packaging/README.md](packaging/README.md) for the full flow documentation a
 </p>
 
 
+### Chip Dashboard
+
+Builds `doc/dashboard.html`, a self-contained page with the analog and digital key numbers of the chip, published next to the Quarto documentation:
+
+```sh
+make dashboard
+```
+
+[scripts/gen_dashboard.py](scripts/gen_dashboard.py) parses the committed outputs (the AC curves in `macros/iqmod/testbenches/xschem/plot_simulations/data/`, the CACE samples in `macros/iqmod/verification/cace/scripts/*.csv`, the riscv STA, power and `stat.rpt` reports in `macros/riscv/verification/`, the RTL in `macros/riscv/rtl/` and `doc/errata.md`) and inlines them into [scripts/dashboard_template.html](scripts/dashboard_template.html). The sign-off, chip facts, band plan and nominal analog tables are kept in `CURATED` inside the script, each row with the report it was read from. Update them after a new LibreLane or CACE run, then rerun the target and commit `doc/dashboard.html`. The target needs no PDK.
+
+
 ### Build, Verify and Simulate All
 
 Runs `build-all` first, followed by Magic DRC for both `tinywhisper_top` and `tinywhisper_top_logo_fill`, then the chip simulations (`sim-all`) and finally generates the bondplan (`bondplan`) once all checks have passed:
