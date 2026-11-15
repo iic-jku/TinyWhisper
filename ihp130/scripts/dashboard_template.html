@@ -96,7 +96,7 @@ body { margin: 0; background: var(--tw-bg); color: var(--tw-fg); font-family: va
   <header class="tw-head" id="overview">
     <h1>TinyWhisper chip dashboard</h1>
     <p class="tw-sub">IHP SG13G2 130 nm · 2 × 2 mm WSPR short-wave transmitter · taped out March 2026 (SoC4219) · data from the committed repo outputs</p>
-    <p class="tw-lede"><b data-draw="lede-pass" data-source="signoff_counts" data-field="pass" data-row="0">—</b> of <b data-draw="lede-total" data-source="signoff_counts" data-field="total" data-row="0">—</b> sign-off checks pass outright across chip, RISC-V and IQ modulator. Timing closes at every corner with <b data-draw="lede-setup" data-source="sta_worst" data-field="setup_wns_ns" data-row="0">—</b> ns worst setup slack on the core. The analog risk is filter corner spread: <b data-draw="lede-yield" data-source="lpf_yield">—</b> % of 200 Monte Carlo samples meet f<sub>c</sub> ≥ 350 kHz. The analog block draws <b data-draw="lede-pdd" data-source="analog_nominal" data-field="value" data-where="block=iqmod_top&amp;metric=Supply%20power%2C%2010%20m%20band%20tran">—</b> from the 1.5 V supply in the schematic-level transient. Silicon is back but not measured yet.</p>
+    <p class="tw-lede"><b data-draw="lede-pass" data-source="signoff_counts" data-field="pass" data-row="0">—</b> of <b data-draw="lede-total" data-source="signoff_counts" data-field="total" data-row="0">—</b> sign-off checks pass outright across chip, RISC-V and IQ modulator. Timing closes at every corner with <b data-draw="lede-setup" data-source="sta_worst" data-field="setup_wns_ns" data-row="0">—</b> ns worst setup slack on the core. The analog risk is filter corner spread: <b data-draw="lede-yield" data-source="lpf_yield">—</b> % of 200 Monte Carlo samples meet f<sub>c</sub> ≥ 350 kHz. The analog block draws <b data-draw="lede-pdd" data-source="analog_nominal" data-field="value" data-where="block=iqmod_top&amp;metric=Supply%20power%2C%2010%20m%20band%20tran%20(post-layout)">—</b> from the 1.5 V supply in the post-layout transient. Silicon is back but not measured yet.</p>
     <div class="tw-flow" aria-label="Signal chain, solid boxes digital, dashed boxes analog">
       <span>RV32E core</span><em>→</em><span>30-bit NCO + CORDIC (I/Q)</span><em>→</em><span>ΔΣ modulator, order 1/2, OSR 32–256</span><em>→</em><span class="ana">SPDT select</span><em>→</em><span class="ana">3rd-order MFB LPF, 400 kHz</span><em>→</em><span class="ana">Passive TG mixer, 25 % LO</span><em>→</em><span class="ana">Off-chip BPF + PA</span>
     </div>
@@ -108,7 +108,7 @@ body { margin: 0; background: var(--tw-bg); color: var(--tw-fg); font-family: va
     <div class="tw-card" id="kpi-cells"><span class="tw-kpi-label">Core std cells</span><span class="tw-kpi-val"><span data-draw="kpi-cells" data-source="cell_total">—</span></span><span class="tw-note">Yosys stat after synthesis</span></div>
     <div class="tw-card" id="kpi-fc"><span class="tw-kpi-label">LPF corner, nominal</span><span class="tw-kpi-val"><span data-draw="kpi-fc" data-source="analog_nominal" data-field="value" data-where="block=MFB%20LPF&amp;metric=-3%20dB%20corner">—</span></span><span class="tw-note">tt, 27 °C, 1.5 V ngspice</span></div>
     <div class="tw-card" id="kpi-yield"><span class="tw-kpi-label">LPF f<sub>c</sub> ≥ 350 kHz yield</span><span class="tw-kpi-val"><span data-draw="kpi-yield" data-source="lpf_yield">—</span><span class="tw-kpi-unit">%</span></span><span class="tw-note">CACE, 200 samples</span></div>
-    <div class="tw-card" id="kpi-rf"><span class="tw-kpi-label">RF output, 10 m band</span><span class="tw-kpi-val"><span data-draw="kpi-rf" data-source="rf_out" data-field="pout_dbm" data-row="0">—</span><span class="tw-kpi-unit">dBm</span></span><span class="tw-note"><span data-draw="kpi-rf-uw" data-source="rf_out" data-field="pout_uw" data-row="0">—</span> µW into 1 kΩ after the 28 MHz BPF, PEX tran</span></div>
+    <div class="tw-card" id="kpi-rf"><span class="tw-kpi-label">RF output, 10 m band</span><span class="tw-kpi-val"><span data-draw="kpi-rf" data-source="rf_out" data-field="pout_dbm" data-row="0">—</span><span class="tw-kpi-unit">dBm</span></span><span class="tw-note"><span data-draw="kpi-rf-vp" data-source="rf_vp" data-field="vp_mv" data-row="0">—</span> mV<sub>p</sub> (<span data-draw="kpi-rf-vrms" data-source="rf_out" data-field="vrms_mv" data-row="0">—</span> mV<sub>rms</sub>), <span data-draw="kpi-rf-uw" data-source="rf_out" data-field="pout_uw" data-row="0">—</span> µW into 1 kΩ after the 28 MHz BPF, PEX tran</span></div>
   </div>
 
   <section class="tw-section" id="analog">
@@ -223,7 +223,7 @@ body { margin: 0; background: var(--tw-bg); color: var(--tw-fg); font-family: va
 
   <details id="notes">
     <summary>Definitions and caveats</summary>
-    <p class="tw-note">WNS is the worst negative slack. A positive value means timing is met. Yield is the share of CACE samples whose -3 dB corner is at or above 350 kHz. CACE ran at tt and 27 °C with a 1.2 to 1.8 V supply sweep. Process corners and temperature are commented out in the yaml, so this is not a full PVT sweep. Core power excludes the pads and the analog macro. RF output power is the average of v(vout_RF_filt)² / 1 kΩ over 8 µs of the committed iqmod_top_tb_tran waveform (PEX netlist, tt, 1.5 V, 28 MHz LO), behind the 1 kΩ / 1 kΩ coupled-resonator band-pass. Supply power and the schematic RF figure come from the same testbench run on the schematic netlist, because the extracted netlist fails to find an operating point with ngspice-47 in the current IIC-OSIC-TOOLS image. No lab measurement exists yet.</p>
+    <p class="tw-note">WNS is the worst negative slack. A positive value means timing is met. Yield is the share of CACE samples whose -3 dB corner is at or above 350 kHz. CACE ran at tt and 27 °C with a 1.2 to 1.8 V supply sweep. Process corners and temperature are commented out in the yaml, so this is not a full PVT sweep. Core power excludes the pads and the analog macro. RF output power is the average of v(vout_RF_filt)² / 1 kΩ over 8 µs of the committed iqmod_top_tb_tran waveform (PEX netlist, tt, 1.5 V, 28 MHz LO), behind the 1 kΩ / 1 kΩ coupled-resonator band-pass. That waveform is from the earlier Magic PEX run. dBm is 10·log10(P / 1 mW) at 1 kΩ. V<sub>p</sub> is the peak of a single tone with the same power, √2 × V<sub>rms</sub>. The largest sample in the window is <span data-draw="note-rf-vmax" data-source="rf_out" data-field="vpk_mv" data-row="0">—</span> mV, a little higher because the filtered output is not a pure tone. The post-layout supply power and RF rows come from the KPEX 0.9.0 netlist with its parasitic resistors shorted (PR 24), because the full-RC transient over 16 µs would take days. No lab measurement exists yet.</p>
   </details>
 </div>
 
@@ -312,6 +312,13 @@ body { margin: 0; background: var(--tw-bg); color: var(--tw-fg); font-family: va
     fn: (riscv_rtl) => d3.sum(riscv_rtl, (r) => Number(r.lines)),
   });
 
+  dash.calc('rf_vp', {
+    title: 'RF peak voltage, 10 m band',
+    description: 'Peak voltage of a single tone with the same power into 1 kOhm, sqrt(2) times the RMS voltage of the filtered RF output.',
+    inputs: ['rf_out'],
+    fn: (rf_out) => rf_out.map((r) => ({ band: r.band, vp_mv: Math.round(Math.SQRT2 * Number(r.vrms_mv) * 10) / 10 })),
+  });
+
   dash.calc('signoff_counts', {
     title: 'Sign-off tally',
     description: 'Number of sign-off rows with status pass, and all rows.',
@@ -339,9 +346,12 @@ body { margin: 0; background: var(--tw-bg); color: var(--tw-fg); font-family: va
   val('kpi-fc', 'analog_nominal', (d) => { const r = d.find((x) => x.block === 'MFB LPF' && x.metric === '-3 dB corner'); return r ? String(r.value).replace(/\s*\(.*\)\s*$/, '') : null; }, 0);
   val('kpi-yield', 'lpf_yield', (d) => d, 1);
   val('rtl-total', 'rtl_total', (d) => d, 0);
-  val('lede-pdd', 'analog_nominal', (d) => { const r = d.find((x) => x.block === 'iqmod_top' && x.metric === 'Supply power, 10 m band tran'); return r ? String(r.value).replace(/\s*\(.*\)\s*$/, '').replace(/ at .*$/, '') : null; }, 0);
+  val('lede-pdd', 'analog_nominal', (d) => { const r = d.find((x) => x.block === 'iqmod_top' && x.metric === 'Supply power, 10 m band tran (post-layout)'); return r ? String(r.value).replace(/\s*\(.*\)\s*$/, '').replace(/ at .*$/, '') : null; }, 0);
   val('kpi-rf', 'rf_out', (d) => d[0] && Number(d[0].pout_dbm), 1);
   val('kpi-rf-uw', 'rf_out', (d) => d[0] && Number(d[0].pout_uw), 1);
+  val('kpi-rf-vp', 'rf_vp', (d) => d[0] && Number(d[0].vp_mv), 0);
+  val('kpi-rf-vrms', 'rf_out', (d) => d[0] && Number(d[0].vrms_mv), 0);
+  val('note-rf-vmax', 'rf_out', (d) => d[0] && Number(d[0].vpk_mv), 1);
 
   function failMsg(el, s) {
     el.replaceChildren();
