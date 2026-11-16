@@ -1,0 +1,30 @@
+** sch_path: /foss/designs/TinyWhisper/ihp130/macros/iqmod/schematic/xschem/iqmod_spdt_switch.sch
+.subckt iqmod_spdt_switch VDD di_spdt_ctrl VSS v_c v_b v_a
+*.PININFO v_a:B v_b:B v_c:B VDD:B VSS:B di_spdt_ctrl:I
+x1 VDD di_spdt_ctrl spdt_ctrl_n VSS iqmod_spdt_switch_inv
+x2 VDD spdt_ctrl_n spdt_ctrl_buf VSS iqmod_spdt_switch_inv
+x3 VDD spdt_ctrl_buf VSS v_c v_a spdt_ctrl_n iqmod_spdt_switch_tg
+x4 VDD spdt_ctrl_n VSS v_c v_b spdt_ctrl_buf iqmod_spdt_switch_tg
+.ends
+
+* expanding   symbol:  iqmod_spdt_switch_inv.sym # of pins=4
+** sym_path: /foss/designs/TinyWhisper/.claude/worktrees/magical-kare-6a0ff5/ihp130/macros/iqmod/schematic/xschem/iqmod_spdt_switch_inv.sym
+** sch_path: /foss/designs/TinyWhisper/.claude/worktrees/magical-kare-6a0ff5/ihp130/macros/iqmod/schematic/xschem/iqmod_spdt_switch_inv.sch
+.subckt iqmod_spdt_switch_inv VDD vin vout VSS
+*.PININFO vin:I VDD:B VSS:B vout:B
+MM1 vout vin VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2
+MM2 vout vin VDD VDD sg13_lv_pmos w=12.0u l=0.13u ng=2
+MMdummy1 VSS VSS VSS VSS sg13_lv_nmos w=2.0u l=0.13u ng=2
+MMdummy2 VDD VDD VDD VDD sg13_lv_pmos w=12.0u l=0.13u ng=2
+.ends
+
+
+* expanding   symbol:  iqmod_spdt_switch_tg.sym # of pins=6
+** sym_path: /foss/designs/TinyWhisper/.claude/worktrees/magical-kare-6a0ff5/ihp130/macros/iqmod/schematic/xschem/iqmod_spdt_switch_tg.sym
+** sch_path: /foss/designs/TinyWhisper/.claude/worktrees/magical-kare-6a0ff5/ihp130/macros/iqmod/schematic/xschem/iqmod_spdt_switch_tg.sch
+.subckt iqmod_spdt_switch_tg VDD di_tg_ctrl VSS v_b v_a di_tg_ctrl_n
+*.PININFO v_a:B v_b:B VDD:B VSS:B di_tg_ctrl:I di_tg_ctrl_n:I
+MM2 v_a di_tg_ctrl_n v_b VDD sg13_lv_pmos w=36.0u l=0.13u ng=6
+MM1 v_a di_tg_ctrl v_b VSS sg13_lv_nmos w=6.0u l=0.13u ng=6
+.ends
+
