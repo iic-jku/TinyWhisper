@@ -1,6 +1,8 @@
 project:
   type: website
   output-dir: _site
+  resources:
+    - dashboard.html
 
 var:
   url-repo: https://github.com/iic-jku/TinyWhisper
@@ -22,6 +24,9 @@ website:
       - icon: bi-filetype-pdf
         text: PDF
         href: index.pdf
+      - icon: bar-chart
+        text: Dashboard
+        href: dashboard.html
     right:
       - icon: github
         href: "{{< meta var.url-repo >}}"
