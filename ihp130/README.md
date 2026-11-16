@@ -1025,14 +1025,14 @@ make release VERSION=2.1.0
 
 ### Regression
 
-The `regression` target is the project's end-to-end smoke test for the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) environment (IIC-OSIC-TOOLS regression test **28**). Its goal is to exercise **every tool and flow** in the project at least once with the **shortest possible runtime**. It is a tool/flow regression, not a design sign-off. It comes in two variants: the default `regression` reuses the committed riscv macro views for speed, while `regression-nightly` additionally re-hardens the riscv macro and runs its gate-level flows (it runs `regression` with `NIGHTLY_REGRESSION=1`).
+The `regression` target is the project's end-to-end smoke test for the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) environment (IIC-OSIC-TOOLS regression test **28**). Its goal is to exercise **every tool and flow** in the project at least once with the **shortest possible runtime**. It is a tool/flow regression, not a design sign-off. It comes in two variants: the default `regression` reuses the committed riscv macro views for speed, while `regression-full` additionally re-hardens the riscv macro and runs its gate-level flows (it runs `regression` with `FULL_REGRESSION=1`).
 
 ```sh
-make regression          # fast variant, committed riscv views reused
-make regression-nightly  # full variant, riscv hardening + gate-level flows included
+make regression       # fast variant, committed riscv views reused
+make regression-full  # full variant, riscv hardening + gate-level flows included
 ```
 
-This target also runs automatically in continuous integration: the [`regression`](../.github/workflows/regression.yml) GitHub Actions workflow runs `make regression-nightly` inside the `IIC-OSIC-TOOLS` container nightly (and on manual dispatch), and its status is shown by the *Regression* badge at the top of the [repository README](../README.md). The scheduled run is gated so it only executes when there have been changes since the previous night.
+This target also runs automatically in continuous integration: the [`regression`](../.github/workflows/regression.yml) GitHub Actions workflow runs `make regression-full` inside the `IIC-OSIC-TOOLS` container on every push to `main` (and on manual dispatch), and its status is shown by the *Regression* badge at the top of the [repository README](../README.md).
 
 To keep the runtime low while still covering the full toolchain, the regression makes the following trade-offs:
 
@@ -1041,9 +1041,9 @@ To keep the runtime low while still covering the full toolchain, the regression 
 - Magic DRC (`sak-drc.sh -m`) runs once, as `magic-drc` of the bondpad, which passes it, so a broken Magic fails the regression. gdscheck DRC (`sak-drc.sh -g`) runs in the bondpad, RF pad and logo IP builds.
 - Only **one** logo (`sg13g2_ip__jku`) is regenerated. It is the only step that exercises the PNG to GDS flow. The other logos (`sg13g2_ip__jku_names`, `sg13g2_ip__ce`, `sg13g2_ip__ce_names`) use an identical toolchain and reuse their committed views.
 - Exactly **one** Xschem testbench (`iqmod_mfb_lpf_tb_ac_cl`) and **one** CACE parameter set (the AC VDD sweep `ac_params` of `iqmod_mfb_lpf.yaml`, no Monte Carlo) are run. Swap `ac_params` for `ac_mc_params` / `ac_mm_params` in the target to also exercise the Monte Carlo flow.
-- In the default `regression` the riscv macro is **not re-hardened**: `librelane-magicdrc` (the full RTL-to-GDS of the CPU, ≈2 h wall clock), the flows that depend on its fresh outputs (`copy-final`, the gate-level cocotb simulation `sim-gl-cocotb` with ≈12 min for the full suite, `generate-xspice`, which is called for consistency with the template but skips itself while the riscv RTL carries its stock settings, and the gate-level Xschem simulation `sim-gl-xschem`) and the Icarus RTL testbench (`sim-rtl-verilog`) only run in `regression-nightly` (`NIGHTLY_REGRESSION=1`). In the default variant the riscv macro is covered at RTL (lint + cocotb, which also exercises Icarus as its simulator), and the LibreLane flow itself is still exercised by the chip top-level `librelane-nodrc` run. A fast gate-level smoke run of a single test (≈20 s) is available via `COCOTB_TEST_FILTER=test_cpu_fibonacci_fast make sim-gl-cocotb`.
+- In the default `regression` the riscv macro is **not re-hardened**: `librelane-magicdrc` (the full RTL-to-GDS of the CPU, ≈2 h wall clock), the flows that depend on its fresh outputs (`copy-final`, the gate-level cocotb simulation `sim-gl-cocotb` with ≈12 min for the full suite, `generate-xspice`, which is called for consistency with the template but skips itself while the riscv RTL carries its stock settings, and the gate-level Xschem simulation `sim-gl-xschem`) and the Icarus RTL testbench (`sim-rtl-verilog`) only run in `regression-full` (`FULL_REGRESSION=1`). In the default variant the riscv macro is covered at RTL (lint + cocotb, which also exercises Icarus as its simulator), and the LibreLane flow itself is still exercised by the chip top-level `librelane-nodrc` run. A fast gate-level smoke run of a single test (≈20 s) is available via `COCOTB_TEST_FILTER=test_cpu_fibonacci_fast make sim-gl-cocotb`.
 
-The regression runs bottom-up: first the script tests, then the iqmod and riscv macros, then the top-level assembly (submodules, bondpad, RF pad, logo) and finally the chip top-level LibreLane run that integrates the macros and IP. In `regression-nightly`, `copy-final` copies the freshly hardened `flow/final/` views into `macros/riscv/final/`, so the gate-level flows and the chip top-level use the freshly built outputs; in the default `regression` the chip top-level integrates the committed views in `macros/riscv/final/` instead.
+The regression runs bottom-up: first the script tests, then the iqmod and riscv macros, then the top-level assembly (submodules, bondpad, RF pad, logo) and finally the chip top-level LibreLane run that integrates the macros and IP. In `regression-full`, `copy-final` copies the freshly hardened `flow/final/` views into `macros/riscv/final/`, so the gate-level flows and the chip top-level use the freshly built outputs; in the default `regression` the chip top-level integrates the committed views in `macros/riscv/final/` instead.
 
 The following tools and flows are checked by both variants:
 
@@ -1064,7 +1064,7 @@ The following tools and flows are checked by both variants:
 | cocotb (RTL, Icarus as simulator) | riscv `sim-rtl-cocotb` |
 | LibreLane (OpenROAD / Yosys / KLayout streamout / Netgen LVS) | chip `librelane-nodrc` |
 
-The following flows are only covered by `regression-nightly`:
+The following flows are only covered by `regression-full`:
 
 | Tool / flow | Target (in `macros/riscv/`) |
 | --- | --- |
