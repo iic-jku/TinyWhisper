@@ -157,7 +157,7 @@ The `sim-xschem` target accepts an optional `TB=<testbenchname>` parameter (defa
 All targets that operate on a specific cell accept an optional `CELL=<cellname>` parameter. The default is the top-level cell (`iqmod_top`).
 
 ```sh
-make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>] [DRC_LEVEL=<precheck|macro|regular>] [GDSCHECK_SUITE=<suite>|GDSCHECK_DECKS=<decks>] [DRC_JOBS=<n>] [EV_PRECISION=<digits>] [TB=<testbenchname>] [SCRIPT=<scriptname>] [OPEN_ARGS=<options>]
+make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [KPEX_REDUCE=<none|floating|ticer>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>] [DRC_LEVEL=<precheck|macro|regular>] [GDSCHECK_SUITE=<suite>|GDSCHECK_DECKS=<decks>] [DRC_JOBS=<n>] [EV_PRECISION=<digits>] [TB=<testbenchname>] [SCRIPT=<scriptname>] [OPEN_ARGS=<options>]
 ```
 
 
