@@ -10,7 +10,7 @@
 <meta name="author" content="Jonathan Hager (DK7JH)">
 <meta name="author" content="Matthias Jung (DL9MJ)">
 <meta name="author" content="Harald Pretl">
-<meta name="dcterms.date" content="2026-11-15">
+<meta name="dcterms.date" content="2026-11-16">
 
 <title>TinyWhisper: An Open-Source Fully-Integrated Multi-Mode Short-Wave Transmitter for Amateur Radio Applications in 130-nm CMOS – TinyWhisper</title>
 <style>
@@ -348,13 +348,14 @@ window.Quarto = {
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">1</span> Overview</a>
   <ul class="collapse">
-  <li><a href="#purpose" id="toc-purpose" class="nav-link" data-scroll-target="#purpose"><span class="header-section-number">1.1</span> Purpose</a></li>
-  <li><a href="#weak-signal-propagation-reporter" id="toc-weak-signal-propagation-reporter" class="nav-link" data-scroll-target="#weak-signal-propagation-reporter"><span class="header-section-number">1.2</span> Weak Signal Propagation Reporter</a></li>
-  <li><a href="#digital-core" id="toc-digital-core" class="nav-link" data-scroll-target="#digital-core"><span class="header-section-number">1.3</span> Digital Core</a></li>
-  <li><a href="#analog-front-end" id="toc-analog-front-end" class="nav-link" data-scroll-target="#analog-front-end"><span class="header-section-number">1.4</span> Analog Front-End</a></li>
-  <li><a href="#tapeout" id="toc-tapeout" class="nav-link" data-scroll-target="#tapeout"><span class="header-section-number">1.5</span> Tapeout</a></li>
-  <li><a href="#packaging" id="toc-packaging" class="nav-link" data-scroll-target="#packaging"><span class="header-section-number">1.6</span> Packaging</a></li>
-  <li><a href="#outlook" id="toc-outlook" class="nav-link" data-scroll-target="#outlook"><span class="header-section-number">1.7</span> Outlook</a></li>
+  <li><a href="#sec-video" id="toc-sec-video" class="nav-link" data-scroll-target="#sec-video"><span class="header-section-number">1.1</span> Video</a></li>
+  <li><a href="#purpose" id="toc-purpose" class="nav-link" data-scroll-target="#purpose"><span class="header-section-number">1.2</span> Purpose</a></li>
+  <li><a href="#weak-signal-propagation-reporter" id="toc-weak-signal-propagation-reporter" class="nav-link" data-scroll-target="#weak-signal-propagation-reporter"><span class="header-section-number">1.3</span> Weak Signal Propagation Reporter</a></li>
+  <li><a href="#digital-core" id="toc-digital-core" class="nav-link" data-scroll-target="#digital-core"><span class="header-section-number">1.4</span> Digital Core</a></li>
+  <li><a href="#analog-front-end" id="toc-analog-front-end" class="nav-link" data-scroll-target="#analog-front-end"><span class="header-section-number">1.5</span> Analog Front-End</a></li>
+  <li><a href="#tapeout" id="toc-tapeout" class="nav-link" data-scroll-target="#tapeout"><span class="header-section-number">1.6</span> Tapeout</a></li>
+  <li><a href="#packaging" id="toc-packaging" class="nav-link" data-scroll-target="#packaging"><span class="header-section-number">1.7</span> Packaging</a></li>
+  <li><a href="#outlook" id="toc-outlook" class="nav-link" data-scroll-target="#outlook"><span class="header-section-number">1.8</span> Outlook</a></li>
   </ul></li>
   <li><a href="#system-description" id="toc-system-description" class="nav-link" data-scroll-target="#system-description"><span class="header-section-number">2</span> System Description</a>
   <ul class="collapse">
@@ -400,7 +401,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 15, 2026</p>
+      <p class="date">November 16, 2026</p>
     </div>
   </div>
   
@@ -444,8 +445,18 @@ Important
 <p align="center">
 <a href="fig/tinywhisper_blockdiagramm.png"> <img src="fig/tinywhisper_blockdiagramm.png" alt="Block diagram of the TinyWhisper ASIC and external RF circuitry" width="90%"> </a> <br> <em>Block diagram of the TinyWhisper ASIC and external RF circuitry.</em>
 </p>
-<section id="purpose" class="level3" data-number="1.1">
-<h3 data-number="1.1" class="anchored" data-anchor-id="purpose"><span class="header-section-number">1.1</span> Purpose</h3>
+<section id="sec-video" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="sec-video"><span class="header-section-number">1.1</span> Video</h3>
+<p>Two videos of about 70 seconds introduce TinyWhisper to a general audience, the first in English and the second in German.</p>
+<p align="center">
+<video src="video/tinywhisper_intro_en.mp4" poster="video/tinywhisper_intro_en.jpg" controls="" preload="metadata" title="TinyWhisper introduction video in English" style="width: 45%; min-width: 280px;">
+</video>
+<video src="video/tinywhisper_intro_de.mp4" poster="video/tinywhisper_intro_de.jpg" controls="" preload="metadata" title="TinyWhisper introduction video in German" style="width: 45%; min-width: 280px;">
+</video>
+</p>
+</section>
+<section id="purpose" class="level3" data-number="1.2">
+<h3 data-number="1.2" class="anchored" data-anchor-id="purpose"><span class="header-section-number">1.2</span> Purpose</h3>
 <p>TinyWhisper demonstrates what is possible with current open-source tools and open-source PDKs, from system design to final tapeout, from packaging to PCB design, and even to a 3D-printable enclosure. It can also be used for:</p>
 <ul>
 <li>Ham radio courses</li>
@@ -453,12 +464,12 @@ Important
 <li>Regression tests of open-source EDA tools</li>
 </ul>
 </section>
-<section id="weak-signal-propagation-reporter" class="level3" data-number="1.2">
-<h3 data-number="1.2" class="anchored" data-anchor-id="weak-signal-propagation-reporter"><span class="header-section-number">1.2</span> Weak Signal Propagation Reporter</h3>
+<section id="weak-signal-propagation-reporter" class="level3" data-number="1.3">
+<h3 data-number="1.3" class="anchored" data-anchor-id="weak-signal-propagation-reporter"><span class="header-section-number">1.3</span> Weak Signal Propagation Reporter</h3>
 <p>WSPR is a popular digital transmission scheme in amateur radio, specifically designed to study propagation conditions at low transmit power. WSPR transmits a short message containing the callsign, location, and transmit power using 4-FSK modulation (tone spacing 1.46 Hz, symbol duration 0.683 s). Thanks to strong forward error correction (rate 1/2), long ranges can be achieved even at very low transmit power levels (down to 10 mW). Receivers can decode WSPR signals down to -31 dB below the noise floor of a 2500 Hz channel. Received signals are reported to a central <a href="https://www.wsprnet.org/drupal/wsprnet/map">database</a> via the internet, enabling global analysis of signal propagation.</p>
 </section>
-<section id="digital-core" class="level3" data-number="1.3">
-<h3 data-number="1.3" class="anchored" data-anchor-id="digital-core"><span class="header-section-number">1.3</span> Digital Core</h3>
+<section id="digital-core" class="level3" data-number="1.4">
+<h3 data-number="1.4" class="anchored" data-anchor-id="digital-core"><span class="header-section-number">1.4</span> Digital Core</h3>
 <p>The heart of the digital core is a simple multi-cycle embedded processor based on a 32-bit RISC-V architecture running at a clock rate of 56 MHz. By using the RISC-V architecture, the CPU is directly compatible with common compilers, and programs can, for example, be written in C. The program is stored in an external SPI SRAM, from which the CPU fetches its instructions. For communication with peripherals, the chip features I2C and UART interfaces as well as digital GPIO pins that can be freely controlled.</p>
 <p>An integrated 30-bit CORDIC algorithm generates the 4-FSK-modulated I/Q baseband signals according to the WSPR protocol. The phase increment of the CORDIC can be configured via software, allowing any frequency to be generated with a resolution of approximately 0.05 Hz. This also enables compensation for frequency errors of the external crystal oscillator. Using a second-order Delta-Sigma (DS) modulator with selectable oversampling (32, 64, 128, or 256), the parallel 30-bit data from the CORDIC is converted into a 1-bit signal that is passed directly to the analog front-end. Additionally, the digital core generates the LO frequencies listed in the table below by dividing the 56 MHz clock by two, covering the most common shortwave bands: 28 MHz, 14 MHz, 7 MHz, and 3.5 MHz.</p>
 <table class="caption-top table">
@@ -498,14 +509,14 @@ Important
 </tbody>
 </table>
 </section>
-<section id="analog-front-end" class="level3" data-number="1.4">
-<h3 data-number="1.4" class="anchored" data-anchor-id="analog-front-end"><span class="header-section-number">1.4</span> Analog Front-End</h3>
+<section id="analog-front-end" class="level3" data-number="1.5">
+<h3 data-number="1.5" class="anchored" data-anchor-id="analog-front-end"><span class="header-section-number">1.5</span> Analog Front-End</h3>
 <p>The analog front-end is an IQ modulator consisting of two third-order multiple-feedback (MFB) low-pass filters with a cutoff frequency of 400 kHz and a Butterworth characteristic. The amplifier core of the MFB filter is based on a Barthelemy / Manfredini (B/M) inverter-based OTA. Two passive voltage-mode mixers are driven by a 25% duty-cycle local oscillator and produce a single-ended RF output signal.</p>
 <p>Integrated SPDT switches allow switching between the internal CORDIC/DSM signals and external analog inputs, enabling tests with an external function generator, among other uses.</p>
 <p>Since the analog front-end is an IQ modulator, it supports not only WSPR but also other modulation schemes such as FT8, SSB, and CW. Hence, the title “TinyWhisper: An Open-Source Fully-Integrated Multi-Mode Short-Wave Transmitter for Amateur Radio Applications in 130-nm CMOS”.</p>
 </section>
-<section id="tapeout" class="level3" data-number="1.5">
-<h3 data-number="1.5" class="anchored" data-anchor-id="tapeout"><span class="header-section-number">1.5</span> Tapeout</h3>
+<section id="tapeout" class="level3" data-number="1.6">
+<h3 data-number="1.6" class="anchored" data-anchor-id="tapeout"><span class="header-section-number">1.6</span> Tapeout</h3>
 <p>TinyWhisper was taped out in the IHP open-silicon MPW run of March 2026 as <code>SoC4219</code>. The die photo below shows a fabricated chip, with the TopMetal2 logo on top of the core. It is followed by renders of the final layout and of the TopMetal2 logo.</p>
 <p align="center">
 <a href="fig/tinywhisper_die.JPG"> <img src="fig/tinywhisper_die.JPG" alt="Die photo of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm), taped out in March 2026" width="70%"> </a> <br> <em>Die photo of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm), taped out in March 2026.</em>
@@ -517,16 +528,16 @@ Important
 <a href="fig/tinywhisper_top_black_TM2.png"> <img src="fig/tinywhisper_top_black_TM2.png" alt="Chip render of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm)" width="70%"> </a> <br> <em>Render of the TopMetal2 TinyWhisper logo, generated with the tool ArtistIC.</em>
 </p>
 </section>
-<section id="packaging" class="level3" data-number="1.6">
-<h3 data-number="1.6" class="anchored" data-anchor-id="packaging"><span class="header-section-number">1.6</span> Packaging</h3>
+<section id="packaging" class="level3" data-number="1.7">
+<h3 data-number="1.7" class="anchored" data-anchor-id="packaging"><span class="header-section-number">1.7</span> Packaging</h3>
 <p>The die is packaged in a <a href="https://europractice-ic.com/wp-content/uploads/2019/06/MLP7X7-48-OP-02-R2-ECN-10501.pdf">QFN-48</a> open-molded plastic package (<a href="https://www.qptechnologies.com/products/ompp/">OmPP</a>). Its 44 signal and supply pads are wired to package leads. The 12 VSS and IOVSS pads are downbonded to the exposed pad, which forms the package ground, and the 4 VSS and IOVSS leads are bonded to the exposed pad as well. Bonding is done with 25 µm gold wire, the longest wire measures 2.75 mm, and the cover is glued on after bonding.</p>
 <p>The bonding diagram below is generated fully automatically with <code>make bondplan</code> from the final chip GDS and the EUROPRACTICE package library <a href="https://europractice-ic.com/wp-content/uploads/2019/07/EP_PACKAGES_08022018.gds_.gz"><code>EP_PACKAGES_08022018.gds</code></a>. The flow extracts the die bondpads together with their names, places the die in the package cavity, draws the bondwires, fills in the title block, and checks wire lengths, crossings, spacing and the clearance around the sensitive RF wires. The <a href="https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/packaging/config.yaml">pinout</a> and all flow settings are kept in a single configuration file, so the diagram never goes out of sync with the chip. Details are documented in the <a href="https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/packaging">packaging README</a>.</p>
 <p align="center">
 <a href="fig/tinywhisper_bondplan_white.png"> <img src="fig/tinywhisper_bondplan_white.png" alt="Bonding diagram of the ihp-sg13g2 TinyWhisper ASIC in a QFN-48 package" width="70%"> </a> <br> <em>Bonding diagram of the ihp-sg13g2 TinyWhisper ASIC in a QFN-48 package.</em>
 </p>
 </section>
-<section id="outlook" class="level3" data-number="1.7">
-<h3 data-number="1.7" class="anchored" data-anchor-id="outlook"><span class="header-section-number">1.7</span> Outlook</h3>
+<section id="outlook" class="level3" data-number="1.8">
+<h3 data-number="1.8" class="anchored" data-anchor-id="outlook"><span class="header-section-number">1.8</span> Outlook</h3>
 <p>Bare dies of the March 2026 tapeout are back from fabrication, see the die photo in the Tapeout section above. The ASIC is just the beginning of a broader open-hardware project. The next step is to design a <a href="https://github.com/iic-jku/TinyWhisper/tree/main/pcb">PCB</a> that includes all necessary external components: switchable bandpass filters for each RF band, an RF amplifier, a crystal oscillator as the clock source, external SRAM, voltage regulators for the various supply voltages, a display, controls, an SMA connector for the antenna, and a USB interface for configuration. The packaged chip will be soldered onto this board and then <a href="https://github.com/iic-jku/TinyWhisper/tree/main/measurements">characterized</a>.</p>
 <p>Building on this PCB, a compact, 3D-printable <a href="https://github.com/iic-jku/TinyWhisper/tree/main/enclosure">enclosure</a> is planned that accommodates the board together with a small battery and is robust enough for outdoor use during field tests and SOTA activations.</p>
 </section>
