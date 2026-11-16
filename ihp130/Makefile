@@ -124,7 +124,7 @@ help: ## Show this help message
 	@echo 'SCRIPT selects the plotting script for sim-view-xschem (default: plot_<CELL>).'
 	@echo 'VERSION defaults to $(VERSION). Used by the release target.'
 	@echo 'OPEN_ARGS passes extra options to sak-open.py for the open target (e.g. --all).'
-	@echo 'NIGHTLY_REGRESSION defaults to 0. Set to 1 (or run regression-nightly) to include the riscv hardening and gate-level flows in regression.'
+	@echo 'FULL_REGRESSION defaults to 0. Set to 1 (or run regression-full) to include the riscv hardening and gate-level flows in regression.'
 	@echo 'REQUIRED_PDK defaults to $(REQUIRED_PDK). Every target except help, clean and clean-all aborts if $$PDK differs.'
 .PHONY: help
 # ================================================================================================
@@ -547,13 +547,13 @@ release: ## Copy the gds, netlist files and chip renders to the release folder (
 
 
 # Regression Targets
-# NIGHTLY_REGRESSION toggles the long-running riscv steps inside `regression`:
+# FULL_REGRESSION toggles the long-running riscv steps inside `regression`:
 # - 0 (default) skips them and integrates the committed macros/riscv/final/ views
 # - 1 re-hardens the riscv macro (librelane-magicdrc + copy-final, ~2 h) and runs the Icarus RTL and gate-level cocotb/xspice/Xschem flows.
-# The regression-nightly target sets it to 1.
-NIGHTLY_REGRESSION ?= 0
+# The regression-full target sets it to 1.
+FULL_REGRESSION ?= 0
 
-regression: ## Regression test target for IIC-OSIC-TOOLS (usage: make regression [NIGHTLY_REGRESSION=1])
+regression: ## Regression test target for IIC-OSIC-TOOLS (usage: make regression [FULL_REGRESSION=1])
 # 	Analog macro: iqmod (Xschem + CACE + DRC/LVS/PEX + build-top)
 	$(MAKE) -C $(MACROS_DIR)/iqmod sim-xschem TB=iqmod_mfb_lpf_tb_ac_cl
 # 	ONE CACE run: the lightweight AC VDD sweep (no Monte-Carlo) to keep runtime short.
@@ -564,16 +564,16 @@ regression: ## Regression test target for IIC-OSIC-TOOLS (usage: make regression
 	$(MAKE) -C $(MACROS_DIR)/iqmod build-top
 # 	Digital macro: riscv (Verilator, Icarus, cocotb, yosys, LibreLane, xspice)
 	$(MAKE) -C $(MACROS_DIR)/riscv lint-verilog-all
-	$(if $(filter 1,$(NIGHTLY_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv sim-rtl-verilog)
+	$(if $(filter 1,$(FULL_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv sim-rtl-verilog)
 	$(MAKE) -C $(MACROS_DIR)/riscv sim-rtl-cocotb
 #	$(MAKE) -C $(MACROS_DIR)/riscv build-fpga
 # 	librelane-magicdrc: full RTL-to-GDS. KLayout DRC skipped for runtime.
-	$(if $(filter 1,$(NIGHTLY_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv librelane-magicdrc)
-	$(if $(filter 1,$(NIGHTLY_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv copy-final)
+	$(if $(filter 1,$(FULL_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv librelane-magicdrc)
+	$(if $(filter 1,$(FULL_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv copy-final)
 # 	Gate-level flows that depend on the LibreLane outputs above.
-	$(if $(filter 1,$(NIGHTLY_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-cocotb)
-	$(if $(filter 1,$(NIGHTLY_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv generate-xspice)
-	$(if $(filter 1,$(NIGHTLY_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-xschem)
+	$(if $(filter 1,$(FULL_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-cocotb)
+	$(if $(filter 1,$(FULL_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv generate-xspice)
+	$(if $(filter 1,$(FULL_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-xschem)
 # 	Top-level assembly
 	$(MAKE) init-submodules
 	$(MAKE) build-bondpad
@@ -582,9 +582,9 @@ regression: ## Regression test target for IIC-OSIC-TOOLS (usage: make regression
 	$(MAKE) librelane-nodrc
 .PHONY: regression
 
-regression-nightly: ## Nightly regression test target for IIC-OSIC-TOOLS (usage: make regression-nightly)
-	$(MAKE) regression NIGHTLY_REGRESSION=1
-.PHONY: regression-nightly
+regression-full: ## Full regression test target for CI (usage: make regression-full)
+	$(MAKE) regression FULL_REGRESSION=1
+.PHONY: regression-full
 # ================================================================================================
 
 
