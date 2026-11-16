@@ -598,6 +598,9 @@ release: ## Copy the gds, netlist files and chip renders to the release folder (
 NIGHTLY_REGRESSION ?= 0
 
 regression: ## Regression test target for IIC-OSIC-TOOLS (usage: make regression [NIGHTLY_REGRESSION=1])
+# 	Script tests: a text I/O without encoding="utf-8" fails, as it breaks on a cp1252 Windows locale.
+	python3 $(SCRIPTS_DIR)/test_gen_dashboard.py
+	python3 $(MACROS_DIR)/iqmod/scripts/test_kpex_to_pex.py
 # 	Analog macro: iqmod (Xschem + CACE + DRC/LVS/PEX + build-top)
 	$(MAKE) -C $(MACROS_DIR)/iqmod sim-xschem TB=iqmod_mfb_lpf_tb_ac_cl
 # 	ONE CACE run: the lightweight AC VDD sweep (no Monte-Carlo) to keep runtime short.

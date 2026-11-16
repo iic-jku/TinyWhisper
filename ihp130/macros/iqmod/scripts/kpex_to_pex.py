@@ -8,7 +8,7 @@ import sys
 
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__)
+    ap = argparse.ArgumentParser(description="Rename the KPEX subcircuit to <cell>_pex and merge the substrate port into the ground net.")
     ap.add_argument("kpex_netlist", help="KPEX SPICE netlist (e.g. <cell>_k25d_pex_netlist_reduced.spice)")
     ap.add_argument("out", help="output netlist, e.g. netlist/pex/<cell>_pex.spice")
     ap.add_argument("--cell", required=True, help="extracted cell, its subcircuit becomes <cell>_pex")
@@ -17,7 +17,7 @@ def main():
     ap.add_argument("--note", default="", help="provenance line written at the top")
     args = ap.parse_args()
 
-    lines = open(args.kpex_netlist).read().splitlines()
+    lines = open(args.kpex_netlist, encoding="utf-8").read().splitlines()
     sub_re = re.compile(r"(?<!\S)" + re.escape(args.substrate) + r"(?!\S)")
     out, in_header, header_ports = [], False, []
     for line in lines:
@@ -40,7 +40,7 @@ def main():
             continue
         out.append(sub_re.sub(args.ground, line))
 
-    with open(args.out, "w") as f:
+    with open(args.out, "w", encoding="utf-8") as f:
         if args.note:
             f.write(f"* {args.note}\n")
         f.write("\n".join(out) + "\n")
