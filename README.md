@@ -44,6 +44,30 @@
 </p>
 
 
+## Video
+
+Two videos of about 70 seconds introduce TinyWhisper to a general audience, one in English and one in German. Click a poster to play its video, or watch both in the [documentation](https://iic-jku.github.io/TinyWhisper/index.html#sec-video).
+
+<table width="100%">
+  <tr>
+    <td align="center" width="50%">
+      <a href="https://iic-jku.github.io/TinyWhisper/video/tinywhisper_intro_en.mp4">
+        <img src="doc/video/tinywhisper_intro_en.jpg" alt="Poster of the TinyWhisper introduction video in English" width="80%">
+      </a>
+      <br>
+      <em>▶ English, 1:11</em>
+    </td>
+    <td align="center" width="50%">
+      <a href="https://iic-jku.github.io/TinyWhisper/video/tinywhisper_intro_de.mp4">
+        <img src="doc/video/tinywhisper_intro_de.jpg" alt="Poster of the TinyWhisper introduction video in German" width="80%">
+      </a>
+      <br>
+      <em>▶ German, 1:08</em>
+    </td>
+  </tr>
+</table>
+
+
 ## Documentation
 
 The full documentation of the TinyWhisper transmitter is available [here](https://iic-jku.github.io/TinyWhisper/index.html).
@@ -191,6 +215,11 @@ The chip design itself lives in [`ihp130/`](https://github.com/iic-jku/TinyWhisp
 │  │  ├─ tinywhisper_top_black.png
 │  │  ├─ tinywhisper_top_black_TM2.png
 │  │  └─ tinywhisper_top_white.png
+│  ├─ 📁 video/
+│  │  ├─ tinywhisper_intro_de.jpg
+│  │  ├─ tinywhisper_intro_de.mp4
+│  │  ├─ tinywhisper_intro_en.jpg
+│  │  └─ tinywhisper_intro_en.mp4
 │  ├─ Makefile
 │  ├─ _quarto.yml
 │  ├─ index.qmd
