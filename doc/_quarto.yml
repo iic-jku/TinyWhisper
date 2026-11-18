@@ -1,6 +1,10 @@
+# SPDX-FileCopyrightText: 2025-2026 The TinyWhisper Team
+# SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
+
 project:
   type: website
   output-dir: _site
+  pre-render: scripts/copy_sim_figures.ts
   resources:
     - dashboard.html
     - video/*
@@ -12,7 +16,8 @@ website:
   title: "TinyWhisper"
   favicon: fig/favicon.png
   site-url: "https://iic-jku.github.io/TinyWhisper/"
-  repo-url: "{{< meta var.url-repo >}}"
+  repo-url: "https://github.com/iic-jku/TinyWhisper"
+  repo-subdir: doc
   repo-branch: main
   repo-actions: [edit, issue]
   navbar:
@@ -49,6 +54,7 @@ format:
     theme:
       light: cosmo
       dark: solar
+    css: styles.css
     fig-align: center
     lang: en-US
     lightbox: true
