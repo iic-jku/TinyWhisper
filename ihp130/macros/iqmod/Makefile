@@ -37,6 +37,10 @@ EXT_MODE ?= 3
 # Override with: make klayout-pex PEX_SUB_NET=<net>
 PEX_SUB_NET ?= VSS
 
+# KPEX netlist reduction in EXT_MODE=3 (none, floating = merge floating islands and remove capacitor-only nodes, ticer = floating plus TICER node elimination)
+# Override with: make klayout-pex KPEX_REDUCE=<none|floating|ticer>
+KPEX_REDUCE ?= ticer
+
 # full-RC extresist threshold in mOhm (sak-pex.sh -t, only used in EXT_MODE=3; default: 10000 = 10 Ohm)
 # Override with: make <target> THRESHOLD=<mOhm>
 THRESHOLD ?= 10000
@@ -104,13 +108,14 @@ DRC_RPT_DIR     := verification/drc
 
 # Help Target
 help: ## Show this help message
-	@echo 'Usage: make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [PEX_SUB_NET=<net>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>] [DRC_LEVEL=<precheck|macro|regular>] [GDSCHECK_SUITE=<suite>|GDSCHECK_DECKS=<decks>] [DRC_JOBS=<n>] [EV_PRECISION=<digits>] [TB=<testbenchname>] [SCRIPT=<scriptname>] [OPEN_ARGS=<options>]'
+	@echo 'Usage: make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [KPEX_REDUCE=<none|floating|ticer>] [PEX_SUB_NET=<net>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>] [DRC_LEVEL=<precheck|macro|regular>] [GDSCHECK_SUITE=<suite>|GDSCHECK_DECKS=<decks>] [DRC_JOBS=<n>] [EV_PRECISION=<digits>] [TB=<testbenchname>] [SCRIPT=<scriptname>] [OPEN_ARGS=<options>]'
 	@echo ''
 	@echo 'Available targets:'
 	@grep -E '^[a-zA-Z0-9_.-]+:.*## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  %-20s %s\n", $$1, $$2}'
 	@echo ''
 	@echo 'CELL defaults to $(TOP). Override to verify subcells.'
 	@echo 'EXT_MODE defaults to 3 (full-RC). 1=C-decoupled, 2=C-coupled.'
+	@echo 'KPEX_REDUCE defaults to ticer. Sets the RC network reduction of klayout-pex in EXT_MODE=3 (none|floating|ticer).'
 	@echo 'THRESHOLD/MINRES/MINDELAY are full-RC (EXT_MODE=3) extresist settings for magic-pex (defaults 10000 mOhm / 1000 mOhm / 1 ps).'
 	@echo 'PEX_SUB_NET defaults to VSS. The port net that klayout-pex ties the substrate port sub! of the kpex 2.5D netlist to (empty keeps sub! as a port).'
 	@echo 'DRC_LEVEL defaults to macro. Sets the DRC level for klayout-drc and gdscheck-drc (precheck|macro|regular).'
@@ -412,7 +417,7 @@ symbol-pex: ## Build the Xschem PEX symbol <CELL>_pex.sym from <CELL>.sym (usage
 	fi
 .PHONY: symbol-pex
 
-klayout-pex: ## Run Parasitic Extraction with the KPEX 2.5D engine of the CELL cell (usage: make klayout-pex [CELL=<cellname>] [EXT_MODE=<1|2|3>] [PEX_SUB_NET=<net>])
+klayout-pex: ## Run Parasitic Extraction with the KPEX 2.5D engine of the CELL cell (usage: make klayout-pex [CELL=<cellname>] [EXT_MODE=<1|2|3>] [KPEX_REDUCE=<none|floating|ticer>] [PEX_SUB_NET=<net>])
 	mkdir -p $(NET_PEX_DIR)
 	$(MAKE) symbol-pex CELL=$(CELL)
 #	kpex reads the schematic as SPICE, so it gets the CDL netlist, or a dummy schematic for a cell without one.
@@ -422,7 +427,7 @@ klayout-pex: ## Run Parasitic Extraction with the KPEX 2.5D engine of the CELL c
 	case $(EXT_MODE) in \
 		1) echo "WARNING: KPEX does not support C-decoupled (C) mode yet, using C-coupled (CC) mode instead."; KPEX_MODE=CC; KPEX_REDUCE= ;; \
 		2) KPEX_MODE=CC; KPEX_REDUCE= ;; \
-		3) KPEX_MODE=RC; KPEX_REDUCE="--reduce ticer" ;; \
+		3) KPEX_MODE=RC; KPEX_REDUCE="--reduce $(KPEX_REDUCE)" ;; \
 		*) echo "Invalid EXT_MODE: $(EXT_MODE). Use 1, 2, or 3."; exit 1;; \
 	esac; \
 	SCH_ARG=; if [ -f $(XSCHEM_SCH_DIR)/$(CELL).sch ]; then SCH_ARG="--schematic $(NET_SCH_DIR)/$(CELL)_klayout.cdl"; fi; \
@@ -433,6 +438,7 @@ klayout-pex: ## Run Parasitic Extraction with the KPEX 2.5D engine of the CELL c
 	$$SCH_ARG \
 	--gds $(LAY_DIR)/$(CELL).$(_GDS_EXT) \
 	--2.5D \
+	--blackbox y \
 	--mode $$KPEX_MODE $$KPEX_REDUCE \
 	--out-dir $(NET_PEX_DIR) \
 	--out-netlist $(NET_PEX_DIR)/$(CELL)_klayout_pex_$(EXT_MODE).spice
