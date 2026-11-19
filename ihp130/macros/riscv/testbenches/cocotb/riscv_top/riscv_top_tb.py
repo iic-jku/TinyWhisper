@@ -9,7 +9,7 @@ from pathlib import Path
 
 import cocotb
 from cocotb.clock import Clock
-from cocotb.triggers import ClockCycles, FallingEdge, Timer
+from cocotb.triggers import ClockCycles, FallingEdge, ReadOnly, Timer
 from cocotb.handle import Immediate
 from cocotb.types import LogicArray, Logic, Range
 from cocotb_tools.runner import get_results, get_runner
@@ -259,16 +259,21 @@ class I2cTarget:
             dut.sda_i.set(Immediate(self.SEND[3 - self.index][self.counter]))
 
 
-async def bus_models(dut, models):
-    """Step the bus models at every falling edge, so that the inputs they drive cannot race the clock tree of the timed netlist."""
+async def bus_models(dut, models, stimulus=None):
+    """Step the bus models at every falling edge, so that the inputs they drive cannot race the clock tree of the timed netlist.
+    stimulus(cycle, dut) runs first in each cycle and changes the inputs that a test drives itself."""
+    cycle = 0
     while True:
         await FallingEdge(dut.clk)
+        if stimulus:
+            stimulus(cycle, dut)
         for model in models:
             model.step(dut)
+        cycle += 1
 
 
-async def start_up(dut, program_path, *models):
-    """Load the program, start the clock, reset the CPU, and start the SRAM model and the given bus models."""
+async def start_up(dut, program_path, *models, stimulus=None):
+    """Load the program, start the clock, reset the CPU, and start the SRAM model, the given bus models and the stimulus."""
     sram = SpiSram(program_path)
     # Drive every input to its idle level: an undriven input is X in the netlist, while the RTL takes an X
     # condition as false (gpio_in[0] is the external interrupt, so X there took a trap on the netlist)
@@ -283,8 +288,14 @@ async def start_up(dut, program_path, *models):
     await Timer(1000, "ns")
     await FallingEdge(dut.clk)
     dut.reset.value = 1
-    cocotb.start_soon(bus_models(dut, [sram, *models]))
+    cocotb.start_soon(bus_models(dut, [sram, *models], stimulus))
     return sram
+
+
+async def run_cycles(dut, cycles):
+    """Wait for the given number of cycles, then until the bus models have taken the last falling edge."""
+    await ClockCycles(dut.clk, cycles, rising=False)
+    await ReadOnly()
 
 
 def fibonacci_writes():
@@ -300,24 +311,26 @@ def fibonacci_writes():
 async def test_cpu_fibonacci_fast(dut):
     """The program writes the Fibonacci numbers to the SRAM."""
     sram = await start_up(dut, "../fib.txt")
-    await ClockCycles(dut.clk, 18000, rising=False)
+    await run_cycles(dut, 18000)
     assert sram.writes == fibonacci_writes()
 
 
 @cocotb.test()
 async def test_cpu_analog_enables(dut):
     """The analog inputs reach the outputs while the CPU does not drive the pads (check the waveform)."""
-    await start_up(dut, "../analog_enables.txt")
     names = ("lo_Qx_i", "lo_Q_i", "ds_Q_n_i", "ds_Q_p_i", "lo_Ix_i", "lo_I_i", "ds_I_n_i", "ds_I_p_i")
-    for name, value in zip(names, (1, 0, 1, 0, 1, 0, 1, 0)):
-        getattr(dut, name).set(Immediate(Logic(value)))
-    for cycle in range(100000):
-        await FallingEdge(dut.clk)
+
+    def stimulus(cycle, dut):
         # Toggle the inputs of the bidirectional pads first, then release them to Z, since the CPU starts to drive
         # the pads at some point and the inputs would turn X
         for name in names:
             pin = getattr(dut, name)
             pin.set(Immediate(not pin.get() if cycle < 10000 else Logic("Z")))
+
+    await start_up(dut, "../analog_enables.txt", stimulus=stimulus)
+    for name, value in zip(names, (1, 0, 1, 0, 1, 0, 1, 0)):
+        getattr(dut, name).set(Immediate(Logic(value)))
+    await run_cycles(dut, 100000)
 
 
 @cocotb.test()
@@ -325,7 +338,7 @@ async def test_cpu_uart_tx(dut):
     """The program sends "Hallo!" over the UART."""
     uart_rx = UartReceiver()
     await start_up(dut, "../uart_tx_test.txt", uart_rx)
-    await ClockCycles(dut.clk, 100000, rising=False)
+    await run_cycles(dut, 100000)
     assert uart_rx.chars == list("Hallo!")
 
 
@@ -333,11 +346,14 @@ async def test_cpu_uart_tx(dut):
 async def test_cpu_uart_rx(dut):
     """The program echoes the characters that it receives over the UART."""
     uart_rx, uart_tx = UartReceiver(), UartTransmitter()
-    await start_up(dut, "../uart_rx_test.txt", uart_rx, uart_tx)
-    for k, char in enumerate("Linz"):
-        await ClockCycles(dut.clk, 6000 if k == 0 else 40000, rising=False)
-        uart_tx.send(char)
-    await ClockCycles(dut.clk, 200000 - 6000 - 3 * 40000, rising=False)
+    send_at = {6000 + 40000 * k: char for k, char in enumerate("Linz")}
+
+    def stimulus(cycle, dut):
+        if cycle in send_at:
+            uart_tx.send(send_at[cycle])
+
+    await start_up(dut, "../uart_rx_test.txt", uart_rx, uart_tx, stimulus=stimulus)
+    await run_cycles(dut, 200000)
     assert uart_rx.chars == list("Linz")
 
 
@@ -346,7 +362,7 @@ async def test_cpu_i2c_rw(dut):
     """The program writes to and reads from an I2C target."""
     i2c = I2cTarget()
     await start_up(dut, "../i2c_rw_test.txt", UartReceiver(), UartTransmitter(), i2c)
-    await ClockCycles(dut.clk, 250000, rising=False)
+    await run_cycles(dut, 250000)
     assert i2c.received == [0x78, 37, 37, 37, 29, 37, 29, 37, 29, 204, 103]
 
 
@@ -355,7 +371,7 @@ async def test_cpu_i2c_mc(dut):
     """The program writes to an I2C target with the multi-cycle I2C master."""
     i2c = I2cTarget()
     await start_up(dut, "../i2c_mc_test.txt", UartReceiver(), UartTransmitter(), i2c)
-    await ClockCycles(dut.clk, 100000, rising=False)
+    await run_cycles(dut, 100000)
     assert i2c.received == [32]
 
 
@@ -373,10 +389,13 @@ async def test_cpu_gpio(dut):
 @cocotb.test()
 async def test_cpu_wspr(dut):
     """The program sends a WSPR message after gpio_in[0] rises (check the waveform)."""
-    await start_up(dut, "../wspr_test.txt")
-    await ClockCycles(dut.clk, 19000, rising=False)
-    dut.gpio_in.set(Immediate(0b0001))
-    await ClockCycles(dut.clk, 300000 - 19000, rising=False)
+
+    def stimulus(cycle, dut):
+        if cycle == 19000:
+            dut.gpio_in.set(Immediate(0b0001))
+
+    await start_up(dut, "../wspr_test.txt", stimulus=stimulus)
+    await run_cycles(dut, 300000)
 
 
 def riscv_top_runner():
