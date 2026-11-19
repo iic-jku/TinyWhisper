@@ -1,13 +1,15 @@
 # SPDX-FileCopyrightText: 2025-2026 The TinyWhisper Team
 # SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
+# Description: cocotb testbench for riscv_top, built like the testbenches of the VLSI design course. Each test loads a program into the model of the SPI SRAM, bus models drive the inputs and monitor the outputs of the CPU at every falling edge, and the test compares what they collected with the expected result.
+# Environment variables: SIM selects the simulator (default icarus). GL=1 (Icarus only) simulates the netlist final/nl/riscv_top.nl.v of the macro, SDF=1 adds the delays of the SDF file of SDF_CORNER, and SDF_TRIPLE selects the min, typ or max value of each delay.
+# CLK_PERIOD_NS sets the clock (default 56 MHz), and COCOTB_TEST_FILTER selects the tests (GL_TESTS of the Makefile).
 
 import os
-import logging
 from pathlib import Path
 
 import cocotb
 from cocotb.clock import Clock
-from cocotb.triggers import Timer, Edge, RisingEdge, FallingEdge, ClockCycles
+from cocotb.triggers import ClockCycles, FallingEdge, Timer
 from cocotb.handle import Immediate
 from cocotb.types import LogicArray, Logic, Range
 from cocotb_tools.runner import get_results, get_runner
@@ -16,7 +18,8 @@ sim = os.getenv("SIM", "icarus")
 pdk_root = os.getenv("PDK_ROOT", Path("~/.ciel").expanduser())
 pdk = os.getenv("PDK", "ihp-sg13g2")
 scl = os.getenv("SCL", "sg13g2_stdcell")
-gl = os.getenv("GL", False)
+# GL=1 selects the gate-level netlist; anything else (unset, "0", "") stays in RTL mode.
+gl = os.getenv("GL", "0").strip().lower() in ("1", "true", "yes", "on")
 # SDF=1 adds the delays of the SDF file of SDF_CORNER to the netlist, SDF_TRIPLE selects the min, typ or max value of each delay.
 sdf        = os.getenv("SDF", "0").strip().lower() in ("1", "true", "yes", "on")
 sdf_corner = os.getenv("SDF_CORNER", "nom_typ_1p50V_25C")
@@ -24,45 +27,249 @@ sdf_triple = os.getenv("SDF_TRIPLE", "typ")
 
 hdl_toplevel = "riscv_top"
 
-CPU_CLK_FREQ = 56  # MHz
-# The tests step the bus models below at the falling edge of clk, so that the inputs they drive cannot race the clock tree of the timed netlist
-
-mem = {}
-async def set_defaults(dut, program_path):
-    global mem
-    mem = {}
-
-    lines = ()
-    with open(program_path, "r") as f:
-        lines = f.readlines()
-
-    for i, line in enumerate(lines):
-        mem[i] = LogicArray(int(line, base=16), Range(7, "downto", 0))
+CLK_PERIOD_NS = float(os.getenv("CLK_PERIOD_NS", round(1e3 / 56, 4)))  # 56 MHz
+UART_WAIT_CYCLES = 510  # clock cycles per bit at 115200 baud
 
 
-async def start_clock(clock, freq=20):
-    """Start the clock @ freq MHz"""
-    inverted = round(1 / freq * 1000, 4)
-    c = Clock(clock, inverted, "ns")
-    cocotb.start_soon(c.start())
+class SpiSram:
+    """Model of the SPI SRAM that holds the program: answers READ and records WRITE commands."""
+
+    READ_CMD = 3
+    WRITE_CMD = 2
+
+    def __init__(self, program_path):
+        with open(program_path, encoding="utf-8") as f:
+            self.mem = {i: LogicArray(int(line, base=16), Range(7, "downto", 0)) for i, line in enumerate(f)}
+        self.writes = []  # (address, data) of every written byte
+        self.state = "RECV_COMMAND"
+        self.command_reg = LogicArray(0, Range(7, "downto", 0))
+        self.addr_reg = LogicArray(0, Range(23, "downto", 0))
+        self.datain_reg = LogicArray(0, Range(7, "downto", 0))
+        self.dataout_reg = LogicArray(0, Range(7, "downto", 0))
+        self.index = 0
+        self.prev_sclk = 0
+
+    def step(self, dut):
+        sclk = dut.sclk.get()
+        si = dut.si.get()
+        if dut.sram_ce.get() == 0:  # cs = 0
+            self.state = "RECV_COMMAND"
+            self.index = 7
+            self.prev_sclk = sclk
+            dut.so.set(Immediate(Logic(0)))
+            return
+
+        if sclk == 1 and self.prev_sclk == 0:
+            if self.state == "RECV_COMMAND":
+                if dut.sram_ce.get() == 1:
+                    self.command_reg[self.index] = si
+                    if self.index == 0:
+                        self.index = 23
+                        self.state = "RECV_ADDR"
+                    else:
+                        self.index -= 1
+
+            elif self.state == "RECV_ADDR":
+                self.addr_reg[self.index] = si
+                if self.index == 0:
+                    self.index = 7
+                    if self.command_reg.to_unsigned() == self.READ_CMD:
+                        self.state = "SEND_DATA"
+                        self.dataout_reg = self.mem[self.addr_reg[22:0].to_unsigned()]
+                    elif self.command_reg.to_unsigned() == self.WRITE_CMD:
+                        self.state = "RECV_DATA"
+                    else:
+                        cocotb.log.warning(f"unknown SPI command {self.command_reg}")
+                else:
+                    self.index -= 1
+
+            elif self.state == "RECV_DATA":
+                self.datain_reg[self.index] = si
+                if self.index == 0:
+                    self.mem[self.addr_reg.to_unsigned()] = LogicArray(self.datain_reg.to_unsigned(), Range(7, "downto", 0))
+                    self.writes.append((self.addr_reg[22:0].to_unsigned(), self.datain_reg.to_unsigned()))
+                    self.index = 7
+                    self.addr_reg = LogicArray(self.addr_reg[22:0].to_unsigned() + 1, Range(23, "downto", 0))
+                else:
+                    self.index -= 1
+
+            elif self.state == "SEND_DATA":
+                if self.index == 0:
+                    self.index = 7
+                    self.addr_reg = LogicArray(self.addr_reg[22:0].to_unsigned() + 1, Range(23, "downto", 0))
+                    self.dataout_reg = self.mem.get(self.addr_reg.to_unsigned(), LogicArray("XXXXXXXX", Range(7, "downto", 0)))
+                else:
+                    self.index -= 1
+
+        elif sclk == 0 and self.prev_sclk == 1:
+            if self.state == "SEND_DATA":
+                dut.so.set(Immediate(self.dataout_reg[self.index]))
+
+        self.prev_sclk = sclk
 
 
-async def reset(reset, clk, active_low=True, time_ns=1000):
-    """Reset dut"""
-    cocotb.log.info("Reset asserted...")
+class UartReceiver:
+    """Monitor of tx: collects the characters that the CPU sends."""
 
-    reset.value = not active_low
-    await Timer(time_ns, "ns")
-    await FallingEdge(clk)
-    reset.value = active_low
+    def __init__(self):
+        self.chars = []
+        self.state = "IDLE"
+        self.clk_counter = 0
+        self.bit_counter = 0
+        self.data = LogicArray(0, Range(7, "downto", 0))
 
-    cocotb.log.info("Reset deasserted.")
+    def step(self, dut):
+        tx = dut.tx.get()
+        if self.state == "IDLE":
+            if tx == 1:  # no start bit
+                return
+            self.state = "RECV"
+            self.clk_counter = 1.5 * UART_WAIT_CYCLES  # sample in the middle of each bit
+            self.bit_counter = 0
+            self.data = LogicArray(0, Range(7, "downto", 0))
+        else:
+            self.clk_counter -= 1
+            if self.clk_counter != 0:
+                return
+            self.clk_counter = UART_WAIT_CYCLES
+            if self.bit_counter <= 7:
+                self.data[self.bit_counter] = tx
+                self.bit_counter += 1
+            elif tx == 0:
+                cocotb.log.warning("expected the UART stop bit on tx")
+            else:
+                self.state = "IDLE"
+                self.chars.append(chr(self.data.to_unsigned()))
 
 
-async def start_up(dut, program_path):
-    global CPU_CLK_FREQ
-    """Startup sequence"""
-    await set_defaults(dut, program_path)
+class UartTransmitter:
+    """Driver of rx: sends one character after send() was called."""
+
+    def __init__(self):
+        self.enable = False
+        self.state = "IDLE"
+        self.clk_counter = 0
+        self.bit_counter = 0
+        self.data = LogicArray(0, Range(7, "downto", 0))
+
+    def send(self, char):
+        self.data = LogicArray(ord(char), Range(7, "downto", 0))
+        self.enable = True
+
+    def step(self, dut):
+        if not self.enable:
+            return
+        rx = 1
+        if self.state == "IDLE":
+            rx = 0  # start bit
+            self.state = "TX"
+            self.clk_counter = UART_WAIT_CYCLES
+            self.bit_counter = 0
+        else:
+            self.clk_counter -= 1
+            if self.clk_counter != 0:
+                return
+            self.clk_counter = UART_WAIT_CYCLES
+            if self.bit_counter <= 7:
+                rx = self.data[self.bit_counter]
+                self.bit_counter += 1
+            else:  # stop bit
+                self.state = "IDLE"
+                self.enable = False
+        dut.rx.set(Immediate(rx))
+
+
+class I2cTarget:
+    """Model of an I2C target: collects the bytes that the CPU writes and answers reads with fixed bytes."""
+
+    SEND = [LogicArray(v, Range(7, "downto", 0)) for v in (37, 29, 204, 103)]
+
+    def __init__(self):
+        self.received = []
+        self.state = "IDLE"
+        self.prev_scl = 1
+        self.prev_sda = 1
+        self.addr = LogicArray(0, Range(6, "downto", 0))
+        self.cmd = 0
+        self.counter = 0
+        self.index = 3
+        self.data = LogicArray(0, Range(7, "downto", 0))
+
+    def step(self, dut):
+        sda = dut.sda_o.get()
+        scl = dut.scl.get()
+
+        if scl == 1 and self.prev_scl == 1 and sda != self.prev_sda:  # start or stop condition
+            self.state = "IDLE"
+        elif self.state == "IDLE":
+            if sda == 0:
+                self.state = "START"
+                self.index = 3
+        elif self.state == "START":
+            if sda == 0 and scl == 0 and self.prev_scl == 1:
+                self.state = "R_ADDR"
+                self.addr = LogicArray(0, Range(6, "downto", 0))
+                self.counter = 6
+        elif self.prev_scl == 0 and scl == 1:  # rising edge of scl
+            if self.state == "R_ADDR":
+                self.addr[self.counter] = sda
+            elif self.state == "R_CMD":
+                self.cmd = sda
+            elif self.state == "WRITE":
+                self.data[self.counter] = sda
+        elif self.prev_scl == 1 and scl == 0:  # falling edge of scl
+            if self.state == "R_ADDR":
+                if self.counter > 0:
+                    self.counter -= 1
+                else:
+                    self.state = "R_CMD"
+            elif self.state == "R_CMD":
+                self.counter = 0
+                self.state = "T_ACK"
+            elif self.state == "T_ACK":
+                self.counter = 7
+                self.index = 3
+                self.state = "READ" if self.cmd == 1 else "WRITE"
+            elif self.state == "WRITE":
+                if self.counter > 0:
+                    self.counter -= 1
+                else:
+                    self.received.append(self.data.to_unsigned())
+                    self.index -= 1
+                    self.counter = 7
+                    self.state = "WRITE_ACK"
+            elif self.state == "WRITE_ACK":
+                self.state = "WRITE"
+            elif self.state == "READ":
+                if self.counter > 0:
+                    self.counter -= 1
+                else:
+                    self.index = max(self.index - 1, 0)
+                    self.counter = 7
+                    self.state = "READ_ACK"
+            elif self.state == "READ_ACK":
+                self.state = "READ"
+
+        self.prev_scl = scl
+        self.prev_sda = sda
+
+        if self.state in ("T_ACK", "WRITE_ACK"):
+            dut.sda_i.set(Immediate(Logic(0)))
+        elif self.state == "READ":
+            dut.sda_i.set(Immediate(self.SEND[3 - self.index][self.counter]))
+
+
+async def bus_models(dut, models):
+    """Step the bus models at every falling edge, so that the inputs they drive cannot race the clock tree of the timed netlist."""
+    while True:
+        await FallingEdge(dut.clk)
+        for model in models:
+            model.step(dut)
+
+
+async def start_up(dut, program_path, *models):
+    """Load the program, start the clock, reset the CPU, and start the SRAM model and the given bus models."""
+    sram = SpiSram(program_path)
     # Drive every input to its idle level: an undriven input is X in the netlist, while the RTL takes an X
     # condition as false (gpio_in[0] is the external interrupt, so X there took a trap on the netlist)
     dut.gpio_in.value = 0
@@ -71,604 +278,105 @@ async def start_up(dut, program_path):
     dut.so.value = 0
     for name in ("lo_I_i", "lo_Ix_i", "lo_Q_i", "lo_Qx_i", "ds_I_n_i", "ds_I_p_i", "ds_Q_n_i", "ds_Q_p_i"):
         getattr(dut, name).value = 0
-    await start_clock(dut.clk, CPU_CLK_FREQ)
-    await reset(dut.reset, dut.clk)
-
-state = "RECV_COMMAND"
-WRITE_CMD = 2
-READ_CMD = 3
-command_reg = LogicArray(0, Range(7, "downto", 0))
-addr_reg = LogicArray(0, Range(23, "downto", 0))
-datain_reg = LogicArray(0, Range(7, "downto", 0))
-dataout_reg = LogicArray(0, Range(7, "downto", 0))
-index = 0
-mem_pattern = []
-prev_sclk = 0
+    cocotb.start_soon(Clock(dut.clk, CLK_PERIOD_NS, "ns").start())
+    dut.reset.value = 0  # active low
+    await Timer(1000, "ns")
+    await FallingEdge(dut.clk)
+    dut.reset.value = 1
+    cocotb.start_soon(bus_models(dut, [sram, *models]))
+    return sram
 
 
-async def do_spi(dut):
-    global state
-    global mem
-    global WRITE_CMD
-    global READ_CMD
-    global command_reg
-    global addr_reg
-    global datain_reg
-    global dataout_reg
-    global index
-    global mem_pattern
-    global prev_sclk
-
-    sclk = dut.sclk.get()
-    si = dut.si.get()
-    if dut.sram_ce.get() == 0:  # cs = 0
-        state = "RECV_COMMAND"
-        index = 7
-        prev_sclk = sclk
-        dut.so.set(Immediate(Logic(0)))
-
-        return
-
-    if sclk == 1 and prev_sclk == 0:
-        if state == "RECV_COMMAND":
-            if dut.sram_ce.get() == 1:
-                command_reg[index] = si
-                if index == 0:
-                    index = 23
-                    state = "RECV_ADDR"
-                else:
-                    index = index - 1
-
-        elif state == "RECV_ADDR":
-            addr_reg[index] = si
-            if index == 0:
-                index = 7
-
-                # print(f"Current: {hex(addr_reg)}")
-                if command_reg.to_unsigned() == READ_CMD:
-                    state = "SEND_DATA"
-                    addr_tmp = addr_reg[22:0].to_unsigned()
-                    dataout_reg = mem[addr_tmp]
-
-                elif command_reg.to_unsigned() == WRITE_CMD:
-                    state = "RECV_DATA"
-                    index = 7
-                else:
-                    print("GOT UNKNOWN SPI COMMAND!!!!!")
-            else:
-                index = index - 1
-
-        elif state == "WAITING":
-            state = "SEND_DATA"
-
-        elif state == "RECV_DATA":
-            datain_reg[index] = si
-            if index == 0:
-                mem[addr_reg.to_unsigned()] = LogicArray(datain_reg.to_unsigned(), Range(7, "downto", 0))
-
-                mem_pattern.append((addr_reg[22:0].to_unsigned(), datain_reg.to_unsigned()))
-                index = 7
-                addr_reg = LogicArray(addr_reg[22:0].to_unsigned() + 1, Range(23, "downto", 0))
-            else:
-                index = index - 1
-
-        elif state == "SEND_DATA":
-            if index == 0:
-                index = 7
-                addr_reg = LogicArray(addr_reg[22:0].to_unsigned() + 1, Range(23, "downto", 0))
-                addr_tmp = addr_reg.to_unsigned()
-                if addr_tmp in mem:
-                    dataout_reg = mem[addr_reg.to_unsigned()]
-                else:
-                    dataout_reg = LogicArray("XXXXXXXX", Range(7, "downto", 0))
-            else:
-                index = index - 1
-
-    elif sclk == 0 and prev_sclk == 1:
-        if state == "SEND_DATA":
-            dut.so.set(Immediate(dataout_reg[index]))
-
-    prev_sclk = sclk
-
-
-uart_rx_bytes = list()  # List of bytes sent by the CPU to the tb
-UART_RX_BAUD = 115200
-# UART_RX_WAIT_CYCLES = (1e9 * (1.0 / UART_RX_BAUD)) / (1e3 * (1.0 / CPU_CLK_FREQ))
-UART_RX_WAIT_CYCLES = 510
-uart_rx_clk_counter = 0
-uart_rx_bit_counter = 0
-uart_rx_state = "IDLE"  # IDLE, WAIITNG, RECV
-uart_rx_current_data = 0
-
-
-async def do_uart_rx(dut):
-    global uart_rx_bytes
-    global UART_RX_WAIT_CYCLES
-    global uart_rx_clk_counter
-    global uart_rx_bit_counter
-    global uart_rx_state
-    global uart_rx_current_data
-
-    cpu_tx = dut.tx.get()
-
-    if uart_rx_state == "IDLE":
-        if cpu_tx == 1:
-            # No start condition. Doing nothing
-            return
-
-        uart_rx_state = "RECV"
-        uart_rx_clk_counter = 1.5 * UART_RX_WAIT_CYCLES
-        uart_rx_bit_counter = 0
-        uart_rx_current_data = LogicArray(0, Range(7, "downto", 0))
-
-    elif uart_rx_state == "RECV":
-        uart_rx_clk_counter -= 1
-
-        if uart_rx_clk_counter != 0:
-            return
-
-        uart_rx_clk_counter = UART_RX_WAIT_CYCLES
-        if uart_rx_bit_counter <= 7:
-            uart_rx_current_data[uart_rx_bit_counter] = cpu_tx
-            uart_rx_bit_counter += 1
-        else:
-            if cpu_tx == 0:
-                print("Expected to see UART stop condition on rx!")
-            else:
-                uart_rx_state = "IDLE"
-                uart_rx_bytes.append(chr(uart_rx_current_data.to_unsigned()))
-
-
-UART_TX_BAUD = 115200
-# UART_TX_WAIT_CYCLES = (1e9 * (1.0 / UART_RX_BAUD)) / (1e3 * (1.0 / CPU_CLK_FREQ))
-UART_TX_WAIT_CYCLES = 510
-uart_tx_clk_counter = 0
-uart_tx_bit_counter = 0
-uart_tx_state = "IDLE"  # IDLE, TX, END
-uart_tx_current_data = 0
-uart_tx_enable = 0
-
-
-async def do_uart_tx(dut):
-    global UART_TX_WAIT_CYCLES
-    global uart_tx_clk_counter
-    global uart_tx_bit_counter
-    global uart_tx_state
-    global uart_tx_current_data
-    global uart_tx_enable
-
-    if uart_tx_enable == 0:
-        return
-
-    cpu_rx_in = 1
-
-    if uart_tx_state == "IDLE":
-        cpu_rx_in = 0
-
-        uart_tx_state = "TX"
-        uart_tx_clk_counter = 1 * UART_TX_WAIT_CYCLES
-        uart_tx_bit_counter = 0
-
-    elif uart_tx_state == "TX":
-        uart_tx_clk_counter -= 1
-
-        if uart_tx_clk_counter != 0:
-            return
-
-        uart_tx_clk_counter = UART_TX_WAIT_CYCLES
-        if uart_tx_bit_counter <= 7:
-            cpu_rx_in = uart_tx_current_data[uart_tx_bit_counter]
-            uart_tx_bit_counter += 1
-        else:
-            uart_tx_state = "IDLE"
-            cpu_rx_in = 1
-            uart_tx_enable = 0
-
-    # Set CPU rx input to the computed value
-    dut.rx.set(Immediate(cpu_rx_in))
-
-
-i2c_state = "IDLE"
-prev_scl = 1
-prev_sda = 1
-i2c_addr = 0
-i2c_cmd = 0
-i2c_counter = 0
-i2c_index = 3
-i2c_recv = []
-i2c_current_recv = LogicArray(0, Range(7, "downto", 0))
-async def do_i2c_slave(dut):
-    global i2c_state
-    global prev_scl
-    global i2c_addr
-    global i2c_cmd
-    global i2c_counter
-    global i2c_index
-    global i2c_recv
-    global i2c_current_recv
-    global prev_sda
-
-    # Some random values
-    i2c_send = [
-        LogicArray(37, Range(7, "downto", 0)),
-        LogicArray(29, Range(7, "downto", 0)),
-        LogicArray(204, Range(7, "downto", 0)),
-        LogicArray(103, Range(7, "downto", 0))
-    ]
-
-    sda_in = dut.sda_o.get()
-    scl = dut.scl.get()
-
-    # if scl == 1 and prev_scl == 1 and sda_in == 1 and prev_sda == 0:
-    if scl == 1 and prev_scl == 1 and sda_in != prev_sda:
-        i2c_state = "IDLE"
-
-    elif i2c_state == "IDLE":
-        # I2C start condition
-        if sda_in == 0:
-            i2c_state = "START"
-            i2c_index = 3
-
-    elif i2c_state == "START":
-        if sda_in == 0 and scl == 0 and prev_scl == 1:
-            i2c_state = "R_ADDR"
-            i2c_addr = LogicArray(0, Range(6, "downto", 0))
-            i2c_counter = 6
-
-    elif prev_scl == 0 and scl == 1:
-        if i2c_state == "R_ADDR":
-            # Posedge of scl
-            i2c_addr[i2c_counter] = sda_in
-
-        elif i2c_state == "R_CMD":
-            i2c_cmd = sda_in
-
-        elif i2c_state == "WRITE":
-            i2c_current_recv[i2c_counter] = sda_in
-
-    elif prev_scl == 1 and scl == 0:
-        if i2c_state == "R_ADDR":
-            if i2c_counter > 0:
-                i2c_counter -= 1
-            else:
-                i2c_state = "R_CMD"
-
-        elif i2c_state == "R_CMD":
-            i2c_counter = 0
-            i2c_state = "T_ACK"
-
-        elif i2c_state == "T_ACK":
-            i2c_counter = 7
-            i2c_index = 3
-            if i2c_cmd == 1:
-                i2c_state = "READ"
-            else:
-                i2c_state = "WRITE"
-
-        elif i2c_state == "WRITE":
-            if i2c_counter > 0:
-                i2c_counter -= 1
-            else:
-                i2c_recv.append(i2c_current_recv.to_unsigned())
-                i2c_index -= 1
-                i2c_counter = 7
-                i2c_state = "WRITE_ACK"
-
-        elif i2c_state == "WRITE_ACK":
-            i2c_state = "WRITE"
-
-        elif i2c_state == "READ":
-            if i2c_counter > 0:
-                i2c_counter -= 1
-            else:
-                i2c_index -= 1
-
-                if i2c_index < 0:
-                    i2c_index = 0
-
-                i2c_counter = 7
-                i2c_state = "READ_ACK"
-
-        elif i2c_state == "READ_ACK":
-            i2c_state = "READ"
-
-    prev_scl = scl
-    prev_sda = sda_in
-
-    if i2c_state in ["T_ACK", "WRITE_ACK"]:
-        dut.sda_i.set(Immediate(Logic(0)))
-    elif i2c_state == "READ":
-        dut.sda_i.set(Immediate(i2c_send[3-i2c_index][i2c_counter]))
+def fibonacci_writes():
+    """Reference model of fib.txt: it stores the Fibonacci numbers from 2 to 89 as 32-bit words from address 160."""
+    a, b, writes = 1, 2, []
+    for k in range(9):
+        writes += [(160 + 4 * k + i, (b >> (8 * i)) & 0xFF) for i in range(4)]
+        a, b = b, a + b
+    return writes
 
 
 @cocotb.test()
 async def test_cpu_fibonacci_fast(dut):
-    global mem_pattern
-    mem_pattern = []
-    mem_pattern_correct = [
-        (160, 2), (161, 0), (162, 0), (163, 0),
-        (164, 3), (165, 0), (166, 0), (167, 0),
-        (168, 5), (169, 0), (170, 0), (171, 0),
-        (172, 8), (173, 0), (174, 0), (175, 0),
-        (176, 13), (177, 0), (178, 0), (179, 0),
-        (180, 21), (181, 0), (182, 0), (183, 0),
-        (184, 34), (185, 0), (186, 0), (187, 0),
-        (188, 55), (189, 0), (190, 0), (191, 0),
-        (192, 89), (193, 0), (194, 0), (195, 0),
-    ]
-
-    # Create a logger for this testbench
-    logger = logging.getLogger("my_testbench")
-
-    logger.info("Startup sequence...")
-
-    # Start up
-    await start_up(dut, "../fib.txt")
-    logger.info("Testing basic fibonacci program")
-
-    # Wait for a number of clock cycles
-    for i in range(18000):
-        await FallingEdge(dut.clk)
-
-        await do_spi(dut)
-
-    # Check the end result of the counter
-    print(mem_pattern)
-    assert mem_pattern == mem_pattern_correct
-    logger.info("Done!")
+    """The program writes the Fibonacci numbers to the SRAM."""
+    sram = await start_up(dut, "../fib.txt")
+    await ClockCycles(dut.clk, 18000, rising=False)
+    assert sram.writes == fibonacci_writes()
 
 
 @cocotb.test()
 async def test_cpu_analog_enables(dut):
-    # Create a logger for this testbench
-    logger = logging.getLogger("my_testbench")
-
-    logger.info("Startup sequence...")
-
-    # Start up
+    """The analog inputs reach the outputs while the CPU does not drive the pads (check the waveform)."""
     await start_up(dut, "../analog_enables.txt")
-    logger.info("Testing analog enable pins")
-
-    dut.lo_Qx_i.set(Immediate(Logic(1)))
-    dut.lo_Q_i.set(Immediate(Logic(0)))
-    dut.ds_Q_n_i.set(Immediate(Logic(1)))
-    dut.ds_Q_p_i.set(Immediate(Logic(0)))
-    dut.lo_Ix_i.set(Immediate(Logic(1)))
-    dut.lo_I_i.set(Immediate(Logic(0)))
-    dut.ds_I_n_i.set(Immediate(Logic(1)))
-    dut.ds_I_p_i.set(Immediate(Logic(0)))
-
-    # Wait for a number of clock cycles
-    for i in range(100000):
+    names = ("lo_Qx_i", "lo_Q_i", "ds_Q_n_i", "ds_Q_p_i", "lo_Ix_i", "lo_I_i", "ds_I_n_i", "ds_I_p_i")
+    for name, value in zip(names, (1, 0, 1, 0, 1, 0, 1, 0)):
+        getattr(dut, name).set(Immediate(Logic(value)))
+    for cycle in range(100000):
         await FallingEdge(dut.clk)
-        await do_spi(dut)
-
-        # HACK: This code writes some input to the bidir pads in the first part of the test
-        # The CPU will not drive those after reset, so that the analog part may be
-        # used even if the CPU is not working properly.
-        # In this test, the CPU will start driving the pads at some point, therefore
-        # we set them to Z again. Otherwise, they would be X.
-        # This allows us to verify that the internal routing works and inputs are correctly
-        # rerouted to the outputs.
-        if i < 10000:
-            dut.lo_Qx_i.set(Immediate(not dut.lo_Qx_i.get()))
-            dut.lo_Q_i.set(Immediate(not dut.lo_Q_i.get()))
-            dut.ds_Q_n_i.set(Immediate(not dut.ds_Q_n_i.get()))
-            dut.ds_Q_p_i.set(Immediate(not dut.ds_Q_p_i.get()))
-            dut.lo_Ix_i.set(Immediate(not dut.lo_Ix_i.get()))
-            dut.lo_I_i.set(Immediate(not dut.lo_I_i.get()))
-            dut.ds_I_n_i.set(Immediate(not dut.ds_I_n_i.get()))
-            dut.ds_I_p_i.set(Immediate(not dut.ds_I_p_i.get()))
-        else:
-            dut.lo_Qx_i.set(Immediate(Logic("Z")))
-            dut.lo_Q_i.set(Immediate(Logic("Z")))
-            dut.ds_Q_n_i.set(Immediate(Logic("Z")))
-            dut.ds_Q_p_i.set(Immediate(Logic("Z")))
-            dut.lo_Ix_i.set(Immediate(Logic("Z")))
-            dut.lo_I_i.set(Immediate(Logic("Z")))
-            dut.ds_I_n_i.set(Immediate(Logic("Z")))
-            dut.ds_I_p_i.set(Immediate(Logic("Z")))
-
-    logger.info("Done!")
+        # Toggle the inputs of the bidirectional pads first, then release them to Z, since the CPU starts to drive
+        # the pads at some point and the inputs would turn X
+        for name in names:
+            pin = getattr(dut, name)
+            pin.set(Immediate(not pin.get() if cycle < 10000 else Logic("Z")))
 
 
 @cocotb.test()
 async def test_cpu_uart_tx(dut):
-    global uart_rx_bytes
-
-    uart_rx_bytes = list()  # List of bytes sent by the CPU to the tb
-
-    # Create a logger for this testbench
-    logger = logging.getLogger("my_testbench")
-
-    logger.info("Startup sequence...")
-
-    # Start up
-    await start_up(dut, "../uart_tx_test.txt")
-    logger.info("Testing UART transmission")
-
-    # Wait for a number of clock cycles
-    # for i in range(150000):
-    for i in range(100000):
-        await FallingEdge(dut.clk)
-
-        await do_spi(dut)
-        await do_uart_rx(dut)
-
-    # Check the end result of the counter
-    print(uart_rx_bytes)
-    assert uart_rx_bytes == ["H", "a", "l", "l", "o", "!"]
-    # assert mem_pattern == mem_pattern_correct
-
-    logger.info("Done!")
+    """The program sends "Hallo!" over the UART."""
+    uart_rx = UartReceiver()
+    await start_up(dut, "../uart_tx_test.txt", uart_rx)
+    await ClockCycles(dut.clk, 100000, rising=False)
+    assert uart_rx.chars == list("Hallo!")
 
 
 @cocotb.test()
 async def test_cpu_uart_rx(dut):
-    global uart_tx_enable
-    global uart_tx_current_data
-    global uart_rx_bytes
-
-    uart_rx_bytes = list()  # List of bytes sent by the CPU to the tb
-    # Create a logger for this testbench
-    logger = logging.getLogger("my_testbench")
-
-    logger.info("Startup sequence...")
-
-    # Start up
-    await start_up(dut, "../uart_rx_test.txt")
-    logger.info("Testing UART receiving")
-
-    to_send = ["L", "i", "n", "z"]
-    counter = -1  # HACK
-    next_i = 6000
-    increment = 40000
-
-    # Wait for a number of clock cycles
-    for i in range(200000):
-        await FallingEdge(dut.clk)
-
-        if i >= next_i:
-            if uart_tx_enable == 0 and counter < len(to_send) - 1:
-                counter += 1
-                uart_tx_enable = 1
-                uart_tx_current_data = LogicArray(ord(to_send[counter]), Range(7, "downto", 0))
-                next_i = i + increment
-
-        await do_spi(dut)
-        await do_uart_rx(dut)
-        await do_uart_tx(dut)
-
-    # Check the end result of the counter
-    print(uart_rx_bytes)
-    assert uart_rx_bytes == to_send
-    logger.info("Done!")
+    """The program echoes the characters that it receives over the UART."""
+    uart_rx, uart_tx = UartReceiver(), UartTransmitter()
+    await start_up(dut, "../uart_rx_test.txt", uart_rx, uart_tx)
+    for k, char in enumerate("Linz"):
+        await ClockCycles(dut.clk, 6000 if k == 0 else 40000, rising=False)
+        uart_tx.send(char)
+    await ClockCycles(dut.clk, 200000 - 6000 - 3 * 40000, rising=False)
+    assert uart_rx.chars == list("Linz")
 
 
 @cocotb.test()
 async def test_cpu_i2c_rw(dut):
-    global uart_tx_enable
-    global uart_tx_current_data
-    global uart_rx_bytes
-    global i2c_recv
+    """The program writes to and reads from an I2C target."""
+    i2c = I2cTarget()
+    await start_up(dut, "../i2c_rw_test.txt", UartReceiver(), UartTransmitter(), i2c)
+    await ClockCycles(dut.clk, 250000, rising=False)
+    assert i2c.received == [0x78, 37, 37, 37, 29, 37, 29, 37, 29, 204, 103]
 
-    i2c_recv = []
-    uart_rx_bytes = list()  # List of bytes sent by the CPU to the tb
-    # Create a logger for this testbench
-    logger = logging.getLogger("my_testbench")
-
-    logger.info("Startup sequence...")
-
-    # Start up
-    await start_up(dut, "../i2c_rw_test.txt")
-    logger.info("Testing I2C")
-
-    # Wait for a number of clock cycles
-    for i in range(250000):
-        await FallingEdge(dut.clk)
-
-        await do_spi(dut)
-        await do_uart_rx(dut)
-        await do_uart_tx(dut)
-        await do_i2c_slave(dut)
-
-    # Check the end result of the counter
-    print(i2c_recv)
-    assert i2c_recv == [0x78, 37, 37, 37, 29, 37, 29, 37, 29, 204, 103]
-    logger.info("Done!")
 
 @cocotb.test()
 async def test_cpu_i2c_mc(dut):
-    global uart_tx_enable
-    global uart_tx_current_data
-    global uart_rx_bytes
-    global i2c_recv
-
-    i2c_recv = []
-    uart_rx_bytes = list()  # List of bytes sent by the CPU to the tb
-    # Create a logger for this testbench
-    logger = logging.getLogger("my_testbench")
-
-    logger.info("Startup sequence...")
-
-    # Start up
-    await start_up(dut, "../i2c_mc_test.txt")
-    logger.info("Testing I2C Multicycle")
-
-    # Wait for a number of clock cycles
-    for i in range(100000):
-        await FallingEdge(dut.clk)
-
-        await do_spi(dut)
-        await do_uart_rx(dut)
-        await do_uart_tx(dut)
-        await do_i2c_slave(dut)
-
-    # Check the end result of the counter
-    print(i2c_recv)
-    assert i2c_recv == [32]
-    logger.info("Done!")
+    """The program writes to an I2C target with the multi-cycle I2C master."""
+    i2c = I2cTarget()
+    await start_up(dut, "../i2c_mc_test.txt", UartReceiver(), UartTransmitter(), i2c)
+    await ClockCycles(dut.clk, 100000, rising=False)
+    assert i2c.received == [32]
 
 
 @cocotb.test()
 async def test_cpu_gpio(dut):
-    # Create a logger for this testbench
-    logger = logging.getLogger("my_testbench")
-
-    logger.info("Startup sequence...")
-
-    # Start up
+    """The program adds one to gpio_in and writes the sum to gpio_out."""
     await start_up(dut, "../gpio_test.txt")
-    logger.info("Testing GPIO")
-
-    # Test 0111 + 1 = 1000
-    dut.gpio_in.set(Immediate(0b0111))
-    # Wait for a number of clock cycles
-
-    print(dut.gpio_out.get())
-    assert dut.gpio_out.get() == 0b0000
-    for i in range(5000):
-        await FallingEdge(dut.clk)
-        await do_spi(dut)
-
-    # Check the end result of the counter
-    print(dut.gpio_out.get())
-    assert dut.gpio_out.get() == 0b1000
-
-    # Test 1010 + 1 = 1011
-    dut.gpio_in.set(Immediate(0b1010))
-    # Wait for a number of clock cycles
-
-    for i in range(5000):
-        await FallingEdge(dut.clk)
-        await do_spi(dut)
-
-    # Check the end result of the counter
-    print(dut.gpio_out.get())
-    assert dut.gpio_out.get() == 0b1011
-    logger.info("Done!")
+    assert dut.gpio_out.get() == 0, f"gpio_out = {dut.gpio_out.get()} after the reset"
+    for gpio_in, expected in ((0b0111, 0b1000), (0b1010, 0b1011)):
+        dut.gpio_in.set(Immediate(gpio_in))
+        await ClockCycles(dut.clk, 5000, rising=False)
+        assert dut.gpio_out.get() == expected, f"gpio_out = {dut.gpio_out.get()}, expected {expected:04b}"
 
 
 @cocotb.test()
 async def test_cpu_wspr(dut):
-    # Create a logger for this testbench
-    logger = logging.getLogger("my_testbench")
-
-    logger.info("Startup sequence...")
-
-    # Start up
+    """The program sends a WSPR message after gpio_in[0] rises (check the waveform)."""
     await start_up(dut, "../wspr_test.txt")
-    logger.info("Testing WSPR")
-
-    for i in range(300000):
-        await FallingEdge(dut.clk)
-        await do_spi(dut)
-
-        if i == 19000:
-            dut.gpio_in.set(Immediate(0b0001))
-
-    print("WSPR TEST DONE. CHECK WAVEFORM!")
-    logger.info("Done!")
+    await ClockCycles(dut.clk, 19000, rising=False)
+    dut.gpio_in.set(Immediate(0b0001))
+    await ClockCycles(dut.clk, 300000 - 19000, rising=False)
 
 
 def riscv_top_runner():

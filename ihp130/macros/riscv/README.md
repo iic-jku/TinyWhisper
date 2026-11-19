@@ -271,6 +271,8 @@ The cocotb testbenches are located in `testbenches/cocotb/`.
 For `CELL=dsmod`, the simulation delegates to the sub-Makefile in `testbenches/cocotb/dsmod/` (PSD, SNDR sweep, and ramp tests).
 For all other cells the Python runner is invoked directly.
 
+The testbench of `riscv_top`, `testbenches/cocotb/riscv_top/riscv_top_tb.py`, is built like the testbenches of the [VLSI design course](https://iic-jku.github.io/vlsi-design/vlsi.html#sec-verification-anatomy). Each test loads a program (`testbenches/cocotb/riscv_top/*.txt`) into `SpiSram`, the model of the external SPI SRAM, and `start_up()` starts it together with the bus models the test needs: `UartReceiver` monitors `tx`, `UartTransmitter` drives `rx`, and `I2cTarget` answers on `sda_i`. One coroutine steps them at every falling edge of `clk`, and each test then compares what the models collected with the expected result, for example the bytes written to `SpiSram` with `fibonacci_writes()`, the reference model of `fib.txt`.
+
 ```sh
 make sim-rtl-cocotb                                    # run riscv_top RTL cocotb simulation
 make sim-rtl-cocotb CELL=dsmod                         # run the dsmod suite for the baseline ORDER=2 / OSR=64
