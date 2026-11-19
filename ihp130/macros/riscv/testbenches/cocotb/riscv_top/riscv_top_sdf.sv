@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: 2026 The TinyWhisper Team
 // SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
-// Description: Wrapper for the timed gate-level simulation of the
-// riscv_top netlist. Icarus Verilog annotates the delays of the SDF
-// file that the plusarg +SDF=<file> names.
+// Description: Wrapper for the timed gate-level simulation of the riscv_top netlist.
+// Icarus Verilog annotates the delays of the SDF file that the plusarg +SDF=<file> names.
 
 `default_nettype none
 

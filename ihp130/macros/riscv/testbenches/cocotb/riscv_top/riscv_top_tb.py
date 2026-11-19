@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2025-2026 The TinyWhisper Team
 # SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
-# Description: cocotb testbench for riscv_top, built like the testbenches of the VLSI design course. Each test loads a program into the model of the SPI SRAM, bus models drive the inputs and monitor the outputs of the CPU at every falling edge, and the test compares what they collected with the expected result.
+# Description: cocotb testbench for riscv_top. Each test loads a program into the model of the SPI SRAM, bus models drive the inputs and monitor the outputs of the CPU at every falling edge, as in the testbenches of the VLSI design course, and the test compares what they collected with the expected result.
 # Environment variables: SIM selects the simulator (default icarus). GL=1 (Icarus only) simulates the netlist final/nl/riscv_top.nl.v of the macro, SDF=1 adds the delays of the SDF file of SDF_CORNER, and SDF_TRIPLE selects the min, typ or max value of each delay.
 # CLK_PERIOD_NS sets the clock (default 56 MHz), and COCOTB_TEST_FILTER selects the tests (GL_TESTS of the Makefile).
 
@@ -18,7 +18,7 @@ sim = os.getenv("SIM", "icarus")
 pdk_root = os.getenv("PDK_ROOT", Path("~/.ciel").expanduser())
 pdk = os.getenv("PDK", "ihp-sg13g2")
 scl = os.getenv("SCL", "sg13g2_stdcell")
-# GL=1 selects the gate-level netlist; anything else (unset, "0", "") stays in RTL mode.
+# GL=1 selects the gate-level netlist. Anything else (unset, "0", "") stays in RTL mode.
 gl = os.getenv("GL", "0").strip().lower() in ("1", "true", "yes", "on")
 # SDF=1 adds the delays of the SDF file of SDF_CORNER to the netlist, SDF_TRIPLE selects the min, typ or max value of each delay.
 sdf        = os.getenv("SDF", "0").strip().lower() in ("1", "true", "yes", "on")
@@ -27,7 +27,7 @@ sdf_triple = os.getenv("SDF_TRIPLE", "typ")
 
 hdl_toplevel = "riscv_top"
 
-CLK_PERIOD_NS = float(os.getenv("CLK_PERIOD_NS", round(1e3 / 56, 4)))  # 56 MHz
+CLK_PERIOD_NS = round(float(os.getenv("CLK_PERIOD_NS", 1e3 / 56)), 4)  # 56 MHz, cocotb rejects a period that is not a whole number of fs
 UART_WAIT_CYCLES = 510  # clock cycles per bit at 115200 baud
 
 
@@ -456,8 +456,8 @@ def riscv_top_runner():
         sdf_file = proj_path / f"../../../final/sdf/{sdf_corner}/{hdl_toplevel}__{sdf_corner}.sdf"
         if not sdf_file.is_file():
             raise SystemExit(f"No SDF file {sdf_file} found. Run 'make build-top' (or 'make copy-final') first.")
-        # The wrapper instantiates the netlist and annotates the SDF file. -gspecify keeps the delays of the cell
-        # models, -ginterconnect the wire delays of the layout, and -T selects the value of each min:typ:max delay.
+        # The wrapper instantiates the netlist and annotates the SDF file.
+        # -gspecify keeps the delays of the cell models, -ginterconnect the wire delays of the layout, and -T selects the value of each min:typ:max delay.
         toplevel   = f"{hdl_toplevel}_sdf"
         sources   += [proj_path / f"{toplevel}.sv"]
         build_args = ["-DSIM", "-gspecify", "-ginterconnect", f"-T{sdf_triple}"]

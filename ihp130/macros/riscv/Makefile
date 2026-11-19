@@ -186,7 +186,7 @@ lint-verilog-all: ## Lint all Verilog source files (dsmod, cordic_iterative, lo_
 # Testbench for the Xschem simulation targets (default: <CELL>_tb_tran)
 # Override with: make <target> TB=<testbenchname>
 TB ?= $(CELL)_tb_tran
-# cocotb tests of the gate-level simulations, a regular expression (default: the Fibonacci program, all tests take about 11 h on the netlist)
+# cocotb tests of the gate-level simulations, a regular expression (default: the Fibonacci program, all eight tests take 1 h 51 min on a laptop)
 # Override with: make <target> GL_TESTS=<regex>
 GL_TESTS ?= test_cpu_fibonacci_fast
 # LibreLane corner of the SDF file for sim-gl-sdf-cocotb (default: DEFAULT_CORNER of flow/librelane/config.yaml)
