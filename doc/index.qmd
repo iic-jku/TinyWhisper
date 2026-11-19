@@ -41,7 +41,7 @@ format:
 ---
 
 ::: {.callout-important}
-This repository requires the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) container with tag `2026.11` or later. All commands below run inside the container, from the `ihp130/` folder of the repository unless a command names another folder. `2026.11` is the first image with the kpex 0.9.0 that `klayout-pex` needs, see @sec-requirements.
+This repository requires the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) container with tag `2026.11` or later. All commands below run inside the container, from the `ihp130/` folder of the repository unless a command names another folder. `2026.11` is the first image with the `sak-pex.sh -k` and the kpex 0.10.0 that `klayout-pex` uses, see @sec-requirements.
 :::
 
 ::: {.callout-note}
@@ -50,7 +50,7 @@ The first silicon of the March 2026 tapeout (`SoC4219`) is back from fabrication
 
 # Overview {#sec-overview}
 
-TinyWhisper is a fully integrated short-wave transmitter for amateur radio in the 130 nm IHP SG13CMOS technology, designed with open-source tools and the open-source `ihp-sg13g2` PDK [@Herman_2024]. A RISC-V CPU computes the baseband, a CORDIC and two delta-sigma modulators turn it into 1-bit I and Q streams, and an analog IQ modulator filters them and mixes them with a four-phase 25 % LO up to the 80 m, 40 m, 20 m or 10 m band. WSPR (Weak Signal Propagation Reporter) is the headline mode, and because the front-end is a generic IQ modulator, the same chip can also send FT8, SSB and CW. The 2 × 2 mm² chip was taped out on the IHP open MPW run of March 2026 as `SoC4219`, and the bare dies are back from fabrication (@fig-die).
+TinyWhisper is a fully integrated short-wave transmitter for amateur radio in the 130 nm IHP SG13G2 technology, designed with open-source tools and the open-source `ihp-sg13g2` PDK [@Herman_2024]. A RISC-V CPU computes the baseband, a CORDIC and two delta-sigma modulators turn it into 1-bit I and Q streams, and an analog IQ modulator filters them and mixes them with a four-phase 25 % LO up to the 80 m, 40 m, 20 m or 10 m band. WSPR (Weak Signal Propagation Reporter) is the headline mode, and because the front-end is a generic IQ modulator, the same chip can also send FT8, SSB and CW. The 2 × 2 mm² chip was taped out on the IHP open MPW run of March 2026 as `SoC4219`, and the bare dies are back from fabrication (@fig-die).
 
 WSPR is pronounced *whisper* [@Taylor_2010], which gave the chip its name: a tiny chip that whispers WSPR beacons around the world.
 
@@ -60,18 +60,20 @@ The project has three parts:
 - **A flow.** Xschem, ngspice and CACE for the analog macro, Verilator, Icarus Verilog, cocotb and LibreLane for the digital macro, KLayout, Magic, Netgen, kpex and gdscheck for physical verification, and the LibreLane chip flow for the pad ring and the top level. Makefiles drive every step inside the IIC-OSIC-TOOLS container [@Pretl_2023; @Fath_2024].
 - **A system.** C firmware for the CPU, a Python reference of the WSPR encoder, an automatically generated bonding diagram for the QFN-48 package, and a planned application board with a 3D-printed enclosure.
 
-![Block diagram of the TinyWhisper ASIC (blue frame) and the external RF circuitry: band-pass filter, power amplifier and antenna.](fig/tinywhisper_blockdiagramm.png){#fig-blockdiagram width=90%}
+![Concept block diagram of the TinyWhisper ASIC (blue frame) and the external RF circuitry. On the chip, the four-phase LO generator takes the place of the drawn phase shifter, the four mixer outputs are joined on the board, and a low-pass filter follows the power amplifier.](fig/tinywhisper_blockdiagramm.png){#fig-blockdiagram width=90%}
 
 ## Videos {#sec-video}
 
 Two videos of about 70 seconds introduce TinyWhisper to a general audience, the first in English and the second in German.
 
+::: {.content-visible when-format="html"}
 <p align="center">
   <video src="video/tinywhisper_intro_en.mp4" poster="video/tinywhisper_intro_en.jpg" controls preload="metadata" title="TinyWhisper introduction video in English" style="width: 45%; min-width: 280px;"></video>
   <video src="video/tinywhisper_intro_de.mp4" poster="video/tinywhisper_intro_de.jpg" controls preload="metadata" title="TinyWhisper introduction video in German" style="width: 45%; min-width: 280px;"></video>
 </p>
+:::
 
-::: {.content-visible unless-format="html"}
+::: {.content-visible when-format="pdf"}
 The videos play in the [online documentation](https://iic-jku.github.io/TinyWhisper/index.html#sec-video).
 :::
 
@@ -89,14 +91,14 @@ TinyWhisper demonstrates what is possible with current open-source tools and ope
 
 | Parameter | Value |
 | :--- | :--- |
-| Technology | IHP SG13CMOS, 130 nm CMOS, open-source collateral of the `ihp-sg13g2` PDK |
+| Technology | IHP SG13G2, 130 nm, with the open-source `ihp-sg13g2` PDK |
 | Die area | 2.0 × 2.0 mm² (4 mm²), core area 1.27 × 1.27 mm² |
-| Supply voltages | 1.5 V core (`VDD`), 3.3 V IO (`IOVDD`) |
+| Supply voltages | 1.5 V core (`VDD`), 3.3 V IO (`IOVDD`), so the digital outputs swing to 3.3 V |
 | Clock | 56 MHz from an external source, constrained at 17 ns |
 | Pads | 56: clock, reset, 6 input, 9 output, 9 bidirectional, 8 analog, 7 `VDD`, 9 `VSS`, 3 `IOVDD`, 3 `IOVSS` |
 | Package | QFN-48, open-molded plastic package, `VSS` and `IOVSS` through the exposed pad |
-| Digital macro | `riscv_top`, 700 × 1130 µm: RISC-V CPU, SPI SRAM interface, UART, two I2C masters, 4 GPIO inputs and outputs, CORDIC, delta-sigma modulators, LO generator |
-| Analog macro | `iqmod_top`, 337.0 × 142.3 µm: two third-order MFB low-pass filters, two passive mixers, input switches |
+| Digital macro | `riscv_top`, 700 × 1130 $\mu$m: RISC-V CPU, SPI SRAM interface, UART, two I2C masters, 4 GPIO inputs and outputs, CORDIC, delta-sigma modulators, LO generator |
+| Analog macro | `iqmod_top`, 337.0 × 142.3 $\mu$m: two third-order MFB low-pass filters, two passive mixers, input switches |
 | Bands | 80 m, 40 m, 20 m and 10 m, with the LO at 3.5, 7, 14 and 28 MHz |
 | Modulation | any I/Q baseband the CPU computes: WSPR, FT8, SSB, CW |
 | Temperature range | -40 °C to +125 °C, the range of the STA corners |
@@ -106,27 +108,29 @@ TinyWhisper demonstrates what is possible with current open-source tools and ope
 
 ## Simulated Performance at a Glance {#sec-glance}
 
-All numbers are simulated, at the typical corner and 1.5 V unless the table says otherwise. Silicon has not been measured yet, see @sec-tapeout.
+All numbers are simulated, at the typical corner and 1.5 V unless the table says otherwise. The view of each analog number is given: the schematic, or the Magic post-layout netlist of the tapeout, on which the committed analog results of July and August 2026 were simulated. Silicon has not been measured yet, see @sec-tapeout.
 
 | Quantity | Value | Section |
 | :--- | :--- | :--- |
-| Filter corner, 3 dB below the dc gain | 401 kHz, target 400 kHz | @sec-iqmod-results |
-| Filter dc gain | -0.45 dB | @sec-iqmod-results |
-| Filter attenuation at 56 MHz | 130 dB | @sec-iqmod-results |
-| Filter corner over 200 process Monte Carlo samples | 345 kHz to 528 kHz | @sec-iqmod-results |
-| Filter output noise, 1 Hz to 400 kHz | 229 µV~rms~ | @sec-iqmod-results |
-| OTA open-loop gain and unity-gain frequency | 27.4 dB and 93 MHz | @sec-iqmod-ota |
-| Mixer switch on-resistance, 0 V to 1.5 V | 4.6 Ω to 12.4 Ω | @sec-iqmod-mixer |
-| RF output, 10 m band, at the 1 kΩ load of the band-pass model | 0.38 V peak, about -12 dBm | @sec-iqmod-results |
-| Delta-sigma modulator peak SNDR, second order, OSR 64 | 68.7 dB at -2 dBFS | @sec-dsm |
+| Filter corner, 3 dB below the dc gain, post-layout | 401 kHz, target 400 kHz | @sec-iqmod-results |
+| Filter dc gain, post-layout | -0.45 dB | @sec-iqmod-results |
+| Filter attenuation at 56 MHz, post-layout | 130 dB | @sec-iqmod-results |
+| Filter corner over 200 process Monte Carlo samples, schematic | 345 kHz to 528 kHz | @sec-iqmod-results |
+| Filter output noise, 1 Hz to 400 kHz, schematic | 229 $\mu$V~rms~ | @sec-iqmod-results |
+| OTA open-loop gain and unity-gain frequency, post-layout | 27.4 dB and 93 MHz | @sec-iqmod-ota |
+| Mixer switch on-resistance, 0 V to 1.5 V, post-layout | 4.6 $\Omega$ to 12.4 $\Omega$ | @sec-iqmod-mixer |
+| IQ modulator supply power, 10 m band | 24.4 mW schematic, 24.5 mW post-layout | @sec-iqmod-results |
+| RF power into the band-pass model and its 1 k$\Omega$ load, 10 m band | 71.3 $\mu$W (-11.5 dBm) schematic, 64.6 $\mu$W (-11.9 dBm) post-layout | @sec-iqmod-results |
+| Delta-sigma modulator SNDR at OSR 32, 124.6 kHz | 52.5 dB first order at full scale, 57.4 dB second order at 0.90 of full scale | @sec-dsm |
+| Delta-sigma modulator peak SNDR, second order, OSR 64, 8.1 kHz | 68.7 dB at -2 dBFS | @sec-dsm |
 | Frequency resolution of the baseband at OSR 32 | 1.63 mHz | @sec-freqgen |
 | `riscv_top` worst setup and hold slack over five corners, 17 ns | +2.34 ns and +0.23 ns | @sec-riscv-hardening |
 | `riscv_top` power at `nom_typ_1p50V_25C` | 20.1 mW | @sec-riscv-hardening |
-| Chip worst setup and hold slack over five corners, 17 ns | +1.84 ns and +0.08 ns | @sec-top |
+| Chip worst setup and hold slack over five corners, 17 ns, August 2026 build | +1.84 ns and +0.08 ns | @sec-top |
 
 : Simulated performance of TinyWhisper. {#tbl-glance tbl-colwidths="[50,30,20]"}
 
-The [chip dashboard](dashboard.html) shows these numbers with their sources, the filter curves, the Monte Carlo samples and the CPU timing per corner. `make dashboard` rebuilds it from the committed results.
+The [chip dashboard](dashboard.html) shows these numbers with the report each one comes from, the filter curves, the Monte Carlo samples and the CPU timing per corner. `make dashboard` rebuilds it from the committed results.
 
 # WSPR {#sec-wspr}
 
@@ -245,10 +249,9 @@ Everything runs inside the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-
 | :--- | :--- | :--- |
 | IIC-OSIC-TOOLS | `2026.11` or later | every target |
 | PDK | `ihp-sg13g2`, set by `.designinit` or `sak-pdk ihp-sg13g2` | every target except `help` and the clean targets |
-| kpex | 0.9.0 or later, in the image from `2026.11` on | `klayout-pex` |
+| `sak-pex.sh -k`, kpex | kpex 0.10.0 or later, both in the image from `2026.11` on | `klayout-pex` |
 | Git submodules | `make init-submodules` | the ArtistIC logo in `flow/artistic/`, the firmware libraries in `software/c_toolchain/` |
 | RISC-V GNU toolchain | `rv32e` with the `ilp32e` ABI, and CMake 3.30 or later | building the firmware, see @sec-software |
-| Python | 3.13, as cocotb 2.0.1 does not run on 3.14 | the delta-sigma testbench of the CPU |
 
 : Tools and versions. {#tbl-requirements tbl-colwidths="[22,43,35]"}
 
@@ -269,7 +272,7 @@ make help                     # every target of the chip Makefile
 make sim-rtl-cocotb           # chip RTL simulation
 make build-top                # chip LibreLane run, logo and fill, render
 make regression               # tool and flow smoke test
-make all                      # the complete chip flow
+make all                      # chip flow, stops at the gdscheck hits
 
 make -C macros/riscv lint-verilog-all            # Verilator lint of the CPU
 make -C macros/riscv sim-rtl-cocotb              # CPU RTL simulation
@@ -307,10 +310,10 @@ Each macro, each IP block and the chip have their own `Makefile`. The chip integ
 | Step | Tools | Make target, folder | Output |
 | :--- | :--- | :--- | :--- |
 | RTL lint | Verilator | `lint-verilog-all`, riscv | |
-| RTL simulation | Icarus Verilog, cocotb | `sim-rtl-verilog`, `sim-rtl-cocotb`, riscv and chip | waveforms |
+| RTL simulation | Icarus Verilog, cocotb | `sim-rtl-verilog`, riscv, `sim-rtl-cocotb`, riscv and chip | waveforms |
 | FPGA emulation | Yosys, nextpnr, ecppack or icepack | `build-fpga`, riscv | bitstream |
 | CPU hardening | LibreLane | `build-top`, riscv | `macros/riscv/final/` |
-| Gate-level simulation | Icarus Verilog, cocotb, ngspice with XSPICE | `sim-gl-cocotb`, `sim-gl-sdf-cocotb`, `sim-gl-xschem`, riscv and chip | waveforms, `plot_simulations/` |
+| Gate-level simulation | Icarus Verilog, cocotb, ngspice with XSPICE | `sim-gl-cocotb`, `sim-gl-xschem`, riscv and chip, `sim-gl-sdf-cocotb`, riscv | waveforms, `plot_simulations/` |
 | Equivalence check | EQY | `lec`, riscv | pass or fail per partition |
 | Analog simulation | Xschem, ngspice | `sim-xschem`, `sim-all`, iqmod | `plot_simulations/` |
 | Characterization | CACE, ngspice | `sim-cace`, iqmod | `verification/cace/results/` |
@@ -322,20 +325,20 @@ Each macro, each IP block and the chip have their own `Makefile`. The chip integ
 | Bonding diagram | KLayout Python | `bondplan`, chip | `packaging/` |
 | Dashboard | Python | `dashboard`, chip | `doc/dashboard.html` |
 | Release | | `release VERSION=<version>`, chip | `release/v.<version>/` |
-| Everything | all of the above except the macro builds | `all`, chip | |
+| Chip flow | IP blocks, chip assembly, chip DRC, bonding diagram | `all`, chip | |
 | Smoke test | a subset of the above | `regression`, `regression-full`, chip | |
 
 : Flow steps and their Makefile targets. {#tbl-flow tbl-colwidths="[18,24,33,25]"}
 
-`make all` in `ihp130/` runs four steps: `build-all` builds the IP blocks and the chip with `build-top`, then `klayout-drc-regular` and `gdscheck-drc-regular` check the final GDS, then `sim-all` runs the chip simulations on the netlists of the same run, and `bondplan` draws the bonding diagram last. `build-top` runs LibreLane without its DRC steps, because IHP's `metal1_pin_offgrid` rule fails on the pad ring ([IHP-Open-PDK#683](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/683)), copies the reports, GDS, netlists and render back, adds the logo and the fill, and renders the final GDS. `build-all` does not rebuild the macros, so `make build-riscv` and `make build-iqmod` run separately. Every macro and IP `make all` follows the same rule: simulations come last, so they use what the same invocation has just built.
+`make all` in `ihp130/` runs three steps: `build-all` builds the IP blocks and the chip with `build-top`, then `klayout-drc-regular` and `gdscheck-drc-regular` check the final GDS, and `bondplan` draws the bonding diagram last. Its `sim-all` line is commented out, so run `make sim-all` separately after a build. `build-top` runs LibreLane without its DRC steps, because IHP's `metal1_pin_offgrid` rule fails on the pad ring ([IHP-Open-PDK#683](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/683)), copies the reports, GDS, netlists and render back, adds the logo and the fill, and renders the final GDS. `build-all` does not rebuild the macros, so `make build-riscv` and `make build-iqmod` run separately. The `make all` of each macro runs its simulations last, so they use what the same invocation has just built.
 
 # Digital Core: The RISC-V Macro {#sec-riscv}
 
-![Layout of `riscv_top` from the LibreLane run (700 × 1130 µm).](fig/sim/riscv_top_librelane.png){#fig-riscv-layout width=45%}
+![Layout of `riscv_top` from the LibreLane run (700 × 1130 $\mu$m).](fig/sim/riscv_top_librelane.png){#fig-riscv-layout width=45%}
 
 ## CPU {#sec-cpu}
 
-`riscv_top` contains a hand-written multi-cycle RISC-V CPU in SystemVerilog, which steps through fetch, decode and execute states without a pipeline. It implements the RV32E base: 16 registers of 32 bits, the integer register and immediate instructions, loads and stores of bytes, half words and words, branches, `jal`, `jalr`, `lui` and `auipc`. Of the CSR and privileged instructions it has `csrr`, `csrw` and `mret`. It has no multiplier and no compressed instructions, and `ecall`, `ebreak`, `fence` and `wfi` raise an illegal-instruction exception. Firmware is therefore built with `-march=rv32e_zicsr -mabi=ilp32e`.
+`riscv_top` (@fig-riscv-layout) contains a hand-written multi-cycle RISC-V CPU in SystemVerilog, which steps through fetch, decode and execute states without a pipeline. It implements the RV32E base: 16 registers of 32 bits, the integer register and immediate instructions, loads and stores of bytes, half words and words, branches, `jal`, `jalr`, `lui` and `auipc`. Of the CSR and privileged instructions it has `csrr`, `csrw` and `mret`. It has no multiplier and no compressed instructions, and `ecall`, `ebreak`, `fence` and `wfi` raise an illegal-instruction exception. Firmware is therefore built with `-march=rv32e_zicsr -mabi=ilp32e`.
 
 The chip has no on-chip program memory and no boot ROM. The CPU fetches every instruction over SPI from an external SRAM, the APS6404L on the planned board, starting at address 0. The program counter has 23 bits, which covers the 8 MB of that SRAM. A host has to load the SRAM before reset is released, see [TW-E02](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/errata.md#tw-e02-sram-bus-pins-are-always-driven-also-in-reset).
 
@@ -364,7 +367,7 @@ The multi-command I2C master is adapted from the one of [Chance Reimer](https://
 
 : Memory map of `riscv_top`. The firmware names come from `software/c_toolchain/mmio.h`, where `FREQ_LO_DIV` is called `FREQ_DS_LO_CONF`. {#tbl-memory-map tbl-colwidths="[24,32,44]"}
 
-A load beyond `0x800068` raises a load access fault. The CPU has no store access fault, and [TW-E21](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/errata.md#tw-e21-memory-map-access-fault-semantics) lists the other corner cases of the map.
+A load or a store beyond `0x800068` raises a load access fault (cause 5), and so does a read of `GPIO_OUT`, so keep a copy of the output value in firmware. The CPU has no store access fault, and [TW-E21](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/errata.md#tw-e21-memory-map-access-fault-semantics) lists the other corner cases of the map.
 
 ## Interrupts and CSRs
 
@@ -386,7 +389,7 @@ Interrupts are always vectored to `mtvec` plus four times the cause, and `mret` 
 ## Peripherals
 
 - **SPI SRAM interface.** `sclk` runs at $f_\mathrm{clk}/2$ = 28 MHz, `si` and `so` carry the data, and `sram_ce` is active high, as on the pico-ice FPGA board, which inverts it. An SRAM with an active-low chip select needs an inverter on the board ([TW-E01](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/errata.md#tw-e01-sram-chip-select-is-active-high)).
-- **UART.** One transmitter and one receiver, 115200 baud nominal, with programmable cycles per bit and an interrupt on every received byte. The receiver samples each bit at its leading edge, so keep its default and let the host send two stop bits ([TW-E07](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/errata.md#tw-e07-uart-rx-samples-each-bit-at-its-leading-edge)).
+- **UART.** One transmitter and one receiver, 115200 baud nominal, with programmable cycles per bit and an interrupt on every received byte. The transmitter resets to 511 clocks per bit, 109589 baud, so write `UART_TX_CPB` = 485 for 115200 baud ([TW-E08](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/errata.md#tw-e08-uart-default-bit-period-is-49--slow)). The receiver samples each bit at its leading edge, so keep its default of 510 and let the host send two stop bits ([TW-E07](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/errata.md#tw-e07-uart-rx-samples-each-bit-at-its-leading-edge)).
 - **I2C.** Master 1 sends a device address and up to four bytes per transaction. The multi-command master handles sub-addresses and longer transfers, but its reads are broken on this silicon, so read through master 1 (TW-E10 to TW-E13). SDA and SCL are driven push-pull.
 - **GPIO.** Four inputs and four outputs. `gpio_in[0]` doubles as the external interrupt.
 - **Timer.** A 64-bit cycle counter with a compare register for the timer interrupt. The demo firmware switches the WSPR symbols with it.
@@ -401,7 +404,7 @@ $$
 f_\mathrm{BB} = f_c \cdot \frac{f_\mathrm{clk}}{\mathrm{OSR} \cdot 2^{30}}, \qquad \Delta f = \frac{f_\mathrm{clk}}{\mathrm{OSR} \cdot 2^{30}},
 $$ {#eq-fbb}
 
-with $f_c$ a signed 30-bit number. The resolution is $\Delta f$ = 1.63 mHz at OSR 32 and 0.20 mHz at OSR 256. `FREQ_OSR_FC` holds the OSR selection in bits 31 to 30 (0 to 3 for OSR 32, 64, 128 and 256) and $f_c$ in bits 29 to 0. Its reset value 76450417 selects OSR 32 and 124.6 kHz. A negative $f_c$ gives a negative frequency, which swaps the sideband. The CORDIC gain is 1.64676, so `CORDIC_I` = $0.9 \cdot 2^{29}/1.64676$ = 293414793 gives 90 % of full scale. The reset value of `CORDIC_I` gives 99.9995 % of full scale, which overloads the second-order modulator ([TW-E05](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/errata.md#tw-e05-second-order-modulator-overloads-at-the-reset-amplitude)).
+with $f_c$ a signed 30-bit number. The resolution is $\Delta f$ = 1.63 mHz at OSR 32 and 0.20 mHz at OSR 256. `FREQ_OSR_FC` holds the OSR selection in bits 31 to 30 (0 to 3 for OSR 32, 64, 128 and 256) and $f_c$ in bits 29 to 0. Its reset value 76450417 selects OSR 32 and 124.6 kHz. A negative $f_c$ gives a negative frequency, which swaps the sideband. The CORDIC gain is 1.6467603, so `CORDIC_I` = $0.9 \cdot 2^{29}/1.6467603$ = 293414793 gives 90 % of full scale. The reset value of `CORDIC_I` gives 99.9995 % of full scale, which overloads the second-order modulator ([TW-E05](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/errata.md#tw-e05-second-order-modulator-overloads-at-the-reset-amplitude)).
 
 | Bit | Name | Reset | Function |
 | :---: | :--- | :---: | :--- |
@@ -426,7 +429,7 @@ with $f_c$ a signed 30-bit number. The resolution is $\Delta f$ = 1.63 mHz at OS
 
 : `FREQ_LO_DIV`. {#tbl-freq-lo-div tbl-colwidths="[8,14,10,68]"}
 
-With the static LO of `lo_dbg` the mixer switches stay on or off, so the filter can be measured differentially through the RF pads. `DS_DEFAULTS` forces single modulator outputs to a fixed level in the same spirit. The outputs of the modulators and the LO generator also leave the chip on the eight bidirectional pads, and with their output enables cleared these pads drive the IQ modulator instead, so the analog macro can be tested with external signals.
+With the static LO of `lo_dbg` the mixer switches stay on or off, so the filter can be measured differentially through the RF pads. The LO generator holds its outputs low in reset, so the static levels need `reset_n` = 1 in `FREQ_STATUS`. `DS_DEFAULTS` forces single modulator outputs to a fixed level in the same spirit. The outputs of the modulators and the LO generator also leave the chip on the eight bidirectional pads, and with their output enables cleared these pads drive the IQ modulator instead, so the analog macro can be tested with external signals.
 
 ## Delta-Sigma Modulator {#sec-dsm}
 
@@ -447,7 +450,7 @@ $$
 \mathrm{SNR} = 6.02 N + 1.76 + 10 \log_{10}\left(\frac{2 L + 1}{\pi^{2L}}\right) + (2L + 1)\, 10 \log_{10}(\mathrm{OSR}).
 $$ {#eq-dsm-snr}
 
-For $N = 1$ and OSR 64, a first-order modulator reaches 56.8 dB and a second-order one 85.2 dB. The second order shapes the noise with 40 dB per decade, which the third-order filter of @sec-iqmod-lpf outweighs with its 60 dB per decade. The cocotb bench of the modulator (`make -C macros/riscv sim-rtl-cocotb CELL=dsmod`) measures a peak SNDR of 68.7 dB at -2 dBFS for the second order at OSR 64, below the ideal value (@fig-dsm). The second-order integrators do not saturate, so keep the amplitude at or below 90 % of full scale.
+For $N = 1$ and OSR 64, a first-order modulator reaches 56.8 dB and a second-order one 85.2 dB. The second order shapes the noise with 40 dB per decade, which the third-order filter of @sec-iqmod-lpf outweighs with its 60 dB per decade. The cocotb bench of the modulator (`make -C macros/riscv sim-rtl-cocotb CELL=dsmod`) measures a peak SNDR of 68.7 dB at -2 dBFS for the second order at OSR 64 with an 8.1 kHz tone, below the ideal value (@fig-dsm). At the OSR 32 that WSPR uses and the 124.6 kHz of the 10 m band, the errata give 52.5 dB for the first order at full scale, the reset default, and 57.4 dB for the second order at 0.90 of full scale. The second-order integrators do not saturate, and at full scale the second order drops to 2.8 dB, so keep the amplitude at or below 90 % of full scale before `ds_mode` = 1.
 
 ::: {#fig-dsm layout-ncol=2}
 ![Output spectrum at -3 dBFS.](fig/sim/dsmod_psd_ord2_osr64_amp-3dBFS.png){#fig-dsm-psd}
@@ -459,7 +462,7 @@ Second-order delta-sigma modulator at OSR 64 and 56 MHz with an 8.1 kHz input to
 
 ## LO Generator {#sec-lo-gen}
 
-The LO generator derives four phases I, Q, Ix and Qx with 25 % duty cycle from the clock. For the 10 m band the I phases toggle on the rising and the Q phases on the falling clock edge, so the LO runs at $f_\mathrm{clk}/2$ = 28 MHz and its I/Q balance depends on the duty cycle of the clock ([TW-E27](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/errata.md#tw-e27-10-m-band-image-rejection-limited-by-clock-duty-and-lo-path-skew)). For the other bands a counter divides the clock by 4, 8 or 16, and the phases come from registered counter states. The LO at the mixer therefore sits at the LO frequency of the band itself, and no oscillator at twice the RF frequency is needed [@Pretl_RFIC].
+The LO generator derives four phases I, Q, Ix and Qx with 25 % duty cycle from the clock. For the 10 m band the I phases toggle on the rising and the Q phases on the falling clock edge, so the LO runs at $f_\mathrm{clk}/2$ = 28 MHz and its I/Q balance depends on the duty cycle of the clock ([TW-E27](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/errata.md#tw-e27-10-m-band-image-rejection-limited-by-clock-duty-and-lo-path-skew)). For the other bands a counter divides the clock by 4, 8 or 16, and the phases come from registered counter states. Because the 10 m band uses both clock edges, the clock runs at only twice the highest LO, where a quadrature divider that works on one edge would need a clock at four times the LO [@Pretl_RFIC].
 
 ## Hardening {#sec-riscv-hardening}
 
@@ -467,7 +470,7 @@ LibreLane hardens the macro from the RTL at a 17 ns clock period, which leaves m
 
 | Parameter | Value |
 | :--- | :--- |
-| Die area | 700 × 1130 µm, placement density 40 % |
+| Die area | 700 × 1130 $\mu$m, placement density 40 % |
 | Cells after synthesis | 25455, 0.343 mm² of standard-cell area |
 | STA corners | `nom_fast_1p32V_m40C`, `nom_fast_1p65V_m40C`, `nom_slow_1p35V_125C`, `nom_typ_1p20V_25C`, `nom_typ_1p50V_25C` |
 | Worst setup slack | +2.34 ns, `nom_slow_1p35V_125C` |
@@ -494,9 +497,9 @@ Every macro output that drives a pad gets a `sg13g2_buf_4` through `INSERT_ECO_B
 
 : Verification of the CPU macro. {#tbl-riscv-verification tbl-colwidths="[22,28,50]"}
 
-The gate-level tests release reset and step their bus models at the falling clock edge, since the clock tree of the netlist delays the clock at every flip-flop. All eight tests take almost 2 h on the netlist, so the default runs only the Fibonacci test, and `GL_TESTS=` runs all of them. Icarus Verilog annotates the SDF delays but checks no setup or hold times, so timing sign-off rests on the STA of LibreLane.
+The gate-level tests of the CPU release reset and step their bus models at the falling clock edge, since the clock tree of the netlist delays the clock at every flip-flop. All eight tests take almost 2 h on the netlist, so the default runs only the Fibonacci test, and `GL_TESTS=` runs all of them. Icarus Verilog annotates the SDF delays but checks no setup or hold times, so timing sign-off rests on the STA of LibreLane.
 
-`make lec` does not pass yet: EQY proves most of the 264 partitions of the netlist, but more than 40 fail for reasons that are still open, so it stays out of `make all`. The XSPICE model in `netlist/xspice/riscv_top.xspice` is a committed source file. It was generated once with the frequency generation free-running in `rtl/memory.sv`, because the mixed-signal bench has no SRAM model and the CPU would never fetch an instruction, and `generate-xspice` skips itself while that line is commented out. A PEX netlist of the whole macro is not practical, an extraction runs for hours, so the macro is verified with the gate-level simulations and the STA instead.
+`make lec` does not pass yet: EQY proves most partitions of the netlist, but about 40 fail for reasons that are still open, so it stays out of `make all`. The XSPICE model in `netlist/xspice/riscv_top.xspice` is a committed source file. It was generated once with the frequency generation free-running in `rtl/memory.sv`, because the mixed-signal bench has no SRAM model and the CPU would never fetch an instruction, and `generate-xspice` skips itself while that line is commented out. A PEX netlist of the whole macro is not practical, an extraction runs for hours, so the macro is verified with the gate-level simulations and the STA instead.
 
 The macro no longer fits the iCE40UP5K of the pico-ice and iCEBreaker boards, 6132 logic cells against 5280, so `build-fpga` builds for the ECP5-85F of the ULX3S by default, where it closes timing at 51 MHz. The [FPGA README](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/macros/riscv/fpga/README.md) has the pin assignment of every board.
 
@@ -510,9 +513,9 @@ The macro no longer fits the iCE40UP5K of the pico-ice and iCEBreaker boards, 61
 - The **MFB filters** turn the 1-bit streams into the analog baseband.
 - The **mixers** chop the differential baseband with the four-phase 25 % LO and deliver four single-ended RF outputs.
 
-The macro runs from the 1.5 V core supply, shares `VDD` and `VSS` with the CPU, and is switched off with `analog_en`.
+The macro runs from the 1.5 V core supply, shares `VDD` and `VSS` with the CPU, and is switched off with `analog_en`. @fig-iqmod-layout shows its layout.
 
-![Layout of `iqmod_top` (337.0 × 142.3 µm): the I and Q filters on the left, the mixers on the right.](fig/sim/iqmod_top_white.png){#fig-iqmod-layout width=100%}
+![Layout of `iqmod_top` (337.0 × 142.3 $\mu$m): the I and Q filters on the left, the mixers on the right.](fig/sim/iqmod_top_white.png){#fig-iqmod-layout width=100%}
 
 ## Low-Pass Filter {#sec-iqmod-lpf}
 
@@ -524,42 +527,56 @@ A single OTA realizes the third-order Butterworth response in a fully differenti
 
 ## OTA {#sec-iqmod-ota}
 
-The OTA is built from CMOS inverters only, an approach that started with transconductance-C filters [@Nauta_1992]. Five inverter-based topologies were sized with gm/ID notebooks in `scripts/sizing/` and compared. The chosen one is a hybrid of the Barthelemy OTA [@Barthelemy_2008] and the Manfredini amplifier [@Manfredini_2020], which keeps the output swing of the plain inverter while its common-mode feedback raises the CMRR [@Rodovalho_2023]. @fig-ota shows the circuit. All its inverters use L = 1.0 µm with a PMOS-to-NMOS width ratio of 6 to 1.
+The OTA is built from CMOS inverters only, an approach that started with transconductance-C filters [@Nauta_1992]. Five inverter-based topologies were sized with gm/ID notebooks in `scripts/sizing/` and compared. The chosen one is a hybrid of the Barthelemy OTA [@Barthelemy_2008] and the Manfredini amplifier [@Manfredini_2020], which keeps the output swing of the plain inverter while its common-mode feedback raises the CMRR [@Rodovalho_2023]. @fig-ota shows the circuit. All its inverters use L = 1.0 $\mu$m with a PMOS-to-NMOS width ratio of 6 to 1.
 
 ![Inverter-based hybrid Barthelemy and Manfredini OTA. The enable $V_\mathrm{en}$ switches the OTA off with `analog_en`.](fig/sim/inverter_based_ota_hybrid_bm_circuit.svg){#fig-ota width=70%}
 
-| OTA parameter | Value |
-| :--- | :--- |
-| Open-loop gain | 27.4 dB |
-| -3 dB frequency and unity-gain frequency | 4.0 MHz and 93 MHz |
-| Output swing | 0.08 V to 1.44 V |
-| CMRR and PSRR at dc | 68.3 dB and 29.8 dB |
+| OTA parameter | Value | View |
+| :--- | :--- | :--- |
+| Open-loop gain | 27.4 dB | post-layout |
+| -3 dB frequency and unity-gain frequency | 4.0 MHz and 93 MHz | post-layout |
+| Output swing | 0.08 V to 1.44 V | schematic |
+| CMRR at dc | 68.3 dB | post-layout |
+| PSRR at dc | 29.8 dB | schematic |
 
-: OTA performance from the testbenches in `testbenches/xschem/`. {#tbl-ota tbl-colwidths="[50,50]"}
+: OTA performance from the testbenches in `testbenches/xschem/`. Post-layout means the Magic full-RC netlist of the tapeout. {#tbl-ota tbl-colwidths="[50,30,20]"}
 
 ## Mixer {#sec-iqmod-mixer}
 
-Each mixer is a passive voltage-mode mixer of four transmission gates, sized for a low on-resistance: 108 µm NMOS and 324 µm PMOS at minimum length, 4.6 Ω to 12.4 Ω over the 0 V to 1.5 V range. The gates connect the two differential filter outputs directly to the RF outputs. With a 25 % LO the four phases barely overlap, so the gate outputs can simply be joined [@Mirzaei_2011]. The LO generator delivers four single-ended phases, so every transmission gate has a local driver that creates the inverted phase for its PMOS, with cross-coupled inverters that lock the two edges together.
+Each mixer is a passive voltage-mode mixer of four transmission gates, sized for a low on-resistance: 108 $\mu$m NMOS and 324 $\mu$m PMOS at minimum length, 4.6 $\Omega$ to 12.4 $\Omega$ over the 0 V to 1.5 V range. The gates connect the two differential filter outputs directly to the RF outputs. With a 25 % LO the four phases barely overlap, so the gate outputs can simply be joined [@Mirzaei_2011]. The LO generator delivers four single-ended phases, so every transmission gate has a local driver that creates the inverted phase for its PMOS, with cross-coupled inverters that lock the two edges together.
 
 ## Simulation Results {#sec-iqmod-results}
 
-The analog benches run headless with `ngspice -b` and export their results with `wrdata` to `testbenches/xschem/plot_simulations/data/`. The plot scripts in `plot_simulations/` turn them into figures.
+The analog benches run headless with `ngspice -b` and export their results with `wrdata` to `testbenches/xschem/plot_simulations/data/`. The plot scripts in `plot_simulations/` turn them into figures. Each bench instantiates the schematic or the PEX symbol of its cell. The committed results were simulated in July and August 2026, when `netlist/pex/` held the Magic full-RC netlists of the tapeout, so they predate the kpex netlists that replaced them on 2026-11-14.
 
-![Closed-loop response of the MFB filter, simulated with ngspice, against the analytical prototype (`iqmod_mfb_lpf_tb_ac_cl`).](fig/sim/iqmod_mfb_lpf_tb_ac_cl.svg){#fig-lpf-ac width=90%}
+| Filter parameter | Nominal | View | 200 process Monte Carlo samples, schematic | CACE limit |
+| :--- | :--- | :--- | :--- | :--- |
+| dc gain | -0.45 dB | post-layout | -0.68 dB to -0.49 dB | -1 dB to +1 dB |
+| Corner frequency | 401 kHz | post-layout | 345 kHz to 528 kHz | 350 kHz or more |
+| CMRR at dc | 45.9 dB | post-layout | 35.9 dB to 79.6 dB | 25 dB or more |
+| Attenuation at 56 MHz | 130 dB | post-layout | | |
+| Output noise, 1 Hz to 400 kHz | 229 $\mu$V~rms~ | schematic | | |
 
-| Filter parameter | Nominal | 200 process Monte Carlo samples | CACE limit |
-| :--- | :--- | :--- | :--- |
-| dc gain | -0.45 dB | -0.68 dB to -0.49 dB | -1 dB to +1 dB |
-| Corner frequency | 401 kHz | 345 kHz to 528 kHz | 350 kHz or more |
-| CMRR at dc | 45.9 dB | 35.9 dB to 79.6 dB | 25 dB or more |
-| Attenuation at 56 MHz | 130 dB | | |
-| Output noise, 1 Hz to 400 kHz | 229 µV~rms~ | | |
+: MFB filter performance. Post-layout means the Magic full-RC netlist of the tapeout. The Monte Carlo samples are those of `verification/cace/scripts/iqmod_mfb_lpf_tb_ac.csv`, at the `tt_stat` corner. {#tbl-lpf tbl-colwidths="[22,12,13,30,23]"}
 
-: MFB filter performance. The Monte Carlo samples are those of `verification/cace/scripts/iqmod_mfb_lpf_tb_ac.csv`, at the `tt_stat` corner. {#tbl-lpf tbl-colwidths="[25,15,35,25]"}
+@fig-lpf-ac compares the post-layout response with the analytical prototype of the designer script.
+
+![Closed-loop response of the MFB filter on the Magic post-layout netlist, simulated with ngspice, against the analytical prototype (`iqmod_mfb_lpf_tb_ac_cl`).](fig/sim/iqmod_mfb_lpf_tb_ac_cl.svg){#fig-lpf-ac width=90%}
 
 3 of the 200 Monte Carlo samples fall below the 350 kHz limit of the corner frequency, at 345 kHz to 350 kHz, which still passes the 126 kHz baseband. The OTA core has its own datasheet: over 200 process Monte Carlo samples its open-loop gain stays between 25.6 dB and 28.3 dB and its CMRR above 56 dB. `make -C macros/iqmod sim-cace` runs both datasheets, and their histograms are in `verification/cace/results/` [@CACE].
 
-The system bench `iqmod_mfb_lpf_riscv_tb_tran` feeds the filter with the 1-bit streams of the CPU's XSPICE model, a 125 kHz tone, and shows the reconstructed baseband (@fig-lpf-riscv). The 10 m band bench `iqmod_top_tb_tran` drives the extracted macro with the LO at 28 MHz and loads the RF output with the coupled-resonator band-pass model of `macros/coupled_resonator_lc_bpf`. The RF output reaches 0.38 V peak at its 1 kΩ load, about -12 dBm.
+The system bench `iqmod_mfb_lpf_riscv_tb_tran` feeds the schematic of the filter with the 1-bit streams of the CPU's XSPICE model, a 125 kHz tone, and shows the reconstructed baseband (@fig-lpf-riscv).
+
+The 10 m band bench `iqmod_top_tb_tran` drives the whole macro with a 124.6 kHz baseband and the LO at 28 MHz, and loads the four joined RF outputs with the coupled-resonator band-pass model of `macros/coupled_resonator_lc_bpf` and its 1 k$\Omega$ load. [PR #24](https://github.com/iic-jku/TinyWhisper/pull/24) reports its supply and output power, averaged over one baseband period at the typical corner and 27 °C:
+
+| Netlist | Supply power | RF power into the band-pass model | Efficiency |
+| :--- | :--- | :--- | :--- |
+| schematic | 24.4 mW | 71.3 $\mu$W, -11.5 dBm | 0.29 % |
+| kpex post-layout, parasitic resistors shorted | 24.5 mW | 64.6 $\mu$W, -11.9 dBm | 0.26 % |
+
+: Supply and RF output power of `iqmod_top` in the 10 m band, ngspice. {#tbl-iqmod-power tbl-colwidths="[40,18,27,15]"}
+
+The bench does not finish on the committed kpex full-RC netlist of `iqmod_top`, whose transient would take days, so its data file in `plot_simulations/data/` is still the one from the Magic netlist.
 
 ::: {#fig-lpf-riscv layout-ncol=2}
 ![Modulator streams and filter outputs.](fig/sim/iqmod_mfb_lpf_riscv_tb_tran.svg){#fig-lpf-riscv-tran}
@@ -573,13 +590,13 @@ The MFB filter driven by the delta-sigma modulator of the CPU's XSPICE model at 
 
 The layout is drawn by hand in KLayout. Every `layout/<cell>.klay.gds` is an editing source that keeps the PDK PCells live, and only `iqmod_top` has a flat export, `layout/iqmod_top.gds`, which the build targets and the chip read. Re-export it after every change to `iqmod_top.klay.gds`. The macro has its own power ring, Metal5 horizontal and TopMetal1 vertical, and the chip PDN connects to it. The schematics contain no `ntap` or `ptap` devices: the wells and the substrate tie directly to `VDD` and `VSS`, which matches the tap-free LVS extraction.
 
-`make -C macros/iqmod all` runs `klayout-verify-all`, `gdscheck-drc-all` and `magic-verify-all` on `iqmod_mfb_lpf`, `iqmod_mixer` and `iqmod_top`, then `build-top` for the LEF, Liberty and Verilog views, and the simulations last. `klayout-pex` uses the 2.5D engine of kpex, and the testbenches include the committed full-RC netlists `netlist/pex/<cell>_pex.spice` that kpex extracted.
+`make -C macros/iqmod all` runs `klayout-verify-all`, `gdscheck-drc-all` and `magic-verify-all` on `iqmod_mfb_lpf`, `iqmod_mixer` and `iqmod_top`, then `build-top` for the LEF, Liberty and Verilog views, and the simulations last. The PEX symbols of the testbenches include the committed full-RC netlists `netlist/pex/<cell>_pex.spice`, which kpex 0.9.0 extracted on 2026-11-14.
 
 # Chip Top Level {#sec-top}
 
 ## Pad Ring and Pinout {#sec-pinout}
 
-The pad ring holds 14 IHP IO cells per side on 70 × 70 µm bondpads. `rtl/tinywhisper_top.sv` instantiates them with generic port names, and `rtl/tinywhisper_core.sv` maps the bits to the two macros. Digital inputs use `sg13g2_IOPadIn`, outputs `sg13g2_IOPadOut30mA`, and bidirectional signals `sg13g2_IOPadInOut30mA`. The analog pads are `sg13g2_IOPadAnalog`: the four filter inputs connect through its secondary protection with a series resistor, the four RF outputs directly to the pad with primary protection only.
+The pad ring holds 14 IHP IO cells per side on 70 × 70 $\mu$m bondpads. `rtl/tinywhisper_top.sv` instantiates them with generic port names, and `rtl/tinywhisper_core.sv` maps the bits to the two macros. Digital inputs use `sg13g2_IOPadIn`, outputs `sg13g2_IOPadOut30mA`, and bidirectional signals `sg13g2_IOPadInOut30mA`. The analog pads are `sg13g2_IOPadAnalog`: the four filter inputs connect through its secondary protection with a series resistor, the four RF outputs directly to the pad with primary protection only.
 
 | Pin | Die pad | Signal | Function |
 | ---: | :--- | :--- | :--- |
@@ -635,21 +652,21 @@ The pad ring holds 14 IHP IO cells per side on 70 × 70 µm bondpads. `rtl/tinyw
 
 : QFN-48 pinout, from the bond report [`packaging/result.md`](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/packaging/result.md). {#tbl-pinout tbl-colwidths="[8,27,20,45]"}
 
-The pad order of `SoC4219` is the same as in this report, which `make bondplan` generates from the chip GDS. Confirm the pin numbers against the bonding diagram of the `SoC4219` assembly before the first PCB is drawn, and mind the board conditions of the errata: an inverter on `sram_ce`, tri-state buffers on the SRAM bus if a loader shares it, pull-ups on `rx` and `so`, pull-downs on the GPIO inputs and the eight bidirectional LO and modulator pins, and series resistors on the I2C lines ([TW-E29](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/errata.md#tw-e29-no-pull-up-or-pull-down-in-any-pad)). No pad has a pull resistor.
+The pad order of `SoC4219` is the same as in this report, which `make bondplan` generates from the chip GDS. Confirm the pin numbers against the bonding diagram of the `SoC4219` assembly before the first PCB is drawn, and follow the board checklist of @tbl-board: no pad has a pull resistor, and several pins need parts on the board.
 
 ## Floorplan
 
 | Instance | Cell | Lower-left corner | Size |
 | :--- | :--- | :--- | :--- |
-| `riscv_top` | `riscv_top` | (435, 435) µm | 700 × 1130 µm |
-| `iqmod_top` | `iqmod_top` | (1215.36, 932.40) µm | 337.0 × 142.3 µm |
+| `riscv_top` | `riscv_top` | (435, 435) $\mu$m | 700 × 1130 $\mu$m |
+| `iqmod_top` | `iqmod_top` | (1215.36, 932.40) $\mu$m | 337.0 × 142.3 $\mu$m |
 | logos and name plates | `sg13g2_ip__jku`, `sg13g2_ip__jku_names`, `sg13g2_ip__ce`, `sg13g2_ip__ce_names` | the four corners of the pad ring | |
 
-: Macro placement in the 1270 × 1270 µm core, from the `instances` of `flow/librelane/config.yaml`. {#tbl-floorplan tbl-colwidths="[20,35,25,20]"}
+: Macro placement in the 1270 × 1270 $\mu$m core, from the `instances` of `flow/librelane/config.yaml`. {#tbl-floorplan tbl-colwidths="[20,35,25,20]"}
 
-The digital part sits in the west of the core and the analog part in the east, next to its pads. The four RF outputs are routed with a non-default rule of 1.35 µm width and 1.0 µm spacing, the four analog inputs with 1.35 µm and 0.5 µm, and the resizer leaves all eight nets alone. `iqmod_top` has its own power ring, and `flow/librelane/pdn_cfg.tcl` bridges the chip grid to it. The [floorplan notes](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/floorplan.md) and [specifications](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/specifications.md) list the details.
+The digital part sits in the west of the core and the analog part in the east, next to its pads. The four RF outputs are routed with a non-default rule of 1.35 $\mu$m width and 1.0 $\mu$m spacing, the four analog inputs with 1.35 $\mu$m and 0.5 $\mu$m, and the resizer leaves all eight nets alone. `iqmod_top` has its own power ring, and `flow/librelane/pdn_cfg.tcl` bridges the chip grid to it. The [floorplan notes](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/floorplan.md) and [specifications](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/specifications.md) list the details.
 
-The chip STA covers the same five corners as the CPU and reports a worst setup slack of +1.84 ns at `nom_slow_1p35V_125C` and a worst hold slack of +0.08 ns at `nom_fast_1p65V_m40C`, with 21 maximum-slew violations in the slow corner. The eight LO and modulator pads get an output delay of 1 ns instead of 20 % of the period, because no off-chip receiver latches them with the clock.
+The committed chip in `layout/`, `netlist/` and `verification/reports/` is the build of August 2026, which integrates the CPU macro of that time, not the re-hardened one in `macros/riscv/final/` (@sec-issues). Its STA covers the same five corners as the CPU and reports a worst setup slack of +1.84 ns at `nom_slow_1p35V_125C` and a worst hold slack of +0.08 ns at `nom_fast_1p65V_m40C`, with 21 maximum-slew violations in the slow corner. The eight LO and modulator pads get an output delay of 1 ns instead of 20 % of the period, because no off-chip receiver latches them with the clock.
 
 ## Logo and Fill
 
@@ -665,7 +682,7 @@ Renders of `SoC4219` as taped out (2 × 2 mm²): the CPU on the left, the IQ mod
 
 ## Chip Simulation
 
-`make sim-all` in `ihp130/` runs the cocotb tests of the CPU on the chip with its pad ring, at RTL (`sim-rtl-cocotb`) and on the gate-level netlist (`sim-gl-cocotb`), and the mixed-signal transient `tinywhisper_top_tb_tran` in Xschem and ngspice, with the models of the IO cells, the CPU as its XSPICE model and the IQ modulator as its schematic (`sim-gl-xschem`). A post-layout simulation of the whole chip with its pad ring does not converge in ngspice yet ([IHP-Open-PDK#921](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/921)).
+`make sim-all` in `ihp130/` runs the cocotb tests of the CPU on the chip with its pad ring, at RTL (`sim-rtl-cocotb`) and on the gate-level netlist (`sim-gl-cocotb`), and the mixed-signal transient `tinywhisper_top_tb_tran` in Xschem and ngspice, with the models of the IO cells, the CPU as its XSPICE model and the IQ modulator as its schematic (`sim-gl-xschem`). The chip runner `testbenches/cocotb/tinywhisper_top_tb.py` still defines `USE_POWER_PINS` for the gate-level run, which makes the cell outputs X in Icarus Verilog, so a passing chip `sim-gl-cocotb` proves nothing yet (@sec-traps). A post-layout simulation of the whole chip with its pad ring does not converge in ngspice yet ([IHP-Open-PDK#921](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/921)).
 
 # Physical Verification {#sec-verification}
 
@@ -692,6 +709,12 @@ make -C macros/iqmod gdscheck-drc CELL=iqmod_top
 
 KLayout is the sign-off DRC. gdscheck and Magic give a second and a third opinion, and both flag cells that the KLayout deck passes. The nBuLay ring that the `pmos` PCell draws under its guard ring trips `NBL.f` in gdscheck 0.2.0 and in Magic ([IHP-Open-PDK#954](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/954), fixed in gdscheck after 0.2.0), and Magic, read hierarchically, flags the IHP IO pads. The flows therefore leave the Magic DRC out until the fixes are in the image, while gdscheck stays in and stops `make all` at its hits on the chip. Every KLayout process needs about 0.5 GiB of memory plus the layout, so more than 4 `DRC_JOBS` pay off only for the full chip on a server.
 
+The current verdicts:
+
+- `iqmod_top` passes the KLayout DRC: its committed report in `macros/iqmod/verification/drc/` has no items.
+- The CPU passes the Magic DRC inside its LibreLane run.
+- For the chip, no KLayout report is committed. gdscheck's `main` suite reports 140 `NBL.f`, 128 `TV1.a`, 32 `TV1.b`, 18 `TM1.a`, 1 `TM2.b`, 1 `Slt.c` and 1 `Slt.i` on `tinywhisper_top_logo_fill`, as the [chip README](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/README.md#design-rule-check-drc) lists with their known causes.
+
 ## LVS
 
 LVS compares the layout against a netlist exported from Xschem: CDL for KLayout (`klayout-lvs`) and SPICE for Magic with Netgen (`magic-lvs`). Both ignore the `ntap` and `ptap` substrate contacts. `EV_PRECISION` sets the significant digits of Xschem's device-parameter evaluation, to avoid rounding mismatches between Xschem and KLayout.
@@ -699,7 +722,7 @@ LVS compares the layout against a netlist exported from Xschem: CDL for KLayout 
 - `iqmod_top` passes the KLayout LVS. Netgen matches it uniquely and reports only the `mm_ok` property of the `rhigh` resistors, which the schematic carries and the extracted layout does not.
 - `riscv_top` passes the Netgen LVS inside its LibreLane run.
 - The chip passes the Netgen LVS of the LibreLane chip flow, which compares the connectivity of the pads and the macros.
-- The custom flow in [`verification/lvs/`](https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/verification/lvs) extracts the shipped `SoC4219` GDS with Magic, merges the macro netlists into the chip netlist and compares the whole chip with Netgen. Its last result, `lvs.out`, is a unique match, but it treats the MOS devices as black boxes, so it checks their connections and not their sizes.
+- The custom flow in [`verification/lvs/`](https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/verification/lvs) extracts the shipped `SoC4219` GDS with Magic, merges the macro netlists into the chip netlist and compares the whole chip with Netgen. Its last result, `lvs.out`, is a unique match, but it treats every device class (MOS transistors, resistors, MIM capacitors and diodes) as a black box, so it checks the connections of the devices and not their sizes.
 
 Harald's first rule of tapeout, from the [lessons of March 2026](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/release/v.1.0.0/doc/README.md), is: no tapeout without top-level LVS on transistor level. A transistor-level top-level LVS of the chip is still open.
 
@@ -710,21 +733,21 @@ make -C macros/iqmod magic-pex CELL=iqmod_top     # Magic, full RC
 make -C macros/iqmod klayout-pex CELL=iqmod_top EXT_MODE=2
 ```
 
-`EXT_MODE` selects C-decoupled (1), C-coupled (2) or full-RC (3, the default) extraction, so the second command extracts with kpex C-coupled. kpex has no C-decoupled mode and falls back to C-coupled for 1. The netlists land in `netlist/pex/<CELL>_<tool>_pex_<EXT_MODE>.spice`, so the modes do not overwrite each other. Both targets first rebuild the PEX symbol `<CELL>_pex.sym` from `<CELL>.sym`, reorder the subcircuit pins to match it, and finish with `check_pex_ports.py`, which fails the target if a declared port does not reach the circuit. Such a netlist simulates without a warning while the cell behaves differently.
+`EXT_MODE` selects C-decoupled (1), C-coupled (2) or full-RC (3, the default) extraction, so the second command extracts with kpex C-coupled. For `EXT_MODE=1`, kpex runs its mode `C`, which replaces each coupling capacitance by its full value from both nets to the substrate. `klayout-pex` runs kpex through `sak-pex.sh -k`, keeps the MIM and MOM capacitors as devices with their models, and reduces a full-RC netlist with TICER (`KPEX_REDUCE`). The netlists land in `netlist/pex/<CELL>_<tool>_pex_<EXT_MODE>.spice`, so the modes do not overwrite each other. Both targets first rebuild the PEX symbol `<CELL>_pex.sym` from `<CELL>.sym`, reorder the subcircuit pins to match it, and finish with `check_pex_ports.py`, which fails the target if a declared port does not reach the circuit. Such a netlist simulates without a warning while the cell behaves differently.
 
 The 2.5D engine of kpex takes minutes where Magic takes seconds, and a full-RC extraction of `iqmod_top` with kpex runs for more than an hour. Use `magic-pex` for a quick netlist. At the chip top level, `PEX_MERGED_PINS` drops `IOVSS` from the PEX symbol, since both ground rings tap the substrate and the extraction sees one ground node.
 
 # Packaging {#sec-packaging}
 
-The die goes into a [QFN-48](https://europractice-ic.com/wp-content/uploads/2019/06/MLP7X7-48-OP-02-R2-ECN-10501.pdf) open-molded plastic package ([OmPP](https://www.qptechnologies.com/products/ompp/)), whose cover is glued on after bonding. 44 pads are wired to package leads. The 9 `VSS` and 3 `IOVSS` pads are downbonded to the exposed pad, which forms the package ground, and the leads 15, 27, 34 and 46 are bonded to the exposed pad too, so the grounds reach the board only through the cavity. All 60 wires are 25 µm gold, from 2.07 mm to 2.75 mm long.
+The die goes into a [QFN-48](https://europractice-ic.com/wp-content/uploads/2019/06/MLP7X7-48-OP-02-R2-ECN-10501.pdf) open-molded plastic package ([OmPP](https://www.qptechnologies.com/products/ompp/)), whose cover is glued on after bonding. 44 pads are wired to package leads. The 9 `VSS` and 3 `IOVSS` pads are downbonded to the exposed pad, which forms the package ground, and the leads 15, 27, 34 and 46 are bonded to the exposed pad too, so the grounds reach the board only through the cavity. All 60 wires are 25 $\mu$m gold: the 44 pad-to-lead wires are 2.07 mm to 2.75 mm long, and the 16 bonds to the cavity 0.5 mm.
 
 `make bondplan` generates the bonding diagram (@fig-bondplan) from the final chip GDS and the EUROPRACTICE package library [`EP_PACKAGES_08022018.gds`](https://europractice-ic.com/wp-content/uploads/2019/07/EP_PACKAGES_08022018.gds_.gz). [`packaging/scripts/run_bondplan.py`](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/packaging/scripts/run_bondplan.py) extracts the bondpads with their names, places the die in the cavity, draws the wires, fills in the title block and checks wire lengths, crossings, spacing and the clearance around the RF wires. A crossing fails the run, as EUROPRACTICE does not allow crossing wires. The pinout and all settings live in [`packaging/config.yaml`](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/packaging/config.yaml), so the diagram cannot drift from the chip, and the [packaging README](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/packaging/README.md) documents every option.
 
-![Bonding diagram of TinyWhisper in the QFN-48 package, generated with `make bondplan`.](fig/tinywhisper_bondplan_white.png){#fig-bondplan width=75%}
+![Bonding diagram of `SoC4219` in the QFN-48 package, generated with `make bondplan` (`release/v.1.0.0/img/`).](fig/tinywhisper_bondplan_white.png){#fig-bondplan width=75%}
 
 # Firmware and Software {#sec-software}
 
-[`software/c_toolchain/`](https://github.com/iic-jku/TinyWhisper/tree/main/software/c_toolchain) holds a small hardware abstraction layer for the CPU (`mmio.c`, `csr.c`, `interrupts.c`), the start-up code and linker script, and a CMake build for the RISC-V GNU toolchain with `rv32e` and `ilp32e`. Its demo reads callsign, locator and power over the UART, computes the 162 WSPR symbols on the CPU, waits for the external interrupt, and then sends one symbol per timer interrupt by reprogramming the frequency word, until it switches the CORDIC, the modulators and the analog front-end off again.
+[`software/c_toolchain/`](https://github.com/iic-jku/TinyWhisper/tree/main/software/c_toolchain) holds a small hardware abstraction layer for the CPU (`mmio.c`, `csr.c`, `interrupts.c`), the start-up code and linker script, and a CMake build for the RISC-V GNU toolchain with `rv32e` and `ilp32e`. Its demo reads callsign, locator and power over the UART, computes the 162 WSPR symbols on the CPU, waits for the external interrupt, and then sends one symbol per timer interrupt by reprogramming the frequency word, until it stops and resets the frequency generator after the last symbol. It leaves `analog_en` set.
 
 ```sh
 cd software/c_toolchain
@@ -762,11 +785,11 @@ TinyWhisper was taped out on the IHP open-silicon MPW run of March 2026 as `SoC4
 | Release | Content |
 | :--- | :--- |
 | [`release/v.1.0.0/`](https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/release/v.1.0.0) | the March 2026 tapeout: `SoC4219.gds.gz` with its MD5, the renders, the die photos, the bonding diagram and the submission documents. The submission repository is [jona250210/IHP__SoC4219](https://github.com/jona250210/IHP__SoC4219), and the branch `IHP-TO-2026-03` holds the design state of the tapeout |
-| [`release/v.2.0.0/`](https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/release/v.2.0.0) | a later build of the chip with a re-hardened CPU: GDS, netlists and renders. It differs from the silicon in routing and fill, and its origin is shifted by 25 µm |
+| [`release/v.2.0.0/`](https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/release/v.2.0.0) | the chip build of August 2026, with the fill fixed in October: GDS, netlists and renders. It differs from the silicon in routing and fill, and its origin is shifted by 25 $\mu$m. Its CPU netlist decodes `addi` and seven other instructions as illegal (@sec-traps), so it does not run firmware |
 
 : Releases. {#tbl-releases tbl-colwidths="[25,75]"}
 
-`make release VERSION=<version>` copies the final GDS, the schematic, layout and LibreLane netlists, the renders and the bonding diagram into `release/v.<version>/`. Coordinates for probing come from `v.1.0.0`, not from the current chip.
+`make release VERSION=<version>` copies the final GDS, the schematic, layout and LibreLane netlists, the renders and the bonding diagram into `release/v.<version>/`. Coordinates for probing come from `v.1.0.0`, not from the current chip. A new release needs a chip rebuild with the re-hardened CPU first.
 
 The [lessons of the March 2026 tapeout](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/release/v.1.0.0/doc/README.md) are worth reading before the next one: top-level LVS on transistor level, the fill density checked after every fill, zero-length paths that fail the IHP precheck silently, trial runs early and often, LibreLane's view of macro supply connections through the DEF only, an XOR after every manual layout change, and being finished before tapeout day.
 
@@ -774,7 +797,7 @@ Parts of TinyWhisper were also taped out on their own:
 
 | Design | Technology | Where |
 | :--- | :--- | :--- |
-| TinyWhisper transmitter, CPU and IQ modulator | IHP SG13CMOS | `release/v.1.0.0/`, branch `IHP-TO-2026-03` |
+| TinyWhisper transmitter, CPU and IQ modulator | IHP SG13G2 | `release/v.1.0.0/`, branch `IHP-TO-2026-03` |
 | RISC-V CPU | GF180MCU, wafer.space | [iic-jku/gf180mcu-jku-projects](https://github.com/iic-jku/gf180mcu-jku-projects) |
 | WSPR encoder in hardware, without the CPU | SKY130, Tiny Tapeout `ttsky25b` | [tt_um_cejmu_wspr](https://tinytapeout.com/chips/ttsky25b/tt_um_cejmu_wspr), sources in `sky130/macros/archive/` |
 | IQ modulator | SKY130, Tiny Tapeout `ttsky25b` | [tt_um_TinyWhisper](https://tinytapeout.com/chips/ttsky25b/tt_um_TinyWhisper) |
@@ -790,7 +813,7 @@ The [errata sheet](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/e
 | ID | Deviation | Workaround |
 | :--- | :--- | :--- |
 | TW-E01 | `sram_ce` is active high | inverting buffer between the chip and the CE# of the SRAM |
-| TW-E02 | the SRAM pins are driven even in reset, `sclk` runs freely | tri-state buffers if a loader shares the bus, reset held for 150 µs after the SRAM supply |
+| TW-E02 | the SRAM pins are driven even in reset, `sclk` runs freely | tri-state buffers if a loader shares the bus, reset held for 150 $\mu$s after the SRAM supply |
 | TW-E03 | the reset I/Q convention sends the lower sideband | `ds_switch` or a negative frequency word |
 | TW-E04 | the reset value of `FREQ_STATUS` selects the external analog inputs and pad-driven LO and modulator signals | write `0x9B` first after boot, pull-downs on the eight bidirectional pins |
 | TW-E05 | the second-order modulator overloads at the reset amplitude | `CORDIC_I` at most 90 % of full scale before `ds_mode` = 1 |
@@ -800,17 +823,52 @@ The [errata sheet](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/e
 
 : The critical and the most important major errata of `SoC4219`. {#tbl-errata tbl-colwidths="[10,45,45]"}
 
+## Board Checklist
+
+| Pins | On the board | Errata |
+| :--- | :--- | :--- |
+| `sram_ce` | inverting buffer to the active-low CE# of the SRAM, with the CE# pull-up on the SRAM side | TW-E01 |
+| `si`, `sclk`, `sram_ce` | tri-state buffers or a multiplexer that a loader owns while `rst_n` is low, short lines away from the RF outputs, series resistors at the chip | TW-E02 |
+| `IOVDD`, `VDD` | `IOVDD` first, then `VDD`, for example a supervisor on `IOVDD` that enables the 1.5 V regulator, current limit on the first power-up | TW-E31 |
+| `VDD` | low-noise 1.5 V supply, decoupling at every `VDD` pin | TW-E28 |
+| `rst_n` | held low by a supervisor until both supplies are valid and the clock runs, at least 150 $\mu$s after the SRAM supply, released through a flip-flop on the same clock | TW-E02, TW-E25, TW-E31 |
+| `clk` | 56 MHz with 50 % duty and a 1.5 V swing | TW-E27 |
+| `rx`, `so` | pull-ups | TW-E29 |
+| `gpio_in[3:0]` | pull-downs, `gpio_in[0]` is the external interrupt | TW-E24, TW-E29 |
+| the eight LO and modulator pins `bidir_PAD[7:0]` | pull-downs of about 100 k$\Omega$, otherwise open or through 100 $\Omega$ to 330 $\Omega$ to test points away from the RF outputs | TW-E04, TW-E26 |
+| `sda`, `scl` | pull-ups and 100 $\Omega$ to 330 $\Omega$ series resistors, slaves that do not stretch the clock | TW-E14 |
+| analog inputs `vin*` | a defined level between 0 V and 1.5 V through a series resistor, never driven while the chip is unpowered | TW-E04, TW-E30 |
+| RF outputs `vout*_RF` | AC-coupled, the dc level is about 0.75 V | TW-E30 |
+
+: Board conditions for `SoC4219` from the errata. {#tbl-board tbl-colwidths="[22,60,18]"}
+
+## Firmware Start-Up
+
+The errata and the register map of @sec-freqgen give this order for the first instructions of a firmware. It has not run on silicon yet.
+
+1. Set `mtvec` and place a vector table at its base (TW-E19).
+2. Write `FREQ_STATUS` = `0x98`: the IQ modulator on, the internal path selected, the LO and modulator outputs enabled, the generator still in reset (TW-E04).
+3. Write `UART_TX_CPB` = 485 and leave `UART_RX_CPB` at 510 (TW-E07, TW-E08).
+4. Write `CORDIC_I` at or below 293414793, 90 % of full scale (TW-E05).
+5. Write `FREQ_OSR_FC` with OSR 32 and the frequency word of the baseband plus 1500 Hz plus the tone (TW-E06, @tbl-bands).
+6. Write `FREQ_LO_DIV` with the divider of the band and `ds_switch` = 1 for the upper sideband, and `ds_mode` = 1 for the second order if wanted (TW-E03).
+7. Write `FREQ_STATUS` = `0x9B` to start the generator.
+
+Read over I2C master 1 only, keep a copy of `GPIO_OUT` in memory, and clear `mip[16]` after every received byte (TW-E09 to TW-E13, TW-E21).
+
 The documentation errata TW-D01 and TW-D02 concern an earlier version of this documentation and the reference firmware, and TW-D03 the pinout notes. This documentation gives the corrected frequency resolution, default OSR, modulator order and SNDR, and the pinout of @tbl-pinout.
 
 # Known Issues and Limitations {#sec-issues}
 
 - **First silicon.** The errata of @sec-errata apply to `SoC4219`, and none of them is measured yet.
-- **The chip on `main` is not the silicon.** The CPU views in `macros/riscv/final/` were re-hardened after the tapeout, and the chip of `v.2.0.0` and later differs from `SoC4219` in routing and fill. The RTL is logically equivalent to the silicon.
-- **Top-level LVS.** The custom top-level LVS compares the MOS devices as black boxes, so a transistor-level LVS of the whole chip is still open.
+- **The committed chip does not run firmware.** The chip in `layout/` and in `release/v.2.0.0/` is the build of August 2026, which differs from `SoC4219` in routing and fill. Its CPU netlist decodes `addi` and seven other instructions as illegal (@sec-traps), so a program traps at its first `addi`. `macros/riscv/final/` holds the re-hardened CPU, and the chip has not been rebuilt with it yet. A gate-level simulation of the first fetches shows that the CPU netlist of `SoC4219`, on branch `IHP-TO-2026-03`, executes these instructions. The RTL is logically equivalent to the silicon.
+- **Top-level LVS.** The custom top-level LVS compares every device class as a black box, so a transistor-level LVS of the whole chip is still open.
 - **DRC in the flows.** `build-top` runs LibreLane without DRC because of the `metal1_pin_offgrid` rule on the pad ring ([IHP-Open-PDK#683](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/683)). The Magic DRC is out of the flows until [IHP-Open-PDK#954](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/954) and the IO pad findings are fixed, and gdscheck stops `make all` at its hits on the chip, see @sec-verification.
 - **Macro builds.** `build-all` and `make all` do not rebuild the macros, which are built in their own folders.
 - **Chip post-layout simulation.** The extracted chip with its pad ring does not converge in ngspice ([IHP-Open-PDK#921](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/921)).
-- **Equivalence check.** `make lec` fails more than 40 of the 264 partitions of the CPU netlist for reasons that are still open.
+- **Chip gate-level simulation.** The chip runner of `sim-gl-cocotb` still defines `USE_POWER_PINS`, so its gate-level run shows X on the cell outputs and its result means nothing yet.
+- **Analog results.** The committed simulation data of the IQ modulator come from the Magic netlists of the tapeout and the schematics, not from the kpex netlists of 2026-11-14, and `iqmod_top_tb_tran` does not finish on the kpex full-RC netlist of `iqmod_top`.
+- **Equivalence check.** `make lec` fails about 40 partitions of the CPU netlist for reasons that are still open.
 - **CPU PEX.** A PEX netlist of `riscv_top` is not practical, so the CPU is verified with the gate-level simulations and the STA.
 - **Shared supply.** The CPU and the IQ modulator share `VDD` and `VSS`, and the IO ring has no supply split, so CPU activity can show up as spurs ([TW-E28](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/errata.md#tw-e28-analog-and-digital-core-share-one-supply)).
 - **sky130.** The sky130 version of the chip waits for a sky130 pad ring in LibreLane ([librelane#925](https://github.com/librelane/librelane/pull/925)).
@@ -819,8 +877,8 @@ The repository keeps the [errata sheet](https://github.com/iic-jku/TinyWhisper/b
 
 # Traps Worth Knowing {#sec-traps}
 
-- **A wildcard localparam can lose its wildcards in Yosys.** In a `casez` item that shares its branch with another item, `read_verilog -sv` dropped the `?` bits of the localparam `DONT_CARES`, and the netlist decoded `addi` and seven other instructions as illegal while Icarus ran the RTL correctly. `constants.sv` defines `DONT_CARES` as a macro since. A gate-level simulation of the final netlist catches this class of bug, an RTL simulation cannot.
-- **A gate-level run can fail silently.** With `USE_POWER_PINS` defined, every cell output of the netlist is X in Icarus Verilog, and an undriven input such as `gpio_in[0]`, the external interrupt, sets `mip[11]` to X. The cocotb runner of the CPU therefore leaves the macro undefined, drives every input and checks the test results instead of trusting the exit code.
+- **A wildcard localparam can lose its wildcards in Yosys.** In a `casez` item that shares its branch with another item, `read_verilog -sv` dropped the `?` bits of the localparam `DONT_CARES`, and the netlist decoded `addi` and seven other instructions as illegal while Icarus ran the RTL correctly. `constants.sv` defines `DONT_CARES` as a macro since. The CPU netlist of August 2026, which the committed chip and `v.2.0.0` integrate, has this bug, and the netlist of `SoC4219` does not. A gate-level simulation of the final netlist catches this class of bug, an RTL simulation cannot.
+- **A gate-level run can fail silently.** With `USE_POWER_PINS` defined, every cell output of the netlist is X in Icarus Verilog, and an undriven input such as `gpio_in[0]`, the external interrupt, sets `mip[11]` to X. The cocotb runner of the CPU therefore leaves the macro undefined, drives every input and checks the test results instead of trusting the exit code. The chip runner does not do this yet.
 - **The XSPICE model is a source file.** No target regenerates `riscv_top.xspice` from the stock RTL, and `make clean` keeps it, see @sec-riscv-verification.
 - **The analog testbenches include committed PEX netlists.** `make clean` in `macros/iqmod` deletes them, and the benches stop at their missing include until `git restore` brings them back.
 - **`iqmod_top.gds` is an export.** Edit `iqmod_top.klay.gds` and re-export, never the other way round.
@@ -855,16 +913,17 @@ The repository keeps the [errata sheet](https://github.com/iic-jku/TinyWhisper/b
 
 # Cite This Work {#sec-cite}
 
-Please cite the repository:
+Please cite the repository [@TinyWhisper_2026]:
 
 ```bibtex
 @misc{2026_TinyWhisper,
-  author = {Dorrer, Simon and Hager, Jonathan and Jung, Matthias and Pretl, Harald},
+  author = {Dorrer, Simon and Hager, Jonathan and Jung, Matthias
+            and Pretl, Harald},
   month  = apr,
   year   = {2026},
-  title  = {{GitHub Repository for TinyWhisper: An Open-Source Fully-Integrated
-            Multi-Mode Short-Wave Transmitter for Amateur Radio Applications
-            in 130-nm CMOS}},
+  title  = {{GitHub Repository for TinyWhisper: An Open-Source
+            Fully-Integrated Multi-Mode Short-Wave Transmitter for Amateur
+            Radio Applications in 130-nm CMOS}},
   url    = {https://github.com/iic-jku/TinyWhisper},
   doi    = {10.5281/zenodo.20004085}
 }
@@ -894,7 +953,7 @@ This project is funded by the JKU/SAL [IWS Lab](https://research.jku.at/de/proje
 :::
 
 ::: {.content-visible when-format="pdf"}
-![](fig/funding/iic-jku.svg){width=45%} \hfill ![](fig/funding/silicon-austria-labs-logo.svg){width=45%}
+![](fig/funding/iic-jku.pdf){width=45%} \hfill ![](fig/funding/silicon-austria-labs-logo.pdf){width=45%}
 :::
 
 # License
