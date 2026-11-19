@@ -31,7 +31,7 @@ This documentation is a Work in Progress.
 :::
 
 ::: {.callout-important}
-This repository requires the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) container with tag `2026.09` or later.
+This repository requires the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) container with tag `2026.11` or later.
 :::
 
 ## Overview
@@ -45,6 +45,19 @@ TinyWhisper is a compact WSPR transmitter realized with the ihp-sg13g2 PDK. The 
   <br>
   <em>Block diagram of the TinyWhisper ASIC and external RF circuitry.</em>
 </p>
+
+### Video {#sec-video}
+
+Two videos of about 70 seconds introduce TinyWhisper to a general audience, the first in English and the second in German.
+
+<p align="center">
+  <video src="video/tinywhisper_intro_en.mp4" poster="video/tinywhisper_intro_en.jpg" controls preload="metadata" title="TinyWhisper introduction video in English" style="width: 45%; min-width: 280px;"></video>
+  <video src="video/tinywhisper_intro_de.mp4" poster="video/tinywhisper_intro_de.jpg" controls preload="metadata" title="TinyWhisper introduction video in German" style="width: 45%; min-width: 280px;"></video>
+</p>
+
+::: {.content-visible unless-format="html"}
+The videos play in the [online documentation](https://iic-jku.github.io/TinyWhisper/index.html#sec-video).
+:::
 
 ### Purpose
 
@@ -81,6 +94,16 @@ Since the analog front-end is an IQ modulator, it supports not only WSPR but als
 
 ### Tapeout
 
+TinyWhisper was taped out in the IHP open-silicon MPW run of March 2026 as `SoC4219`. The die photo below shows a fabricated chip, with the TopMetal2 logo on top of the core. It is followed by renders of the final layout and of the TopMetal2 logo.
+
+<p align="center">
+  <a href="fig/tinywhisper_die.JPG">
+    <img src="fig/tinywhisper_die.JPG" alt="Die photo of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm), taped out in March 2026" width=70%>
+  </a>
+  <br>
+  <em>Die photo of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm), taped out in March 2026.</em>
+</p>
+
 <p align="center">
   <a href="fig/tinywhisper_top_black.png">
     <img src="fig/tinywhisper_top_black.png" alt="Chip render of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm)" width=70%>
@@ -99,7 +122,7 @@ Since the analog front-end is an IQ modulator, it supports not only WSPR but als
 
 ### Packaging
 
-The die is packaged in a [QFN-48](https://europractice-ic.com/wp-content/uploads/2019/06/MLP7X7-48-OP-02-R2-ECN-10501.pdf) open-molded plastic package ([OmPP](https://www.qptechnologies.com/products/ompp/)). Its 56 bondpads are wired to the 48 package leads, and the eight remaining VSS and IOVSS pads are connected as downbonds directly to the exposed pad, which forms the package ground. Bonding is done with 25 µm gold wire, the longest wire measures 2.75 mm, and the cover is glued on after bonding.
+The die is packaged in a [QFN-48](https://europractice-ic.com/wp-content/uploads/2019/06/MLP7X7-48-OP-02-R2-ECN-10501.pdf) open-molded plastic package ([OmPP](https://www.qptechnologies.com/products/ompp/)). Its 44 signal and supply pads are wired to package leads. The 12 VSS and IOVSS pads are downbonded to the exposed pad, which forms the package ground, and the 4 VSS and IOVSS leads are bonded to the exposed pad as well. Bonding is done with 25 µm gold wire, the longest wire measures 2.75 mm, and the cover is glued on after bonding.
 
 The bonding diagram below is generated fully automatically with `make bondplan` from the final chip GDS and the EUROPRACTICE package library [`EP_PACKAGES_08022018.gds`](https://europractice-ic.com/wp-content/uploads/2019/07/EP_PACKAGES_08022018.gds_.gz). The flow extracts the die bondpads together with their names, places the die in the package cavity, draws the bondwires, fills in the title block, and checks wire lengths, crossings, spacing and the clearance around the sensitive RF wires. The [pinout](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/packaging/config.yaml) and all flow settings are kept in a single configuration file, so the diagram never goes out of sync with the chip. Details are documented in the [packaging README](https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/packaging).
 
@@ -113,7 +136,7 @@ The bonding diagram below is generated fully automatically with `make bondplan` 
 
 ### Outlook
 
-The chip is still in production and is expected to be delivered in December 2026. The ASIC is just the beginning of a broader open-hardware project. The next step is to design a [PCB](https://github.com/iic-jku/TinyWhisper/tree/main/pcb) that includes all necessary external components: switchable bandpass filters for each RF band, an RF amplifier, a crystal oscillator as the clock source, external SRAM, voltage regulators for the various supply voltages, a display, controls, an SMA connector for the antenna, and a USB interface for configuration. The packaged chip will be soldered onto this board and then [characterized](https://github.com/iic-jku/TinyWhisper/tree/main/measurements).
+Bare dies of the March 2026 tapeout are back from fabrication, see the die photo in the Tapeout section above. The ASIC is just the beginning of a broader open-hardware project. The next step is to design a [PCB](https://github.com/iic-jku/TinyWhisper/tree/main/pcb) that includes all necessary external components: switchable bandpass filters for each RF band, an RF amplifier, a crystal oscillator as the clock source, external SRAM, voltage regulators for the various supply voltages, a display, controls, an SMA connector for the antenna, and a USB interface for configuration. The packaged chip will be soldered onto this board and then [characterized](https://github.com/iic-jku/TinyWhisper/tree/main/measurements).
 
 Building on this PCB, a compact, 3D-printable [enclosure](https://github.com/iic-jku/TinyWhisper/tree/main/enclosure) is planned that accommodates the board together with a small battery and is robust enough for outdoor use during field tests and SOTA activations.
 
@@ -282,16 +305,16 @@ The architectural overview is shown in @fig-tx-concept. The FSK-4 modulation is 
 
 #### TX LO Generation {#sec-impl-lo-gen}
 
-To support the RF frequencies listed in @sec-sys-rf-freq, the following LO generation concept is planned. The LO frequency is 2x the RF frequency, since the IQ phases are generated by a divide-by-2 circuit (<https://iic-jku.github.io/radio-frequency-integrated-circuits/rfic.html#sec-lo-ff>). If a constant 56 MHz crystal clock is used, the resulting frequency offset must be generated digitally by the CORDIC.
+To support the RF frequencies listed in @sec-sys-rf-freq, the LO generation block derives a 4-phase 25% LO directly from the 56 MHz clock. With the divider setting DIV1, the I phase toggles on the rising clock edge and the Q phase follows on the falling edge, so the 4 phases run at 56 MHz / 2 = 28 MHz. DIV2, DIV4 and DIV8 count clock cycles instead and give 14 MHz, 7 MHz and 3.5 MHz. The LO at the mixer therefore sits at the band LO itself, not at 2x the RF frequency (<https://iic-jku.github.io/radio-frequency-integrated-circuits/rfic.html#sec-lo-ff>). If a constant 56 MHz crystal clock is used, the resulting frequency offset must be generated digitally by the CORDIC.
 
-| RF frequency  | LO frequency | LO pre-divider | CLK frequency | CORDIC frequency offset |
-|---------------|--------------|----------------|---------------|-------------------------|
-| 3.592600 MHz  |  7 MHz       | 8              | 56 MHz        |  92.600 kHz             |
-| 7.038600 MHz  | 14 MHz       | 4              | 56 MHz        |  38.600 kHz             |
-| 14.095600 MHz | 28 MHz       | 2              | 56 MHz        |  95.600 kHz             |
-| 28.124600 MHz | 56 MHz       | 1              | 56 MHz        | 124.600 kHz             |
+| RF frequency  | LO frequency | LO divider | CLK frequency | CORDIC frequency offset |
+|---------------|--------------|------------|---------------|-------------------------|
+| 3.568600 MHz  | 3.5 MHz      | DIV8       | 56 MHz        |  68.600 kHz             |
+| 7.038600 MHz  | 7 MHz        | DIV4       | 56 MHz        |  38.600 kHz             |
+| 14.095600 MHz | 14 MHz       | DIV2       | 56 MHz        |  95.600 kHz             |
+| 28.124600 MHz | 28 MHz       | DIV1       | 56 MHz        | 124.600 kHz             |
 
-As the frequencies are low enough, the LO generation is implemented in HDL in `src/lo_gen.v`.
+As the frequencies are low enough, the LO generation is implemented in HDL in `ihp130/macros/riscv/rtl/lo_gen.v`.
 
 #### TX DACs {#sec-impl-dac}
 

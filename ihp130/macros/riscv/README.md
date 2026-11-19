@@ -569,6 +569,10 @@ Extracts the parasitics of the hardened macro from the final GDS and writes a po
 | parasitics | none, Liberty delays only | R and C from the layout |
 | speed | fast, digital event driven | slow, full analog solve |
 
+> [!WARNING]
+> PEX and a post-layout simulation of the whole RISC-V macro take very long. `klayout-pex` had not finished a C-coupled extraction of `riscv_top` (71780 cell instances) after 5 h, as the capacitance extraction of kpex runs on one core, and a full-RC extraction with `magic-pex` takes hours too and writes a netlist far larger than the one of the template's counter. Simulating every transistor of the CPU in ngspice takes far longer still. This is why `magic-pex` and `klayout-pex` are commented out in `make all` and nothing in this repository consumes the extracted netlist.
+> Verify the macro with a gate-level simulation instead: `make sim-gl-cocotb` for the function and `make sim-gl-xschem` for the mixed-signal behavior with the gate delays of the XSPICE model. Its timing is checked by the STA of LibreLane, which runs on the parasitics LibreLane extracts (`final/spef/`), and `make copy-reports` writes its summary to `verification/stapostpnr_summary.rpt`. Run the PEX targets by hand only for a short, targeted post-layout check.
+
 The extracted SPICE filenames include the selected extraction mode:
 - `klayout-pex` writes `netlist/pex/<CELL>_klayout_pex_<EXT_MODE>.spice`
 - `magic-pex` writes `netlist/pex/<CELL>_magic_pex_<EXT_MODE>.spice`
@@ -586,7 +590,7 @@ make magic-pex CELL=riscv_top
 make magic-pex CELL=riscv_top EXT_MODE=1
 ```
 
-**KLayout PEX** uses `kpex`, which runs Magic internally for the extraction itself:
+**KLayout PEX** uses `sak-pex.sh -k`, which extracts with the 2.5D engine of `kpex`. Both come with the image from `2026.11` on (kpex 0.10.0):
 
 ```sh
 make klayout-pex
@@ -594,9 +598,11 @@ make klayout-pex CELL=riscv_top EXT_MODE=1
 ```
 
 > [!NOTE]
-> For `klayout-pex`, `EXT_MODE=1` (C-decoupled) is not yet supported by kpex and automatically falls back to `EXT_MODE=2` (CC) with a warning.
+> For `klayout-pex`, `EXT_MODE=1` (C-decoupled) runs kpex in its mode `C`, which replaces each coupling capacitance by its full value from both nets to the substrate.
 
-Both targets read `final/gds/<CELL>.gds`, so **`make build-top` (or at least `make copy-final`) has to have run first**. They abort with a clear message if the GDS is missing, instead of failing somewhere inside the extractor. Unlike the analog macro there is no Xschem schematic to hand to kpex as the reference netlist, so `klayout-pex` passes the LibreLane-extracted `netlist/spice/<CELL>.spice` instead.
+Both targets read `final/gds/<CELL>.gds`, so **`make build-top` (or at least `make copy-final`) has to have run first**. They abort with a clear message if the GDS is missing, instead of failing somewhere inside the extractor. Unlike the analog macro there is no Xschem schematic to hand to kpex as the reference netlist, so `klayout-pex` passes the LibreLane-extracted `netlist/spice/<CELL>.spice` instead. LibreLane writes the standard cells there as empty black boxes, which would leave the device check of kpex without devices, so the target first fills in their transistors from the CDL of the PDK (`sg13g2_stdcell.cdl`), in a temporary `netlist/pex/<CELL>_kpex_schematic.spice`.
+
+`klayout-pex` runs `sak-pex.sh -k` as for the analog macros: it keeps MIM and MOM capacitors as devices (`--blackbox y`), reduces the full-RC netlist with TICER (`KPEX_REDUCE`, default `ticer`) and ties the substrate port `sub!` of the 2.5D netlist to `PEX_SUB_NET` (default `VSS`), as Magic ties the substrate to `VSS`, so the netlist keeps the pins of `<CELL>_pex.sym`.
 
 For full-RC extraction (`EXT_MODE=3`), `magic-pex` additionally exposes the three `extresist` tuning parameters of `sak-pex.sh`. They are ignored in `EXT_MODE=1`/`2`:
 
@@ -610,7 +616,7 @@ For full-RC extraction (`EXT_MODE=3`), `magic-pex` additionally exposes the thre
 make magic-pex CELL=riscv_top EXT_MODE=3 THRESHOLD=5000 MINRES=500 MINDELAY=2
 ```
 
-The `.subckt` name in the extracted SPICE file is `<CELL>_pex`: `magic-pex` sets it directly via the `sak-pex.sh` option `-n <CELL>_pex`, while for `klayout-pex` it is automatically renamed from `<CELL>`, the name kpex writes.
+The `.subckt` name in the extracted SPICE file is `<CELL>_pex`: both targets set it via the `sak-pex.sh` option `-n <CELL>_pex`.
 
 Both targets start by running `symbol-pex` (see above), so `schematic/xschem/<CELL>_pex.sym` always reflects the current cell symbol. The `.subckt` pin order in the extracted SPICE file is then reordered with `sak-pin-reorder.py` (installed in the IIC-OSIC-TOOLS container) to match that symbol's pin positions, matching by `sim_pinname` because the symbol and the layout use different pin names. Both targets finish by running [`scripts/check_pex_ports.py`](scripts/check_pex_ports.py), which verifies that every pin of the `.subckt` really reaches the circuit and fails the target otherwise. It is the same check the analog macro runs, see [`macros/iqmod/README.md`](../iqmod/README.md) for the two cases it catches.
 
@@ -618,9 +624,6 @@ Both targets start by running `symbol-pex` (see above), so `schematic/xschem/<CE
 > Magic's `extresist` step is not deterministic. Two `make magic-pex` runs on the same GDS give the same transistors, but the R and C counts move by around a percent and the internal node names are renumbered, so an extracted netlist shows up as modified in `git status` after every run, even when nothing about the layout changed.
 
 The riscv testbench [`testbenches/xschem/riscv_top_tb_tran.sch`](testbenches/xschem/riscv_top_tb_tran.sch) includes only the XSPICE model. To run a **post-layout simulation**, add an instance of `riscv_top_pex.sym` next to the `riscv_top.sym` one, `.include` the extracted netlist from `netlist/pex/`, and park the instance you do not need with `spice_ignore=true`, the way the iqmod testbenches switch between schematic and PEX views. A post-layout run simulates every transistor of the CPU in ngspice, so keep the stimulus short: use the XSPICE model for functional runs, and the PEX netlist on short, targeted stimuli to check timing and signal integrity.
-
-> [!WARNING]
-> A full-RC extraction of the whole RISC-V macro takes hours in the IIC-OSIC-TOOLS container and writes a netlist far larger than the one of the template's counter. This is why `magic-pex` and `klayout-pex` are commented out in `make all` and nothing in this repository consumes the extracted netlist. Run them by hand when a post-layout netlist is needed.
 
 
 ### Logic Equivalence Check

@@ -20,7 +20,7 @@ TOP = tinywhisper_top
 REQUIRED_PDK ?= ihp-sg13g2
 
 # Goals that do not read the PDK
-PDK_FREE_GOALS = help clean clean-all
+PDK_FREE_GOALS = help clean clean-all dashboard
 
 ifneq ($(REQUIRED_PDK),)
 ifneq ($(filter-out $(PDK_FREE_GOALS),$(or $(MAKECMDGOALS),$(.DEFAULT_GOAL))),)
@@ -78,6 +78,14 @@ _DRC_JOBS_OPT = $(if $(DRC_JOBS),-j $(DRC_JOBS))
 # Override with: make <target> PEX_MERGED_PINS="<pin> <pin> ..."
 PEX_MERGED_PINS ?= IOVSS
 
+# Port net that klayout-pex ties the substrate port sub! of the kpex 2.5D netlist to (sak-pex.sh -g), as Magic ties the substrate to VSS. Empty keeps sub! as a port, which <CELL>_pex.sym does not have.
+# Override with: make klayout-pex PEX_SUB_NET=<net>
+PEX_SUB_NET ?= VSS
+
+# Reduction of the full-RC netlist of klayout-pex (sak-pex.sh -R, only used in EXT_MODE=3; default: ticer): none, floating (merges the floating islands and removes the capacitor-only nodes) or ticer (floating plus TICER node elimination). TICER leaves fewer elements and a faster simulation, and ngspice with KLU can lose the operating point of an unreduced RC netlist (resistors below 1 mOhm).
+# Override with: make klayout-pex KPEX_REDUCE=<none|floating|ticer>
+KPEX_REDUCE ?= ticer
+
 # Floating-point precision (significant digits) for Xschem's ev function
 # Override with: make <target> EV_PRECISION=<digits>
 EV_PRECISION ?= 5
@@ -125,7 +133,7 @@ FLOW_FINAL_DIR  		:= flow/final
 
 # Help Target
 help: ## Show this help message
-	@echo 'Usage: make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>] [DRC_LEVEL=<precheck|macro|regular>] [GDSCHECK_SUITE=<suite>|GDSCHECK_DECKS=<decks>] [DRC_JOBS=<n>] [PEX_MERGED_PINS="<pin> ..."] [EV_PRECISION=<digits>] [WAVEFORM_VIEWER=<gtkwave|surfer>] [TB=<testbenchname>] [SCRIPT=<scriptname>] [VERSION=<version>] [OPEN_ARGS=<options>]'
+	@echo 'Usage: make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>] [DRC_LEVEL=<precheck|macro|regular>] [GDSCHECK_SUITE=<suite>|GDSCHECK_DECKS=<decks>] [DRC_JOBS=<n>] [PEX_MERGED_PINS="<pin> ..."] [KPEX_REDUCE=<none|floating|ticer>] [PEX_SUB_NET=<net>] [EV_PRECISION=<digits>] [WAVEFORM_VIEWER=<gtkwave|surfer>] [TB=<testbenchname>] [SCRIPT=<scriptname>] [VERSION=<version>] [OPEN_ARGS=<options>]'
 	@echo ''
 	@echo 'Available targets:'
 	@grep -E '^[a-zA-Z0-9_.-]+:.*## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  %-20s %s\n", $$1, $$2}'
@@ -138,13 +146,15 @@ help: ## Show this help message
 	@echo 'GDSCHECK_DECKS runs gdscheck rule decks instead of a suite, comma-separated (e.g. activ,gatpoly).'
 	@echo 'DRC_JOBS caps the KLayout DRC processes and sets the gdscheck threads (default: 4 KLayout processes or fewer, gdscheck on every CPU).'
 	@echo 'PEX_MERGED_PINS defaults to IOVSS. Lists the supply pins that the flat extraction merges, they are dropped from the generated PEX symbol.'
+	@echo 'PEX_SUB_NET defaults to VSS. The port net that klayout-pex ties the substrate port sub! of the kpex 2.5D netlist to (empty keeps sub! as a port).'
+	@echo 'KPEX_REDUCE defaults to ticer. Sets the RC network reduction of klayout-pex in EXT_MODE=3 (none|floating|ticer).'
 	@echo 'EV_PRECISION defaults to 5 significant digits for Xschem ev function.'
 	@echo 'WAVEFORM_VIEWER defaults to gtkwave. Use surfer to launch Surfer instead.'
 	@echo 'TB selects the Xschem testbench for sim-gl-xschem (default: <CELL>_tb_tran).'
 	@echo 'SCRIPT selects the plotting script for sim-view-xschem (default: plot_<CELL>).'
 	@echo 'VERSION defaults to $(VERSION). Used by the release target.'
 	@echo 'OPEN_ARGS passes extra options to sak-open.py for the open target (e.g. --all).'
-	@echo 'NIGHTLY_REGRESSION defaults to 0. Set to 1 (or run regression-nightly) to include the riscv hardening and gate-level flows in regression.'
+	@echo 'FULL_REGRESSION defaults to 0. Set to 1 (or run regression-full) to include the riscv hardening and gate-level flows in regression.'
 	@echo 'REQUIRED_PDK defaults to $(REQUIRED_PDK). Every target except help, clean and clean-all aborts if $$PDK differs.'
 .PHONY: help
 # ================================================================================================
@@ -311,6 +321,10 @@ build-bondpad: ## Build the bondpad in ip/sg13g2_ip__bondpad_70x70/
 	@$(MAKE) -C $(IP_DIR)/sg13g2_ip__bondpad_70x70 all
 .PHONY: build-bondpad
 
+build-rfpad: ## Build the RF pad in ip/sg13g2_ip__rfpad_70x70/
+	@$(MAKE) -C $(IP_DIR)/sg13g2_ip__rfpad_70x70 all
+.PHONY: build-rfpad
+
 build-logos: ## Build the logos in ip/sg13g2_ip__jku*/ and ip/sg13g2_ip__ce*/
 	@$(MAKE) -C $(IP_DIR)/sg13g2_ip__jku all
 	@$(MAKE) -C $(IP_DIR)/sg13g2_ip__jku_names all
@@ -352,9 +366,10 @@ build-top: ## Build the chip (LibreLane, copy reports/GDS/netlist/render, add lo
 # TODO: Enable `make build-macros`. For now, this is not possible: the RISC-V CPU is built with nix-shell and the
 # top-level is built with the `next` release of IIC-OSIC-TOOLS due to
 # https://github.com/FPGA-Research/heichips25-tapeout/blob/8944926f1f49e382616fbdd150e356bbdcf23b8c/nix/disable_auto_taper.patch#L4.
-build-all: ## Build the bondpad, logos, macros and the chip top-level
+build-all: ## Build the bondpad, RF pad, logos, macros and the chip top-level
 	$(MAKE) init-submodules
 	$(MAKE) build-bondpad
+	$(MAKE) build-rfpad
 	$(MAKE) build-logos
 # 	$(MAKE) build-macros
 	$(MAKE) build-top
@@ -467,31 +482,14 @@ check-ports: ## Compare the pins of <CELL>.sym with the ports of the layout SPIC
 	python3 $(SCRIPTS_DIR)/check_top_ports.py $(XSCHEM_SCH_DIR)/$(CELL).sym $(NET_SPICE_DIR)/$(CELL).spice
 .PHONY: check-ports
 
-klayout-pex: ## Run Parasitic Extraction with KPEX of the CELL cell (usage: make klayout-pex [CELL=<cellname>] [EXT_MODE=<1|2|3>])
+klayout-pex: ## Run Parasitic Extraction with the KPEX 2.5D engine of the CELL cell (usage: make klayout-pex [CELL=<cellname>] [EXT_MODE=<1|2|3>] [KPEX_REDUCE=<none|floating|ticer>] [PEX_SUB_NET=<net>])
 	mkdir -p $(NET_PEX_DIR)
 	$(MAKE) symbol-pex CELL=$(CELL)
 	$(MAKE) check-ports CELL=$(CELL)
-	PDK_UNDERSCORED=$$(echo $$PDK | sed -e 's/-/_/g'); \
-	case $(EXT_MODE) in \
-		1) echo "WARNING: KPEX does not support C-decoupled (C) mode yet, using C-coupled (CC) mode instead."; KPEX_MODE=CC ;; \
-		2) KPEX_MODE=CC ;; \
-		3) KPEX_MODE=RC ;; \
-		*) echo "Invalid EXT_MODE: $(EXT_MODE). Use 1, 2, or 3."; exit 1;; \
-	esac; \
-	kpex \
-	--pdk $$PDK_UNDERSCORED \
-	--cell $(CELL) \
-	--schematic $(XSCHEM_SCH_DIR)/$(CELL).sch \
-	--gds $(LAY_DIR)/$(CELL).gds.gz \
-	--magic \
-	--magic_mode $$KPEX_MODE \
-	--out_dir $(NET_PEX_DIR) \
-	--out_spice $(NET_PEX_DIR)/$(CELL)_klayout_pex_$(EXT_MODE).spice
-#	--2.5D
-#	--mode $$KPEX_MODE
-	sed -i 's/$(CELL)/$(CELL)_pex/g' $(NET_PEX_DIR)/$(CELL)_klayout_pex_$(EXT_MODE).spice
-	rm -rf $(NET_PEX_DIR)/$(CELL)__$(CELL)
-	rm -f $(CELL).nodes $(CELL).sim
+#	kpex reads the schematic as SPICE, so it gets the CDL netlist, or a dummy schematic for a cell without one.
+	@if [ -f $(XSCHEM_SCH_DIR)/$(CELL).sch ]; then $(MAKE) klayout-lvs-netlist CELL=$(CELL); fi
+	sak-pex.sh -d -k -m $(EXT_MODE) -n $(CELL)_pex -R $(KPEX_REDUCE) -g "$(PEX_SUB_NET)" $(if $(wildcard $(XSCHEM_SCH_DIR)/$(CELL).sch),-S $(NET_SCH_DIR)/$(CELL)_klayout.cdl) -w $(NET_PEX_DIR) $(LAY_DIR)/$(CELL).gds.gz
+	mv $(NET_PEX_DIR)/$(CELL).pex.spice $(NET_PEX_DIR)/$(CELL)_klayout_pex_$(EXT_MODE).spice
 	@if [ -f $(XSCHEM_SCH_DIR)/$(CELL)_pex.sym ]; then \
 		echo "Reordering pins in $(CELL)_klayout_pex_$(EXT_MODE).spice to match $(CELL)_pex.sym..."; \
 		sak-pin-reorder.py $(XSCHEM_SCH_DIR)/$(CELL)_pex.sym $(NET_PEX_DIR)/$(CELL)_klayout_pex_$(EXT_MODE).spice --format spice; \
@@ -526,8 +524,9 @@ klayout-verify: ## Verify CELL cell with KLayout (usage: make klayout-verify [CE
 	$(MAKE) klayout-pex CELL=$(CELL)
 .PHONY: klayout-verify
 
-magic-verify: ## Verify CELL cell with Magic (usage: make magic-verify [CELL=<cellname>])
-	$(MAKE) magic-drc CELL=$(CELL)
+magic-verify: ## Verify CELL cell with Magic, LVS and PEX (usage: make magic-verify [CELL=<cellname>])
+# The flows leave the Magic DRC out until the foundry cells are clean in it, make magic-drc still runs it
+#	$(MAKE) magic-drc CELL=$(CELL)
 	$(MAKE) magic-lvs CELL=$(CELL)
 	$(MAKE) magic-pex CELL=$(CELL)
 .PHONY: magic-verify
@@ -541,14 +540,21 @@ bondplan: ## Generate the bondplan (die in package + bondwires + pin table) in p
 # ================================================================================================
 
 
+# Dashboard Target
+dashboard: ## Build the chip dashboard doc/dashboard.html from the committed simulation data and reports
+	python3 $(SCRIPTS_DIR)/gen_dashboard.py
+.PHONY: dashboard
+# ================================================================================================
+
+
 # Build, Verify, Simulate and Package All Target
 all: ## Build, verify, simulate and package the whole chip
 	$(MAKE) build-all
 # Magic stops on the foundry cells of the chip, so its DRC stays out until they are clean
 #	$(MAKE) magic-drc CELL=$(TOP)
 #	$(MAKE) magic-drc CELL=$(TOP)_logo_fill
-	$(MAKE) gdscheck-drc CELL=$(TOP)
-	$(MAKE) gdscheck-drc CELL=$(TOP)_logo_fill
+	$(MAKE) klayout-drc-regular
+	$(MAKE) gdscheck-drc-regular
 #	$(MAKE) klayout-verify
 #	$(MAKE) magic-verify
 #	$(MAKE) sim-all
@@ -578,46 +584,49 @@ release: ## Copy the gds, netlist files and chip renders to the release folder (
 
 
 # Regression Targets
-# NIGHTLY_REGRESSION toggles the long-running riscv steps inside `regression`:
+# FULL_REGRESSION toggles the long-running riscv steps inside `regression`:
 # - 0 (default) skips them and integrates the committed macros/riscv/final/ views
 # - 1 re-hardens the riscv macro (librelane-magicdrc + copy-final, ~2 h) and runs the Icarus RTL and gate-level cocotb/xspice/Xschem flows.
-# The regression-nightly target sets it to 1.
-NIGHTLY_REGRESSION ?= 0
+# The regression-full target sets it to 1.
+FULL_REGRESSION ?= 0
 
-regression: ## Regression test target for IIC-OSIC-TOOLS (usage: make regression [NIGHTLY_REGRESSION=1])
+regression: ## Regression test target for IIC-OSIC-TOOLS (usage: make regression [FULL_REGRESSION=1])
+# 	Script tests: a text I/O without encoding="utf-8" fails, as it breaks on a cp1252 Windows locale.
+	python3 $(SCRIPTS_DIR)/test_gen_dashboard.py
 # 	Analog macro: iqmod (Xschem + CACE + DRC/LVS/PEX + build-top)
 	$(MAKE) -C $(MACROS_DIR)/iqmod sim-xschem TB=iqmod_mfb_lpf_tb_ac_cl
 # 	ONE CACE run: the lightweight AC VDD sweep (no Monte-Carlo) to keep runtime short.
 	cd $(MACROS_DIR)/iqmod/verification/cace && cace iqmod_mfb_lpf.yaml -p ac_params && rm -rf _runs _docs netlist
-# 	KLayout & Magic DRC, LVS and PEX of the iqmod_top cell.
-	$(MAKE) -C $(MACROS_DIR)/iqmod klayout-verify CELL=iqmod_top
+# 	KLayout DRC, LVS and PEX and Magic LVS and PEX of the iqmod_top cell. kpex extracts C-coupled, as its full-RC run takes 100 min, so its device check only warns.
+	$(MAKE) -C $(MACROS_DIR)/iqmod klayout-verify CELL=iqmod_top EXT_MODE=2
 	$(MAKE) -C $(MACROS_DIR)/iqmod magic-verify CELL=iqmod_top
 	$(MAKE) -C $(MACROS_DIR)/iqmod build-top
 # 	Digital macro: riscv (Verilator, Icarus, cocotb, yosys, LibreLane, xspice)
 	$(MAKE) -C $(MACROS_DIR)/riscv lint-verilog-all
-	$(if $(filter 1,$(NIGHTLY_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv sim-rtl-verilog)
+	$(if $(filter 1,$(FULL_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv sim-rtl-verilog)
 	$(MAKE) -C $(MACROS_DIR)/riscv sim-rtl-cocotb
 #	$(MAKE) -C $(MACROS_DIR)/riscv build-fpga
 # 	librelane-magicdrc: full RTL-to-GDS. KLayout DRC skipped for runtime.
-	$(if $(filter 1,$(NIGHTLY_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv librelane-magicdrc)
-	$(if $(filter 1,$(NIGHTLY_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv copy-final)
+	$(if $(filter 1,$(FULL_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv librelane-magicdrc)
+	$(if $(filter 1,$(FULL_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv copy-final)
 # 	Gate-level flows that depend on the LibreLane outputs above.
-	$(if $(filter 1,$(NIGHTLY_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-cocotb)
-	$(if $(filter 1,$(NIGHTLY_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv generate-xspice)
-	$(if $(filter 1,$(NIGHTLY_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-xschem)
+	$(if $(filter 1,$(FULL_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-cocotb)
+	$(if $(filter 1,$(FULL_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv generate-xspice)
+	$(if $(filter 1,$(FULL_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-xschem)
 # 	Top-level assembly
 	$(MAKE) init-submodules
 	$(MAKE) build-bondpad
-# 	gdscheck DRC of a cell it passes, so that a broken gdscheck fails the regression.
-	$(MAKE) -C $(IP_DIR)/sg13g2_ip__bondpad_70x70 gdscheck-drc
+# 	Magic DRC of a cell it passes, so that a broken Magic fails the regression.
+	$(MAKE) -C $(IP_DIR)/sg13g2_ip__bondpad_70x70 magic-drc
+	$(MAKE) build-rfpad
 	$(MAKE) -C $(IP_DIR)/sg13g2_ip__jku all
 # 	librelane-nodrc: full RTL-to-GDS. DRC is skipped for runtime.
 	$(MAKE) librelane-nodrc
 .PHONY: regression
 
-regression-nightly: ## Nightly regression test target for IIC-OSIC-TOOLS (usage: make regression-nightly)
-	$(MAKE) regression NIGHTLY_REGRESSION=1
-.PHONY: regression-nightly
+regression-full: ## Full regression test target for CI (usage: make regression-full)
+	$(MAKE) regression FULL_REGRESSION=1
+.PHONY: regression-full
 # ================================================================================================
 
 
@@ -643,6 +652,7 @@ clean: ## Delete all generated chip top-level files and folders (LibreLane runs,
 clean-all: ## Delete all generated files of the chip top-level, the IPs and the macros
 	$(MAKE) clean
 	$(MAKE) -C $(IP_DIR)/sg13g2_ip__bondpad_70x70 clean
+	$(MAKE) -C $(IP_DIR)/sg13g2_ip__rfpad_70x70 clean
 	$(MAKE) -C $(IP_DIR)/sg13g2_ip__jku clean
 	$(MAKE) -C $(IP_DIR)/sg13g2_ip__jku_names clean
 	$(MAKE) -C $(IP_DIR)/sg13g2_ip__ce clean

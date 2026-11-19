@@ -10,6 +10,8 @@ lvs_run_*
 drc_*.tcl
 ext_*.tcl
 pex_*.tcl
+.pextmp_*
+*_kpex_schematic.spice
 *.vcd
 *.raw
 *.log
@@ -62,7 +64,6 @@ pex_*.tcl
 /ihp130/doc/Intro_Digital_Design_Flow_FOSS.pdf
 /ihp130/schematic/xschem/simulations
 /ihp130/testbenches/xschem/simulations
-/ihp130/ip/sg13g2_ip__rf_bondpad_80x80
 /ihp130/macros/iqmod/scripts/sizing/techsweep
 /ihp130/macros/iqmod/scripts/sizing/drawing_circuits.ipynb
 /ihp130/macros/*/verification/cace/_runs

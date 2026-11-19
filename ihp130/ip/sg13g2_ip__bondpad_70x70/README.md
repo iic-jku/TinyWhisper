@@ -89,9 +89,9 @@ make bondpad DIAMETER=70.0 SHAPE=octagon BOTTOM_METAL=2
 The `script/bondpad.py` script runs in KLayout batch mode. It:
 
 1. Instantiates the `bondpad` PCell from the `SG13_dev` library
-2. Flattens the PCell into a static layout
+2. Places it in a top cell named after the output file, as the static child cell `bondpad`
 3. Exports the layout as GDSII
-4. Generates a matching LEF file (with `pad` pin on Metal2–TopMetal2 and metal obstruction layers)
+4. Generates a matching LEF file (with the `pad` pin on every metal the PCell draws, from `BOTTOM_METAL` up to TopMetal2, and metal obstruction layers) and stops if the GDS draws no metal on a pin layer
 
 The metal stack used for the bondpad covers `Metal3` through `TopMetal2` by default (`BOTTOM_METAL=3`, matching the SG13G2 PDK default). Override `BOTTOM_METAL` to start the stack at a different layer.
 
@@ -108,14 +108,14 @@ make klayout-drc CELL=sg13g2_ip__bondpad_70x70
 make klayout-drc DRC_LEVEL=regular
 ```
 
-**Magic DRC** uses `sak-drc.sh`:
+**Magic DRC** uses `sak-drc.sh`. `make all` leaves it out until the foundry cells of the chip are clean in Magic:
 
 ```sh
 make magic-drc
 make magic-drc CELL=sg13g2_ip__bondpad_70x70
 ```
 
-**gdscheck DRC** runs the standalone [gdscheck](https://github.com/aesc-silicon/gdscheck) engine (`sak-drc.sh -g`). `DRC_LEVEL` selects its suite (`precheck`, `core` for the default `macro`, or `main` for `regular`) and `GDSCHECK_SUITE` replaces it, or `GDSCHECK_DECKS` runs single rule decks instead, see the [top-level README](../../README.md#design-rule-check-drc). It is not part of `make all`:
+**gdscheck DRC** runs the standalone [gdscheck](https://github.com/aesc-silicon/gdscheck) engine (`sak-drc.sh -g`). `DRC_LEVEL` selects its suite (`precheck`, `core` for the default `macro`, or `main` for `regular`) and `GDSCHECK_SUITE` replaces it, or `GDSCHECK_DECKS` runs single rule decks instead, see the [top-level README](../../README.md#design-rule-check-drc). `make all` runs it:
 
 ```sh
 make gdscheck-drc

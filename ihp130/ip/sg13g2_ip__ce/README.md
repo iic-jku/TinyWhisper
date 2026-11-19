@@ -78,7 +78,7 @@ The following Makefile variables can be overridden:
 | Variable      | Default  | Description                                                                           |
 |---------------|----------|---------------------------------------------------------------------------------------|
 | `IMG_SIZE_PX` | `750`    | Source image width/height in pixels                                                   |
-| `BLOCK_SIZE`  | `100`    | Desired physical block size in µm                                                     |
+| `BLOCK_SIZE`  | `100`    | Desired physical block size in µm (the holes need this size, see below)               |
 | `PIXEL_SIZE`  | `0.25`   | Pixel size in µm (must be ≥ M5 min width of 0.21 µm to avoid DRC violations)          |
 | `LAYER`       | `Metal5` | Metal layer the logo is drawn on; one of `Metal1`..`Metal5`, `TopMetal1`, `TopMetal2` |
 
@@ -89,6 +89,12 @@ make all LAYER=TopMetal1
 ```
 
 The image scale factor is computed automatically.
+
+`ce_logo.png` holds 3 holes of one pixel each, 0.25 x 0.25 µm in the GDS, centered at (38.375, 38.375), (38.375, 61.625) and (61.625, 61.625) µm. Without them the artwork holds a solid Metal5 square of 52 µm, which `Slt.c` and `Slt.i` reject, and with them no solid square above 26 µm fits. Fewer than 3 holes cannot clear it, and `make all` fails on gdscheck if one is missing.
+
+The holes satisfy how both decks measure the width of a plate. They are no `Metal5.slit` shapes and the plate stays about 75 µm wide, so they do not do what slits do. They are single pixels of the PNG and `img2lay.py` samples it nearest neighbor, so another `BLOCK_SIZE` or `IMG_SIZE_PX` can drop them.
+
+`DRC_LEVEL=regular` also runs the global density rules, which only the finished chip can meet. This cell draws no other layer and its Metal5 alone is 66.79 % (`M5.k` allows 60 %), so both engines report them here.
 
 
 ## Logo Generator Script
@@ -115,14 +121,14 @@ make klayout-drc CELL=sg13g2_ip__ce
 make klayout-drc DRC_LEVEL=regular
 ```
 
-**Magic DRC** uses `sak-drc.sh`:
+**Magic DRC** uses `sak-drc.sh`. `make all` leaves it out until the foundry cells of the chip are clean in Magic:
 
 ```sh
 make magic-drc
 make magic-drc CELL=sg13g2_ip__ce
 ```
 
-**gdscheck DRC** runs the standalone [gdscheck](https://github.com/aesc-silicon/gdscheck) engine (`sak-drc.sh -g`). `DRC_LEVEL` selects its suite (`precheck`, `core` for the default `macro`, or `main` for `regular`) and `GDSCHECK_SUITE` replaces it, or `GDSCHECK_DECKS` runs single rule decks instead, see the [top-level README](../../README.md#design-rule-check-drc). It is not part of `make all`:
+**gdscheck DRC** runs the standalone [gdscheck](https://github.com/aesc-silicon/gdscheck) engine (`sak-drc.sh -g`). `DRC_LEVEL` selects its suite (`precheck`, `core` for the default `macro`, or `main` for `regular`) and `GDSCHECK_SUITE` replaces it, or `GDSCHECK_DECKS` runs single rule decks instead, see the [top-level README](../../README.md#design-rule-check-drc). `make all` runs it:
 
 ```sh
 make gdscheck-drc

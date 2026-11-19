@@ -84,7 +84,9 @@ localparam logic [2:0] FUNCT3_MRET = 3'b000;
 localparam logic [2:0] FUNCT3_CSRW = 3'b001;
 localparam logic [2:0] FUNCT3_CSRR = 3'b010;
 
-localparam logic [6:0] DONT_CARES = 7'b???????;
+// A macro, not a localparam: Yosys read_verilog -sv drops the wildcard bits of a localparam in a casez
+// item that shares its branch with another item, and the netlist then decoded ADDI and the like as illegal
+`define DONT_CARES 7'b???????
 
 // Instruction definitions
 // R-TYPE

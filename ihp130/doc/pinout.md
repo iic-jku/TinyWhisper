@@ -52,4 +52,4 @@ ToDo
     - Vinn_Q
     - Vinp_Q
 - Total: 56 pins
-- Note: 8 x VSS will be connected to package GND --> QFN-48 package
+- Note: all 9 x VSS and 3 x IOVSS pads are downbonded to the exposed pad (package GND) of the QFN-48 package, see `../packaging/config.yaml`

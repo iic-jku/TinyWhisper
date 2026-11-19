@@ -9,7 +9,7 @@ When adding or reorganizing a macro, mirror the template layout and its per-macr
 
 ## Environment
 
-- Run every flow inside the IIC-OSIC-TOOLS container (https://github.com/iic-jku/IIC-OSIC-TOOLS), tag `2026.09` or later (`README.md`). CI uses `hpretl/iic-osic-tools:latest`.
+- Run every flow inside the IIC-OSIC-TOOLS container (https://github.com/iic-jku/IIC-OSIC-TOOLS), tag `2026.11` or later (`README.md`). CI uses `hpretl/iic-osic-tools:latest`.
 - The PDK is `ihp-sg13g2`. `.designinit` exports `PDK` and the related variables, and `sak-pdk ihp-sg13g2` switches a running shell.
 - The chip, macro and IP Makefiles check `$PDK` when they are parsed: every target except `help` and the clean targets aborts if it is not `ihp-sg13g2`. Fix the PDK instead of passing `REQUIRED_PDK=`.
 - After cloning, run `make init-submodules` in `ihp130/`. It fetches `ihp130/flow/artistic` (ArtistIC) and the two submodules under `software/c_toolchain/`.
@@ -20,7 +20,7 @@ When adding or reorganizing a macro, mirror the template layout and its per-macr
 | --- | --- |
 | `ihp130/` | The chip: `Makefile`, `README.md` (documents every target), `rtl/` (pad ring `tinywhisper_top.sv`, `tinywhisper_core.sv`), `flow/librelane/`, `layout/`, `netlist/`, `schematic/xschem/`, `testbenches/`, `verification/`, `packaging/` (bondplan), `release/v.<version>/` |
 | `ihp130/macros/<name>/` | One macro per folder: `riscv` (digital), `iqmod` (analog), `coupled_resonator_lc_bpf` (schematic-only). `ihp130/macros/README.md` compares them. |
-| `ihp130/ip/<name>/` | Bondpad and logo blocks, each with `Makefile` and `README.md`, plus the third-party pad cells in `sg13g2_io_custom/` |
+| `ihp130/ip/<name>/` | Bondpad, RF pad and logo blocks, each with `Makefile` and `README.md`, plus the third-party pad cells in `sg13g2_io_custom/` |
 | `software/` | C toolchain for the RISC-V core and the Python WSPR reference (`software/README.md`) |
 | `doc/` | Quarto documentation site |
 | `sky130/` | Legacy sky130 test chip, kept for reference and not maintained |
@@ -40,7 +40,7 @@ Inside a macro, folders exist only where the macro kind needs them:
 
 ## Makefiles
 
-- `ihp130/`, every macro and every bondpad or logo IP has its own `Makefile` and `README.md`. The `README.md` documents each target. Read it before changing a flow.
+- `ihp130/`, every macro and every bondpad, RF pad or logo IP has its own `Makefile` and `README.md`. The `README.md` documents each target. Read it before changing a flow.
 - Each of these Makefiles sets `.DEFAULT_GOAL := help`, and `make help` lists every target from its `## ` comment. Give every new target a `## ` comment.
 - Variables are set with `?=` and overridden on the command line, for example `CELL=<cell>`, `TB=<testbench>`, `EXT_MODE=<1|2|3>`, `WAVEFORM_VIEWER=surfer`.
 - cocotb testbenches are self-contained Python runners (`cocotb_tools.runner.get_runner`). The targets run `python3 <cell>_tb.py` in the testbench folder, with `GL=1` for gate level. The exception is `macros/riscv/testbenches/cocotb/dsmod/`, which has its own `Makefile` that includes cocotb's `Makefile.sim`.
@@ -59,7 +59,7 @@ make -C macros/riscv lint-verilog-all               # Verilator lint of the risc
 make -C macros/riscv sim-rtl-cocotb                 # riscv RTL simulation
 make -C macros/iqmod sim-xschem TB=iqmod_mfb_lpf_tb_ac_cl   # one Xschem/ngspice testbench
 make -C macros/iqmod klayout-verify CELL=iqmod_top  # KLayout DRC, LVS, PEX
-make -C macros/iqmod magic-verify CELL=iqmod_top    # Magic DRC, Netgen LVS, Magic PEX
+make -C macros/iqmod magic-verify CELL=iqmod_top    # Netgen LVS, Magic PEX, its DRC is commented out
 make -C macros/iqmod gdscheck-drc CELL=iqmod_top    # gdscheck DRC
 make build-top                                      # chip LibreLane run, copy-back, logo and fill, render
 make regression                                     # tool/flow smoke test, reuses the committed riscv views
@@ -68,7 +68,7 @@ make regression                                     # tool/flow smoke test, reus
 ## CI
 
 - `.github/workflows/license-check.yml` runs `reuse lint` on pushes and pull requests to `main`.
-- `.github/workflows/regression.yml` runs `make regression-nightly` in `ihp130/` inside `hpretl/iic-osic-tools:latest`, nightly at 02:00 UTC if `main` has a commit from the last 25 h, and on manual dispatch. It is a tool/flow smoke test, not sign-off. "Regression" in `ihp130/README.md` lists what it covers.
+- `.github/workflows/regression.yml` runs `make regression-full` in `ihp130/` inside `hpretl/iic-osic-tools:latest`, on every push to `main` and on manual dispatch. It is a tool/flow smoke test, not sign-off. "Regression" in `ihp130/README.md` lists what it covers.
 - `.github/workflows/quarto-publish.yml` renders `doc/` and publishes it to `gh-pages` on every push to `main`.
 
 ## Design conventions
@@ -86,8 +86,9 @@ make regression                                     # tool/flow smoke test, reus
 - `make release` defaults to `VERSION=2.0.0` and overwrites the committed `ihp130/release/v.2.0.0/`. Never run it without an explicit new `VERSION`.
 - `ihp130/macros/riscv/netlist/xspice/riscv_top.xspice` is a committed source that no target rebuilds from the stock RTL. `generate-xspice` skips itself while `freq_status[1:0] <= 2'b11;` is commented out in `rtl/memory.sv`. Leave that guard alone.
 - `build-top` runs `librelane-nodrc` on purpose: IHP's `metal1_pin_offgrid` rule fails on the pad ring (TODO in `ihp130/Makefile`). Run DRC separately with `make magic-drc`, `make klayout-drc-regular` or the matching `gdscheck-drc-*` targets. `DRC_JOBS=<n>` caps the KLayout processes and sets the gdscheck threads (default 4 and every CPU). More than 4 only pays off for the full chip on a server.
-- KLayout is the sign-off DRC. Magic and gdscheck flag IHP's own cells (the nBuLay ring of the `pmos` guard ring PCell, IHP-Open-PDK#954, fixed in gdscheck after 0.2.0, and, for Magic, the IO pads read hierarchically), so until the upstream fixes are in the image `magic-verify` and `make regression` stop at Magic, and `make all` leaves the chip's Magic DRC out. Fix such a report upstream, not with make's `-` prefix in a flow. Keep `-f` patterns for Magic away from the top cell: `sak-drc.sh` refuses one that matches it, because Magic would check an empty cell.
+- KLayout is the sign-off DRC. Magic and gdscheck flag IHP's own cells (the nBuLay ring of the `pmos` guard ring PCell, IHP-Open-PDK#954, fixed in gdscheck after 0.2.0, and, for Magic, the IO pads read hierarchically), so the flows leave the Magic DRC out until the upstream fixes are in the image: its lines are commented out in `magic-verify`, in the IP `all` and in `make all`. gdscheck stays in and stops `make build-all` and `make all`. Fix such a report upstream, not with make's `-` prefix in a flow. Keep `-f` patterns for Magic away from the top cell: `sak-drc.sh` refuses one that matches it, because Magic would check an empty cell.
 - `build-all` does not rebuild the macros. The chip integrates the committed views in `macros/riscv/final/` and `macros/iqmod/final/`.
+- `klayout-pex` runs the 2.5D engine of `kpex` through `sak-pex.sh -k`, which the image ships from `2026.11` on (with kpex 0.10.0). A full-RC extraction of `iqmod_mixer_tg` takes about 1 min and `EXT_MODE=2` on `iqmod_top` 8 min, where Magic takes seconds, so use `magic-pex` for a quick netlist. On `riscv_top` even a C-coupled extraction had not finished after 5 h, so verify `riscv_top` with its gate-level simulations and the LibreLane STA, not with a PEX netlist.
 - Third-party files keep their own license (see `REUSE.toml`): `ihp130/ip/sg13g2_io_custom/`, `ihp130/testbenches/xschem/models/`, the IHP cell netlists `sg13g2_io.spi` and `sg13g2_stdcell.spice` in `ihp130/verification/lvs/`, and the EUROPRACTICE package GDS in `ihp130/packaging/layout/`.
 
 ## License headers

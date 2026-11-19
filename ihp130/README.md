@@ -53,6 +53,14 @@
 │  │  ├─ 📁 verification/
 │  │  ├─ Makefile
 │  │  └─ README.md
+│  ├─ 📁 sg13g2_ip__rfpad_70x70/
+│  │  ├─ 📁 final/
+│  │  ├─ 📁 netlist/
+│  │  ├─ 📁 schematic/
+│  │  ├─ 📁 script/
+│  │  ├─ 📁 verification/
+│  │  ├─ Makefile
+│  │  └─ README.md
 │  ├─ 📁 sg13g2_ip__ce/
 │  │  ├─ 📁 final/
 │  │  ├─ 📁 logo/
@@ -212,6 +220,7 @@ Xschem reads exactly one `xschemrc` at start-up, and that file decides which sym
 | --- | --- |
 | [`schematic/xschem/xschemrc`](schematic/xschem/xschemrc) | chip top-level schematics |
 | [`testbenches/xschem/xschemrc`](testbenches/xschem/xschemrc) | chip top-level testbenches |
+| [`ip/sg13g2_ip__rfpad_70x70/schematic/xschem/xschemrc`](ip/sg13g2_ip__rfpad_70x70/schematic/xschem/xschemrc) | RF pad schematic |
 | [`macros/iqmod/schematic/xschem/xschemrc`](macros/iqmod/schematic/xschem/xschemrc) | iqmod schematics |
 | [`macros/iqmod/testbenches/xschem/xschemrc`](macros/iqmod/testbenches/xschem/xschemrc) | iqmod testbenches |
 | [`macros/iqmod/verification/cace/templates/xschemrc`](macros/iqmod/verification/cace/templates/xschemrc) | CACE testbench templates |
@@ -288,8 +297,8 @@ The whole flow is driven by Makefiles. The top-level `Makefile` builds the chip,
 
 At the top level, `make all` runs four steps in this order:
 
-1. `build-all` initialises the submodules and builds every component by calling its own `all` target: bondpad, logos, macros, and finally the chip assembly with `build-top` (LibreLane, copy-back of all artifacts, logo and fill insertion, final GDS render).
-2. `gdscheck-drc` runs the DRC of the final `tinywhisper_top` and `tinywhisper_top_logo_fill` GDS. A violation stops `make all`, and gdscheck flags IHP's own cells until the fix is in the container (see [Design Rule Check (DRC)](#design-rule-check-drc)). `magic-drc` is left out until IHP's IO pads are clean in Magic. The KLayout DRC, the sign-off deck, is not part of `make all` to shorten the runtime. Run it separately with `klayout-drc-minimum` or `klayout-drc-regular`.
+1. `build-all` initialises the submodules and builds every component by calling its own `all` target: bondpad, RF pad, logos, macros, and finally the chip assembly with `build-top` (LibreLane, copy-back of all artifacts, logo and fill insertion, final GDS render).
+2. `klayout-drc-regular` (the sign-off deck) and `gdscheck-drc-regular` run the DRC of the final `tinywhisper_top_logo_fill` GDS. A violation stops `make all`, and gdscheck reports violations on this chip (see [Design Rule Check (DRC)](#design-rule-check-drc)). `magic-drc` is left out until IHP's IO pads are clean in Magic.
 3. `sim-all` runs the top-level RTL and gate-level simulations on the netlists produced by this build.
 4. `bondplan` generates the bonding diagram, the bondwires, and the pin table.
 
@@ -300,7 +309,7 @@ Every component follows the same principle. The simulations always run last, so 
 | [`macros/riscv/`](macros/riscv/) (digital) | lint -> build (FPGA and LibreLane) -> simulate. DRC and LVS run inside the LibreLane flow. The XSPICE model is a committed source file, rebuilt only when the riscv RTL enables it. |
 | [`macros/iqmod/`](macros/iqmod/) (analog) | verify (DRC, LVS, PEX) -> build (LEF, LIB, Verilog stub, GDS, render) -> simulate |
 | [`macros/coupled_resonator_lc_bpf/`](macros/coupled_resonator_lc_bpf/) (schematic-only) | simulate |
-| [`ip/*`](ip/) (bondpad, logos) | build -> verify (DRC) |
+| [`ip/*`](ip/) (bondpad, RF pad, logos) | build -> verify (DRC, and LVS on the RF pad) |
 | top level | build -> verify (DRC) -> simulate -> package |
 
 The following sections describe the top-level targets in detail. The macro and IP targets are documented in the `README.md` of the respective subfolder.
@@ -561,6 +570,15 @@ make build-bondpad
 ```
 
 
+### Build RF Pad
+
+To build the [RF pad](ip/sg13g2_ip__rfpad_70x70/README.md) in the `ip` folder, run the following command. The chip does not use it by default, the README of the IP lists what a chip needs for it.
+
+```sh
+make build-rfpad
+```
+
+
 ### Build Logos
 
 To build the logos in the `ip` folder, run the following command:
@@ -596,7 +614,7 @@ The FPGA part of that build emulates the macro on a [pico-ice](https://pico-ice.
 
 #### Build Analog Macros
 
-Each analog macro has its own `klayout-verify` and `magic-verify` targets that run DRC, LVS, and PEX for the top-level cell, and a `gdscheck-drc` target for the gdscheck DRC.
+Each analog macro has a `klayout-verify` target that runs DRC, LVS, and PEX for the top-level cell, a `gdscheck-drc` target for the gdscheck DRC, and a `magic-verify` target that runs LVS and PEX. `magic-drc` runs the Magic DRC on its own.
 
 To build the IQ modulator macro:
 
@@ -626,7 +644,7 @@ Internally this executes (in order): `librelane-nodrc` -> `copy-reports` -> `cop
 
 ### Build All
 
-To initialise submodules, build the bondpad, build the logos, build the macros, and run the full `build-top` flow, run:
+To initialise submodules, build the bondpad and the RF pad, build the logos, build the macros, and run the full `build-top` flow, run:
 
 ```sh
 make build-all
@@ -684,7 +702,7 @@ The `DRC_JOBS` parameter (`sak-drc.sh -j`) sets how many jobs one run uses at mo
 make klayout-drc-minimum
 ```
 
-**KLayout DRC (regular)** runs a full (`regular`) KLayout DRC on the final top-level layout with logo and fill structures:
+**KLayout DRC (regular)** runs a full (`regular`) KLayout DRC on the final top-level layout with logo and fill structures. `make all` runs it as its first DRC:
 
 ```sh
 make klayout-drc-regular
@@ -714,7 +732,7 @@ make magic-drc CELL=tinywhisper_top
 make gdscheck-drc-minimum
 ```
 
-**gdscheck DRC (regular)** runs the `main` suite on the final top-level layout with logo and fill structures:
+**gdscheck DRC (regular)** runs the `main` suite on the final top-level layout with logo and fill structures. `make all` runs it after the KLayout DRC:
 
 ```sh
 make gdscheck-drc-regular
@@ -735,8 +753,9 @@ make gdscheck-drc CELL=tinywhisper_top_logo_fill GDSCHECK_DECKS=metal1,via1
 > - The `SG13_dev` `pmos` PCell draws an nBuLay ring under its n+ tap ring when `guardRingType` is `nwell`, as in `iqmod`. Magic reports `NBL.f` between that ring and the PMOS diffusion inside it, and gdscheck 0.2.0 reports `NBL.f` (26 in `iqmod_mfb_lpf`, 36 in `iqmod_mixer`, 140 in `iqmod_top`). The KLayout deck checks `NBL.f` only against P+ Activ in PWell, as IHP aligned it with the commercial deck in [IHP-Open-PDK#700](https://github.com/IHP-GmbH/IHP-Open-PDK/pull/700). Which reading is right is open in [IHP-Open-PDK#954](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/954). gdscheck reads `NBL.f` like the KLayout deck since [aesc-silicon/gdscheck#51](https://github.com/aesc-silicon/gdscheck/pull/51), which came after 0.2.0.
 > - Magic also reports 144 `MIM.e`, 16 `NBL.e` and 8 `pSD.e/f` on `iqmod_top`, which the KLayout deck does not report even at `regular`. Their cause is not traced yet.
 > - Read hierarchically, Magic reports "This layer can't abut or partially overlap between subcells" in IHP's IO pads.
+> - On `tinywhisper_top_logo_fill`, gdscheck's `main` suite reports 140 `NBL.f` and also 128 `TV1.a`, 32 `TV1.b`, 18 `TM1.a`, 1 `TM2.b`, 1 `Slt.c` and 1 `Slt.i`. The `TV1` hits sit on the TopVia1 stacks at `iqmod_top` and the `TM1.a` hits at `VIA_TopVia1EWNS`, both not traced yet. The `Slt` hits are the `sg13g2_ip__ce` without its pinholes, which this GDS holds until the next `make build-top`: with the new cell patched into a copy, `main` reports 319 hits, without them.
 >
-> A flow stops on a violation of any engine it calls, so until the fixes are in the container the Magic DRC of `iqmod_top` stops `magic-verify` and `make regression`. To continue meanwhile, run the later steps directly (`magic-lvs`, `magic-pex`, `build-top`). Upstream calls gdscheck experimental, so a clean gdscheck run is no sign-off on its own.
+> A flow stops on a violation of any engine it calls, so the flows leave the Magic DRC out until the fixes are in the container: its lines are commented out in `magic-verify`, in the IP `all` and in `make all`, and `magic-drc` still runs it on its own. gdscheck stays in, so it stops `make all` at the chip hits above, and the `make all` of `iqmod` at its cells. To continue meanwhile, run the later steps directly (`bondplan`). Upstream calls gdscheck experimental, so a clean gdscheck run is no sign-off on its own.
 
 
 ### Export Schematic Netlist for LVS
@@ -848,9 +867,9 @@ The `EXT_MODE` parameter selects the extraction mode:
 - `3` = full-RC (default)
 
 > [!NOTE]
-> For `klayout-pex`, `EXT_MODE=1` (C-decoupled) is not yet supported by kpex and automatically falls back to `EXT_MODE=2` (C-coupled) with a warning.
+> For `klayout-pex`, `EXT_MODE=1` (C-decoupled) runs kpex in its mode `C`, which replaces each coupling capacitance by its full value from both nets to the substrate.
 
-The `.subckt` name in the extracted SPICE file is `<CELL>_pex`: `magic-pex` sets it directly via the `sak-pex.sh` option `-n <CELL>_pex`, while for `klayout-pex` it is automatically renamed from `<CELL>` (kpex).
+The `.subckt` name in the extracted SPICE file is `<CELL>_pex`: both targets set it via the `sak-pex.sh` option `-n <CELL>_pex`.
 
 Both targets start by running `symbol-pex` (see above), so `schematic/xschem/<CELL>_pex.sym` always reflects the current cell symbol. The `.subckt` pin order in the extracted SPICE file is then reordered with `sak-pin-reorder.py` (installed in the IIC-OSIC-TOOLS container) to match that symbol's pin positions. This ensures the PEX netlist can be used directly with the corresponding Xschem symbol for simulation regardless of the selected `EXT_MODE`.
 
@@ -866,13 +885,22 @@ python3 scripts/check_pex_ports.py netlist/pex/tinywhisper_top_magic_pex_3.spice
 python3 scripts/check_pex_ports.py -v netlist/pex/*.spice     # -v also prints the size of each subcircuit
 ```
 
-**KLayout PEX** currently uses `kpex` with the Magic extraction engine (the 2.5D engine is work in progress):
+**KLayout PEX** uses `sak-pex.sh -k`, which extracts with the 2.5D engine of `kpex`. Both come with the image from `2026.11` on (kpex 0.10.0):
 
 ```sh
 make klayout-pex
 make klayout-pex CELL=tinywhisper_top
 make klayout-pex CELL=tinywhisper_top EXT_MODE=3
 ```
+
+On top of the extraction the target does four things:
+
+- It passes the CDL netlist of `klayout-lvs-netlist` as schematic (`sak-pex.sh -S`), so that kpex checks its own LVS netlist against the device classes and totals of the schematic. A mismatch fails the target in full-RC (`EXT_MODE=3`) and is only a warning in `EXT_MODE=1` and `2`. A cell without a schematic gets a dummy one.
+- It keeps MIM and MOM capacitors as devices with their models (`--blackbox y`), which kpex would otherwise replace by the extracted capacitance of their plates.
+- It reduces the full-RC netlist with TICER (`KPEX_REDUCE`, default `ticer`), which leaves far fewer elements and a faster simulation, and ngspice with `klu` can lose the operating point of an unreduced netlist (resistors below 1 mOhm).
+- It ties the substrate port `sub!` of the 2.5D netlist to `PEX_SUB_NET` (default `VSS`, `sak-pex.sh -g`), as Magic ties the substrate to `VSS`, so the netlist keeps the pins of `<CELL>_pex.sym`.
+
+The chip top-level has not been extracted with the 2.5D engine yet. `riscv_top` alone had not finished a C-coupled extraction after 5 h, so verify the digital part of `tinywhisper_top` with a gate-level simulation instead, see the warning in [`macros/riscv/README.md`](macros/riscv/README.md#parasitic-extraction-pex).
 
 **Magic PEX** uses `sak-pex.sh`, which extracts the parasitics with Magic (C-decoupled, C-coupled, or full-RC):
 
@@ -899,7 +927,7 @@ make magic-pex CELL=tinywhisper_top EXT_MODE=3 THRESHOLD=5000 MINRES=500 MINDELA
 
 ### Verify a Specific Cell
 
-Runs DRC, LVS, and PEX for a specific cell (e.g. `tinywhisper_top`):
+Runs DRC, LVS, and PEX with KLayout and LVS and PEX with Magic for a specific cell (e.g. `tinywhisper_top`):
 
 ```sh
 make klayout-verify CELL=tinywhisper_top
@@ -909,7 +937,7 @@ make magic-verify CELL=tinywhisper_top
 
 ### Verify Top Cell
 
-Runs DRC, LVS, and PEX for the top cell:
+Runs DRC, LVS, and PEX with KLayout and LVS and PEX with Magic for the top cell:
 
 ```sh
 make klayout-verify
@@ -945,9 +973,20 @@ See [packaging/README.md](packaging/README.md) for the full flow documentation a
 </p>
 
 
+### Chip Dashboard
+
+Builds `doc/dashboard.html`, a self-contained page with the analog and digital key numbers of the chip, published next to the Quarto documentation:
+
+```sh
+make dashboard
+```
+
+[scripts/gen_dashboard.py](scripts/gen_dashboard.py) parses the committed outputs (the AC curves in `macros/iqmod/testbenches/xschem/plot_simulations/data/`, the CACE samples in `macros/iqmod/verification/cace/scripts/*.csv`, the riscv STA, power and `stat.rpt` reports in `macros/riscv/verification/`, the RTL in `macros/riscv/rtl/` and `doc/errata.md`) and inlines them into [scripts/dashboard_template.html](scripts/dashboard_template.html). The sign-off, chip facts, band plan and nominal analog tables are kept in `CURATED` inside the script, each row with the report it was read from. Update them after a new LibreLane or CACE run, then rerun the target and commit `doc/dashboard.html`. The target needs no PDK.
+
+
 ### Build, Verify and Simulate All
 
-Runs `build-all` first, followed by the gdscheck DRC of both `tinywhisper_top` and `tinywhisper_top_logo_fill`, then the chip simulations (`sim-all`) and finally generates the bondplan (`bondplan`). A violation in the DRC stops the flow, see [Design Rule Check (DRC)](#design-rule-check-drc):
+Runs `build-all` first, followed by the regular KLayout and gdscheck DRC of the final `tinywhisper_top_logo_fill`, then the chip simulations (`sim-all`) and finally generates the bondplan (`bondplan`). A violation in the DRC stops the flow, see [Design Rule Check (DRC)](#design-rule-check-drc):
 
 ```sh
 make all
@@ -995,44 +1034,46 @@ make release VERSION=2.1.0
 
 ### Regression
 
-The `regression` target is the project's end-to-end smoke test for the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) environment (IIC-OSIC-TOOLS regression test **28**). Its goal is to exercise **every tool and flow** in the project at least once with the **shortest possible runtime**. It is a tool/flow regression, not a design sign-off. It comes in two variants: the default `regression` reuses the committed riscv macro views for speed, while `regression-nightly` additionally re-hardens the riscv macro and runs its gate-level flows (it runs `regression` with `NIGHTLY_REGRESSION=1`).
+The `regression` target is the project's end-to-end smoke test for the [IIC-OSIC-TOOLS](https://github.com/iic-jku/IIC-OSIC-TOOLS) environment (IIC-OSIC-TOOLS regression test **28**). Its goal is to exercise **every tool and flow** in the project at least once with the **shortest possible runtime**. It is a tool/flow regression, not a design sign-off. It comes in two variants: the default `regression` reuses the committed riscv macro views for speed, while `regression-full` additionally re-hardens the riscv macro and runs its gate-level flows (it runs `regression` with `FULL_REGRESSION=1`).
 
 ```sh
-make regression          # fast variant, committed riscv views reused
-make regression-nightly  # full variant, riscv hardening + gate-level flows included
+make regression       # fast variant, committed riscv views reused
+make regression-full  # full variant, riscv hardening + gate-level flows included
 ```
 
-This target also runs automatically in continuous integration: the [`regression`](../.github/workflows/regression.yml) GitHub Actions workflow runs `make regression-nightly` inside the `IIC-OSIC-TOOLS` container nightly (and on manual dispatch), and its status is shown by the *Regression* badge at the top of the [repository README](../README.md). The scheduled run is gated so it only executes when there have been changes since the previous night.
+This target also runs automatically in continuous integration: the [`regression`](../.github/workflows/regression.yml) GitHub Actions workflow runs `make regression-full` inside the `IIC-OSIC-TOOLS` container on every push to `main` (and on manual dispatch), and its status is shown by the *Regression* badge at the top of the [repository README](../README.md).
 
 To keep the runtime low while still covering the full toolchain, the regression makes the following trade-offs:
 
 - The chip top-level runs `librelane-nodrc`. All DRC checks are skipped to save runtime on the large top-level assembly. The macros and IP blocks are DRC-checked individually beforehand, so this only leaves the top-level routing/fill unchecked.
-- KLayout DRC (`sak-drc.sh`) is skipped inside the LibreLane runs, but is still exercised in the bondpad and logo IP builds, and in the iqmod `klayout-verify`.
-- Magic DRC (`sak-drc.sh -m`) runs in the bondpad and logo IP builds and in the iqmod `magic-verify`, where the regression stops until the fixes for IHP's own cells are in the container (see [Design Rule Check (DRC)](#design-rule-check-drc)). gdscheck DRC (`sak-drc.sh -g`) runs once, as `gdscheck-drc` of the bondpad, which passes it, so a broken gdscheck fails the regression.
+- KLayout DRC (`sak-drc.sh`) is skipped inside the LibreLane runs, but is still exercised in the bondpad, RF pad and logo IP builds, and in the iqmod `klayout-verify`.
+- Magic DRC (`sak-drc.sh -m`) runs once, as `magic-drc` of the bondpad, which passes it, so a broken Magic fails the regression. gdscheck DRC (`sak-drc.sh -g`) runs in the bondpad, RF pad and logo IP builds.
 - Only **one** logo (`sg13g2_ip__jku`) is regenerated. It is the only step that exercises the PNG to GDS flow. The other logos (`sg13g2_ip__jku_names`, `sg13g2_ip__ce`, `sg13g2_ip__ce_names`) use an identical toolchain and reuse their committed views.
 - Exactly **one** Xschem testbench (`iqmod_mfb_lpf_tb_ac_cl`) and **one** CACE parameter set (the AC VDD sweep `ac_params` of `iqmod_mfb_lpf.yaml`, no Monte Carlo) are run. Swap `ac_params` for `ac_mc_params` / `ac_mm_params` in the target to also exercise the Monte Carlo flow.
-- In the default `regression` the riscv macro is **not re-hardened**: `librelane-magicdrc` (the full RTL-to-GDS of the CPU, ≈2 h wall clock), the flows that depend on its fresh outputs (`copy-final`, the gate-level cocotb simulation `sim-gl-cocotb` with ≈12 min for the full suite, `generate-xspice`, which is called for consistency with the template but skips itself while the riscv RTL carries its stock settings, and the gate-level Xschem simulation `sim-gl-xschem`) and the Icarus RTL testbench (`sim-rtl-verilog`) only run in `regression-nightly` (`NIGHTLY_REGRESSION=1`). In the default variant the riscv macro is covered at RTL (lint + cocotb, which also exercises Icarus as its simulator), and the LibreLane flow itself is still exercised by the chip top-level `librelane-nodrc` run. A fast gate-level smoke run of a single test (≈20 s) is available via `COCOTB_TEST_FILTER=test_cpu_fibonacci_fast make sim-gl-cocotb`.
+- In the default `regression` the riscv macro is **not re-hardened**: `librelane-magicdrc` (the full RTL-to-GDS of the CPU, ≈2 h wall clock), the flows that depend on its fresh outputs (`copy-final`, the gate-level cocotb simulation `sim-gl-cocotb` with ≈12 min for the full suite, `generate-xspice`, which is called for consistency with the template but skips itself while the riscv RTL carries its stock settings, and the gate-level Xschem simulation `sim-gl-xschem`) and the Icarus RTL testbench (`sim-rtl-verilog`) only run in `regression-full` (`FULL_REGRESSION=1`). In the default variant the riscv macro is covered at RTL (lint + cocotb, which also exercises Icarus as its simulator), and the LibreLane flow itself is still exercised by the chip top-level `librelane-nodrc` run. A fast gate-level smoke run of a single test (≈20 s) is available via `COCOTB_TEST_FILTER=test_cpu_fibonacci_fast make sim-gl-cocotb`.
 
-The regression runs bottom-up: first the iqmod and riscv macros, then the top-level assembly (submodules, bondpad, logo) and finally the chip top-level LibreLane run that integrates the macros and IP. In `regression-nightly`, `copy-final` copies the freshly hardened `flow/final/` views into `macros/riscv/final/`, so the gate-level flows and the chip top-level use the freshly built outputs; in the default `regression` the chip top-level integrates the committed views in `macros/riscv/final/` instead.
+The regression runs bottom-up: first the script tests, then the iqmod and riscv macros, then the top-level assembly (submodules, bondpad, RF pad, logo) and finally the chip top-level LibreLane run that integrates the macros and IP. In `regression-full`, `copy-final` copies the freshly hardened `flow/final/` views into `macros/riscv/final/`, so the gate-level flows and the chip top-level use the freshly built outputs; in the default `regression` the chip top-level integrates the committed views in `macros/riscv/final/` instead.
 
 The following tools and flows are checked by both variants:
 
 | Tool / flow | Where it is exercised |
 | --- | --- |
+| Python scripts with UTF-8 text I/O (`EncodingWarning` as an error) | `scripts/test_gen_dashboard.py` |
 | git submodules | `init-submodules` |
-| KLayout scripting (bondpad generator), KLayout DRC, Magic DRC | `build-bondpad` |
-| gdscheck DRC (`sak-drc.sh -g`) | bondpad `gdscheck-drc` |
-| PNG to GDS logo generation, KLayout DRC, Magic DRC | `sg13g2_ip__jku all` (single logo) |
+| KLayout scripting (bondpad generator), KLayout DRC, gdscheck DRC | `build-bondpad` |
+| Magic DRC (`sak-drc.sh -m`) | bondpad `magic-drc` |
+| KLayout generator with connectivity checks, KLayout LVS of a generated cell | `build-rfpad` |
+| PNG to GDS logo generation, KLayout DRC, gdscheck DRC | `sg13g2_ip__jku all` (single logo) |
 | Xschem + ngspice (analog simulation) | iqmod `sim-xschem` (`iqmod_mfb_lpf_tb_ac_cl`) |
 | CACE (+ ngspice) | iqmod CACE, single parameter set (`ac_params`) |
-| KLayout DRC (`sak-drc.sh`) + KLayout LVS (`sak-lvs.sh`) + KLayout PEX (`kpex`) | iqmod `klayout-verify CELL=iqmod_top` |
-| Magic DRC (`sak-drc.sh`) + Magic extract + Netgen LVS (`sak-lvs.sh`) + Magic PEX (`sak-pex.sh`) | iqmod `magic-verify CELL=iqmod_top` |
+| KLayout DRC (`sak-drc.sh`) + KLayout LVS (`sak-lvs.sh`) + KLayout PEX (`kpex`) | iqmod `klayout-verify CELL=iqmod_top EXT_MODE=2` |
+| Magic extract + Netgen LVS (`sak-lvs.sh`) + Magic PEX (`sak-pex.sh`) | iqmod `magic-verify CELL=iqmod_top` |
 | Magic LEF export + LIB + Verilog stub + `sak-render.py` render | iqmod `build-top` |
 | Verilator lint | riscv `lint-verilog-all` |
 | cocotb (RTL, Icarus as simulator) | riscv `sim-rtl-cocotb` |
 | LibreLane (OpenROAD / Yosys / KLayout streamout / Netgen LVS) | chip `librelane-nodrc` |
 
-The following flows are only covered by `regression-nightly`:
+The following flows are only covered by `regression-full`:
 
 | Tool / flow | Target (in `macros/riscv/`) |
 | --- | --- |
