@@ -900,7 +900,7 @@ On top of the extraction the target does four things:
 - It reduces the full-RC netlist with TICER (`KPEX_REDUCE`, default `ticer`), which leaves far fewer elements and a faster simulation, and ngspice with `klu` can lose the operating point of an unreduced netlist (resistors below 1 mOhm).
 - It ties the substrate port `sub!` of the 2.5D netlist to `PEX_SUB_NET` (default `VSS`, `sak-pex.sh -g`), as Magic ties the substrate to `VSS`, so the netlist keeps the pins of `<CELL>_pex.sym`.
 
-The chip top-level has not been extracted with the 2.5D engine yet. `riscv_top` alone had not finished `EXT_MODE=1` after 5 h, so verify the digital part of `tinywhisper_top` with a gate-level simulation instead, see the warning in [`macros/riscv/README.md`](macros/riscv/README.md#parasitic-extraction-pex).
+The chip top-level has not been extracted with the 2.5D engine yet. `riscv_top` alone had not finished a C-coupled extraction after 5 h, so verify the digital part of `tinywhisper_top` with a gate-level simulation instead, see the warning in [`macros/riscv/README.md`](macros/riscv/README.md#parasitic-extraction-pex).
 
 **Magic PEX** uses `sak-pex.sh`, which extracts the parasitics with Magic (C-decoupled, C-coupled, or full-RC):
 
