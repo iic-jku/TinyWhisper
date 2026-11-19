@@ -2,17 +2,14 @@
 # Johannes Kepler University, Department for Integrated Circuits
 # Julius-Maximilians-Universität, Department for Computer Engineering
 # SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
-# Description: Nightly regression workflow running `make regression-nightly` in the IIC-OSIC-TOOLS container.
+# Description: Regression workflow running `make regression-full` in the IIC-OSIC-TOOLS container.
 
 name: regression
 
 on:
   workflow_dispatch:
-  schedule:
-    # Nightly at 02:00 UTC. Scheduled runs only ever trigger on the default
-    # branch (main). The "gate" job below skips the heavy regression when
-    # nothing has changed since the previous nightly run.
-    - cron: '0 2 * * *'
+  push:
+    branches: [main]
 
 permissions:
   contents: read
@@ -22,42 +19,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  gate:
-    name: Check for changes since last nightly run
-    runs-on: ubuntu-latest
-    outputs:
-      should_run: ${{ steps.check.outputs.should_run }}
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v5
-
-      - name: Decide whether to run
-        id: check
-        run: |
-          # Manual runs always execute.
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "Manual dispatch -> run."
-            echo "should_run=true" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          # Scheduled run: execute only if the tip of the default branch was
-          # committed within the nightly window, i.e. there is a change since
-          # the previous nightly run. (Use a window slightly larger than the
-          # 24h cadence so a commit landing near the boundary is never missed.)
-          head_date="$(git log -1 --format=%cI)"
-          echo "Latest commit: $head_date"
-          if [ -n "$(git log -1 --since='25 hours ago' --format=%H)" ]; then
-            echo "Changes since last nightly run -> run."
-            echo "should_run=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "No changes since last nightly run -> skip."
-            echo "should_run=false" >> "$GITHUB_OUTPUT"
-          fi
-
   regression:
-    name: Run make regression-nightly
-    needs: gate
-    if: needs.gate.outputs.should_run == 'true'
+    name: Run make regression-full
     runs-on: ubuntu-latest
     # The full end-to-end tool/flow regression (iqmod analog macro, riscv
     # digital macro and the chip top-level LibreLane run) is long-running;
@@ -128,10 +91,10 @@ jobs:
 
       - name: Run regression
         # The IHP130 chip Makefile lives in ihp130/, not the repository root.
-        # regression-nightly is the full variant: it re-hardens the riscv macro
+        # regression-full is the full variant: it re-hardens the riscv macro
         # and runs the gate-level flows on top of the default regression.
         working-directory: ihp130
-        run: make regression-nightly
+        run: make regression-full
 
       - name: Upload regression logs
         if: always()
