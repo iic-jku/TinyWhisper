@@ -558,8 +558,9 @@ regression: ## Regression test target for IIC-OSIC-TOOLS (usage: make regression
 	$(MAKE) -C $(MACROS_DIR)/iqmod sim-xschem TB=iqmod_mfb_lpf_tb_ac_cl
 # 	ONE CACE run: the lightweight AC VDD sweep (no Monte-Carlo) to keep runtime short.
 	cd $(MACROS_DIR)/iqmod/verification/cace && cace iqmod_mfb_lpf.yaml -p ac_params && rm -rf _runs _docs netlist
-# 	KLayout & Magic DRC, LVS and PEX of the iqmod_top cell.
-	$(MAKE) -C $(MACROS_DIR)/iqmod klayout-verify CELL=iqmod_top
+# 	KLayout DRC and LVS and Magic DRC, LVS and PEX of the iqmod_top cell. klayout-pex is left out, as it needs kpex 0.9.0, which no image tag before 2026.11 has.
+	$(MAKE) -C $(MACROS_DIR)/iqmod klayout-drc CELL=iqmod_top
+	$(MAKE) -C $(MACROS_DIR)/iqmod klayout-lvs CELL=iqmod_top
 	$(MAKE) -C $(MACROS_DIR)/iqmod magic-verify CELL=iqmod_top
 	$(MAKE) -C $(MACROS_DIR)/iqmod build-top
 # 	Digital macro: riscv (Verilator, Icarus, cocotb, yosys, LibreLane, xspice)
