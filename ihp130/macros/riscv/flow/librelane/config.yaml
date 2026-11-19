@@ -14,84 +14,84 @@ meta:
 
 INSERT_ECO_BUFFERS:
   # === East Pads ===
-  - target: output19/X # analog_en
+  - target: output17/X # analog_en
     buffer: sg13g2_buf_4
 
-  - target: output17/X # I_ae
+  - target: output15/X # I_ae
     buffer: sg13g2_buf_4
 
-  - target: output21/X # ds_I_oe
+  - target: output19/X # ds_I_oe
     buffer: sg13g2_buf_4
 
-  - target: output22/X # ds_I_p_o
+  - target: output20/X # ds_I_p_o
     buffer: sg13g2_buf_4
 
-  - target: output20/X # ds_I_n_o
+  - target: output18/X # ds_I_n_o
     buffer: sg13g2_buf_4
 
-  - target: output31/X # lo_I_oe
+  - target: output29/X # lo_I_oe
     buffer: sg13g2_buf_4
 
-  - target: output30/X # lo_I_o
+  - target: output28/X # lo_I_o
     buffer: sg13g2_buf_4
 
-  - target: output32/X # lo_Ix_o
+  - target: output30/X # lo_Ix_o
     buffer: sg13g2_buf_4
 
-  - target: output35/X # lo_Qx_o
+  - target: output33/X # lo_Qx_o
     buffer: sg13g2_buf_4
 
-  - target: output33/X # lo_Q_o
+  - target: output31/X # lo_Q_o
     buffer: sg13g2_buf_4
 
-  - target: output34/X # lo_Q_oe
+  - target: output32/X # lo_Q_oe
     buffer: sg13g2_buf_4
 
-  - target: output23/X # ds_Q_n_o
+  - target: output21/X # ds_Q_n_o
     buffer: sg13g2_buf_4
 
-  - target: output25/X # ds_Q_p_o
+  - target: output23/X # ds_Q_p_o
     buffer: sg13g2_buf_4
 
-  - target: output24/X # ds_Q_oe
+  - target: output22/X # ds_Q_oe
     buffer: sg13g2_buf_4
 
-  - target: output18/X # Q_ae
+  - target: output16/X # Q_ae
     buffer: sg13g2_buf_4
 
   # === South Pads ===
-  - target: output29/X # gpio_out[3]
+  - target: output27/X # gpio_out[3]
     buffer: sg13g2_buf_4
 
-  - target: output28/X # gpio_out[2]
+  - target: output26/X # gpio_out[2]
     buffer: sg13g2_buf_4
 
-  - target: output27/X # gpio_out[1]
+  - target: output25/X # gpio_out[1]
     buffer: sg13g2_buf_4
 
-  - target: output26/X # gpio_out[0]
+  - target: output24/X # gpio_out[0]
     buffer: sg13g2_buf_4
 
   # === West Pads ===
-  - target: output42/X # tx
+  - target: output40/X # tx
     buffer: sg13g2_buf_4
 
-  - target: output36/X # scl
+  - target: output34/X # scl
     buffer: sg13g2_buf_4
 
-  - target: output39/X # sda_oe
+  - target: output37/X # sda_oe
     buffer: sg13g2_buf_4
 
-  - target: output38/X # sda_o
+  - target: output36/X # sda_o
     buffer: sg13g2_buf_4
 
-  - target: output41/X # sram_ce
+  - target: output39/X # sram_ce
     buffer: sg13g2_buf_4
 
-  - target: output37/X # sclk
+  - target: output35/X # sclk
     buffer: sg13g2_buf_4
 
-  - target: output40/X # si
+  - target: output38/X # si
     buffer: sg13g2_buf_4
 
   # === North Pads ===
