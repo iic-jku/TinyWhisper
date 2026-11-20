@@ -133,10 +133,13 @@ _LINT_SRCS = $(if $(filter $(CELL),$(TOP)),$(SRC_DIR)/constants.sv $(MODULES_SYN
 # Testbench extension: prefers <CELL>_tb.sv, falls back to <CELL>_tb.v (dot is added at use site)
 _TB_EXT = $(if $(wildcard $(VERILOG_TB_DIR)/$(CELL)/$(CELL)_tb.sv),sv,v)
 
+# Waveform of a cocotb run: Icarus Verilog writes sim_build/<CELL>.fst, Verilator sim_build/dump.fst
+_COCOTB_FST = $(COCOTB_DIR)/$(CELL)/sim_build/$(if $(filter verilator,$(SIM)),dump,$(CELL)).fst
+
 
 # Help Target
 help: ## Show this help message
-	@echo 'Usage: make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [KPEX_REDUCE=<none|floating|ticer>] [PEX_SUB_NET=<net>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>] [WAVEFORM_VIEWER=<gtkwave|surfer>] [GL_TESTS=<regex>] [SDF_CORNER=<corner>] [SDF_TRIPLE=<min|typ|max>] [TB=<testbenchname>] [DSMOD_TARGET=<all|all_runs>] [DSMOD_TARGET_SIM_ALL=<all|all_runs>] [OPEN_ARGS=<options>] [FORCE=1]'
+	@echo 'Usage: make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [KPEX_REDUCE=<none|floating|ticer>] [PEX_SUB_NET=<net>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>] [WAVEFORM_VIEWER=<gtkwave|surfer>] [SIM=<icarus|verilator>] [GL_TESTS=<regex>] [SDF_CORNER=<corner>] [SDF_TRIPLE=<min|typ|max>] [TB=<testbenchname>] [DSMOD_TARGET=<all|all_runs>] [DSMOD_TARGET_SIM_ALL=<all|all_runs>] [OPEN_ARGS=<options>] [FORCE=1]'
 	@echo ''
 	@echo 'Available targets:'
 	@grep -E '^[a-zA-Z0-9_.-]+:.*## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  %-20s %s\n", $$1, $$2}'
@@ -147,6 +150,7 @@ help: ## Show this help message
 	@echo 'PEX_SUB_NET defaults to VSS. The port net that klayout-pex ties the substrate port sub! of the kpex 2.5D netlist to (empty keeps sub! as a port).'
 	@echo 'KPEX_REDUCE defaults to ticer. Sets the RC network reduction of klayout-pex in EXT_MODE=3 (none|floating|ticer).'
 	@echo 'WAVEFORM_VIEWER defaults to gtkwave. Use surfer to launch Surfer instead.'
+	@echo 'SIM selects the simulator of sim-rtl-cocotb, icarus (default) or verilator, and the waveform that sim-view-cocotb opens. The gate-level runs need icarus.'
 	@echo 'GL_TESTS selects the cocotb tests of sim-gl-cocotb and sim-gl-sdf-cocotb by a regular expression (default: $(GL_TESTS)).'
 	@echo 'SDF_CORNER selects the LibreLane corner of the SDF file for sim-gl-sdf-cocotb (default: $(SDF_CORNER)).'
 	@echo 'SDF_TRIPLE selects the min, typ or max value of each SDF delay for sim-gl-sdf-cocotb (default: typ).'
@@ -195,6 +199,9 @@ SDF_CORNER ?= nom_typ_1p50V_25C
 # Value of each min:typ:max delay in the SDF file for sim-gl-sdf-cocotb (iverilog -T)
 # Override with: make sim-gl-sdf-cocotb SDF_TRIPLE=<min|typ|max>
 SDF_TRIPLE ?= typ
+# Simulator of sim-rtl-cocotb, also selects the waveform of sim-view-cocotb (default: icarus)
+# Override with: make <target> SIM=<icarus|verilator>
+SIM ?= icarus
 
 sim-rtl-verilog: ## Run RTL simulation of CELL cell with Icarus Verilog (usage: make sim-rtl-verilog [CELL=<cellname>])
 	mkdir -p $(VERILOG_TB_DIR)/$(CELL)
@@ -213,11 +220,11 @@ sim-view-verilog: ## View CELL cell Verilog simulation waveforms (usage: make si
 	fi
 .PHONY: sim-view-verilog
 
-sim-rtl-cocotb: ## Run RTL simulation of CELL cell with cocotb (usage: make sim-rtl-cocotb [CELL=<cellname>] [DSMOD_TARGET=<all|all_runs>])
+sim-rtl-cocotb: ## Run RTL simulation of CELL cell with cocotb (usage: make sim-rtl-cocotb [CELL=<cellname>] [SIM=<icarus|verilator>] [DSMOD_TARGET=<all|all_runs>])
 	@if [ "$(CELL)" = "dsmod" ]; then \
 		$(MAKE) -C $(COCOTB_DIR)/$(CELL) $(DSMOD_TARGET); \
 	else \
-		cd $(COCOTB_DIR)/$(CELL) && python3 $(CELL)_tb.py; \
+		cd $(COCOTB_DIR)/$(CELL) && SIM=$(SIM) python3 $(CELL)_tb.py; \
 	fi
 .PHONY: sim-rtl-cocotb
 
@@ -229,13 +236,13 @@ sim-gl-sdf-cocotb: ## Run timed gate-level simulation of CELL cell with cocotb a
 	cd $(COCOTB_DIR)/$(CELL) && GL=1 SDF=1 SDF_CORNER=$(SDF_CORNER) SDF_TRIPLE=$(SDF_TRIPLE) COCOTB_TEST_FILTER='$(GL_TESTS)' python3 $(CELL)_tb.py
 .PHONY: sim-gl-sdf-cocotb
 
-sim-view-cocotb: ## View CELL cell cocotb simulation waveforms (usage: make sim-view-cocotb [CELL=<cellname>] [WAVEFORM_VIEWER=<gtkwave|surfer>])
+sim-view-cocotb: ## View CELL cell cocotb simulation waveforms (usage: make sim-view-cocotb [CELL=<cellname>] [WAVEFORM_VIEWER=<gtkwave|surfer>] [SIM=<icarus|verilator>])
 	@if [ "$(WAVEFORM_VIEWER)" = "gtkwave" ]; then \
-		$(WAVEFORM_VIEWER) $(COCOTB_DIR)/$(CELL)/sim_build/$(CELL).fst $(COCOTB_DIR)/$(CELL)/$(CELL)_tb.gtkw; \
+		$(WAVEFORM_VIEWER) $(_COCOTB_FST) $(COCOTB_DIR)/$(CELL)/$(CELL)_tb.gtkw; \
 	elif [ "$(WAVEFORM_VIEWER)" = "surfer" ]; then \
-		$(WAVEFORM_VIEWER) -s $(COCOTB_DIR)/$(CELL)/$(CELL)_tb.surf.ron $(COCOTB_DIR)/$(CELL)/sim_build/$(CELL).fst; \
+		$(WAVEFORM_VIEWER) -s $(COCOTB_DIR)/$(CELL)/$(CELL)_tb.surf.ron $(_COCOTB_FST); \
 	else \
-		$(WAVEFORM_VIEWER) $(COCOTB_DIR)/$(CELL)/sim_build/$(CELL).fst; \
+		$(WAVEFORM_VIEWER) $(_COCOTB_FST); \
 	fi
 .PHONY: sim-view-cocotb
 

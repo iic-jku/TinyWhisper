@@ -310,7 +310,7 @@ Each macro, each IP block and the chip have their own `Makefile`. The chip integ
 | Step | Tools | Make target, folder | Output |
 | :--- | :--- | :--- | :--- |
 | RTL lint | Verilator | `lint-verilog-all`, riscv | |
-| RTL simulation | Icarus Verilog, cocotb | `sim-rtl-verilog`, riscv, `sim-rtl-cocotb`, riscv and chip | waveforms |
+| RTL simulation | Icarus Verilog, cocotb, Verilator for the riscv cocotb tests | `sim-rtl-verilog`, riscv, `sim-rtl-cocotb`, riscv and chip | waveforms |
 | FPGA emulation | Yosys, nextpnr, ecppack or icepack | `build-fpga`, riscv | bitstream |
 | CPU hardening | LibreLane | `build-top`, riscv | `macros/riscv/final/` |
 | Gate-level simulation | Icarus Verilog, cocotb, ngspice with XSPICE | `sim-gl-cocotb`, `sim-gl-xschem`, riscv and chip, `sim-gl-sdf-cocotb`, riscv | waveforms, `plot_simulations/` |
