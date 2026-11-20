@@ -123,7 +123,7 @@ module freq_generator (
       .o_lo_qx(lo_qx)
   );
 
-  typedef enum {
+  typedef enum logic [1:0] {
     IDLE,
     CORDIC_ONLY,  // For first symbol only
     DSMOD_ONLY,   // First phase until last few cycles
