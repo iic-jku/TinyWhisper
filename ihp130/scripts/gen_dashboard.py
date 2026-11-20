@@ -24,11 +24,11 @@ HERE = Path(__file__).resolve().parent
 CURATED = {
     "signoff": [
         # block, check, tool, result, status, source
-        ("Chip top, Aug 2026 build", "DRC", "Magic", "0 errors (top + logo fill)", "pass", "ihp130/verification/drc/"),
-        ("Chip top, Aug 2026 build", "LVS", "Netgen", "Match, 328 devices", "pass", "ihp130/verification/reports/lvs.netgen.rpt"),
-        ("Chip top, Aug 2026 build", "Antenna", "OpenROAD", "0 violations", "pass", "ihp130/verification/reports/"),
-        ("Chip top, Aug 2026 build", "Setup / hold", "OpenSTA", "+1.841 ns / +0.080 ns", "pass", "ihp130/verification/reports/"),
-        ("Chip top, Aug 2026 build", "Max slew", "OpenSTA", "21 violations (slow)", "warn", "ihp130/verification/reports/"),
+        ("Chip top", "DRC", "gdscheck 0.2.1", "175 hits in iqmod_top and the east pad ring", "warn", "ihp130/README.md"),
+        ("Chip top", "LVS", "Netgen", "Match, 334 devices", "pass", "ihp130/verification/reports/lvs.netgen.rpt"),
+        ("Chip top", "Antenna", "OpenROAD", "0 violations", "pass", "ihp130/verification/reports/"),
+        ("Chip top", "Setup / hold", "OpenSTA", "+1.188 ns / +0.076 ns", "pass", "ihp130/verification/reports/"),
+        ("Chip top", "Max slew", "OpenSTA", "18 violations (slow)", "warn", "ihp130/verification/reports/"),
         ("riscv_top", "DRC", "Magic", "0 errors", "pass", "ihp130/macros/riscv/verification/drc.magic.rpt"),
         ("riscv_top", "LVS", "Netgen", "Match, 32,245 devices", "pass", "ihp130/macros/riscv/verification/lvs.netgen.rpt"),
         ("riscv_top", "Antenna", "OpenROAD", "0 nets, 0 pins", "pass", "ihp130/macros/riscv/verification/antenna_summary.rpt"),

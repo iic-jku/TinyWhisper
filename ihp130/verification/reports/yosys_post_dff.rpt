@@ -28,11 +28,11 @@
         1        -   sg13g2_ip__jku_names
 
    Area for cell type \iqmod_top is unknown!
+   Area for cell type \riscv_top is unknown!
    Area for cell type \sg13g2_ip__ce is unknown!
    Area for cell type \sg13g2_ip__ce_names is unknown!
    Area for cell type \sg13g2_ip__jku is unknown!
    Area for cell type \sg13g2_ip__jku_names is unknown!
-   Area for cell type \riscv_top is unknown!
 
    Chip area for module '\tinywhisper_top': 806400.000000
      of which used for sequential elements: 0.000000 (0.00%)
