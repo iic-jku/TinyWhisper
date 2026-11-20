@@ -124,9 +124,9 @@ All numbers are simulated, at the typical corner and 1.5 V unless the table says
 | Delta-sigma modulator SNDR at OSR 32, 124.6 kHz | 52.5 dB first order at full scale, 57.4 dB second order at 0.90 of full scale | @sec-dsm |
 | Delta-sigma modulator peak SNDR, second order, OSR 64, 8.1 kHz | 68.7 dB at -2 dBFS | @sec-dsm |
 | Frequency resolution of the baseband at OSR 32 | 1.63 mHz | @sec-freqgen |
-| `riscv_top` worst setup and hold slack over five corners, 17 ns | +2.34 ns and +0.23 ns | @sec-riscv-hardening |
-| `riscv_top` power at `nom_typ_1p50V_25C` | 20.1 mW | @sec-riscv-hardening |
-| Chip worst setup and hold slack over five corners, 17 ns | +1.19 ns and +0.08 ns | @sec-top |
+| `riscv_top` worst setup and hold slack over five corners, 17 ns | +1.57 ns and +0.23 ns | @sec-riscv-hardening |
+| `riscv_top` power at `nom_typ_1p50V_25C` | 19.8 mW | @sec-riscv-hardening |
+| Chip worst setup and hold slack over five corners, 17 ns | +0.32 ns and +0.08 ns | @sec-top |
 
 : Simulated performance of TinyWhisper. {#tbl-glance tbl-colwidths="[50,30,20]"}
 
@@ -471,11 +471,11 @@ LibreLane hardens the macro from the RTL at a 17 ns clock period, which leaves m
 | Parameter | Value |
 | :--- | :--- |
 | Die area | 700 × 1130 $\mu$m, placement density 40 % |
-| Cells after synthesis | 25455, 0.343 mm² of standard-cell area |
+| Cells after synthesis | 25262, 0.341 mm² of standard-cell area |
 | STA corners | `nom_fast_1p32V_m40C`, `nom_fast_1p65V_m40C`, `nom_slow_1p35V_125C`, `nom_typ_1p20V_25C`, `nom_typ_1p50V_25C` |
-| Worst setup slack | +2.34 ns, `nom_slow_1p35V_125C` |
+| Worst setup slack | +1.57 ns, `nom_slow_1p35V_125C` |
 | Worst hold slack | +0.23 ns, `nom_fast_1p65V_m40C` |
-| Power | 20.1 mW at `nom_typ_1p50V_25C`, 63 % of it in the flip-flops and 33 % in the clock tree |
+| Power | 19.8 mW at `nom_typ_1p50V_25C`, 62 % of it in the flip-flops and 33 % in the clock tree |
 | Sign-off | Magic DRC and Netgen LVS inside the LibreLane run |
 
 : Hardening results of `riscv_top`. {#tbl-riscv-hardening tbl-colwidths="[25,75]"}
@@ -501,7 +501,7 @@ The gate-level tests of the CPU release reset and step their bus models at the f
 
 `make lec` does not pass yet: EQY proves most partitions of the netlist, but about 40 fail for reasons that are still open, so it stays out of `make all`. The XSPICE model in `netlist/xspice/riscv_top.xspice` is a committed source file. It was generated once with the frequency generation free-running in `rtl/memory.sv`, because the mixed-signal bench has no SRAM model and the CPU would never fetch an instruction, and `generate-xspice` skips itself while that line is commented out. A PEX netlist of the whole macro is not practical, an extraction runs for hours, so the macro is verified with the gate-level simulations and the STA instead.
 
-The macro no longer fits the iCE40UP5K of the pico-ice and iCEBreaker boards, 6132 logic cells against 5280, so `build-fpga` builds for the ECP5-85F of the ULX3S by default, where it closes timing at 51 MHz. The [FPGA README](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/macros/riscv/fpga/README.md) has the pin assignment of every board.
+The macro no longer fits the iCE40UP5K of the pico-ice and iCEBreaker boards, 6119 logic cells against 5280, so `build-fpga` builds for the ECP5-85F of the ULX3S by default, where it closes timing at 52 MHz. The [FPGA README](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/macros/riscv/fpga/README.md) has the pin assignment of every board.
 
 # Analog Front-End: The IQ Modulator Macro {#sec-iqmod}
 
@@ -666,7 +666,7 @@ The pad order of `SoC4219` is the same as in this report, which `make bondplan` 
 
 The digital part sits in the west of the core and the analog part in the east, next to its pads. The four RF outputs are routed with a non-default rule of 1.35 $\mu$m width and 1.0 $\mu$m spacing, the four analog inputs with 1.35 $\mu$m and 0.5 $\mu$m, and the resizer leaves all eight nets alone. `iqmod_top` has its own power ring, and `flow/librelane/pdn_cfg.tcl` bridges the chip grid to it. The [floorplan notes](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/floorplan.md) and [specifications](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/specifications.md) list the details.
 
-The committed chip in `layout/`, `netlist/` and `verification/reports/` integrates the re-hardened CPU of `macros/riscv/final/`. Its STA covers the same five corners as the CPU and reports a worst setup slack of +1.19 ns at `nom_slow_1p35V_125C` and a worst hold slack of +0.08 ns at `nom_fast_1p65V_m40C`, with 18 maximum-slew violations in the slow corner. The eight LO and modulator pads get an output delay of 1 ns instead of 20 % of the period, because no off-chip receiver latches them with the clock.
+The committed chip in `layout/`, `netlist/` and `verification/reports/` integrates the re-hardened CPU of `macros/riscv/final/`. Its STA covers the same five corners as the CPU and reports a worst setup slack of +0.32 ns at `nom_slow_1p35V_125C` and a worst hold slack of +0.08 ns at `nom_fast_1p65V_m40C`, with 18 maximum-slew violations in the slow corner. The eight LO and modulator pads get an output delay of 1 ns instead of 20 % of the period, because no off-chip receiver latches them with the clock.
 
 ## Logo and Fill
 
