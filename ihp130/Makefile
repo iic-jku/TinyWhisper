@@ -611,6 +611,7 @@ regression: ## Regression test target for IIC-OSIC-TOOLS (usage: make regression
 	$(if $(filter 1,$(FULL_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv copy-final)
 # 	Gate-level flows that depend on the LibreLane outputs above.
 	$(if $(filter 1,$(FULL_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-cocotb)
+	$(if $(filter 1,$(FULL_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-sdf-cocotb)
 	$(if $(filter 1,$(FULL_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv generate-xspice)
 	$(if $(filter 1,$(FULL_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-xschem)
 # 	Top-level assembly

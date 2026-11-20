@@ -31,6 +31,12 @@
 │  │  └─ riscv_top.nl.v
 │  ├─ 📁 pnl/
 │  │  └─ riscv_top.pnl.v
+│  ├─ 📁 sdf/
+│  │  ├─ 📁 nom_fast_1p32V_m40C/
+│  │  ├─ 📁 nom_fast_1p65V_m40C/
+│  │  ├─ 📁 nom_slow_1p35V_125C/
+│  │  ├─ 📁 nom_typ_1p20V_25C/
+│  │  └─ 📁 nom_typ_1p50V_25C/
 │  ├─ 📁 spef/
 │  │  └─ 📁 nom/
 │  └─ 📁 vh/
@@ -111,6 +117,7 @@
 │  │  │  ├─ Makefile
 │  │  │  └─ README.md
 │  │  └─ 📁 riscv_top/
+│  │     ├─ riscv_top_sdf.sv
 │  │     ├─ riscv_top_tb.gtkw
 │  │     ├─ riscv_top_tb.py
 │  │     └─ riscv_top_tb.surf.ron
@@ -264,6 +271,8 @@ The cocotb testbenches are located in `testbenches/cocotb/`.
 For `CELL=dsmod`, the simulation delegates to the sub-Makefile in `testbenches/cocotb/dsmod/` (PSD, SNDR sweep, and ramp tests).
 For all other cells the Python runner is invoked directly.
 
+The testbench of `riscv_top`, `testbenches/cocotb/riscv_top/riscv_top_tb.py`, takes from the testbenches of the [VLSI design course](https://iic-jku.github.io/vlsi-design/vlsi.html#sec-verification-anatomy) what fits a CPU: bus models apart from the tests, inputs that change at the falling edge, and a reference model. Each test loads a program (`testbenches/cocotb/riscv_top/*.txt`) into `SpiSram`, the model of the external SPI SRAM, and `start_up()` starts it together with the bus models the test needs: `UartReceiver` monitors `tx`, `UartTransmitter` drives `rx`, and `I2cTarget` answers on `sda_i`. One coroutine steps them at every falling edge of `clk`, and each test then compares what the models collected with the expected result, for example the bytes written to `SpiSram` with `fibonacci_writes()`, the reference model of `fib.txt`. It has no scoreboard that checks every cycle and no coverage, and `test_cpu_analog_enables` and `test_cpu_wspr` check nothing and are meant for the waveform.
+
 ```sh
 make sim-rtl-cocotb                                    # run riscv_top RTL cocotb simulation
 make sim-rtl-cocotb CELL=dsmod                         # run the dsmod suite for the baseline ORDER=2 / OSR=64
@@ -277,8 +286,11 @@ See `testbenches/cocotb/dsmod/README.md` for `dsmod`-specific configuration opti
 To run the gate-level (GL) cocotb simulation:
 
 ```sh
-make sim-gl-cocotb                # gate-level simulation of riscv_top
+make sim-gl-cocotb                # gate-level simulation of riscv_top, the test test_cpu_fibonacci_fast
+make sim-gl-cocotb GL_TESTS=      # all eight tests
 ```
+
+`GL_TESTS` selects the tests of both gate-level targets by a regular expression. It defaults to `test_cpu_fibonacci_fast`, which takes 30 s on the netlist on a laptop, while all eight tests take 1 h 51 min, 84 min of them in `test_cpu_wspr`.
 
 > [!NOTE]
 > Gate-level simulation requires the latest implementation in `flow/final/`.
@@ -294,6 +306,25 @@ make sim-view-cocotb CELL=dsmod WAVEFORM_VIEWER=surfer        # use Surfer inste
 
 Each cocotb simulation folder contains a pre-configured waveform layout file (`<CELL>_tb.gtkw` for GTKWave, `<CELL>_tb.surf.ron` for Surfer).
 The view target loads it automatically together with the current `.fst`, so signal formatting is preserved across runs.
+
+#### Timed Gate-Level cocotb Simulation
+
+`sim-gl-sdf-cocotb` runs the same cocotb tests (`GL_TESTS`) on the final netlist with the cell and wire delays of the layout, the timing simulation of the [VLSI design course](https://iic-jku.github.io/vlsi-design/vlsi.html#sec-verification-gl-sdf). LibreLane writes one SDF (Standard Delay Format) file per STA corner, and `make copy-final` copies them to `final/sdf/<corner>/`. The wrapper `testbenches/cocotb/riscv_top/riscv_top_sdf.sv` instantiates the netlist and annotates the SDF file with `$sdf_annotate()`, and Icarus Verilog compiles with `-gspecify` for the cell delays and `-ginterconnect` for the wire delays. The annotation of the 29k cells alone takes 11 min on a laptop:
+
+```sh
+make sim-gl-sdf-cocotb                                                 # default corner nom_typ_1p50V_25C, typical delays
+make sim-gl-sdf-cocotb SDF_CORNER=nom_slow_1p35V_125C SDF_TRIPLE=max  # slow corner, maximum delays
+make sim-gl-sdf-cocotb SDF_CORNER=nom_fast_1p65V_m40C SDF_TRIPLE=min  # fast corner, minimum delays
+```
+
+Every delay in the SDF file is a `min:typ:max` triple, and `SDF_TRIPLE` selects the value that Icarus Verilog uses (`iverilog -T`). In the files of LibreLane the typical value is the mean of the other two. The log of a clean run shows:
+
+- `SDF ERROR: ... Chosen value not defined` twice, for the `VOLTAGE` and `TEMPERATURE` lines of the header, which have no typical value (none with `SDF_TRIPLE=min` or `max`). Any other `SDF ERROR` means that a delay was not annotated.
+- `SDF WARNING: ... TIMINGCHECK not supported` once per flip-flop. Icarus Verilog annotates the delays but checks no setup, hold, recovery or removal time, so a timing violation shows only if a flip-flop captures a wrong value. Signoff rests on STA (`verification/stapostpnr_summary.rpt`).
+
+A clean log does not prove that the delays arrived. Check one path in the waveform `testbenches/cocotb/riscv_top/sim_build/riscv_top_sdf.fst`: the time from an edge of `clk` to the pin `CLK` of a flip-flop equals the sum of the `IOPATH` and `INTERCONNECT` delays along its clock path in the SDF file, each rounded to the 10 ps of the cell models (`` `timescale 1ns/10ps ``).
+
+In the netlist the clock tree delays the clock at every flip-flop, and an output follows the clock edge only after its clock-to-output delay. An input that changes at the rising edge of `clk` can reach a flip-flop before its clock does and be captured one cycle early, and an output sampled shortly after the edge can still show its old value, which the RTL never shows. The tests therefore release `reset` and step the bus models at the falling edge.
 
 #### Gate-Level Xschem Simulation
 
@@ -330,7 +361,8 @@ This executes the following targets in order:
 3. `sim-rtl-verilog` (default: `riscv_top`)
 4. `sim-rtl-cocotb` (default: `riscv_top`)
 5. `sim-gl-cocotb` (default: `riscv_top`)
-6. `sim-gl-xschem` (default: `riscv_top`)
+6. `sim-gl-sdf-cocotb` (default: `riscv_top`)
+7. `sim-gl-xschem` (default: `riscv_top`)
 
 > [!NOTE]
 > The `sim-view-verilog` and `sim-view-cocotb` targets are intentionally **not** called by `sim-all`.
@@ -383,13 +415,13 @@ This only works if at least one LibreLane run exists in `flow/librelane/runs/` a
 
 ### Copy the Final Views
 
-To copy the final `gds`, `lef`, `lib`, `nl`, `pnl`, `spef`, and `vh` view folders from `flow/final/` into `final/`, run:
+To copy the final `gds`, `lef`, `lib`, `nl`, `pnl`, `sdf`, `spef`, and `vh` view folders from `flow/final/` into `final/`, run:
 
 ```sh
 make copy-final
 ```
 
-This refreshes the committed views in `final/` after a LibreLane run, so that the gate-level simulation (`sim-gl-cocotb` reads `final/nl/riscv_top.nl.v`) and the chip top-level integration use the freshly built outputs. It assumes the required views exist under `flow/final/`.
+This refreshes the committed views in `final/` after a LibreLane run, so that the gate-level simulations (`sim-gl-cocotb` and `sim-gl-sdf-cocotb` read `final/nl/riscv_top.nl.v`, the latter also `final/sdf/`) and the chip top-level integration use the freshly built outputs. It assumes the required views exist under `flow/final/`.
 
 
 ### Copy the Final Netlist
@@ -570,7 +602,7 @@ Extracts the parasitics of the hardened macro from the final GDS and writes a po
 
 > [!WARNING]
 > PEX and a post-layout simulation of the whole RISC-V macro take very long. `klayout-pex` had not finished a C-coupled extraction of `riscv_top` (71780 cell instances) after 5 h, as the capacitance extraction of kpex runs on one core, and a full-RC extraction with `magic-pex` takes hours too and writes a netlist far larger than the one of the template's counter. Simulating every transistor of the CPU in ngspice takes far longer still. This is why `magic-pex` and `klayout-pex` are commented out in `make all` and nothing in this repository consumes the extracted netlist.
-> Verify the macro with a gate-level simulation instead: `make sim-gl-cocotb` for the function and `make sim-gl-xschem` for the mixed-signal behavior with the gate delays of the XSPICE model. Its timing is checked by the STA of LibreLane, which runs on the parasitics LibreLane extracts (`final/spef/`), and `make copy-reports` writes its summary to `verification/stapostpnr_summary.rpt`. Run the PEX targets by hand only for a short, targeted post-layout check.
+> Verify the macro with a gate-level simulation instead: `make sim-gl-cocotb` for the function, `make sim-gl-sdf-cocotb` for the function with the cell and wire delays of the layout, and `make sim-gl-xschem` for the mixed-signal behavior with the gate delays of the XSPICE model. Its timing is checked by the STA of LibreLane, which runs on the parasitics LibreLane extracts (`final/spef/`), and `make copy-reports` writes its summary to `verification/stapostpnr_summary.rpt`. Run the PEX targets by hand only for a short, targeted post-layout check.
 
 The extracted SPICE filenames include the selected extraction mode:
 - `klayout-pex` writes `netlist/pex/<CELL>_klayout_pex_<EXT_MODE>.spice`
@@ -635,7 +667,7 @@ Lints, builds, verifies and simulates the whole macro:
 - `magic-pex` (currently disabled in the `Makefile`, see below)
 - `sim-all`
 
-Linting runs first to fail fast on structural RTL issues. The simulations run **after** the build, so `sim-gl-cocotb` runs on the netlists produced by this build, not on those of a previous one. `sim-gl-xschem` reads the XSPICE model, which `build-top` regenerates only when the RTL enables it and otherwise leaves as committed, see [Generate XSPICE File](#generate-xspice-file). `magic-pex` and `klayout-pex` are commented out in the recipe: a full-RC extraction of the whole RISC-V macro takes hours and no testbench in this macro consumes the result, so run it by hand when a post-layout netlist is needed (see [Parasitic Extraction (PEX)](#parasitic-extraction-pex)). The DRC and LVS verification is done within the LibreLane flow.
+Linting runs first to fail fast on structural RTL issues. The simulations run **after** the build, so `sim-gl-cocotb` and `sim-gl-sdf-cocotb` run on the netlist and the SDF files produced by this build, not on those of a previous one. `sim-gl-xschem` reads the XSPICE model, which `build-top` regenerates only when the RTL enables it and otherwise leaves as committed, see [Generate XSPICE File](#generate-xspice-file). `magic-pex` and `klayout-pex` are commented out in the recipe: a full-RC extraction of the whole RISC-V macro takes hours and no testbench in this macro consumes the result, so run it by hand when a post-layout netlist is needed (see [Parasitic Extraction (PEX)](#parasitic-extraction-pex)). The DRC and LVS verification is done within the LibreLane flow.
 
 ```sh
 make all
