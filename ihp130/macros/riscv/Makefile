@@ -81,6 +81,10 @@ LEC_NETLIST ?= final/nl/$(TOP).nl.v
 # Override with: make lec LEC_TIMEOUT=<seconds>
 LEC_TIMEOUT ?= 300
 
+# Time limit in seconds of the second strategy, which lec runs only on the partitions the first left unproved
+# Override with: make lec LEC_SCORR_TIMEOUT=<seconds>
+LEC_SCORR_TIMEOUT ?= 3600
+
 # Partitions lec proves in parallel
 # Override with: make lec LEC_JOBS=<n>
 LEC_JOBS ?= 4
@@ -165,6 +169,7 @@ help: ## Show this help message
 	@echo 'OPEN_ARGS passes extra options to sak-open.py for the open target (e.g. --all).'
 	@echo 'LEC_NETLIST selects the netlist for lec (default: final/nl/$(TOP).nl.v).'
 	@echo 'LEC_TIMEOUT sets the time limit of lec per partition in seconds (default: 300).'
+	@echo 'LEC_SCORR_TIMEOUT sets the time limit of the slower second strategy of lec in seconds (default: 3600).'
 	@echo 'LEC_JOBS sets the partitions lec proves in parallel (default: 4).'
 	@echo 'FORCE=1 lets symbol-gl overwrite an existing symbol instead of refusing.'
 	@echo 'REQUIRED_PDK defaults to $(REQUIRED_PDK). Every target except help and clean aborts if $$PDK differs.'
@@ -471,7 +476,7 @@ magic-pex: ## Run Parasitic Extraction with Magic on the final GDS (usage: make 
 # ================================================================================================
 
 
-# Logic Equivalence Check Target
+# Logic Equivalence Check Targets
 LEC_DIR := flow/eqy
 LEC_LIB := $(PDK_ROOT)/$(PDK)/libs.ref/sg13g2_stdcell/lib/sg13g2_stdcell_typ_1p20V_25C.lib
 
@@ -483,10 +488,32 @@ else
 LEC_GOLD_READ := 'plugin -i slang' 'read_slang --single-unit --top $(TOP) $(abspath $(SRC_DIR)/constants.sv $(MODULES_SYNTH))'
 endif
 
+# Registers EQY cannot pair by name, since synthesis merged registers whose next states are equal into one: en_scl into busy,
+# rw into addr[0], gpio_in_sync[0] into csr_i.intr_ext_sync, lo_enable into dsmod_ena, and the sign copies of data_step_r
+# into bit 32. Fewer pairs can only stop a proof, and EQY proves every pair it is given.
+LEC_MATCH := 'gold-match memory_i.i2c_master_mc.en_scl memory_i.i2c_master_mc.busy' \
+	'gold-match memory_i.i2c_master_mc.rw memory_i.i2c_master_mc.addr[0]' \
+	'gold-match memory_i.gpio_in_sync[0] csr_i.intr_ext_sync' \
+	'gold-match memory_i.freq_inst.lo_enable memory_i.freq_inst.dsmod_cos.i_ena_mod' \
+	$(foreach d,cos sin,$(foreach b,33 34 35 36 37, \
+		'gold-match memory_i.freq_inst.dsmod_$(d).data_step_r[$(b)] memory_i.freq_inst.dsmod_$(d).data_step_r[32]'))
+
+# Yosys turned the CORDIC's atan_value table into a ROM and merged shift_value into its read port, so the netlist
+# registers the ROM output. Proving Z_o in one partition with shift_value keeps that register consistent with its address.
+LEC_COLLECT := 'group /memory_i\.freq_inst\.(Z_o|cordic\.shift_value)\[\d+\]/'
+
+# Both sides start after four reset cycles. EQY lets the netlist's uninitialized registers start from any value but not
+# the RTL's, so without a common start the CPU core partition fails at its first step. The CORDIC's reset is two registers
+# behind reset, and sim needs one more cycle to clear the X it propagates through the gate cells of the delta-sigma modulators.
+LEC_RESET := 'sim -clock clk -resetn reset -rstlen 4 -n 4 -w'
+
 # memory_map because EQY cannot partition the memory slang keeps for the register file.
 # splitnets because the netlist keeps single-bit register names, and EQY pairs registers by name.
-# clk2fflogic on both sides makes the clock an input of the proof, and the design uses both clock edges.
-lec: ## Prove the gate-level netlist equivalent to the RTL with EQY (usage: make lec [LEC_NETLIST=<netlist>] [LEC_TIMEOUT=<seconds>] [LEC_JOBS=<n>])
+# clk2fflogic on both sides makes the clock an input of the proof: EQY's own SBY script assumes one clock,
+# so without it a flop on the wrong clock net would pass, and the design uses both clock edges.
+# EQY runs the second strategy only where the first ended in a timeout. The CPU core partition needs it: ABC's scorr
+# merges the registers it proves equal by induction, after which PDR proves the rest at once.
+lec: ## Prove the gate-level netlist equivalent to the RTL with EQY (usage: make lec [LEC_NETLIST=<netlist>] [LEC_TIMEOUT=<seconds>] [LEC_SCORR_TIMEOUT=<seconds>] [LEC_JOBS=<n>])
 	@if [ ! -f $(LEC_NETLIST) ]; then \
 		echo "No netlist $(LEC_NETLIST) found. Run 'make build-top' (or 'make copy-final') first."; \
 		exit 1; \
@@ -501,6 +528,7 @@ lec: ## Prove the gate-level netlist equivalent to the RTL with EQY (usage: make
 		'memory_map' \
 		'flatten -noscopeinfo' \
 		'splitnets -format []' \
+		$(LEC_RESET) \
 		'clk2fflogic' \
 		'' \
 		'[gate]' \
@@ -509,14 +537,46 @@ lec: ## Prove the gate-level netlist equivalent to the RTL with EQY (usage: make
 		'hierarchy -check -top $(TOP)' \
 		'flatten -noscopeinfo' \
 		'select -assert-none t:sg13g2_*' \
+		$(LEC_RESET) \
 		'clk2fflogic' \
+		'' \
+		'[match $(TOP)]' \
+		$(LEC_MATCH) \
+		'' \
+		'[collect $(TOP)]' \
+		$(LEC_COLLECT) \
 		'' \
 		'[strategy sby]' \
 		'use sby' \
 		'timeout $(LEC_TIMEOUT)' \
-		'engine abc pdr' > $(LEC_DIR)/$(TOP).eqy
+		'engine abc pdr' \
+		'' \
+		'[strategy scorr]' \
+		'use sby' \
+		'timeout $(LEC_SCORR_TIMEOUT)' \
+		'engine abc scorr; pdr' > $(LEC_DIR)/$(TOP).eqy
 	cd $(LEC_DIR) && eqy -j $(LEC_JOBS) -f $(TOP).eqy -d work
 .PHONY: lec
+
+lec-mutant: ## Check that lec catches a difference: change one cell and one clock pin in copies of the netlist and expect lec to fail on each
+	mkdir -p $(LEC_DIR)
+	sed '0,/sg13g2_nand2_1 /s//sg13g2_nor2_1 /' $(LEC_NETLIST) > $(LEC_DIR)/mutant_cell.nl.v
+	sed '0,/\.CLK([^)]*)/s//.CLK(rx)/' $(LEC_NETLIST) > $(LEC_DIR)/mutant_clock.nl.v
+#	Only a partition's own FAIL counts: lec also exits non-zero when it never ran a proof
+	@for m in cell clock; do \
+		if cmp -s $(LEC_NETLIST) $(LEC_DIR)/mutant_$$m.nl.v; then \
+			echo "lec-mutant: nothing to change for the $$m mutant in $(LEC_NETLIST)"; \
+			exit 1; \
+		fi; \
+		$(MAKE) --no-print-directory lec LEC_NETLIST=$(LEC_DIR)/mutant_$$m.nl.v || true; \
+		if grep -qx FAIL $(LEC_DIR)/work/strategies/*/*/status 2>/dev/null; then \
+			echo "lec-mutant: PASS, lec found the $$m mutant"; \
+		else \
+			echo "lec-mutant: FAIL, no partition failed on the $$m mutant: lec proved it equivalent or never ran a proof"; \
+			exit 1; \
+		fi; \
+	done
+.PHONY: lec-mutant
 # ================================================================================================
 
 
@@ -527,6 +587,8 @@ all: ## Lint, build, verify and simulate the macro
 	$(MAKE) lint-verilog-all
 	$(MAKE) build-fpga
 	$(MAKE) build-top
+	$(MAKE) lec
+	$(MAKE) lec-mutant
 #	$(MAKE) magic-pex
 #	$(MAKE) klayout-pex
 	$(MAKE) sim-all
