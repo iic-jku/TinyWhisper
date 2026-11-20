@@ -532,7 +532,7 @@ LEC_RESET := 'sim -clock clk -resetn reset -rstlen 4 -n 4 -w'
 # splitnets because the netlist keeps single-bit register names, and EQY pairs registers by name.
 # clk2fflogic on both sides makes the clock an input of the proof: EQY's own SBY script assumes one clock,
 # so without it a flop on the wrong clock net would pass, and the design uses both clock edges.
-# EQY runs the second strategy only where the first timed out, which the CPU core partition always does.
+# EQY runs the second strategy only where the first timed out, which the CPU core partition of the committed netlist does.
 lec: ## Prove the gate-level netlist equivalent to the RTL with EQY (usage: make lec [LEC_NETLIST=<netlist>] [LEC_TIMEOUT=<seconds>] [LEC_SCORR_TIMEOUT=<seconds>] [LEC_JOBS=<n>])
 	@if [ ! -f $(LEC_NETLIST) ]; then \
 		echo "No netlist $(LEC_NETLIST) found. Run 'make build-top' (or 'make copy-final') first."; \
