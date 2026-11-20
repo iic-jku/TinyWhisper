@@ -10,7 +10,7 @@ from cocotb.clock import Clock
 from cocotb.triggers import Timer, Edge, RisingEdge, FallingEdge, ClockCycles
 from cocotb.handle import Immediate
 from cocotb.types import LogicArray, Logic, Range
-from cocotb_tools.runner import get_runner
+from cocotb_tools.runner import get_results, get_runner
 
 sim = os.getenv("SIM", "icarus")
 pdk_root = os.getenv("PDK_ROOT", Path("~/.ciel").expanduser())
@@ -21,6 +21,7 @@ gl = os.getenv("GL", False)
 hdl_toplevel = "tinywhisper_top"
 
 CPU_CLK_FREQ = 56  # MHz
+# The tests step the bus models below at the falling edge of clk, so that the inputs they drive cannot race the clock tree of the netlist
 
 mem = {}
 async def set_defaults(dut, program_path):
@@ -35,9 +36,16 @@ async def set_defaults(dut, program_path):
         mem[i] = LogicArray(int(line, base=16), Range(7, "downto", 0))
 
 
-async def enable_power(dut):
-    dut.VDD.value = 1
-    dut.VSS.value = 0
+# The tests and bus models set single input pads (rx, so, gpio_in). They write the whole vector from this copy,
+# since a read-modify-write of input_PAD can read back the old value of a bit another model has just set.
+input_pad = LogicArray(0b010000, Range(5, "downto", 0))
+
+
+def drive_input_pad(dut, bits):
+    """Set the given {index: value} bits of input_PAD."""
+    for index, value in bits.items():
+        input_pad[index] = value
+    dut.input_PAD.set(Immediate(input_pad))
 
 
 async def start_clock(clock, freq=20):
@@ -47,12 +55,13 @@ async def start_clock(clock, freq=20):
     cocotb.start_soon(c.start())
 
 
-async def reset(reset, active_low=True, time_ns=1000):
+async def reset(reset, clk, active_low=True, time_ns=1000):
     """Reset dut"""
     cocotb.log.info("Reset asserted...")
 
     reset.value = not active_low
     await Timer(time_ns, "ns")
+    await FallingEdge(clk)
     reset.value = active_low
 
     cocotb.log.info("Reset deasserted.")
@@ -62,10 +71,14 @@ async def start_up(dut, program_path):
     global CPU_CLK_FREQ
     """Startup sequence"""
     await set_defaults(dut, program_path)
-    if gl:
-        await enable_power(dut)
+    # Drive every input pad to its idle level: an undriven input is X in the netlist, while the RTL takes an X
+    # condition as false (input_PAD[0] is gpio_in[0], the external interrupt, so X there sets mip[11] to X on the netlist).
+    # input_PAD[4] is rx, which idles high. The bidirectional pads stay with the tests, since the chip drives them.
+    global input_pad
+    input_pad = LogicArray(0b010000, Range(5, "downto", 0))
+    dut.input_PAD.value = input_pad
     await start_clock(dut.clk_PAD, CPU_CLK_FREQ)
-    await reset(dut.rst_n_PAD)
+    await reset(dut.rst_n_PAD, dut.clk_PAD)
 
 state = "RECV_COMMAND"
 WRITE_CMD = 2
@@ -97,9 +110,7 @@ async def do_spi(dut):
         state = "RECV_COMMAND"
         index = 7
         prev_sclk = sclk
-        tmp = dut.input_PAD.get()
-        tmp[5] = Logic(0)
-        dut.input_PAD.set(Immediate(tmp))
+        drive_input_pad(dut, {5: Logic(0)})
 
         return
 
@@ -160,9 +171,7 @@ async def do_spi(dut):
 
     elif sclk == 0 and prev_sclk == 1:
         if state == "SEND_DATA":
-            tmp = dut.input_PAD.get()
-            tmp[5] = dataout_reg[index]
-            dut.input_PAD.set(Immediate(tmp))
+            drive_input_pad(dut, {5: dataout_reg[index]})
 
     prev_sclk = sclk
 
@@ -261,9 +270,7 @@ async def do_uart_tx(dut):
             uart_tx_enable = 0
 
     # Set CPU rx input to the computed value
-    tmp = dut.input_PAD.get()
-    tmp[4] = cpu_rx_in
-    dut.input_PAD.set(Immediate(tmp))
+    drive_input_pad(dut, {4: cpu_rx_in})
 
 
 i2c_state = "IDLE"
@@ -412,7 +419,7 @@ async def test_cpu_fibonacci_fast(dut):
 
     # Wait for a number of clock cycles
     for i in range(18000):
-        await ClockCycles(dut.clk_PAD, 1)
+        await FallingEdge(dut.clk_PAD)
 
         await do_spi(dut)
 
@@ -448,7 +455,7 @@ async def test_cpu_analog_enables(dut):
 
     # Wait for a number of clock cycles
     for i in range(100000):
-        await ClockCycles(dut.clk_PAD, 1)
+        await FallingEdge(dut.clk_PAD)
         await do_spi(dut)
 
         # HACK: This code writes some input to the bidir pads in the first part of the test
@@ -505,7 +512,7 @@ async def test_cpu_uart_tx(dut):
     # Wait for a number of clock cycles
     # for i in range(150000):
     for i in range(100000):
-        await ClockCycles(dut.clk_PAD, 1)
+        await FallingEdge(dut.clk_PAD)
 
         await do_spi(dut)
         await do_uart_rx(dut)
@@ -541,7 +548,7 @@ async def test_cpu_uart_rx(dut):
 
     # Wait for a number of clock cycles
     for i in range(200000):
-        await ClockCycles(dut.clk_PAD, 1)
+        await FallingEdge(dut.clk_PAD)
 
         if i >= next_i:
             if uart_tx_enable == 0 and counter < len(to_send) - 1:
@@ -580,7 +587,7 @@ async def test_cpu_i2c_rw(dut):
 
     # Wait for a number of clock cycles
     for i in range(250000):
-        await ClockCycles(dut.clk_PAD, 1)
+        await FallingEdge(dut.clk_PAD)
 
         await do_spi(dut)
         await do_uart_rx(dut)
@@ -612,7 +619,7 @@ async def test_cpu_i2c_mc(dut):
 
     # Wait for a number of clock cycles
     for i in range(100000):
-        await ClockCycles(dut.clk_PAD, 1)
+        await FallingEdge(dut.clk_PAD)
 
         await do_spi(dut)
         await do_uart_rx(dut)
@@ -637,18 +644,13 @@ async def test_cpu_gpio(dut):
     logger.info("Testing GPIO")
 
     # Test 0111 + 1 = 1000
-    tmp = dut.input_PAD.get()
-    tmp[3] = 0
-    tmp[2] = 1
-    tmp[1] = 1
-    tmp[0] = 1
-    dut.input_PAD.set(Immediate(tmp))
+    drive_input_pad(dut, {3: 0, 2: 1, 1: 1, 0: 1})
     # Wait for a number of clock cycles
 
     print(dut.output_PAD.get()[3:0])
     assert dut.output_PAD.get()[3:0] == 0b0000
     for i in range(5000):
-        await ClockCycles(dut.clk_PAD, 1)
+        await FallingEdge(dut.clk_PAD)
         await do_spi(dut)
 
     # Check the end result of the counter
@@ -656,16 +658,11 @@ async def test_cpu_gpio(dut):
     assert dut.output_PAD.get()[3:0] == 0b1000
 
     # Test 1010 + 1 = 1011
-    tmp = dut.input_PAD.get()
-    tmp[3] = 1
-    tmp[2] = 0
-    tmp[1] = 1
-    tmp[0] = 0
-    dut.input_PAD.set(Immediate(tmp))
+    drive_input_pad(dut, {3: 1, 2: 0, 1: 1, 0: 0})
     # Wait for a number of clock cycles
 
     for i in range(5000):
-        await ClockCycles(dut.clk_PAD, 1)
+        await FallingEdge(dut.clk_PAD)
         await do_spi(dut)
 
     # Check the end result of the counter
@@ -686,13 +683,11 @@ async def test_cpu_wspr(dut):
     logger.info("Testing WSPR")
 
     for i in range(300000):
-        await ClockCycles(dut.clk_PAD, 1)
+        await FallingEdge(dut.clk_PAD)
         await do_spi(dut)
 
         if i == 19000:
-            tmp = dut.input_PAD.get()
-            tmp[0] = 1
-            dut.input_PAD.set(Immediate(tmp))
+            drive_input_pad(dut, {0: 1})
 
     print("WSPR TEST DONE. CHECK WAVEFORM!")
     logger.info("Done!")
@@ -718,7 +713,8 @@ def tinywhisper_top_runner():
         sources.append(root_path / f"netlist/nl/{hdl_toplevel}.nl.v")
         sources.append(root_path / "macros/riscv/final/nl/riscv_top.nl.v")
 
-        defines = {"USE_POWER_PINS": False}
+        # Unpowered netlist: USE_POWER_PINS must NOT be defined at all
+        # (passing USE_POWER_PINS=False would still define the macro).
     else:
         # Toplevel
         sources.append(root_path / "rtl/tinywhisper_top.sv")
@@ -773,7 +769,7 @@ def tinywhisper_top_runner():
         pass
 
     if sim == "verilator":
-        build_args = ["--timing", "--trace", "--trace-fst", "--trace-structs"]
+        raise SystemExit("The chip testbench needs SIM=icarus: Verilator cannot build the Verilog models of the IO pads.")
 
     runner = get_runner(sim)
     runner.build(
@@ -789,12 +785,17 @@ def tinywhisper_top_runner():
 
     plusargs = []
 
-    runner.test(
+    results_xml = runner.test(
         hdl_toplevel=hdl_toplevel,
         test_module="tinywhisper_top_tb,",
         plusargs=plusargs,
         waves=True,
     )
+
+    # Outside pytest a failing test leaves the exit status at 0, so check the results
+    num_tests, num_failed = get_results(results_xml)
+    if num_failed:
+        raise SystemExit(f"FAIL: {num_failed} of {num_tests} tests failed")
 
 
 if __name__ == "__main__":

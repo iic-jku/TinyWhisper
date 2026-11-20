@@ -288,7 +288,8 @@ All `simulations/` folders are generated and git-ignored.
 
 - The Makefile targets always name one explicitly with `--rcfile`, so a target behaves the same from any working directory.
 - Inside the container, [`.designinit`](../.designinit) only exports the PDK variables. It does not wrap `xschem`, so a plain `xschem <file>` uses whatever the current directory provides.
-- Starting Xschem from within one of the nine folders picks up that folder's file, which is the normal interactive case.
+- Starting Xschem from within one of the folders in the table above picks up that folder's file, which is the normal interactive case.
+- `make open` starts Xschem in the file's own directory, so the same rule applies to every button of the file browser, see [Open the Design Files](#open-the-design-files).
 
 
 ## Makefile Structure
@@ -355,6 +356,8 @@ Opens a file browser for this folder with `sak-open.py` from the [IIC-OSIC-TOOLS
 make open
 ```
 
+All file types are ticked at startup, each checkbox showing how many files of that type the tree holds. `None` and `All` untick or tick every type at once, and `Rescan` rereads the tree immediately. The filter field keeps only the files whose path contains the typed text (case-insensitive), so `iqmod` reduces the list to the iqmod macro. Clicking a directory heading folds it away. Hovering a button shows the file's size and age in the status line at the bottom. A right click on a button opens a menu with `Cell view` (all views of that cell, for example its `.sch`, `.sym`, `.gds` and `.nl.v`, wherever they live in the tree), `Scope here` (rescan from that file's directory), `Fold all`, `Save view` (remember the folded directories and ticked types for this tree), `Open shell` and `Copy path`.
+
 Clicking a button launches the matching tool in the file's own directory, so Xschem finds its `simulations/` folder and KLayout its run outputs where they belong:
 
 | File type | Tool |
@@ -399,6 +402,8 @@ Run this after cloning the repository, or whenever submodule pointers are update
 
 We use [cocotb](https://www.cocotb.org/), a Python-based testbench environment, for the verification of the chip.
 The underlying simulator is [Icarus Verilog](https://github.com/steveicarus/iverilog).
+Verilator cannot build the Verilog models of the IO pads, so the chip testbench stops under `SIM=verilator`.
+The cocotb testbench of the `riscv` macro also runs on Verilator, see [`macros/riscv/README.md`](macros/riscv/README.md).
 
 The simulation targets accept an optional `CELL` variable (default: `tinywhisper_top`).
 The testbench is located in `testbenches/cocotb/tinywhisper_top_tb.py`. To run the RTL simulation, use:
@@ -410,8 +415,11 @@ make sim-rtl-cocotb
 To run the gate-level (GL) simulation with cocotb, use:
 
 ```sh
-make sim-gl-cocotb
+make sim-gl-cocotb                # the test test_cpu_fibonacci_fast
+make sim-gl-cocotb GL_TESTS=      # all eight tests
 ```
+
+`GL_TESTS` selects the gate-level tests by a regular expression, as in the riscv macro. The runner simulates the unpowered netlist with `USE_POWER_PINS` undefined, since defining it, also as `False`, makes every cell output X. It drives every input pad to its idle level and fails when a test fails, which cocotb does not do on its own outside pytest.
 
 To run the gate-level simulation with Xschem, use:
 
@@ -753,7 +761,7 @@ make gdscheck-drc CELL=tinywhisper_top_logo_fill GDSCHECK_DECKS=metal1,via1
 > - The `SG13_dev` `pmos` PCell draws an nBuLay ring under its n+ tap ring when `guardRingType` is `nwell`, as in `iqmod`. Magic reports `NBL.f` between that ring and the PMOS diffusion inside it, and gdscheck 0.2.0 reports `NBL.f` (26 in `iqmod_mfb_lpf`, 36 in `iqmod_mixer`, 140 in `iqmod_top`). The KLayout deck checks `NBL.f` only against P+ Activ in PWell, as IHP aligned it with the commercial deck in [IHP-Open-PDK#700](https://github.com/IHP-GmbH/IHP-Open-PDK/pull/700). Which reading is right is open in [IHP-Open-PDK#954](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/954). gdscheck reads `NBL.f` like the KLayout deck since [aesc-silicon/gdscheck#51](https://github.com/aesc-silicon/gdscheck/pull/51), which came after 0.2.0.
 > - Magic also reports 144 `MIM.e`, 16 `NBL.e` and 8 `pSD.e/f` on `iqmod_top`, which the KLayout deck does not report even at `regular`. Their cause is not traced yet.
 > - Read hierarchically, Magic reports "This layer can't abut or partially overlap between subcells" in IHP's IO pads.
-> - On `tinywhisper_top_logo_fill`, gdscheck's `main` suite reports 140 `NBL.f` and also 128 `TV1.a`, 32 `TV1.b`, 18 `TM1.a`, 1 `TM2.b`, 1 `Slt.c` and 1 `Slt.i`. The `TV1` hits sit on the TopVia1 stacks at `iqmod_top` and the `TM1.a` hits at `VIA_TopVia1EWNS`, both not traced yet. The `Slt` hits are the `sg13g2_ip__ce` without its pinholes, which this GDS holds until the next `make build-top`: with the new cell patched into a copy, `main` reports 319 hits, without them.
+> - On `tinywhisper_top_logo_fill`, gdscheck 0.2.1's `main` suite reports 175 hits: 12 `NBL.f`, 128 `TV1.a` and 32 `TV1.b`, all inside `iqmod_top`, and 3 `TM2.b` in the pad ring east of it. None of them is traced yet.
 >
 > A flow stops on a violation of any engine it calls, so the flows leave the Magic DRC out until the fixes are in the container: its lines are commented out in `magic-verify`, in the IP `all` and in `make all`, and `magic-drc` still runs it on its own. gdscheck stays in, so it stops `make all` at the chip hits above, and the `make all` of `iqmod` at its cells. To continue meanwhile, run the later steps directly (`bondplan`). Upstream calls gdscheck experimental, so a clean gdscheck run is no sign-off on its own.
 
@@ -1050,7 +1058,7 @@ To keep the runtime low while still covering the full toolchain, the regression 
 - Magic DRC (`sak-drc.sh -m`) runs once, as `magic-drc` of the bondpad, which passes it, so a broken Magic fails the regression. gdscheck DRC (`sak-drc.sh -g`) runs in the bondpad, RF pad and logo IP builds.
 - Only **one** logo (`sg13g2_ip__jku`) is regenerated. It is the only step that exercises the PNG to GDS flow. The other logos (`sg13g2_ip__jku_names`, `sg13g2_ip__ce`, `sg13g2_ip__ce_names`) use an identical toolchain and reuse their committed views.
 - Exactly **one** Xschem testbench (`iqmod_mfb_lpf_tb_ac_cl`) and **one** CACE parameter set (the AC VDD sweep `ac_params` of `iqmod_mfb_lpf.yaml`, no Monte Carlo) are run. Swap `ac_params` for `ac_mc_params` / `ac_mm_params` in the target to also exercise the Monte Carlo flow.
-- In the default `regression` the riscv macro is **not re-hardened**: `librelane-magicdrc` (the full RTL-to-GDS of the CPU, ≈2 h wall clock), the flows that depend on its fresh outputs (`copy-final`, the logic equivalence check `lec` with ≈30 min, the gate-level cocotb simulation `sim-gl-cocotb` with ≈12 min for the full suite, `generate-xspice`, which is called for consistency with the template but skips itself while the riscv RTL carries its stock settings, and the gate-level Xschem simulation `sim-gl-xschem`) and the Icarus RTL testbench (`sim-rtl-verilog`) only run in `regression-full` (`FULL_REGRESSION=1`). In the default variant the riscv macro is covered at RTL (lint + cocotb, which also exercises Icarus as its simulator), and the LibreLane flow itself is still exercised by the chip top-level `librelane-nodrc` run. A fast gate-level smoke run of a single test (≈20 s) is available via `COCOTB_TEST_FILTER=test_cpu_fibonacci_fast make sim-gl-cocotb`.
+- In the default `regression` the riscv macro is **not re-hardened**: `librelane-magicdrc` (the full RTL-to-GDS of the CPU, ≈2 h wall clock), the flows that depend on its fresh outputs (`copy-final`, the logic equivalence check `lec` with ≈30 min, the gate-level cocotb simulations `sim-gl-cocotb` and `sim-gl-sdf-cocotb` of the test `test_cpu_fibonacci_fast` (`GL_TESTS`), `generate-xspice`, which is called for consistency with the template but skips itself while the riscv RTL carries its stock settings, and the gate-level Xschem simulation `sim-gl-xschem`) and the Icarus RTL testbench (`sim-rtl-verilog`) only run in `regression-full` (`FULL_REGRESSION=1`). In the default variant the riscv macro is covered at RTL (lint + cocotb, which also exercises Icarus as its simulator), and the LibreLane flow itself is still exercised by the chip top-level `librelane-nodrc` run. `make -C macros/riscv sim-gl-cocotb GL_TESTS=` runs all eight tests on the netlist, 1 h 51 min on a laptop.
 
 The regression runs bottom-up: first the script tests, then the iqmod and riscv macros, then the top-level assembly (submodules, bondpad, RF pad, logo) and finally the chip top-level LibreLane run that integrates the macros and IP. In `regression-full`, `copy-final` copies the freshly hardened `flow/final/` views into `macros/riscv/final/`, so the logic equivalence check (`lec`), the gate-level flows and the chip top-level use the freshly built outputs. In the default `regression` the chip top-level integrates the committed views in `macros/riscv/final/` instead.
 
@@ -1080,7 +1088,7 @@ The following flows are only covered by `regression-full`:
 | Icarus Verilog with the plain SystemVerilog testbench | `sim-rtl-verilog` |
 | LibreLane macro hardening + Magic sign-off DRC (≈2 h) | `librelane-magicdrc` + `copy-final` |
 | EQY + yosys-slang (logic equivalence check of the fresh netlist against the RTL, ≈30 min) | `lec` |
-| cocotb gate-level | `sim-gl-cocotb` (manual smoke run: `COCOTB_TEST_FILTER=test_cpu_fibonacci_fast make sim-gl-cocotb`) |
+| cocotb gate-level, without and with the SDF delays | `sim-gl-cocotb`, `sim-gl-sdf-cocotb` (the test `test_cpu_fibonacci_fast`, `GL_TESTS`) |
 | `verilog2sym.py` (Xschem symbol check) + `spi2xspice.py` + `sak-pin-reorder.py` (XSPICE model) | `generate-xspice`, **skipped by its guard** while `macros/riscv/rtl/memory.sv` carries its stock settings, so these three are only exercised when the model is regenerated on purpose |
 | Xschem gate-level (ngspice + xspice) | `sim-gl-xschem` |
 

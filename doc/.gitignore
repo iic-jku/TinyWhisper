@@ -1,2 +1,4 @@
 /.quarto/
 **/*.quarto_ipynb
+# copied from the macros and the chip by scripts/copy_sim_figures.ts before every render
+/fig/sim/
