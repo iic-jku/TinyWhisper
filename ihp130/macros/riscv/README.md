@@ -275,9 +275,12 @@ The testbench of `riscv_top`, `testbenches/cocotb/riscv_top/riscv_top_tb.py`, ta
 
 ```sh
 make sim-rtl-cocotb                                    # run riscv_top RTL cocotb simulation
+make sim-rtl-cocotb SIM=verilator                      # run it on Verilator instead of Icarus Verilog
 make sim-rtl-cocotb CELL=dsmod                         # run the dsmod suite for the baseline ORDER=2 / OSR=64
 make sim-rtl-cocotb CELL=dsmod DSMOD_TARGET=all_runs   # run the dsmod suite for all orders and OSRs
 ```
+
+The RTL simulation of `riscv_top` also runs on [Verilator](https://www.veripool.org/verilator/) with `SIM=verilator`, all eight tests in about 1 min on a laptop. The gate-level runs need Icarus Verilog, because Verilator cannot build the UDP models of the standard cells.
 
 `DSMOD_TARGET` selects which target of the dsmod sub-Makefile is run. `all` (the default) regenerates the figures of one configuration only, `all_runs` sweeps `DSMOD_ORDER` over 1 and 2 and `DSMOD_OSR` over 32, 64, 128 and 256, which regenerates every figure committed under `testbenches/cocotb/dsmod/results/`. `sim-all` uses `all_runs`.
 
@@ -295,11 +298,12 @@ make sim-gl-cocotb GL_TESTS=      # all eight tests
 > [!NOTE]
 > Gate-level simulation requires the latest implementation in `flow/final/`.
 
-A waveform file is generated under `testbenches/cocotb/<cell>/sim_build/<cell>.fst`.
+A waveform file is generated under `testbenches/cocotb/<cell>/sim_build/<cell>.fst`, by Verilator under `testbenches/cocotb/<cell>/sim_build/dump.fst`.
 To view it:
 
 ```sh
 make sim-view-cocotb                                          # view riscv_top waveform
+make sim-view-cocotb SIM=verilator                            # view the waveform of the Verilator run
 make sim-view-cocotb CELL=dsmod                               # view dsmod waveform
 make sim-view-cocotb CELL=dsmod WAVEFORM_VIEWER=surfer        # use Surfer instead
 ```

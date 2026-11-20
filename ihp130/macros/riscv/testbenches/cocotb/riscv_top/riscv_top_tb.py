@@ -450,6 +450,9 @@ def riscv_top_runner():
         build_args = ["-DSIM"]
         pass
 
+    if gl and sim == "verilator":
+        raise SystemExit("The gate-level simulation (GL=1) needs SIM=icarus: Verilator cannot build the UDP models of the standard cells.")
+
     if gl and sdf:
         if sim != "icarus":
             raise SystemExit("The timed gate-level simulation (SDF=1) needs SIM=icarus.")
