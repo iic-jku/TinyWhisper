@@ -88,7 +88,8 @@ module control (
     interrupt
   } states_t;
 
-  states_t state_d, state_q;
+  states_t state_d;
+  (* fsm_encoding = "none" *) states_t state_q;
 
   always_ff @(posedge clk) begin
     if (reset == 0) state_q <= rst;
