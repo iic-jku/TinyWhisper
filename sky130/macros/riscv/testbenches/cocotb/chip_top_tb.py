@@ -1043,7 +1043,7 @@ def chip_top_runner():
         pass
 
     if sim == "verilator":
-        build_args = ["--timing", "--trace", "--trace-fst", "--trace-structs"]
+        raise SystemExit("The chip testbench needs SIM=icarus: Verilator cannot build the Verilog models of the IO pads.")
 
     runner = get_runner(sim)
     runner.build(
