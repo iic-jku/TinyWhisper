@@ -94,6 +94,12 @@ module tinywhisper_top (clk_PAD,
  wire net22;
  wire net23;
  wire net24;
+ wire net25;
+ wire net26;
+ wire net27;
+ wire net28;
+ wire net29;
+ wire net30;
 
  sg13g2_antennanp ANTENNA_1 (.A(\bidir_PAD2CORE[4] ));
  sg13g2_antennanp ANTENNA_2 (.A(\bidir_PAD2CORE[5] ));
@@ -29894,12 +29900,12 @@ module tinywhisper_top (clk_PAD,
  sg13g2_decap_8 FILLER_278_84 ();
  sg13g2_decap_8 FILLER_278_91 ();
  sg13g2_decap_8 FILLER_278_98 ();
- sg13g2_decap_8 FILLER_279_0 ();
- sg13g2_decap_8 FILLER_279_105 ();
- sg13g2_decap_8 FILLER_279_112 ();
- sg13g2_decap_4 FILLER_279_119 ();
+ sg13g2_decap_8 FILLER_279_100 ();
+ sg13g2_decap_8 FILLER_279_107 ();
+ sg13g2_decap_8 FILLER_279_114 ();
+ sg13g2_fill_2 FILLER_279_121 ();
  sg13g2_fill_1 FILLER_279_123 ();
- sg13g2_decap_8 FILLER_279_14 ();
+ sg13g2_decap_8 FILLER_279_16 ();
  sg13g2_decap_8 FILLER_279_1625 ();
  sg13g2_decap_8 FILLER_279_1632 ();
  sg13g2_decap_8 FILLER_279_1639 ();
@@ -29968,7 +29974,6 @@ module tinywhisper_top (clk_PAD,
  sg13g2_decap_8 FILLER_279_2080 ();
  sg13g2_decap_8 FILLER_279_2087 ();
  sg13g2_decap_8 FILLER_279_2094 ();
- sg13g2_decap_8 FILLER_279_21 ();
  sg13g2_decap_8 FILLER_279_2101 ();
  sg13g2_decap_8 FILLER_279_2108 ();
  sg13g2_decap_8 FILLER_279_2115 ();
@@ -29998,6 +30003,7 @@ module tinywhisper_top (clk_PAD,
  sg13g2_decap_8 FILLER_279_2283 ();
  sg13g2_decap_8 FILLER_279_2290 ();
  sg13g2_decap_8 FILLER_279_2297 ();
+ sg13g2_decap_8 FILLER_279_23 ();
  sg13g2_decap_8 FILLER_279_2304 ();
  sg13g2_decap_8 FILLER_279_2311 ();
  sg13g2_decap_8 FILLER_279_2318 ();
@@ -30048,18 +30054,17 @@ module tinywhisper_top (clk_PAD,
  sg13g2_decap_8 FILLER_279_2633 ();
  sg13g2_decap_4 FILLER_279_2640 ();
  sg13g2_fill_1 FILLER_279_2644 ();
- sg13g2_decap_8 FILLER_279_28 ();
- sg13g2_decap_8 FILLER_279_35 ();
- sg13g2_decap_8 FILLER_279_42 ();
- sg13g2_decap_8 FILLER_279_49 ();
- sg13g2_decap_8 FILLER_279_56 ();
- sg13g2_decap_8 FILLER_279_63 ();
- sg13g2_decap_8 FILLER_279_7 ();
- sg13g2_decap_8 FILLER_279_70 ();
- sg13g2_decap_8 FILLER_279_77 ();
- sg13g2_decap_8 FILLER_279_84 ();
- sg13g2_decap_8 FILLER_279_91 ();
- sg13g2_decap_8 FILLER_279_98 ();
+ sg13g2_decap_8 FILLER_279_30 ();
+ sg13g2_decap_8 FILLER_279_37 ();
+ sg13g2_decap_8 FILLER_279_44 ();
+ sg13g2_decap_8 FILLER_279_51 ();
+ sg13g2_decap_8 FILLER_279_58 ();
+ sg13g2_decap_8 FILLER_279_65 ();
+ sg13g2_decap_8 FILLER_279_72 ();
+ sg13g2_decap_8 FILLER_279_79 ();
+ sg13g2_decap_8 FILLER_279_86 ();
+ sg13g2_decap_8 FILLER_279_9 ();
+ sg13g2_decap_8 FILLER_279_93 ();
  sg13g2_decap_8 FILLER_27_0 ();
  sg13g2_decap_8 FILLER_27_105 ();
  sg13g2_decap_8 FILLER_27_112 ();
@@ -43397,14 +43402,13 @@ module tinywhisper_top (clk_PAD,
  sg13g2_decap_8 FILLER_334_1138 ();
  sg13g2_decap_8 FILLER_334_1145 ();
  sg13g2_decap_8 FILLER_334_1152 ();
- sg13g2_decap_8 FILLER_334_1159 ();
- sg13g2_decap_8 FILLER_334_1166 ();
- sg13g2_decap_8 FILLER_334_1173 ();
- sg13g2_fill_1 FILLER_334_1180 ();
+ sg13g2_decap_4 FILLER_334_1159 ();
+ sg13g2_fill_2 FILLER_334_1163 ();
+ sg13g2_decap_8 FILLER_334_1174 ();
  sg13g2_decap_8 FILLER_334_119 ();
  sg13g2_decap_8 FILLER_334_1190 ();
- sg13g2_decap_8 FILLER_334_1197 ();
- sg13g2_decap_8 FILLER_334_1204 ();
+ sg13g2_decap_4 FILLER_334_1197 ();
+ sg13g2_fill_1 FILLER_334_1201 ();
  sg13g2_decap_8 FILLER_334_1211 ();
  sg13g2_decap_8 FILLER_334_1218 ();
  sg13g2_decap_8 FILLER_334_1225 ();
@@ -43708,36 +43712,35 @@ module tinywhisper_top (clk_PAD,
  sg13g2_decap_8 FILLER_334_736 ();
  sg13g2_decap_8 FILLER_334_743 ();
  sg13g2_decap_8 FILLER_334_750 ();
- sg13g2_decap_8 FILLER_334_757 ();
- sg13g2_decap_8 FILLER_334_764 ();
+ sg13g2_decap_4 FILLER_334_757 ();
  sg13g2_decap_8 FILLER_334_77 ();
- sg13g2_decap_8 FILLER_334_771 ();
- sg13g2_decap_8 FILLER_334_778 ();
- sg13g2_decap_8 FILLER_334_785 ();
- sg13g2_decap_8 FILLER_334_792 ();
- sg13g2_decap_8 FILLER_334_799 ();
- sg13g2_decap_8 FILLER_334_806 ();
- sg13g2_decap_8 FILLER_334_813 ();
- sg13g2_decap_8 FILLER_334_820 ();
- sg13g2_decap_8 FILLER_334_827 ();
- sg13g2_decap_8 FILLER_334_834 ();
+ sg13g2_decap_8 FILLER_334_770 ();
+ sg13g2_decap_8 FILLER_334_777 ();
+ sg13g2_decap_8 FILLER_334_784 ();
+ sg13g2_decap_8 FILLER_334_791 ();
+ sg13g2_decap_8 FILLER_334_798 ();
+ sg13g2_decap_8 FILLER_334_805 ();
+ sg13g2_decap_8 FILLER_334_812 ();
+ sg13g2_decap_8 FILLER_334_819 ();
+ sg13g2_decap_8 FILLER_334_826 ();
+ sg13g2_decap_8 FILLER_334_833 ();
  sg13g2_decap_8 FILLER_334_84 ();
- sg13g2_decap_8 FILLER_334_841 ();
- sg13g2_decap_8 FILLER_334_848 ();
- sg13g2_decap_8 FILLER_334_855 ();
- sg13g2_decap_8 FILLER_334_862 ();
- sg13g2_decap_8 FILLER_334_869 ();
- sg13g2_decap_8 FILLER_334_876 ();
- sg13g2_decap_8 FILLER_334_883 ();
- sg13g2_decap_8 FILLER_334_890 ();
- sg13g2_decap_8 FILLER_334_897 ();
- sg13g2_decap_8 FILLER_334_904 ();
+ sg13g2_decap_8 FILLER_334_840 ();
+ sg13g2_decap_8 FILLER_334_847 ();
+ sg13g2_decap_8 FILLER_334_854 ();
+ sg13g2_decap_8 FILLER_334_861 ();
+ sg13g2_decap_8 FILLER_334_868 ();
+ sg13g2_decap_8 FILLER_334_875 ();
+ sg13g2_decap_8 FILLER_334_882 ();
+ sg13g2_decap_8 FILLER_334_889 ();
+ sg13g2_decap_8 FILLER_334_896 ();
+ sg13g2_decap_8 FILLER_334_903 ();
  sg13g2_decap_8 FILLER_334_91 ();
- sg13g2_decap_8 FILLER_334_911 ();
- sg13g2_decap_8 FILLER_334_918 ();
- sg13g2_decap_8 FILLER_334_925 ();
- sg13g2_decap_8 FILLER_334_932 ();
- sg13g2_fill_1 FILLER_334_939 ();
+ sg13g2_decap_8 FILLER_334_910 ();
+ sg13g2_decap_8 FILLER_334_917 ();
+ sg13g2_decap_8 FILLER_334_924 ();
+ sg13g2_decap_8 FILLER_334_931 ();
+ sg13g2_fill_2 FILLER_334_938 ();
  sg13g2_decap_8 FILLER_334_949 ();
  sg13g2_decap_8 FILLER_334_956 ();
  sg13g2_decap_8 FILLER_334_963 ();
@@ -46781,10 +46784,9 @@ module tinywhisper_top (clk_PAD,
  sg13g2_decap_8 FILLER_48_91 ();
  sg13g2_decap_8 FILLER_48_98 ();
  sg13g2_decap_8 FILLER_49_0 ();
- sg13g2_decap_8 FILLER_49_105 ();
- sg13g2_decap_8 FILLER_49_112 ();
- sg13g2_decap_4 FILLER_49_119 ();
- sg13g2_fill_1 FILLER_49_123 ();
+ sg13g2_decap_8 FILLER_49_103 ();
+ sg13g2_decap_8 FILLER_49_110 ();
+ sg13g2_decap_8 FILLER_49_117 ();
  sg13g2_decap_8 FILLER_49_14 ();
  sg13g2_decap_8 FILLER_49_1625 ();
  sg13g2_decap_8 FILLER_49_1632 ();
@@ -46943,9 +46945,9 @@ module tinywhisper_top (clk_PAD,
  sg13g2_decap_8 FILLER_49_7 ();
  sg13g2_decap_8 FILLER_49_70 ();
  sg13g2_decap_8 FILLER_49_77 ();
- sg13g2_decap_8 FILLER_49_84 ();
- sg13g2_decap_8 FILLER_49_91 ();
- sg13g2_decap_8 FILLER_49_98 ();
+ sg13g2_fill_2 FILLER_49_84 ();
+ sg13g2_fill_1 FILLER_49_86 ();
+ sg13g2_decap_8 FILLER_49_96 ();
  sg13g2_decap_8 FILLER_4_0 ();
  sg13g2_decap_8 FILLER_4_1001 ();
  sg13g2_decap_8 FILLER_4_1008 ();
@@ -55977,12 +55979,12 @@ module tinywhisper_top (clk_PAD,
  sg13g2_decap_8 FILLER_92_84 ();
  sg13g2_decap_8 FILLER_92_91 ();
  sg13g2_decap_8 FILLER_92_98 ();
- sg13g2_decap_8 FILLER_93_0 ();
- sg13g2_decap_8 FILLER_93_105 ();
- sg13g2_decap_8 FILLER_93_112 ();
- sg13g2_decap_4 FILLER_93_119 ();
+ sg13g2_decap_8 FILLER_93_100 ();
+ sg13g2_decap_8 FILLER_93_107 ();
+ sg13g2_decap_8 FILLER_93_114 ();
+ sg13g2_fill_2 FILLER_93_121 ();
  sg13g2_fill_1 FILLER_93_123 ();
- sg13g2_decap_8 FILLER_93_14 ();
+ sg13g2_decap_8 FILLER_93_16 ();
  sg13g2_decap_8 FILLER_93_1628 ();
  sg13g2_decap_8 FILLER_93_1635 ();
  sg13g2_decap_8 FILLER_93_1642 ();
@@ -56051,7 +56053,6 @@ module tinywhisper_top (clk_PAD,
  sg13g2_decap_8 FILLER_93_2083 ();
  sg13g2_decap_8 FILLER_93_2090 ();
  sg13g2_decap_8 FILLER_93_2097 ();
- sg13g2_decap_8 FILLER_93_21 ();
  sg13g2_decap_8 FILLER_93_2104 ();
  sg13g2_decap_8 FILLER_93_2111 ();
  sg13g2_decap_8 FILLER_93_2118 ();
@@ -56080,6 +56081,7 @@ module tinywhisper_top (clk_PAD,
  sg13g2_decap_8 FILLER_93_2279 ();
  sg13g2_decap_8 FILLER_93_2286 ();
  sg13g2_decap_8 FILLER_93_2293 ();
+ sg13g2_decap_8 FILLER_93_23 ();
  sg13g2_decap_8 FILLER_93_2300 ();
  sg13g2_decap_8 FILLER_93_2307 ();
  sg13g2_decap_8 FILLER_93_2314 ();
@@ -56130,18 +56132,17 @@ module tinywhisper_top (clk_PAD,
  sg13g2_decap_8 FILLER_93_2629 ();
  sg13g2_decap_8 FILLER_93_2636 ();
  sg13g2_fill_2 FILLER_93_2643 ();
- sg13g2_decap_8 FILLER_93_28 ();
- sg13g2_decap_8 FILLER_93_35 ();
- sg13g2_decap_8 FILLER_93_42 ();
- sg13g2_decap_8 FILLER_93_49 ();
- sg13g2_decap_8 FILLER_93_56 ();
- sg13g2_decap_8 FILLER_93_63 ();
- sg13g2_decap_8 FILLER_93_7 ();
- sg13g2_decap_8 FILLER_93_70 ();
- sg13g2_decap_8 FILLER_93_77 ();
- sg13g2_decap_8 FILLER_93_84 ();
- sg13g2_decap_8 FILLER_93_91 ();
- sg13g2_decap_8 FILLER_93_98 ();
+ sg13g2_decap_8 FILLER_93_30 ();
+ sg13g2_decap_8 FILLER_93_37 ();
+ sg13g2_decap_8 FILLER_93_44 ();
+ sg13g2_decap_8 FILLER_93_51 ();
+ sg13g2_decap_8 FILLER_93_58 ();
+ sg13g2_decap_8 FILLER_93_65 ();
+ sg13g2_decap_8 FILLER_93_72 ();
+ sg13g2_decap_8 FILLER_93_79 ();
+ sg13g2_decap_8 FILLER_93_86 ();
+ sg13g2_decap_8 FILLER_93_9 ();
+ sg13g2_decap_8 FILLER_93_93 ();
  sg13g2_decap_8 FILLER_94_0 ();
  sg13g2_decap_8 FILLER_94_105 ();
  sg13g2_decap_8 FILLER_94_112 ();
@@ -57821,53 +57822,65 @@ module tinywhisper_top (clk_PAD,
  sg13g2_ip__ce_names ce_names ();
  sg13g2_IOPadIn clk_pad (.p2c(clk_PAD2CORE),
     .pad(clk_PAD));
- sg13g2_dlygate4sd3_1 hold1 (.A(net9),
+ sg13g2_dlygate4sd3_1 hold1 (.A(net25),
     .X(net1));
  sg13g2_dlygate4sd3_1 hold10 (.A(net1),
     .X(net10));
- sg13g2_dlygate4sd3_1 hold11 (.A(net24),
+ sg13g2_dlygate4sd3_1 hold11 (.A(net26),
     .X(net11));
- sg13g2_dlygate4sd3_1 hold12 (.A(net2),
+ sg13g2_dlygate4sd3_1 hold12 (.A(net3),
     .X(net12));
- sg13g2_dlygate4sd3_1 hold13 (.A(\i_tinywhisper_core.input_in[2] ),
+ sg13g2_dlygate4sd3_1 hold13 (.A(net27),
     .X(net13));
- sg13g2_dlygate4sd3_1 hold14 (.A(net3),
+ sg13g2_dlygate4sd3_1 hold14 (.A(net2),
     .X(net14));
- sg13g2_dlygate4sd3_1 hold15 (.A(\i_tinywhisper_core.input_in[0] ),
+ sg13g2_dlygate4sd3_1 hold15 (.A(net28),
     .X(net15));
  sg13g2_dlygate4sd3_1 hold16 (.A(net4),
     .X(net16));
- sg13g2_dlygate4sd3_1 hold17 (.A(\bidir_PAD2CORE[8] ),
+ sg13g2_dlygate4sd3_1 hold17 (.A(net29),
     .X(net17));
- sg13g2_dlygate4sd3_1 hold18 (.A(net6),
+ sg13g2_dlygate4sd3_1 hold18 (.A(net5),
     .X(net18));
- sg13g2_dlygate4sd3_1 hold19 (.A(\i_tinywhisper_core.input_in[5] ),
+ sg13g2_dlygate4sd3_1 hold19 (.A(net30),
     .X(net19));
- sg13g2_dlygate4sd3_1 hold2 (.A(net11),
+ sg13g2_dlygate4sd3_1 hold2 (.A(net13),
     .X(net2));
- sg13g2_dlygate4sd3_1 hold20 (.A(net5),
+ sg13g2_dlygate4sd3_1 hold20 (.A(net6),
     .X(net20));
- sg13g2_dlygate4sd3_1 hold21 (.A(\i_tinywhisper_core.rst_n ),
+ sg13g2_dlygate4sd3_1 hold21 (.A(\i_tinywhisper_core.input_in[4] ),
     .X(net21));
- sg13g2_dlygate4sd3_1 hold22 (.A(\i_tinywhisper_core.input_in[4] ),
+ sg13g2_dlygate4sd3_1 hold22 (.A(net7),
     .X(net22));
- sg13g2_dlygate4sd3_1 hold23 (.A(\i_tinywhisper_core.input_in[1] ),
+ sg13g2_dlygate4sd3_1 hold23 (.A(\i_tinywhisper_core.rst_n ),
     .X(net23));
- sg13g2_dlygate4sd3_1 hold24 (.A(\i_tinywhisper_core.input_in[3] ),
+ sg13g2_dlygate4sd3_1 hold24 (.A(\i_tinywhisper_core.input_in[2] ),
     .X(net24));
- sg13g2_dlygate4sd3_1 hold3 (.A(net13),
+ sg13g2_dlygate4sd3_1 hold25 (.A(net9),
+    .X(net25));
+ sg13g2_dlygate4sd3_1 hold26 (.A(\bidir_PAD2CORE[8] ),
+    .X(net26));
+ sg13g2_dlygate4sd3_1 hold27 (.A(\i_tinywhisper_core.input_in[0] ),
+    .X(net27));
+ sg13g2_dlygate4sd3_1 hold28 (.A(\i_tinywhisper_core.input_in[5] ),
+    .X(net28));
+ sg13g2_dlygate4sd3_1 hold29 (.A(\i_tinywhisper_core.input_in[1] ),
+    .X(net29));
+ sg13g2_dlygate4sd3_1 hold3 (.A(net11),
     .X(net3));
+ sg13g2_dlygate4sd3_1 hold30 (.A(\i_tinywhisper_core.input_in[3] ),
+    .X(net30));
  sg13g2_dlygate4sd3_1 hold4 (.A(net15),
     .X(net4));
- sg13g2_dlygate4sd3_1 hold5 (.A(net19),
+ sg13g2_dlygate4sd3_1 hold5 (.A(net17),
     .X(net5));
- sg13g2_dlygate4sd3_1 hold6 (.A(net17),
+ sg13g2_dlygate4sd3_1 hold6 (.A(net19),
     .X(net6));
  sg13g2_dlygate4sd3_1 hold7 (.A(net21),
     .X(net7));
- sg13g2_dlygate4sd3_1 hold8 (.A(net22),
+ sg13g2_dlygate4sd3_1 hold8 (.A(net23),
     .X(net8));
- sg13g2_dlygate4sd3_1 hold9 (.A(net23),
+ sg13g2_dlygate4sd3_1 hold9 (.A(net24),
     .X(net9));
  iqmod_top \i_tinywhisper_core.iqmod_top  (.di_spdt_ctrl_Q(\i_tinywhisper_core.Q_ae ),
     .di_spdt_ctrl_I(\i_tinywhisper_core.I_ae ),
@@ -57912,21 +57925,21 @@ module tinywhisper_top (clk_PAD,
     .lo_Q_oe(\i_tinywhisper_core.lo_Q_oe ),
     .lo_Qx_i(\bidir_PAD2CORE[7] ),
     .lo_Qx_o(\i_tinywhisper_core.lo_Qx_o ),
-    .reset(net7),
-    .rx(net8),
+    .reset(net8),
+    .rx(net22),
     .scl(\i_tinywhisper_core.scl ),
     .sclk(\i_tinywhisper_core.sclk ),
-    .sda_i(net18),
+    .sda_i(net12),
     .sda_o(\i_tinywhisper_core.sda_o ),
     .sda_oe(\i_tinywhisper_core.sda_oe ),
     .si(\i_tinywhisper_core.si ),
-    .so(net20),
+    .so(net16),
     .sram_ce(\i_tinywhisper_core.sram_ce ),
     .tx(\i_tinywhisper_core.tx ),
-    .gpio_in({net12,
-    net14,
+    .gpio_in({net20,
     net10,
-    net16}),
+    net18,
+    net14}),
     .gpio_out({\i_tinywhisper_core.gpio_out[3] ,
     \i_tinywhisper_core.gpio_out[2] ,
     \i_tinywhisper_core.gpio_out[1] ,
