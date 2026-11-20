@@ -21,18 +21,18 @@
 
 <p align="center">
   <a href="doc/fig/tinywhisper_die.JPG">
-    <img src="doc/fig/tinywhisper_die.JPG" alt="Die photo of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm), taped out in March 2026" width=70%>
+    <img src="doc/fig/tinywhisper_die.JPG" alt="Die photo of the ihp-sg13cmos TinyWhisper ASIC (2mm x 2mm), taped out in March 2026" width=70%>
   </a>
   <br>
-  <em>Die photo of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm), taped out in March 2026.</em>
+  <em>Die photo of the ihp-sg13cmos TinyWhisper ASIC (2mm x 2mm), taped out in March 2026.</em>
 </p>
 
 <p align="center">
   <a href="doc/fig/tinywhisper_top_black.png">
-    <img src="doc/fig/tinywhisper_top_black.png" alt="Chip render of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm)" width=70%>
+    <img src="doc/fig/tinywhisper_top_black.png" alt="Chip render of the ihp-sg13cmos TinyWhisper ASIC (2mm x 2mm)" width=70%>
   </a>
   <br>
-  <em>Chip render of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm).</em>
+  <em>Chip render of the ihp-sg13cmos TinyWhisper ASIC (2mm x 2mm).</em>
 </p>
 
 <p align="center">
@@ -88,7 +88,7 @@ TinyWhisper demonstrates what is possible with current open-source tools and ope
 
 | Parameter           | Value                                                                             |
 | ------------------- | --------------------------------------------------------------------------------- |
-| Technology          | IHP SG13G2 (130 nm), `ihp-sg13g2` PDK                                             |
+| Technology          | SKY130 \& IHP SG13CMOS (130 nm CMOS)                                              |
 | Die Area            | 2000 × 2000 µm (4 mm²)                                                            |
 | Core Area           | 1270 × 1270 µm (1.613 mm²)                                                        |
 | Clock Frequency     | 56 MHz                                                                            |
@@ -134,7 +134,7 @@ TinyWhisper demonstrates what is possible with current open-source tools and ope
 
 ## Description
 
-TinyWhisper is a compact WSPR transmitter realized with the ihp-sg13g2 PDK. The 2 mm x 2 mm chip operates at a core supply voltage of 1.5 V and an I/O supply voltage of 3.3 V. The chip is [packaged](https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/packaging) in a QFN-48 package. The chip has 56 pads, and its 9 VSS and 3 IOVSS pads are downbonded to the exposed pad of the package. All documentation, presentations, design files, and future updates are publicly available [here](https://github.com/iic-jku/TinyWhisper/tree/main/presentations). The block diagram is shown below. A render of the final chip layout is shown above, with the digital part placed on the left side of the chip and the analog part on the right. A custom logo on the topmost metal layer, generated with the tool [ArtistIC](https://arxiv.org/abs/2502.02626), is also shown above. The die photo at the top shows a fabricated chip of the March 2026 tapeout (`SoC4219`), with the TopMetal2 logo on top of the core.
+TinyWhisper is a compact WSPR transmitter realized with the ihp-sg13cmos PDK. The 2 mm x 2 mm chip operates at a core supply voltage of 1.5 V and an I/O supply voltage of 3.3 V. The chip is [packaged](https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/packaging) in a QFN-48 package. The chip has 56 pads, and its 9 VSS and 3 IOVSS pads are downbonded to the exposed pad of the package. All documentation, presentations, design files, and future updates are publicly available [here](https://github.com/iic-jku/TinyWhisper/tree/main/presentations). The block diagram is shown below. A render of the final chip layout is shown above, with the digital part placed on the left side of the chip and the analog part on the right. A custom logo on the topmost metal layer, generated with the tool [ArtistIC](https://arxiv.org/abs/2502.02626), is also shown above. The die photo at the top shows a fabricated chip of the March 2026 tapeout (`SoC4219`), with the TopMetal2 logo on top of the core.
 
 <p align="center">
   <a href="doc/fig/tinywhisper_blockdiagramm.png">
