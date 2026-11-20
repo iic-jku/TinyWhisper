@@ -295,14 +295,13 @@ All `simulations/` folders are generated and git-ignored.
 
 The whole flow is driven by Makefiles. The top-level `Makefile` builds the chip, and every component under [`macros/`](macros/) and [`ip/`](ip/) has its own `Makefile` and `README.md` following the same conventions (`make help`, `make all`, and so on). You can run each component from the top level or directly from inside its own folder. The `macros/` folder also has a `Makefile` of its own with one target, `make macro FROM=<macro> NAME=<name>`, which starts a new macro as a renamed copy of an existing one, see [macros/README.md](macros/README.md#start-a-new-macro-from-an-existing-one).
 
-At the top level, `make all` runs four steps in this order:
+At the top level, `make all` runs three steps in this order:
 
 1. `build-all` initialises the submodules and builds every component by calling its own `all` target: bondpad, RF pad, logos, macros, and finally the chip assembly with `build-top` (LibreLane, copy-back of all artifacts, logo and fill insertion, final GDS render).
 2. `klayout-drc-regular` (the sign-off deck) and `gdscheck-drc-regular` run the DRC of the final `tinywhisper_top_logo_fill` GDS. A violation stops `make all`, and gdscheck reports violations on this chip (see [Design Rule Check (DRC)](#design-rule-check-drc)). `magic-drc` is left out until IHP's IO pads are clean in Magic.
-3. `sim-all` runs the top-level RTL and gate-level simulations on the netlists produced by this build.
-4. `bondplan` generates the bonding diagram, the bondwires, and the pin table.
+3. `bondplan` generates the bonding diagram, the bondwires, and the pin table.
 
-Every component follows the same principle. The simulations always run last, so they use the artifacts that the same invocation has just produced.
+The `sim-all` line of `make all` is commented out, so run `make sim-all` after a build to simulate the chip on its new netlists. In the macros the simulations always run last, so they use the artifacts that the same invocation has just produced.
 
 | Makefile | `all` flow |
 | --- | --- |
@@ -310,7 +309,7 @@ Every component follows the same principle. The simulations always run last, so 
 | [`macros/iqmod/`](macros/iqmod/) (analog) | verify (DRC, LVS, PEX) -> build (LEF, LIB, Verilog stub, GDS, render) -> simulate |
 | [`macros/coupled_resonator_lc_bpf/`](macros/coupled_resonator_lc_bpf/) (schematic-only) | simulate |
 | [`ip/*`](ip/) (bondpad, RF pad, logos) | build -> verify (DRC, and LVS on the RF pad) |
-| top level | build -> verify (DRC) -> simulate -> package |
+| top level | build -> verify (DRC) -> package |
 
 The following sections describe the top-level targets in detail. The macro and IP targets are documented in the `README.md` of the respective subfolder.
 
@@ -984,9 +983,9 @@ make dashboard
 [scripts/gen_dashboard.py](scripts/gen_dashboard.py) parses the committed outputs (the AC curves in `macros/iqmod/testbenches/xschem/plot_simulations/data/`, the CACE samples in `macros/iqmod/verification/cace/scripts/*.csv`, the riscv STA, power and `stat.rpt` reports in `macros/riscv/verification/`, the RTL in `macros/riscv/rtl/` and `doc/errata.md`) and inlines them into [scripts/dashboard_template.html](scripts/dashboard_template.html). The sign-off, chip facts, band plan and nominal analog tables are kept in `CURATED` inside the script, each row with the report it was read from. Update them after a new LibreLane or CACE run, then rerun the target and commit `doc/dashboard.html`. The target needs no PDK.
 
 
-### Build, Verify and Simulate All
+### Build, Verify and Package All
 
-Runs `build-all` first, followed by the regular KLayout and gdscheck DRC of the final `tinywhisper_top_logo_fill`, then the chip simulations (`sim-all`) and finally generates the bondplan (`bondplan`). A violation in the DRC stops the flow, see [Design Rule Check (DRC)](#design-rule-check-drc):
+Runs `build-all` first, followed by the regular KLayout and gdscheck DRC of the final `tinywhisper_top_logo_fill`, and finally generates the bondplan (`bondplan`). The chip simulations are not part of it, so run `make sim-all` separately. A violation in the DRC stops the flow, see [Design Rule Check (DRC)](#design-rule-check-drc):
 
 ```sh
 make all

@@ -21,18 +21,18 @@
 
 <p align="center">
   <a href="doc/fig/tinywhisper_die.JPG">
-    <img src="doc/fig/tinywhisper_die.JPG" alt="Die photo of the ihp-sg13cmos TinyWhisper ASIC (2mm x 2mm), taped out in March 2026" width=70%>
+    <img src="doc/fig/tinywhisper_die.JPG" alt="Die photo of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm), taped out in March 2026" width=70%>
   </a>
   <br>
-  <em>Die photo of the ihp-sg13cmos TinyWhisper ASIC (2mm x 2mm), taped out in March 2026.</em>
+  <em>Die photo of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm), taped out in March 2026.</em>
 </p>
 
 <p align="center">
   <a href="doc/fig/tinywhisper_top_black.png">
-    <img src="doc/fig/tinywhisper_top_black.png" alt="Chip render of the ihp-sg13cmos TinyWhisper ASIC (2mm x 2mm)" width=70%>
+    <img src="doc/fig/tinywhisper_top_black.png" alt="Chip render of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm)" width=70%>
   </a>
   <br>
-  <em>Chip render of the ihp-sg13cmos TinyWhisper ASIC (2mm x 2mm).</em>
+  <em>Chip render of the ihp-sg13g2 TinyWhisper ASIC (2mm x 2mm).</em>
 </p>
 
 <p align="center">
@@ -72,7 +72,7 @@ Two videos of about 70 seconds introduce TinyWhisper to a general audience, one 
 
 The full documentation of the TinyWhisper transmitter is available [here](https://iic-jku.github.io/TinyWhisper/index.html).
 
-Moreover, look into the [`presentation/`](https://github.com/iic-jku/TinyWhisper/tree/main/presentations) folder for further information.
+Moreover, look into the [`presentations/`](https://github.com/iic-jku/TinyWhisper/tree/main/presentations) folder for further information.
 
 
 ## Purpose
@@ -88,20 +88,20 @@ TinyWhisper demonstrates what is possible with current open-source tools and ope
 
 | Parameter           | Value                                                                             |
 | ------------------- | --------------------------------------------------------------------------------- |
-| Technology          | SKY130 \& IHP SG13CMOS (130 nm CMOS)                                              |
+| Technology          | IHP SG13G2 (130 nm), `ihp-sg13g2` PDK                                             |
 | Die Area            | 2000 × 2000 µm (4 mm²)                                                            |
 | Core Area           | 1270 × 1270 µm (1.613 mm²)                                                        |
 | Clock Frequency     | 56 MHz                                                                            |
 | Core Supply Voltage | 1.5 V                                                                             |
 | I/O Supply Voltage  | 3.3 V                                                                             |
-| Total Pads          | 56 (8 analog, 6 input, 9 output, 9 bidirectional, 7 VDD, 9 VSS, 3 IOVDD, 3 IOVSS) |
-| Packaging           | QFN-48 package → 8 pads are connected directly to package VSS                     |
+| Total Pads          | 56 (clock, reset, 6 input, 9 output, 9 bidirectional, 8 analog, 7 VDD, 9 VSS, 3 IOVDD, 3 IOVSS) |
+| Packaging           | QFN-48, the 9 VSS and 3 IOVSS pads are downbonded to the exposed pad (package ground) |
 | Temperature Range   | -40 °C to +125 °C                                                                 |
 
 
 ## Overview
 
-- Analog Front-End — IQ Modulator
+- Analog Front-End: IQ Modulator
     - 3rd-order multiple-feedback (MFB) low-pass filter
         - Butterworth
         - fc = 400 kHz
@@ -118,14 +118,14 @@ TinyWhisper demonstrates what is possible with current open-source tools and ope
     - 30-bit iterative CORDIC for sine / cosine generation
         - Adjustable amplitude
         - Adjustable fc, fm, and phim enable different modulation schemes
-        - Frequency resolution: df = fclk / 2^(n) = fclk / 2^(30) ~ 0.05 Hz
-        - Maximum frequency: fc = 2 × OSR × frequency / fclk
+        - Frequency resolution: df = fclk / (OSR × 2^30), 1.63 mHz at OSR 32
+        - Frequency word: fc = 2^30 × OSR × frequency / fclk (30 bit, signed)
     - Delta-Sigma modulator
         - OSR = 32 / 64 / 128 / 256
         - 1st / 2nd order
         - Inversion / exchange of the I/Q channel
     - 25% LO Generation for Mixer
-        - DIV = 1 / 2 / 4 / 8
+        - LO = fclk / 2, 4, 8 or 16 (28, 14, 7 or 3.5 MHz)
         - Debugging modes (mixer TG always on / off → fully differential measurement of the MFB filter is possible)
     - Debugging features
         - Bidirectional pads: measure DSM / LO output or inject signals externally
@@ -134,7 +134,7 @@ TinyWhisper demonstrates what is possible with current open-source tools and ope
 
 ## Description
 
-TinyWhisper is a compact WSPR transmitter realized with the ihp-sg13cmos PDK. The 2 mm x 2 mm chip operates at a core supply voltage of 1.5 V and an I/O supply voltage of 3.3 V. The chip is [packaged](https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/packaging) in a QFN-48 package with a total of 56 pins, eight of which are VSS pins connected directly to the package VSS. All documentation, presentations, design files, and future updates are publicly available [here](https://github.com/iic-jku/TinyWhisper/tree/main/presentations). The block diagram is shown below. A render of the final chip layout is shown above, with the digital part placed on the left side of the chip and the analog part on the right. A custom logo on the topmost metal layer, generated with the tool [ArtistIC](https://arxiv.org/abs/2502.02626), is also shown above. The die photo at the top shows a fabricated chip of the March 2026 tapeout (`SoC4219`), with the TopMetal2 logo on top of the core.
+TinyWhisper is a compact WSPR transmitter realized with the ihp-sg13g2 PDK. The 2 mm x 2 mm chip operates at a core supply voltage of 1.5 V and an I/O supply voltage of 3.3 V. The chip is [packaged](https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/packaging) in a QFN-48 package. The chip has 56 pads, and its 9 VSS and 3 IOVSS pads are downbonded to the exposed pad of the package. All documentation, presentations, design files, and future updates are publicly available [here](https://github.com/iic-jku/TinyWhisper/tree/main/presentations). The block diagram is shown below. A render of the final chip layout is shown above, with the digital part placed on the left side of the chip and the analog part on the right. A custom logo on the topmost metal layer, generated with the tool [ArtistIC](https://arxiv.org/abs/2502.02626), is also shown above. The die photo at the top shows a fabricated chip of the March 2026 tapeout (`SoC4219`), with the TopMetal2 logo on top of the core.
 
 <p align="center">
   <a href="doc/fig/tinywhisper_blockdiagramm.png">
@@ -152,7 +152,7 @@ WSPR is a popular digital transmission scheme in amateur radio, specifically des
 
 The heart of the digital core is a simple multi-cycle embedded processor based on a 32-bit RISC-V architecture running at a clock rate of 56 MHz. By using the RISC-V architecture, the CPU is directly compatible with common compilers, and programs can, for example, be written in C. The program is stored in an external SPI SRAM, from which the CPU fetches its instructions. For communication with peripherals, the chip features I2C and UART interfaces as well as digital GPIO pins that can be freely controlled.
 
-An integrated 30-bit CORDIC algorithm generates the 4-FSK-modulated I/Q baseband signals according to the WSPR protocol. The phase increment of the CORDIC can be configured via software, allowing any frequency to be generated with a resolution of approximately 0.05 Hz. This also enables compensation for frequency errors of the external crystal oscillator. Using a second-order Delta-Sigma (DS) modulator with selectable oversampling (32, 64, 128, or 256), the parallel 30-bit data from the CORDIC is converted into a 1-bit signal that is passed directly to the analog front-end. Additionally, the digital core generates the LO frequencies listed in the table below by dividing the 56 MHz clock by two, covering the most common shortwave bands: 28 MHz, 14 MHz, 7 MHz, and 3.5 MHz.
+An integrated 30-bit CORDIC algorithm generates the 4-FSK-modulated I/Q baseband signals according to the WSPR protocol. The phase increment of the CORDIC can be configured via software, allowing any frequency to be generated with a resolution of 1.63 mHz at an oversampling ratio of 32. This also enables compensation for frequency errors of the external crystal oscillator. Using a first- or second-order Delta-Sigma (DS) modulator with selectable oversampling (32, 64, 128, or 256), the parallel 30-bit data from the CORDIC is converted into a 1-bit signal that is passed directly to the analog front-end. Additionally, the digital core generates the LO frequencies listed in the table below by dividing the 56 MHz clock by 2, 4, 8 or 16, covering the most common shortwave bands: 28 MHz, 14 MHz, 7 MHz, and 3.5 MHz. The signal lands at the LO plus the IF only in the upper sideband, which the firmware has to select, see [errata TW-E03](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/errata.md#tw-e03-default-iq-convention-transmits-the-lower-sideband).
 
 | Band | RF Frequency  | LO Frequency | IF (CORDIC) |
 | ---- | ------------- | ------------ | ----------- |
@@ -183,10 +183,10 @@ The ToDo list can be found in [ToDo.md](https://github.com/iic-jku/TinyWhisper/t
 
 ## Tapeouts
 
-- [x] TinyWhisper Transmitter (Digital Core + IQ Modulator) — IHP130: https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/release and branch `IHP-TO-2026-03`
-- [x] RISC-V CPU — GF180 wafer.space: https://github.com/iic-jku/gf180mcu-jku-projects
-- [x] WSPR in Hardware without RISC-V CPU (see [archive](https://github.com/iic-jku/TinyWhisper/tree/main/sky130/macros/archive/verilog_TT_11-2025) folder) — SKY130 Tiny Tapeout: https://tinytapeout.com/chips/ttsky25b/tt_um_cejmu_wspr
-- [x] IQ Modulator — SKY130 Tiny Tapeout: https://tinytapeout.com/chips/ttsky25b/tt_um_TinyWhisper
+- [x] TinyWhisper Transmitter (Digital Core + IQ Modulator), IHP130: https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/release and branch `IHP-TO-2026-03`
+- [x] RISC-V CPU, GF180 wafer.space: https://github.com/iic-jku/gf180mcu-jku-projects
+- [x] WSPR in Hardware without RISC-V CPU (see [archive](https://github.com/iic-jku/TinyWhisper/tree/main/sky130/macros/archive/verilog_TT_11-2025) folder), SKY130 Tiny Tapeout: https://tinytapeout.com/chips/ttsky25b/tt_um_cejmu_wspr
+- [x] IQ Modulator, SKY130 Tiny Tapeout: https://tinytapeout.com/chips/ttsky25b/tt_um_TinyWhisper
 
 
 ## Directory Structure
@@ -206,15 +206,24 @@ The chip design itself lives in [`ihp130/`](https://github.com/iic-jku/TinyWhisp
 ├─ 📁 doc/
 │  ├─ 📁 fig/
 │  │  ├─ 📁 funding/
+│  │  │  ├─ iic-jku.pdf
 │  │  │  ├─ iic-jku.svg
+│  │  │  ├─ silicon-austria-labs-logo.pdf
 │  │  │  └─ silicon-austria-labs-logo.svg
 │  │  ├─ Makefile
+│  │  ├─ TinyWhisper_architecture.drawio
+│  │  ├─ TinyWhisper_architecture.svg
+│  │  ├─ favicon.png
+│  │  ├─ fec.svg
+│  │  ├─ fec.tex
 │  │  ├─ tinywhisper_blockdiagramm.png
 │  │  ├─ tinywhisper_bondplan_white.png
 │  │  ├─ tinywhisper_die.JPG
 │  │  ├─ tinywhisper_top_black.png
 │  │  ├─ tinywhisper_top_black_TM2.png
 │  │  └─ tinywhisper_top_white.png
+│  ├─ 📁 scripts/
+│  │  └─ copy_sim_figures.ts
 │  ├─ 📁 video/
 │  │  ├─ tinywhisper_intro_de.jpg
 │  │  ├─ tinywhisper_intro_de.mp4
@@ -222,8 +231,11 @@ The chip design itself lives in [`ihp130/`](https://github.com/iic-jku/TinyWhisp
 │  │  └─ tinywhisper_intro_en.mp4
 │  ├─ Makefile
 │  ├─ _quarto.yml
+│  ├─ dashboard.html
 │  ├─ index.qmd
-│  └─ requirements.txt
+│  ├─ references.bib
+│  ├─ requirements.txt
+│  └─ styles.css
 ├─ 📁 enclosure/
 │  └─ README.md
 ├─ 📁 ihp130/
@@ -236,6 +248,7 @@ The chip design itself lives in [`ihp130/`](https://github.com/iic-jku/TinyWhisp
 │  ├─ 📁 ip/
 │  │  ├─ 📁 sg13g2_io_custom/
 │  │  ├─ 📁 sg13g2_ip__bondpad_70x70/
+│  │  ├─ 📁 sg13g2_ip__rfpad_70x70/
 │  │  ├─ 📁 sg13g2_ip__ce/
 │  │  ├─ 📁 sg13g2_ip__ce_names/
 │  │  ├─ 📁 sg13g2_ip__jku/

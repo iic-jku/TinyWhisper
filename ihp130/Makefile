@@ -548,7 +548,7 @@ dashboard: ## Build the chip dashboard doc/dashboard.html from the committed sim
 
 
 # Build, Verify, Simulate and Package All Target
-all: ## Build, verify, simulate and package the whole chip
+all: ## Build, verify and package the whole chip (run sim-all separately)
 	$(MAKE) build-all
 # Magic stops on the foundry cells of the chip, so its DRC stays out until they are clean
 #	$(MAKE) magic-drc CELL=$(TOP)
