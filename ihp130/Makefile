@@ -588,6 +588,7 @@ release: ## Copy the gds, netlist files and chip renders to the release folder (
 # - 0 (default) skips them and integrates the committed macros/riscv/final/ views
 # - 1 re-hardens the riscv macro (librelane-magicdrc + copy-final, ~2 h) and runs the Icarus RTL and gate-level cocotb/xspice/Xschem flows.
 # The regression-full target sets it to 1.
+# Override with: make regression FULL_REGRESSION=1
 FULL_REGRESSION ?= 0
 
 regression: ## Regression test target for IIC-OSIC-TOOLS (usage: make regression [FULL_REGRESSION=1])

@@ -11,7 +11,7 @@ When adding or reorganizing a macro, mirror the template layout and its per-macr
 
 - Run every flow inside the IIC-OSIC-TOOLS container (https://github.com/iic-jku/IIC-OSIC-TOOLS), tag `2026.11` or later (`README.md`). CI uses `hpretl/iic-osic-tools:latest`.
 - The PDK is `ihp-sg13g2`. `.designinit` exports `PDK` and the related variables, and `sak-pdk ihp-sg13g2` switches a running shell.
-- The chip, macro and IP Makefiles check `$PDK` when they are parsed: every target except `help` and the clean targets aborts if it is not `ihp-sg13g2`. Fix the PDK instead of passing `REQUIRED_PDK=`.
+- The chip, macro and IP Makefiles check `$PDK` when they are parsed: every target except `help` and the clean targets aborts if it is not `ihp-sg13g2`. Fix the PDK instead of passing `REQUIRED_PDK=`. A new target that does not read the PDK goes into `PDK_FREE_GOALS`, every other target inherits the guard.
 - After cloning, run `make init-submodules` in `ihp130/`. It fetches `ihp130/flow/artistic` (ArtistIC) and the two submodules under `software/c_toolchain/`.
 
 ## Repository layout
@@ -41,8 +41,8 @@ Inside a macro, folders exist only where the macro kind needs them:
 ## Makefiles
 
 - `ihp130/`, every macro and every bondpad, RF pad or logo IP has its own `Makefile` and `README.md`. The `README.md` documents each target. Read it before changing a flow.
-- Each of these Makefiles sets `.DEFAULT_GOAL := help`, and `make help` lists every target from its `## ` comment. Give every new target a `## ` comment.
-- Variables are set with `?=` and overridden on the command line, for example `CELL=<cell>`, `TB=<testbench>`, `EXT_MODE=<1|2|3>`, `WAVEFORM_VIEWER=surfer`.
+- Each of these Makefiles sets `.DEFAULT_GOAL := help`, and `make help` lists every target from its `## ` comment. Give every new target a `## ` comment on the rule line and a `.PHONY:` line.
+- Overridable variables use `?=` with a `# Override with: make <target> VAR=<value>` comment above them and are set on the command line, for example `CELL=<cell>`, `TB=<testbench>`, `EXT_MODE=<1|2|3>`, `WAVEFORM_VIEWER=surfer`.
 - cocotb testbenches are self-contained Python runners (`cocotb_tools.runner.get_runner`). The targets run `python3 <cell>_tb.py` in the testbench folder, with `GL=1` for gate level. The exception is `macros/riscv/testbenches/cocotb/dsmod/`, which has its own `Makefile` that includes cocotb's `Makefile.sim`.
 - Start a new macro with `make macro FROM=<macro> NAME=<name>` in `ihp130/macros/`, then follow "What Is Left to Do" in `ihp130/macros/README.md`.
 - Each folder with schematics has its own `xschemrc`, and the targets pass it with `--rcfile`. See "Xschem Configuration" in `ihp130/README.md`.
