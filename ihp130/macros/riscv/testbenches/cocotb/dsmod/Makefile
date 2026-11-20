@@ -7,6 +7,7 @@ MAKEFILE_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 MAKEFILE_PATH := $(realpath $(firstword $(MAKEFILE_LIST)))
 
 # Variables
+# Override with: make <target> SIM=<icarus> TOPLEVEL_LANG=<verilog> PYTHON_BIN=<python>
 SIM ?= icarus
 TOPLEVEL_LANG ?= verilog
 TOPLEVEL = dsmod
