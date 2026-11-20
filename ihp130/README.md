@@ -410,8 +410,11 @@ make sim-rtl-cocotb
 To run the gate-level (GL) simulation with cocotb, use:
 
 ```sh
-make sim-gl-cocotb
+make sim-gl-cocotb                # the test test_cpu_fibonacci_fast
+make sim-gl-cocotb GL_TESTS=      # all eight tests
 ```
+
+`GL_TESTS` selects the gate-level tests by a regular expression, as in the riscv macro. The runner simulates the unpowered netlist with `USE_POWER_PINS` undefined, since defining it, also as `False`, makes every cell output X. It drives every input pad to its idle level and fails when a test fails, which cocotb does not do on its own outside pytest.
 
 To run the gate-level simulation with Xschem, use:
 
