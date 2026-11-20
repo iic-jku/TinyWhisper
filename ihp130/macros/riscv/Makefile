@@ -513,9 +513,8 @@ else
 LEC_GOLD_READ := 'plugin -i slang' 'read_slang --single-unit --top $(TOP) $(abspath $(SRC_DIR)/constants.sv $(MODULES_SYNTH))'
 endif
 
-# Registers EQY cannot pair by name, since synthesis merged registers whose next states are equal into one: en_scl into busy,
-# rw into addr[0], gpio_in_sync[0] into csr_i.intr_ext_sync, lo_enable into dsmod_ena, and the sign copies of data_step_r
-# into bit 32. Fewer pairs can only stop a proof, and EQY proves every pair it is given.
+# Registers that synthesis merged into one with the same next state, so EQY cannot pair them by name.
+# EQY proves every pair it is given, so a wrong pair fails.
 LEC_MATCH := 'gold-match memory_i.i2c_master_mc.en_scl memory_i.i2c_master_mc.busy' \
 	'gold-match memory_i.i2c_master_mc.rw memory_i.i2c_master_mc.addr[0]' \
 	'gold-match memory_i.gpio_in_sync[0] csr_i.intr_ext_sync' \
@@ -523,21 +522,17 @@ LEC_MATCH := 'gold-match memory_i.i2c_master_mc.en_scl memory_i.i2c_master_mc.bu
 	$(foreach d,cos sin,$(foreach b,33 34 35 36 37, \
 		'gold-match memory_i.freq_inst.dsmod_$(d).data_step_r[$(b)] memory_i.freq_inst.dsmod_$(d).data_step_r[32]'))
 
-# Yosys turned the CORDIC's atan_value table into a ROM and merged shift_value into its read port, so the netlist
-# registers the ROM output. Proving Z_o in one partition with shift_value keeps that register consistent with its address.
+# Yosys turned the CORDIC's atan_value table into a ROM with shift_value in its read port, so Z_o is proved together with shift_value.
 LEC_COLLECT := 'group /memory_i\.freq_inst\.(Z_o|cordic\.shift_value)\[\d+\]/'
 
-# Both sides start after four reset cycles. EQY lets the netlist's uninitialized registers start from any value but not
-# the RTL's, so without a common start the CPU core partition fails at its first step. The CORDIC's reset is two registers
-# behind reset, and sim needs one more cycle to clear the X it propagates through the gate cells of the delta-sigma modulators.
+# Both sides start after four reset cycles, since EQY lets only the netlist's uninitialized registers start from any value.
 LEC_RESET := 'sim -clock clk -resetn reset -rstlen 4 -n 4 -w'
 
 # memory_map because EQY cannot partition the memory slang keeps for the register file.
 # splitnets because the netlist keeps single-bit register names, and EQY pairs registers by name.
 # clk2fflogic on both sides makes the clock an input of the proof: EQY's own SBY script assumes one clock,
 # so without it a flop on the wrong clock net would pass, and the design uses both clock edges.
-# EQY runs the second strategy only where the first ended in a timeout. The CPU core partition needs it: ABC's scorr
-# merges the registers it proves equal by induction, after which PDR proves the rest at once.
+# EQY runs the second strategy only where the first timed out, which the CPU core partition always does.
 lec: ## Prove the gate-level netlist equivalent to the RTL with EQY (usage: make lec [LEC_NETLIST=<netlist>] [LEC_TIMEOUT=<seconds>] [LEC_SCORR_TIMEOUT=<seconds>] [LEC_JOBS=<n>])
 	@if [ ! -f $(LEC_NETLIST) ]; then \
 		echo "No netlist $(LEC_NETLIST) found. Run 'make build-top' (or 'make copy-final') first."; \

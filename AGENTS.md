@@ -78,7 +78,7 @@ make regression                                     # tool/flow smoke test, reus
 - Defines in use: `USE_POWER_PINS` (power ports for LibreLane), `FPGA` (FPGA build, set in `macros/riscv/fpga/fpga.mk`), `SIM` (Icarus runs, set by `sim-rtl-verilog` and the cocotb runners).
 - Adding or removing a riscv RTL file means updating every source list: `MODULES_SYNTH` and `MODULES_SIM` in `macros/riscv/Makefile`, `VERILOG_FILES` in `macros/riscv/flow/librelane/config.yaml`, `DUT_SRCS` in `macros/riscv/fpga/dut.mk`, and the `sources` in `riscv_top_tb.py` and `ihp130/testbenches/cocotb/tinywhisper_top_tb.py`. `constants.sv` compiles first.
 - Keep `make -C macros/riscv lint-verilog-all` clean. It runs `verilator --lint-only` and is part of the regression.
-- Give the state register of a new riscv FSM `(* fsm_encoding = "none" *)`, like the seven existing ones. Yosys otherwise re-encodes it one-hot under its RTL name, and `make lec` cannot pair it with the RTL.
+- Give a new riscv FSM a sized enum (`typedef enum logic [N:0]`) and `(* fsm_encoding = "none" *)` on its state register, like the existing ones. Yosys otherwise may re-encode the register one-hot under its RTL name, which `make lec` cannot pair with the RTL, and an unsized enum is 32 bits wide.
 - Xschem testbenches run headless with `ngspice -b`, so `plot` commands in a `.control` block do nothing. Export results with `wrdata` to `testbenches/xschem/plot_simulations/data/` and plot them with a script in `plot_simulations/` (`make sim-view-xschem SCRIPT=<script>`).
 - `<cell>_pex.sym` is regenerated from `<cell>.sym` before every extraction. Edit `<cell>.sym`, never the generated copy.
 
