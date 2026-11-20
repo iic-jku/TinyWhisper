@@ -675,7 +675,7 @@ make lec LEC_JOBS=<n>                  # partitions proved in parallel (default:
 make lec-mutant                        # check that lec catches a difference
 ```
 
-`lec` writes an [EQY](https://github.com/YosysHQ/eqy) script to `flow/eqy/riscv_top.eqy` and runs it in `flow/eqy/work/`. EQY pairs the registers of both designs by name, splits the design into partitions, proves each of them, and exits with 0 only when all of them are equivalent. On the committed netlist, it proves @@N@@ partitions in about @@T@@ minutes. The script is the one of the counter macro in the chip templates, and its four details matter here too:
+`lec` writes an [EQY](https://github.com/YosysHQ/eqy) script to `flow/eqy/riscv_top.eqy` and runs it in `flow/eqy/work/`. EQY pairs the registers of both designs by name, splits the design into partitions, proves each of them, and exits with 0 only when all of them are equivalent. On the committed netlist, it proves all 272 partitions in 15 to 25 minutes with 4 jobs. The script is the one of the counter macro in the chip templates, and its four details matter here too:
 
 - The RTL is read with the other front end than synthesis: yosys-slang while `USE_SLANG` is off in `flow/librelane/config.yaml`, and Yosys' own `read_verilog -sv` when it is on. With the same front end on both sides, a front end that misreads the RTL would produce the same mistake in the netlist and prove it equivalent.
 - The functions of the standard cells come from the Liberty file of the PDK, not from its Verilog models. `-ignore_miss_func` skips the cells without a function (e.g. the clock gate `sg13g2_lgcp_1`), and `hierarchy -check` together with `select -assert-none t:sg13g2_*` makes the run fail if the netlist uses a cell without a model, instead of treating it as an empty box that proves trivially.
@@ -701,7 +701,7 @@ A rule that matches nothing makes EQY warn `Cannot find entity`, so check the lo
 - A register the RTL leaves unknown (`X`) matches any netlist, because EQY takes an `X` in the RTL as don't-care.
 - It pairs registers by name, so a register that synthesis renames, merges or re-encodes fails on a correct netlist until it gets a rule like the ones above.
 
-LibreLane has an equivalence step of its own (`Yosys.EQY`, enabled with `RUN_EQY`), but it skips every PDK other than sky130A, which is why the macro runs EQY from its Makefile. `lec` was tested with IIC-OSIC-TOOLS @@TAG@@.
+LibreLane has an equivalence step of its own (`Yosys.EQY`, enabled with `RUN_EQY`), but it skips every PDK other than sky130A, which is why the macro runs EQY from its Makefile. `lec` was tested with IIC-OSIC-TOOLS 2026.10 and the nightly of 2026-11-12 (`443bb609a0bc`).
 
 
 ### Lint, Build, Verify and Simulate All

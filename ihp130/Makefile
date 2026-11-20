@@ -614,7 +614,7 @@ regression: ## Regression test target for IIC-OSIC-TOOLS (usage: make regression
 # 	librelane-magicdrc: full RTL-to-GDS. KLayout DRC skipped for runtime.
 	$(if $(filter 1,$(FULL_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv librelane-magicdrc)
 	$(if $(filter 1,$(FULL_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv copy-final)
-# 	EQY proof of the fresh riscv netlist against its RTL, about 30 min. lec-mutant stays in the macro's make all, since each mutant repeats the whole proof.
+# 	EQY proof of the fresh riscv netlist against its RTL, about 25 min. lec-mutant stays in the macro's make all, since each mutant repeats the whole proof.
 	$(if $(filter 1,$(FULL_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv lec)
 # 	Gate-level flows that depend on the LibreLane outputs above.
 	$(if $(filter 1,$(FULL_REGRESSION)),$(MAKE) -C $(MACROS_DIR)/riscv sim-gl-cocotb)
