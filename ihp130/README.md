@@ -288,7 +288,8 @@ All `simulations/` folders are generated and git-ignored.
 
 - The Makefile targets always name one explicitly with `--rcfile`, so a target behaves the same from any working directory.
 - Inside the container, [`.designinit`](../.designinit) only exports the PDK variables. It does not wrap `xschem`, so a plain `xschem <file>` uses whatever the current directory provides.
-- Starting Xschem from within one of the nine folders picks up that folder's file, which is the normal interactive case.
+- Starting Xschem from within one of the folders in the table above picks up that folder's file, which is the normal interactive case.
+- `make open` starts Xschem in the file's own directory, so the same rule applies to every button of the file browser, see [Open the Design Files](#open-the-design-files).
 
 
 ## Makefile Structure
@@ -354,6 +355,8 @@ Opens a file browser for this folder with `sak-open.py` from the [IIC-OSIC-TOOLS
 ```sh
 make open
 ```
+
+All file types are ticked at startup, each checkbox showing how many files of that type the tree holds. `None` and `All` untick or tick every type at once, and `Rescan` rereads the tree immediately. The filter field keeps only the files whose path contains the typed text (case-insensitive), so `iqmod` reduces the list to the iqmod macro. Clicking a directory heading folds it away. Hovering a button shows the file's size and age in the status line at the bottom. A right click on a button opens a menu with `Cell view` (all views of that cell, for example its `.sch`, `.sym`, `.gds` and `.nl.v`, wherever they live in the tree), `Scope here` (rescan from that file's directory), `Fold all`, `Save view` (remember the folded directories and ticked types for this tree), `Open shell` and `Copy path`.
 
 Clicking a button launches the matching tool in the file's own directory, so Xschem finds its `simulations/` folder and KLayout its run outputs where they belong:
 
