@@ -102,6 +102,12 @@ module tinywhisper_top (clk_PAD,
  wire net22;
  wire net23;
  wire net24;
+ wire net25;
+ wire net26;
+ wire net27;
+ wire net28;
+ wire net29;
+ wire net30;
 
  sg13g2_antennanp ANTENNA_1 (.VDD(VDD),
     .VSS(VSS),
@@ -59705,17 +59711,17 @@ module tinywhisper_top (clk_PAD,
     .VSS(VSS));
  sg13g2_decap_8 FILLER_278_98 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_279_0 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_279_100 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_279_105 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_279_107 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_279_112 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_279_114 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_4 FILLER_279_119 (.VDD(VDD),
+ sg13g2_fill_2 FILLER_279_121 (.VDD(VDD),
     .VSS(VSS));
  sg13g2_fill_1 FILLER_279_123 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_279_14 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_279_16 (.VDD(VDD),
     .VSS(VSS));
  sg13g2_decap_8 FILLER_279_1625 (.VDD(VDD),
     .VSS(VSS));
@@ -59853,8 +59859,6 @@ module tinywhisper_top (clk_PAD,
     .VSS(VSS));
  sg13g2_decap_8 FILLER_279_2094 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_279_21 (.VDD(VDD),
-    .VSS(VSS));
  sg13g2_decap_8 FILLER_279_2101 (.VDD(VDD),
     .VSS(VSS));
  sg13g2_decap_8 FILLER_279_2108 (.VDD(VDD),
@@ -59912,6 +59916,8 @@ module tinywhisper_top (clk_PAD,
  sg13g2_decap_8 FILLER_279_2290 (.VDD(VDD),
     .VSS(VSS));
  sg13g2_decap_8 FILLER_279_2297 (.VDD(VDD),
+    .VSS(VSS));
+ sg13g2_decap_8 FILLER_279_23 (.VDD(VDD),
     .VSS(VSS));
  sg13g2_decap_8 FILLER_279_2304 (.VDD(VDD),
     .VSS(VSS));
@@ -60013,29 +60019,27 @@ module tinywhisper_top (clk_PAD,
     .VSS(VSS));
  sg13g2_fill_1 FILLER_279_2644 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_279_28 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_279_30 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_279_35 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_279_37 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_279_42 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_279_44 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_279_49 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_279_51 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_279_56 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_279_58 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_279_63 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_279_65 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_279_7 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_279_72 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_279_70 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_279_79 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_279_77 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_279_86 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_279_84 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_279_9 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_279_91 (.VDD(VDD),
-    .VSS(VSS));
- sg13g2_decap_8 FILLER_279_98 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_279_93 (.VDD(VDD),
     .VSS(VSS));
  sg13g2_decap_8 FILLER_27_0 (.VDD(VDD),
     .VSS(VSS));
@@ -86711,21 +86715,19 @@ module tinywhisper_top (clk_PAD,
     .VSS(VSS));
  sg13g2_decap_8 FILLER_334_1152 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_1159 (.VDD(VDD),
+ sg13g2_decap_4 FILLER_334_1159 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_1166 (.VDD(VDD),
+ sg13g2_fill_2 FILLER_334_1163 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_1173 (.VDD(VDD),
-    .VSS(VSS));
- sg13g2_fill_1 FILLER_334_1180 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_1174 (.VDD(VDD),
     .VSS(VSS));
  sg13g2_decap_8 FILLER_334_119 (.VDD(VDD),
     .VSS(VSS));
  sg13g2_decap_8 FILLER_334_1190 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_1197 (.VDD(VDD),
+ sg13g2_decap_4 FILLER_334_1197 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_1204 (.VDD(VDD),
+ sg13g2_fill_1 FILLER_334_1201 (.VDD(VDD),
     .VSS(VSS));
  sg13g2_decap_8 FILLER_334_1211 (.VDD(VDD),
     .VSS(VSS));
@@ -87333,65 +87335,63 @@ module tinywhisper_top (clk_PAD,
     .VSS(VSS));
  sg13g2_decap_8 FILLER_334_750 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_757 (.VDD(VDD),
-    .VSS(VSS));
- sg13g2_decap_8 FILLER_334_764 (.VDD(VDD),
+ sg13g2_decap_4 FILLER_334_757 (.VDD(VDD),
     .VSS(VSS));
  sg13g2_decap_8 FILLER_334_77 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_771 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_770 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_778 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_777 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_785 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_784 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_792 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_791 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_799 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_798 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_806 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_805 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_813 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_812 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_820 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_819 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_827 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_826 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_834 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_833 (.VDD(VDD),
     .VSS(VSS));
  sg13g2_decap_8 FILLER_334_84 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_841 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_840 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_848 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_847 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_855 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_854 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_862 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_861 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_869 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_868 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_876 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_875 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_883 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_882 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_890 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_889 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_897 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_896 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_904 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_903 (.VDD(VDD),
     .VSS(VSS));
  sg13g2_decap_8 FILLER_334_91 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_911 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_910 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_918 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_917 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_925 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_924 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_334_932 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_334_931 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_fill_1 FILLER_334_939 (.VDD(VDD),
+ sg13g2_fill_2 FILLER_334_938 (.VDD(VDD),
     .VSS(VSS));
  sg13g2_decap_8 FILLER_334_949 (.VDD(VDD),
     .VSS(VSS));
@@ -93479,13 +93479,11 @@ module tinywhisper_top (clk_PAD,
     .VSS(VSS));
  sg13g2_decap_8 FILLER_49_0 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_49_105 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_49_103 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_49_112 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_49_110 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_4 FILLER_49_119 (.VDD(VDD),
-    .VSS(VSS));
- sg13g2_fill_1 FILLER_49_123 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_49_117 (.VDD(VDD),
     .VSS(VSS));
  sg13g2_decap_8 FILLER_49_14 (.VDD(VDD),
     .VSS(VSS));
@@ -93803,11 +93801,11 @@ module tinywhisper_top (clk_PAD,
     .VSS(VSS));
  sg13g2_decap_8 FILLER_49_77 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_49_84 (.VDD(VDD),
+ sg13g2_fill_2 FILLER_49_84 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_49_91 (.VDD(VDD),
+ sg13g2_fill_1 FILLER_49_86 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_49_98 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_49_96 (.VDD(VDD),
     .VSS(VSS));
  sg13g2_decap_8 FILLER_4_0 (.VDD(VDD),
     .VSS(VSS));
@@ -111871,17 +111869,17 @@ module tinywhisper_top (clk_PAD,
     .VSS(VSS));
  sg13g2_decap_8 FILLER_92_98 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_93_0 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_93_100 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_93_105 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_93_107 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_93_112 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_93_114 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_4 FILLER_93_119 (.VDD(VDD),
+ sg13g2_fill_2 FILLER_93_121 (.VDD(VDD),
     .VSS(VSS));
  sg13g2_fill_1 FILLER_93_123 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_93_14 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_93_16 (.VDD(VDD),
     .VSS(VSS));
  sg13g2_decap_8 FILLER_93_1628 (.VDD(VDD),
     .VSS(VSS));
@@ -112019,8 +112017,6 @@ module tinywhisper_top (clk_PAD,
     .VSS(VSS));
  sg13g2_decap_8 FILLER_93_2097 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_93_21 (.VDD(VDD),
-    .VSS(VSS));
  sg13g2_decap_8 FILLER_93_2104 (.VDD(VDD),
     .VSS(VSS));
  sg13g2_decap_8 FILLER_93_2111 (.VDD(VDD),
@@ -112076,6 +112072,8 @@ module tinywhisper_top (clk_PAD,
  sg13g2_decap_8 FILLER_93_2286 (.VDD(VDD),
     .VSS(VSS));
  sg13g2_decap_8 FILLER_93_2293 (.VDD(VDD),
+    .VSS(VSS));
+ sg13g2_decap_8 FILLER_93_23 (.VDD(VDD),
     .VSS(VSS));
  sg13g2_decap_8 FILLER_93_2300 (.VDD(VDD),
     .VSS(VSS));
@@ -112177,29 +112175,27 @@ module tinywhisper_top (clk_PAD,
     .VSS(VSS));
  sg13g2_fill_2 FILLER_93_2643 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_93_28 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_93_30 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_93_35 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_93_37 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_93_42 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_93_44 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_93_49 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_93_51 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_93_56 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_93_58 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_93_63 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_93_65 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_93_7 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_93_72 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_93_70 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_93_79 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_93_77 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_93_86 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_93_84 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_93_9 (.VDD(VDD),
     .VSS(VSS));
- sg13g2_decap_8 FILLER_93_91 (.VDD(VDD),
-    .VSS(VSS));
- sg13g2_decap_8 FILLER_93_98 (.VDD(VDD),
+ sg13g2_decap_8 FILLER_93_93 (.VDD(VDD),
     .VSS(VSS));
  sg13g2_decap_8 FILLER_94_0 (.VDD(VDD),
     .VSS(VSS));
@@ -115879,7 +115875,7 @@ module tinywhisper_top (clk_PAD,
     .pad(clk_PAD),
     .vdd(VDD),
     .vss(VSS));
- sg13g2_dlygate4sd3_1 hold1 (.A(net9),
+ sg13g2_dlygate4sd3_1 hold1 (.A(net25),
     .VDD(VDD),
     .VSS(VSS),
     .X(net1));
@@ -115887,23 +115883,23 @@ module tinywhisper_top (clk_PAD,
     .VDD(VDD),
     .VSS(VSS),
     .X(net10));
- sg13g2_dlygate4sd3_1 hold11 (.A(net24),
+ sg13g2_dlygate4sd3_1 hold11 (.A(net26),
     .VDD(VDD),
     .VSS(VSS),
     .X(net11));
- sg13g2_dlygate4sd3_1 hold12 (.A(net2),
+ sg13g2_dlygate4sd3_1 hold12 (.A(net3),
     .VDD(VDD),
     .VSS(VSS),
     .X(net12));
- sg13g2_dlygate4sd3_1 hold13 (.A(\i_tinywhisper_core.input_in[2] ),
+ sg13g2_dlygate4sd3_1 hold13 (.A(net27),
     .VDD(VDD),
     .VSS(VSS),
     .X(net13));
- sg13g2_dlygate4sd3_1 hold14 (.A(net3),
+ sg13g2_dlygate4sd3_1 hold14 (.A(net2),
     .VDD(VDD),
     .VSS(VSS),
     .X(net14));
- sg13g2_dlygate4sd3_1 hold15 (.A(\i_tinywhisper_core.input_in[0] ),
+ sg13g2_dlygate4sd3_1 hold15 (.A(net28),
     .VDD(VDD),
     .VSS(VSS),
     .X(net15));
@@ -115911,55 +115907,79 @@ module tinywhisper_top (clk_PAD,
     .VDD(VDD),
     .VSS(VSS),
     .X(net16));
- sg13g2_dlygate4sd3_1 hold17 (.A(\bidir_PAD2CORE[8] ),
+ sg13g2_dlygate4sd3_1 hold17 (.A(net29),
     .VDD(VDD),
     .VSS(VSS),
     .X(net17));
- sg13g2_dlygate4sd3_1 hold18 (.A(net6),
+ sg13g2_dlygate4sd3_1 hold18 (.A(net5),
     .VDD(VDD),
     .VSS(VSS),
     .X(net18));
- sg13g2_dlygate4sd3_1 hold19 (.A(\i_tinywhisper_core.input_in[5] ),
+ sg13g2_dlygate4sd3_1 hold19 (.A(net30),
     .VDD(VDD),
     .VSS(VSS),
     .X(net19));
- sg13g2_dlygate4sd3_1 hold2 (.A(net11),
+ sg13g2_dlygate4sd3_1 hold2 (.A(net13),
     .VDD(VDD),
     .VSS(VSS),
     .X(net2));
- sg13g2_dlygate4sd3_1 hold20 (.A(net5),
+ sg13g2_dlygate4sd3_1 hold20 (.A(net6),
     .VDD(VDD),
     .VSS(VSS),
     .X(net20));
- sg13g2_dlygate4sd3_1 hold21 (.A(\i_tinywhisper_core.rst_n ),
+ sg13g2_dlygate4sd3_1 hold21 (.A(\i_tinywhisper_core.input_in[4] ),
     .VDD(VDD),
     .VSS(VSS),
     .X(net21));
- sg13g2_dlygate4sd3_1 hold22 (.A(\i_tinywhisper_core.input_in[4] ),
+ sg13g2_dlygate4sd3_1 hold22 (.A(net7),
     .VDD(VDD),
     .VSS(VSS),
     .X(net22));
- sg13g2_dlygate4sd3_1 hold23 (.A(\i_tinywhisper_core.input_in[1] ),
+ sg13g2_dlygate4sd3_1 hold23 (.A(\i_tinywhisper_core.rst_n ),
     .VDD(VDD),
     .VSS(VSS),
     .X(net23));
- sg13g2_dlygate4sd3_1 hold24 (.A(\i_tinywhisper_core.input_in[3] ),
+ sg13g2_dlygate4sd3_1 hold24 (.A(\i_tinywhisper_core.input_in[2] ),
     .VDD(VDD),
     .VSS(VSS),
     .X(net24));
- sg13g2_dlygate4sd3_1 hold3 (.A(net13),
+ sg13g2_dlygate4sd3_1 hold25 (.A(net9),
+    .VDD(VDD),
+    .VSS(VSS),
+    .X(net25));
+ sg13g2_dlygate4sd3_1 hold26 (.A(\bidir_PAD2CORE[8] ),
+    .VDD(VDD),
+    .VSS(VSS),
+    .X(net26));
+ sg13g2_dlygate4sd3_1 hold27 (.A(\i_tinywhisper_core.input_in[0] ),
+    .VDD(VDD),
+    .VSS(VSS),
+    .X(net27));
+ sg13g2_dlygate4sd3_1 hold28 (.A(\i_tinywhisper_core.input_in[5] ),
+    .VDD(VDD),
+    .VSS(VSS),
+    .X(net28));
+ sg13g2_dlygate4sd3_1 hold29 (.A(\i_tinywhisper_core.input_in[1] ),
+    .VDD(VDD),
+    .VSS(VSS),
+    .X(net29));
+ sg13g2_dlygate4sd3_1 hold3 (.A(net11),
     .VDD(VDD),
     .VSS(VSS),
     .X(net3));
+ sg13g2_dlygate4sd3_1 hold30 (.A(\i_tinywhisper_core.input_in[3] ),
+    .VDD(VDD),
+    .VSS(VSS),
+    .X(net30));
  sg13g2_dlygate4sd3_1 hold4 (.A(net15),
     .VDD(VDD),
     .VSS(VSS),
     .X(net4));
- sg13g2_dlygate4sd3_1 hold5 (.A(net19),
+ sg13g2_dlygate4sd3_1 hold5 (.A(net17),
     .VDD(VDD),
     .VSS(VSS),
     .X(net5));
- sg13g2_dlygate4sd3_1 hold6 (.A(net17),
+ sg13g2_dlygate4sd3_1 hold6 (.A(net19),
     .VDD(VDD),
     .VSS(VSS),
     .X(net6));
@@ -115967,11 +115987,11 @@ module tinywhisper_top (clk_PAD,
     .VDD(VDD),
     .VSS(VSS),
     .X(net7));
- sg13g2_dlygate4sd3_1 hold8 (.A(net22),
+ sg13g2_dlygate4sd3_1 hold8 (.A(net23),
     .VDD(VDD),
     .VSS(VSS),
     .X(net8));
- sg13g2_dlygate4sd3_1 hold9 (.A(net23),
+ sg13g2_dlygate4sd3_1 hold9 (.A(net24),
     .VDD(VDD),
     .VSS(VSS),
     .X(net9));
@@ -116022,21 +116042,21 @@ module tinywhisper_top (clk_PAD,
     .lo_Q_oe(\i_tinywhisper_core.lo_Q_oe ),
     .lo_Qx_i(\bidir_PAD2CORE[7] ),
     .lo_Qx_o(\i_tinywhisper_core.lo_Qx_o ),
-    .reset(net7),
-    .rx(net8),
+    .reset(net8),
+    .rx(net22),
     .scl(\i_tinywhisper_core.scl ),
     .sclk(\i_tinywhisper_core.sclk ),
-    .sda_i(net18),
+    .sda_i(net12),
     .sda_o(\i_tinywhisper_core.sda_o ),
     .sda_oe(\i_tinywhisper_core.sda_oe ),
     .si(\i_tinywhisper_core.si ),
-    .so(net20),
+    .so(net16),
     .sram_ce(\i_tinywhisper_core.sram_ce ),
     .tx(\i_tinywhisper_core.tx ),
-    .gpio_in({net12,
-    net14,
+    .gpio_in({net20,
     net10,
-    net16}),
+    net18,
+    net14}),
     .gpio_out({\i_tinywhisper_core.gpio_out[3] ,
     \i_tinywhisper_core.gpio_out[2] ,
     \i_tinywhisper_core.gpio_out[1] ,

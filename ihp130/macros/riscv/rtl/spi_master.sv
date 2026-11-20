@@ -32,7 +32,7 @@ module spi_master (
     SEND_DATA,
     VALID
   } states_t;
-  states_t state;
+  (* fsm_encoding = "none" *) states_t state;
 
   // The mode is stored internally because we do not want it to change
   // while talking to the SRAM. The initial command determines the behavior

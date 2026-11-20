@@ -130,7 +130,7 @@ module freq_generator (
     DSMOD_CORDIC  // Last few cycles. Both compute and finish simultaneously
   } transmit_state_t;
 
-  transmit_state_t transmit_state;
+  (* fsm_encoding = "none" *) transmit_state_t transmit_state;
   logic [7:0] transmit_counter;
 
   always_ff @(posedge clk) begin

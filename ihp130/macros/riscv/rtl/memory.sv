@@ -181,8 +181,8 @@ module memory #(
     TFAULT
   } target_t;
 
-  states_t        state;
-  target_t        target;
+  (* fsm_encoding = "none" *) states_t        state;
+  (* fsm_encoding = "none" *) target_t        target;
 
   logic    [63:0] mtime;
   logic    [63:0] mtimecmp;

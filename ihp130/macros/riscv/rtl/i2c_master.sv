@@ -42,7 +42,7 @@ module i2c_master (
     END
   } states_t;
 
-  states_t        state;
+  (* fsm_encoding = "none" *) states_t        state;
 
   logic           scl_reg;
   logic           scl_trigger;
