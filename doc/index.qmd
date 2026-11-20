@@ -126,7 +126,7 @@ All numbers are simulated, at the typical corner and 1.5 V unless the table says
 | Frequency resolution of the baseband at OSR 32 | 1.63 mHz | @sec-freqgen |
 | `riscv_top` worst setup and hold slack over five corners, 17 ns | +2.34 ns and +0.23 ns | @sec-riscv-hardening |
 | `riscv_top` power at `nom_typ_1p50V_25C` | 20.1 mW | @sec-riscv-hardening |
-| Chip worst setup and hold slack over five corners, 17 ns, August 2026 build | +1.84 ns and +0.08 ns | @sec-top |
+| Chip worst setup and hold slack over five corners, 17 ns | +1.19 ns and +0.08 ns | @sec-top |
 
 : Simulated performance of TinyWhisper. {#tbl-glance tbl-colwidths="[50,30,20]"}
 
@@ -666,7 +666,7 @@ The pad order of `SoC4219` is the same as in this report, which `make bondplan` 
 
 The digital part sits in the west of the core and the analog part in the east, next to its pads. The four RF outputs are routed with a non-default rule of 1.35 $\mu$m width and 1.0 $\mu$m spacing, the four analog inputs with 1.35 $\mu$m and 0.5 $\mu$m, and the resizer leaves all eight nets alone. `iqmod_top` has its own power ring, and `flow/librelane/pdn_cfg.tcl` bridges the chip grid to it. The [floorplan notes](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/floorplan.md) and [specifications](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/doc/specifications.md) list the details.
 
-The committed chip in `layout/`, `netlist/` and `verification/reports/` is the build of August 2026, which integrates the CPU macro of that time, not the re-hardened one in `macros/riscv/final/` (@sec-issues). Its STA covers the same five corners as the CPU and reports a worst setup slack of +1.84 ns at `nom_slow_1p35V_125C` and a worst hold slack of +0.08 ns at `nom_fast_1p65V_m40C`, with 21 maximum-slew violations in the slow corner. The eight LO and modulator pads get an output delay of 1 ns instead of 20 % of the period, because no off-chip receiver latches them with the clock.
+The committed chip in `layout/`, `netlist/` and `verification/reports/` integrates the re-hardened CPU of `macros/riscv/final/`. Its STA covers the same five corners as the CPU and reports a worst setup slack of +1.19 ns at `nom_slow_1p35V_125C` and a worst hold slack of +0.08 ns at `nom_fast_1p65V_m40C`, with 18 maximum-slew violations in the slow corner. The eight LO and modulator pads get an output delay of 1 ns instead of 20 % of the period, because no off-chip receiver latches them with the clock.
 
 ## Logo and Fill
 
@@ -682,7 +682,7 @@ Renders of `SoC4219` as taped out (2 × 2 mm²): the CPU on the left, the IQ mod
 
 ## Chip Simulation
 
-`make sim-all` in `ihp130/` runs the cocotb tests of the CPU on the chip with its pad ring, at RTL (`sim-rtl-cocotb`) and on the gate-level netlist (`sim-gl-cocotb`), and the mixed-signal transient `tinywhisper_top_tb_tran` in Xschem and ngspice, with the models of the IO cells, the CPU as its XSPICE model and the IQ modulator as its schematic (`sim-gl-xschem`). The chip runner `testbenches/cocotb/tinywhisper_top_tb.py` still defines `USE_POWER_PINS` for the gate-level run, which makes the cell outputs X in Icarus Verilog, so a passing chip `sim-gl-cocotb` proves nothing yet (@sec-traps). A post-layout simulation of the whole chip with its pad ring does not converge in ngspice yet ([IHP-Open-PDK#921](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/921)).
+`make sim-all` in `ihp130/` runs the cocotb tests of the CPU on the chip with its pad ring, at RTL (`sim-rtl-cocotb`) and on the gate-level netlist (`sim-gl-cocotb`), and the mixed-signal transient `tinywhisper_top_tb_tran` in Xschem and ngspice, with the models of the IO cells, the CPU as its XSPICE model and the IQ modulator as its schematic (`sim-gl-xschem`). Like the CPU runner, the chip runner `testbenches/cocotb/tinywhisper_top_tb.py` leaves `USE_POWER_PINS` undefined, drives every input pad, steps its bus models at the falling clock edge and fails on a failed test (@sec-traps), and `GL_TESTS` selects the gate-level tests, `test_cpu_fibonacci_fast` by default. A post-layout simulation of the whole chip with its pad ring does not converge in ngspice yet ([IHP-Open-PDK#921](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/921)).
 
 # Physical Verification {#sec-verification}
 
@@ -713,7 +713,7 @@ The current verdicts:
 
 - `iqmod_top` passes the KLayout DRC: its committed report in `macros/iqmod/verification/drc/` has no items.
 - The CPU passes the Magic DRC inside its LibreLane run.
-- For the chip, no KLayout report is committed. gdscheck's `main` suite reports 140 `NBL.f`, 128 `TV1.a`, 32 `TV1.b`, 18 `TM1.a`, 1 `TM2.b`, 1 `Slt.c` and 1 `Slt.i` on `tinywhisper_top_logo_fill`, as the [chip README](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/README.md#design-rule-check-drc) lists with their known causes.
+- For the chip, no KLayout report is committed. gdscheck 0.2.1's `main` suite reports 175 hits on `tinywhisper_top_logo_fill`: 12 `NBL.f`, 128 `TV1.a` and 32 `TV1.b` inside `iqmod_top`, and 3 `TM2.b` in the pad ring east of it, as the [chip README](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/README.md#design-rule-check-drc) lists.
 
 ## LVS
 
@@ -789,7 +789,7 @@ TinyWhisper was taped out on the IHP open-silicon MPW run of March 2026 as `SoC4
 
 : Releases. {#tbl-releases tbl-colwidths="[25,75]"}
 
-`make release VERSION=<version>` copies the final GDS, the schematic, layout and LibreLane netlists, the renders and the bonding diagram into `release/v.<version>/`. Coordinates for probing come from `v.1.0.0`, not from the current chip. A new release needs a chip rebuild with the re-hardened CPU first.
+`make release VERSION=<version>` copies the final GDS, the schematic, layout and LibreLane netlists, the renders and the bonding diagram into `release/v.<version>/`. Coordinates for probing come from `v.1.0.0`, not from the current chip.
 
 The [lessons of the March 2026 tapeout](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/release/v.1.0.0/doc/README.md) are worth reading before the next one: top-level LVS on transistor level, the fill density checked after every fill, zero-length paths that fail the IHP precheck silently, trial runs early and often, LibreLane's view of macro supply connections through the DEF only, an XOR after every manual layout change, and being finished before tapeout day.
 
@@ -861,12 +861,11 @@ The documentation errata TW-D01 and TW-D02 concern an earlier version of this do
 # Known Issues and Limitations {#sec-issues}
 
 - **First silicon.** The errata of @sec-errata apply to `SoC4219`, and none of them is measured yet.
-- **The committed chip does not run firmware.** The chip in `layout/` and in `release/v.2.0.0/` is the build of August 2026, which differs from `SoC4219` in routing and fill. Its CPU netlist decodes `addi` and seven other instructions as illegal (@sec-traps), so a program traps at its first `addi`. `macros/riscv/final/` holds the re-hardened CPU, and the chip has not been rebuilt with it yet. A gate-level simulation of the first fetches shows that the CPU netlist of `SoC4219`, on branch `IHP-TO-2026-03`, executes these instructions. The RTL is logically equivalent to the silicon.
+- **`v.2.0.0` does not run firmware.** The chip of `release/v.2.0.0/` is the build of August 2026, which differs from `SoC4219` in routing and fill. Its CPU netlist decodes `addi` and seven other instructions as illegal (@sec-traps), so a program traps at its first `addi`. The chip in `layout/` is rebuilt with the re-hardened CPU of `macros/riscv/final/`, ready for a release under a new `VERSION`. The CPU netlist of `SoC4219`, on branch `IHP-TO-2026-03`, passes the gate-level `test_cpu_fibonacci_fast`, whose program has seven `addi`, so the silicon is not affected. The RTL is logically equivalent to the silicon.
 - **Top-level LVS.** The custom top-level LVS compares every device class as a black box, so a transistor-level LVS of the whole chip is still open.
 - **DRC in the flows.** `build-top` runs LibreLane without DRC because of the `metal1_pin_offgrid` rule on the pad ring ([IHP-Open-PDK#683](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/683)). The Magic DRC is out of the flows until [IHP-Open-PDK#954](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/954) and the IO pad findings are fixed, and gdscheck stops `make all` at its hits on the chip, see @sec-verification.
 - **Macro builds.** `build-all` and `make all` do not rebuild the macros, which are built in their own folders.
 - **Chip post-layout simulation.** The extracted chip with its pad ring does not converge in ngspice ([IHP-Open-PDK#921](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/921)).
-- **Chip gate-level simulation.** The chip runner of `sim-gl-cocotb` still defines `USE_POWER_PINS`, so its gate-level run shows X on the cell outputs and its result means nothing yet.
 - **Analog results.** The committed simulation data of the IQ modulator come from the Magic netlists of the tapeout and the schematics, not from the kpex netlists of 2026-11-14, and `iqmod_top_tb_tran` does not finish on the kpex full-RC netlist of `iqmod_top`.
 - **Equivalence check.** `make lec` fails about 40 partitions of the CPU netlist for reasons that are still open.
 - **CPU PEX.** A PEX netlist of `riscv_top` is not practical, so the CPU is verified with the gate-level simulations and the STA.
@@ -877,8 +876,8 @@ The repository keeps the [errata sheet](https://github.com/iic-jku/TinyWhisper/b
 
 # Traps Worth Knowing {#sec-traps}
 
-- **A wildcard localparam can lose its wildcards in Yosys.** In a `casez` item that shares its branch with another item, `read_verilog -sv` dropped the `?` bits of the localparam `DONT_CARES`, and the netlist decoded `addi` and seven other instructions as illegal while Icarus ran the RTL correctly. `constants.sv` defines `DONT_CARES` as a macro since. The CPU netlist of August 2026, which the committed chip and `v.2.0.0` integrate, has this bug, and the netlist of `SoC4219` does not. A gate-level simulation of the final netlist catches this class of bug, an RTL simulation cannot.
-- **A gate-level run can fail silently.** With `USE_POWER_PINS` defined, every cell output of the netlist is X in Icarus Verilog, and an undriven input such as `gpio_in[0]`, the external interrupt, sets `mip[11]` to X. The cocotb runner of the CPU therefore leaves the macro undefined, drives every input and checks the test results instead of trusting the exit code. The chip runner does not do this yet.
+- **A wildcard localparam can lose its wildcards in Yosys.** In a `casez` item that shares its branch with another item, `read_verilog -sv` dropped the `?` bits of the localparam `DONT_CARES`, and the netlist decoded `addi` and seven other instructions as illegal while Icarus ran the RTL correctly. `constants.sv` defines `DONT_CARES` as a macro since. The CPU netlist of August 2026, which `v.2.0.0` integrates, has this bug, and the netlist of `SoC4219` does not. A gate-level simulation of the final netlist catches this class of bug, an RTL simulation cannot.
+- **A gate-level run can fail silently.** With `USE_POWER_PINS` defined, every cell output of the netlist is X in Icarus Verilog, and an undriven input such as `gpio_in[0]`, the external interrupt, sets `mip[11]` to X. The cocotb runners of the CPU and the chip therefore leave the macro undefined, drive every input and check the test results instead of trusting the exit code.
 - **The XSPICE model is a source file.** No target regenerates `riscv_top.xspice` from the stock RTL, and `make clean` keeps it, see @sec-riscv-verification.
 - **The analog testbenches include committed PEX netlists.** `make clean` in `macros/iqmod` deletes them, and the benches stop at their missing include until `git restore` brings them back.
 - **`iqmod_top.gds` is an export.** Edit `iqmod_top.klay.gds` and re-export, never the other way round.
