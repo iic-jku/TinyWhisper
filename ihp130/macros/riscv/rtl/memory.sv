@@ -161,7 +161,7 @@ module memory #(
   localparam int I2C_MC_CONT_RD_ADDR = 32'h00800068;
 // verilog_format: on
 
-  typedef enum {
+  typedef enum logic [2:0] {
     IDLE,
     WRITING,
     READING,
@@ -172,7 +172,7 @@ module memory #(
     FAULT
   } states_t;
 
-  typedef enum {
+  typedef enum logic [2:0] {
     SRAM,
     I2C,
     UART,

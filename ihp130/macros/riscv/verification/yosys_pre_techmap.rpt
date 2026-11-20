@@ -4,23 +4,23 @@
 
         +----------Local Count, excluding submodules.
         | 
-    12400 wires
-    17258 wire bits
+    12285 wires
+    16945 wire bits
       294 public wires
-     3803 public wire bits
+     3602 public wire bits
        37 ports
        43 port bits
-    16357 cells
-      650   $_ANDNOT_
-     3177   $_AND_
+    16207 cells
+      639   $_ANDNOT_
+     3141   $_AND_
       582   $_DFFE_PP_
        29   $_DFF_P_
-     2259   $_MUX_
-     3234   $_NAND_
-      760   $_NOR_
-      468   $_NOT_
-      438   $_ORNOT_
-     1353   $_OR_
+     2250   $_MUX_
+     3225   $_NAND_
+      747   $_NOR_
+      456   $_NOT_
+      417   $_ORNOT_
+     1341   $_OR_
        28   $_SDFFCE_PN0P_
         1   $_SDFFE_NN0P_
        16   $_SDFFE_PN0N_
@@ -30,9 +30,9 @@
         5   $_SDFFE_PP1P_
         5   $_SDFF_NN0_
       368   $_SDFF_PN0_
-       64   $_SDFF_PP0_
-      495   $_XNOR_
-      991   $_XOR_
+       36   $_SDFF_PP0_
+      486   $_XNOR_
+     1001   $_XOR_
 
    Area for cell type $_ANDNOT_ is unknown!
    Area for cell type $_AND_ is unknown!

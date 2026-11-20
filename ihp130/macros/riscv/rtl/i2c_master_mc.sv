@@ -58,8 +58,8 @@ module i2c_master_mc (
     output reg       nack            //denotes whether module is encountering a nack from slave (only activates when master is attempting to contact device)
 );
 
-  reg [3:0] state;
-  reg [3:0] next_state;
+  (* fsm_encoding = "none" *) reg [3:0] state;
+  (* fsm_encoding = "none" *) reg [3:0] next_state;
   reg reg_sda_o;
   reg [7:0] addr;
   reg rw;

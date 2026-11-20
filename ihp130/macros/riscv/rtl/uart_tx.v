@@ -77,7 +77,7 @@ module uart_tx (
 
   //
   // Current and next states of the internal FSM.
-  reg [2:0] fsm_state;
+  (* fsm_encoding = "none" *) reg [2:0] fsm_state;
   reg [2:0] n_fsm_state;
 
   localparam FSM_IDLE = 0;

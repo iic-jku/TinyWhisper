@@ -76,7 +76,7 @@ module control (
   // it is finished
   // If we omit fetch_await then we would assume the memory has finished
   // (busy == 0), because the posedge of busy has not arrived yet
-  typedef enum {
+  typedef enum logic [3:0] {
     rst,
     fetch_await,
     fetch,
@@ -138,6 +138,7 @@ module control (
 
       // ISR
       interrupt: state_d = fetch_await;
+      default: ;
     endcase
   end
 
@@ -179,6 +180,7 @@ module control (
       interrupt: begin
         jump_to_isr = 1;
       end
+      default: ;
     endcase
 
     if (state_q == memory_await || state_q == memory || state_q == fetch_await || state_q == fetch)

@@ -472,7 +472,7 @@ Emulates the macro on an FPGA. The flow is split into a board-independent part a
 | pico-ice | Lattice iCE40UP5K | Yosys -> nextpnr-ice40 -> icepack | `dfu-util` |
 | iCEBreaker | Lattice iCE40UP5K | Yosys -> nextpnr-ice40 -> icepack | `iceprog` |
 
-The ULX3S is the default, because the macro no longer fits an iCE40UP5K: both iCE40 boards synthesize to 6132 ICESTORM_LCs against the 5280 the UP5K has and nextpnr stops with `Failed to expand region`, while the ECP5-85F takes the same design at 6.9% utilisation and closes timing at 51.0 MHz against its 25 MHz oscillator.
+The ULX3S is the default, because the macro no longer fits an iCE40UP5K: both iCE40 boards synthesize to 6119 ICESTORM_LCs against the 5280 the UP5K has and nextpnr stops with `Failed to expand region`, while the ECP5-85F takes the same design at 7.2% utilisation and closes timing at 52.4 MHz against its 25 MHz oscillator.
 
 To run the full flow (clean -> lint -> synthesis -> place-and-route -> bitstream) on the default board, run:
 
