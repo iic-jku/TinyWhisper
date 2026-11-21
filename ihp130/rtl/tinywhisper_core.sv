@@ -101,11 +101,8 @@ module tinywhisper_core #(
 	// ======================================================
 	// IQ-Modulator (Analog)
 	// ======================================================
-	wire voutp_I_RF;
-	wire voutn_I_RF;
-	wire voutn_Q_RF;
-	wire voutp_Q_RF;
-	
+	// The analog pins connect to the ports directly, without alias wires.
+	// An alias wire can give the net its name in synthesis, and the NDR and RSZ_DONT_TOUCH_LIST of config.yaml then miss it.
 	iqmod_top iqmod_top (
 		`ifdef USE_POWER_PINS
 		.VDD(VDD),
@@ -126,10 +123,10 @@ module tinywhisper_core #(
 		.vinn_Q(analog_padres[1]),
 		.vinp_I(analog_padres[7]),
 		.vinp_Q(analog_padres[0]),
-		.voutn_I_RF(voutn_I_RF),
-		.voutn_Q_RF(voutn_Q_RF),
-		.voutp_I_RF(voutp_I_RF),
-		.voutp_Q_RF(voutp_Q_RF)
+		.voutn_I_RF(analog_padbare[4]),
+		.voutn_Q_RF(analog_padbare[3]),
+		.voutp_I_RF(analog_padbare[5]),
+		.voutp_Q_RF(analog_padbare[2])
 	);
 	// ======================================================
 	
@@ -189,11 +186,6 @@ module tinywhisper_core #(
 	// Not connected analog pads (only padres or padbare is connected per analog pad)
 	// - analog_padres[2], analog_padres[3], analog_padres[4], analog_padres[5]
 	// - analog_padbare[0], analog_padbare[1], analog_padbare[6], analog_padbare[7]
-	
-	assign analog_padbare[5] = voutp_I_RF;
-	assign analog_padbare[4] = voutn_I_RF;
-	assign analog_padbare[3] = voutn_Q_RF;
-	assign analog_padbare[2] = voutp_Q_RF;
 	// ======================================================
 endmodule
 
