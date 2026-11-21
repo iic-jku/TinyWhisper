@@ -25,7 +25,7 @@ module i2c_master (
     output logic [4:0] acks
 );
 
-  typedef enum {
+  typedef enum logic [3:0] {
     RESET,
     START,
     SEND_ADDR,
@@ -42,7 +42,7 @@ module i2c_master (
     END
   } states_t;
 
-  states_t        state;
+  (* fsm_encoding = "none" *) states_t        state;
 
   logic           scl_reg;
   logic           scl_trigger;
@@ -51,7 +51,7 @@ module i2c_master (
 
   logic    [15:0] scl_counter;
 
-  logic    [ 1:0] frame_index;
+  (* fsm_encoding = "none" *) logic    [ 1:0] frame_index;
   logic    [ 1:0] next_frame_index;
   logic           has_next_index;
   logic    [ 7:0] frame;
@@ -100,6 +100,7 @@ module i2c_master (
         end
         STOP: state <= END;
         END: state <= END;
+        default: ;
       endcase
     end
 
@@ -157,6 +158,7 @@ module i2c_master (
             state <= SEND_FRAME;
           end
         end
+        default: ;
       endcase
     end
 
@@ -192,6 +194,7 @@ module i2c_master (
             2'd3: frame_acks[3] <= sda_i_sync1;
           endcase
         end
+        default: ;
       endcase
 
     end
@@ -278,6 +281,7 @@ module i2c_master (
       RESET, END: begin
         busy = 0;
       end
+      default: ;
     endcase
   end
 

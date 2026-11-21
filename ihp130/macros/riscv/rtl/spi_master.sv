@@ -23,7 +23,7 @@ module spi_master (
   // The state machine according to the SRAM specifiation is the following:
   // Write: SEND_COMMAND, SEND_ADDR, SEND_DATA
   // Read: SEND_COMMAND, SEND_ADDR, WAITING (1 sclk cycle), RECV_DATA
-  typedef enum {
+  typedef enum logic [2:0] {
     RESET,
     SEND_COMMAND,
     SEND_ADDR,
@@ -32,7 +32,7 @@ module spi_master (
     SEND_DATA,
     VALID
   } states_t;
-  states_t state;
+  (* fsm_encoding = "none" *) states_t state;
 
   // The mode is stored internally because we do not want it to change
   // while talking to the SRAM. The initial command determines the behavior
@@ -98,7 +98,7 @@ module spi_master (
           end else index <= index - 1;
         end
 
-        default: state <= (state == VALID) ? VALID : RESET;
+        default: if (state != VALID) state <= RESET;
       endcase
     end else if (negedge_trigger) begin  // == negedge of sclk. Setting si here so it's stable on posedge
       sclk <= 0;
@@ -120,6 +120,7 @@ module spi_master (
         SEND_ADDR: si <= addr[index[4:0]];
         SEND_DATA: si <= data_in[index[4:0]];
         VALID: ce <= 1'b0;
+        default: ;
       endcase
     end
 
