@@ -503,7 +503,7 @@ magic-pex: ## Run Parasitic Extraction with Magic on the final GDS (usage: make 
 
 # Logic Equivalence Check Targets
 LEC_DIR := flow/eqy
-LEC_LIB := $(PDK_ROOT)/$(PDK)/libs.ref/sg13g2_stdcell/lib/sg13g2_stdcell_typ_1p20V_25C.lib
+LEC_LIB := $(PDK_ROOT)/$(PDK)/libs.ref/sg13g2_stdcell/lib/sg13g2_stdcell_typ_1p20V_25C.lib.gz
 
 # Read the RTL with the other front end than synthesis (USE_SLANG in config.yaml),
 # so that a front end that misreads the RTL cannot do so on both sides
