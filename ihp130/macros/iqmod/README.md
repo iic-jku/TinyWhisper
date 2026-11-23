@@ -157,7 +157,7 @@ The `sim-xschem` target accepts an optional `TB=<testbenchname>` parameter (defa
 All targets that operate on a specific cell accept an optional `CELL=<cellname>` parameter. The default is the top-level cell (`iqmod_top`).
 
 ```sh
-make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [KPEX_REDUCE=<none|floating|ticer>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>] [DRC_LEVEL=<precheck|macro|regular>] [GDSCHECK_SUITE=<suite>|GDSCHECK_DECKS=<decks>] [DRC_JOBS=<n>] [EV_PRECISION=<digits>] [TB=<testbenchname>] [SCRIPT=<scriptname>] [OPEN_ARGS=<options>]
+make <target> [CELL=<cellname>] [EXT_MODE=<1|2|3>] [KPEX_REDUCE=<none|floating|ticer>] [CTHRESH=<fF>] [THRESHOLD=<mOhm>] [MINRES=<mOhm>] [MINDELAY=<ps>] [DRC_LEVEL=<precheck|macro|regular>] [GDSCHECK_SUITE=<suite>|GDSCHECK_DECKS=<decks>] [DRC_JOBS=<n>] [EV_PRECISION=<digits>] [TB=<testbenchname>] [SCRIPT=<scriptname>] [OPEN_ARGS=<options>]
 ```
 
 
@@ -607,6 +607,8 @@ make magic-pex
 make magic-pex CELL=iqmod_top
 make magic-pex CELL=iqmod_top EXT_MODE=3
 ```
+
+In every `EXT_MODE`, `magic-pex` leaves each parasitic capacitor below `CTHRESH` (`sak-pex.sh -c`, in fF, default `0.01` = 10 aF) out of the netlist. `CTHRESH=0.001` keeps every capacitor Magic can resolve, since it writes smaller ones as `0`, and a larger value gives a smaller netlist, for example `make magic-pex CTHRESH=0.1`.
 
 For full-RC extraction (`EXT_MODE=3`), `magic-pex` additionally exposes the three `extresist` tuning parameters of `sak-pex.sh`. They are ignored in `EXT_MODE=1`/`2`.
 
