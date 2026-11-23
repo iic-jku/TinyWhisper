@@ -24,6 +24,7 @@ The Free Silicon Conference (FSiC) took place from July 6 to 8, 2026, at the Uni
 
 ## QSP Article
 
-The Austrian Experimental Radio Society (Österreichischer Versuchssenderverband - ÖVSV) is celebrating its 100th anniversary in 2026. This milestone marks a century of technical innovation, experimentation, and community in the amateur radio world. To mark this occasion, Simon (OE3SDE) submitted a QSP article (German only) for the anniversary issue, which will be published in August.
+The Austrian Experimental Radio Society (Österreichischer Versuchssenderverband - ÖVSV) is celebrating its 100th anniversary in 2026. This milestone marks a century of technical innovation, experimentation, and community in the amateur radio world. To mark this occasion, Simon (OE3SDE) published a QSP article (German only) for the anniversary issue.
 
+- QSP article: [QSP100_Open-Source-Chip-Design.pdf](QSP100_Open-Source-Chip-Design.pdf)
 - Copies of the ÖVSV amateur radio journal QSP can be downloaded here approximately six months after publication: https://www.oevsv.at/downloads/
