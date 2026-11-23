@@ -1,4 +1,4 @@
-# Presentations
+# Publications
 
 ## EasterHegg 2026
 
@@ -22,7 +22,7 @@ The Free Silicon Conference (FSiC) took place from July 6 to 8, 2026, at the Uni
 - Talk page: https://wiki.f-si.org/index.php?title=From_idea_to_tapeout:_an_open-source_analog_mixed-signal_design_flow_with_the_IHP_Open-PDK
 - Slides: [FSiC2026_OSICD-Flow_Final.pdf](https://wiki.f-si.org/images/8/86/FSiC2026_OSICD-Flow_Final.pdf)
 
-## QSP Article
+## QSP Article 2026
 
 The Austrian Experimental Radio Society (Österreichischer Versuchssenderverband - ÖVSV) is celebrating its 100th anniversary in 2026. This milestone marks a century of technical innovation, experimentation, and community in the amateur radio world. To mark this occasion, Simon (OE3SDE) published a QSP article (German only) for the anniversary issue.
 
