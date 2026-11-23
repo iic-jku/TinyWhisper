@@ -43,6 +43,7 @@ tb/a.out
 /sky130/testbenches/simulations
 /ihp130/flow/final
 /ihp130/macros/*/flow/final
+/ihp130/macros/*/flow/eqy
 /ihp130/flow/artistic
 /ihp130/doc/AMS
 /ihp130/doc/klayout/pex.zip

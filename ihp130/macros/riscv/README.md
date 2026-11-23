@@ -42,6 +42,7 @@
 │  └─ 📁 vh/
 │     └─ riscv_top.vh
 ├─ 📁 flow/
+│  ├─ 📁 eqy/                 # .gitignore'd: EQY script and work folder of make lec
 │  └─ 📁 librelane/
 │     ├─ config.yaml
 │     ├─ impl.sdc
@@ -661,6 +662,48 @@ Both targets start by running `symbol-pex` (see above), so `schematic/xschem/<CE
 The riscv testbench [`testbenches/xschem/riscv_top_tb_tran.sch`](testbenches/xschem/riscv_top_tb_tran.sch) includes only the XSPICE model. To run a **post-layout simulation**, add an instance of `riscv_top_pex.sym` next to the `riscv_top.sym` one, `.include` the extracted netlist from `netlist/pex/`, and park the instance you do not need with `spice_ignore=true`, the way the iqmod testbenches switch between schematic and PEX views. A post-layout run simulates every transistor of the CPU in ngspice, so keep the stimulus short: use the XSPICE model for functional runs, and the PEX netlist on short, targeted stimuli to check timing and signal integrity.
 
 
+### Logic Equivalence Check
+
+A gate-level simulation checks the netlist only for the stimuli of its testbench. A logic equivalence check (LEC) proves with a formal solver that the netlist does exactly what the RTL does, for every input sequence. It catches a netlist that no longer matches the RTL, e.g. because the RTL was edited after the last `make build-top`, and any change of function by the flow. On the netlist built before the `DONT_CARES` fix in [`rtl/constants.sv`](rtl/constants.sv), it failed `rd_alu`, the ALU result that Yosys' front end had decoded wrong.
+
+```sh
+make lec                               # final/nl/riscv_top.nl.v against the RTL
+make lec LEC_NETLIST=<netlist>         # another netlist, e.g. the synthesis netlist of a run
+make lec LEC_TIMEOUT=<seconds>         # another time limit per partition (default: 300)
+make lec LEC_SCORR_TIMEOUT=<seconds>   # another time limit of the second strategy (default: 3600)
+make lec LEC_JOBS=<n>                  # partitions proved in parallel (default: 4)
+make lec-mutant                        # check that lec catches a difference
+```
+
+`lec` writes an [EQY](https://github.com/YosysHQ/eqy) script to `flow/eqy/riscv_top.eqy` and runs it in `flow/eqy/work/`. EQY pairs the registers of both designs by name, splits the design into partitions, proves each of them, and exits with 0 only when all of them are equivalent. On the committed netlist, it proves all 584 partitions in about 8 minutes with 4 jobs. The script is the one of the counter macro in the chip templates, and its four details matter here too:
+
+- The RTL is read with the other front end than synthesis: yosys-slang while `USE_SLANG` is off in `flow/librelane/config.yaml`, and Yosys' own `read_verilog -sv` when it is on. With the same front end on both sides, a front end that misreads the RTL would produce the same mistake in the netlist and prove it equivalent.
+- The functions of the standard cells come from the Liberty file of the PDK, not from its Verilog models. `-ignore_miss_func` skips the cells without a function (e.g. the clock gate `sg13g2_lgcp_1`), and `hierarchy -check` together with `select -assert-none t:sg13g2_*` makes the run fail if the netlist uses a cell without a model, instead of treating it as an empty box that proves trivially.
+- `clk2fflogic` on both sides makes the clock an input of the proof. Without it, EQY's own SBY script assumes one clock, and a flop on the wrong clock net still proves equivalent. The CPU also uses both clock edges, which SBY refuses without it.
+- Each partition is proved with SBY and the ABC engine `pdr`, which needs no depth bound. A partition that runs into `LEC_TIMEOUT`, and here also into `LEC_SCORR_TIMEOUT` of the second strategy below, counts as not proved, so `lec` fails instead of running on.
+
+The CPU needs five additions, the first in the RTL and the others in the `Makefile`, plus a fallback:
+
+- The FSM state registers carry `(* fsm_encoding = "none" *)` in the RTL. Yosys would otherwise re-encode them one-hot under their RTL names, and a match by name would compare one-hot bits with binary ones.
+- `memory_map` on the RTL, because EQY cannot partition the memory that yosys-slang keeps for the register file, and `splitnets`, because the netlist keeps single-bit register names. `sram_sim.sv` stays out, since it is a simulation model.
+- Both sides start after four cycles of `reset` (`LEC_RESET`). EQY lets the uninitialized registers of the netlist start from any value (`formalff -ff2anyinit`), but not those of the RTL, so without a common start the partition of `memory_i.sram_master.index` fails. The reset of the CORDIC is two registers behind `reset`, and Yosys' `sim` needs one more cycle to clear the `X` it propagates through the gate cells of the delta-sigma modulators. The proof then covers every state the chip reaches after `reset` was low for at least four rising clock edges.
+- Synthesis merged registers into the one with the same next state: `en_scl` into `busy` and `rw` into `addr[0]` of `i2c_master_mc`, `gpio_in_sync[0]` into `csr_i.intr_ext_sync`, `lo_enable` of the frequency generator into `dsmod_cos.i_ena_mod`, and the sign copies `data_step_r[37:33]` of both delta-sigma modulators into `data_step_r[32]`. `gold-match` pairs them, and EQY proves each pair, so a wrong pair fails.
+- Yosys turned the `atan_value` table of the CORDIC into a ROM (`memory_bmux2rom`) and merged the `shift_value` register into its read port (`memory_dff`), so the netlist registers the table output. `LEC_COLLECT` proves `Z_o` in one partition with `shift_value`, which keeps that register consistent with its address.
+- A second strategy, `engine abc scorr; pdr`, which EQY runs only on the partitions that ran into `LEC_TIMEOUT`. No partition of the committed netlist needs it. It catches a partition that runs into the time limit on a busy machine, as the CPU core partition (`regs.registers.0.0`, the register file with the logic around it) did while the FSM enums were 32 bits wide: ABC's `scorr` merges the registers it proves equal by induction, and PDR then proves the rest at once.
+
+A rule that matches nothing makes EQY warn `Cannot find entity`, so check the log after an RTL change to these registers.
+
+`lec-mutant` changes two copies of the netlist: `flow/eqy/mutant_cell.nl.v` has its first `sg13g2_nand2_1` swapped for a `sg13g2_nor2_1`, and `flow/eqy/mutant_clock.nl.v` has its first flop clocked by `rx`. It passes only if a partition of `lec` reports `FAIL` on each, so a `lec` that never ran a proof (a missing tool, a broken script) fails it too. Run it after changing the script or its rules, to make sure the check can still fail. Each mutant repeats the whole proof.
+
+`lec` has limits:
+
+- It checks function, not timing. Static timing analysis and gate-level simulation stay.
+- A register the RTL leaves unknown (`X`) matches any netlist, because EQY takes an `X` in the RTL as don't-care.
+- It pairs registers by name, so a register that synthesis renames, merges or re-encodes fails on a correct netlist until it gets a rule like the ones above.
+
+LibreLane has an equivalence step of its own (`Yosys.EQY`, enabled with `RUN_EQY`), but it skips every PDK other than sky130A, which is why the macro runs EQY from its Makefile. `lec` was tested with IIC-OSIC-TOOLS 2026.10 and the nightly of 2026-11-12 (`443bb609a0bc`).
+
+
 ### Lint, Build, Verify and Simulate All
 
 Lints, builds, verifies and simulates the whole macro:
@@ -668,10 +711,12 @@ Lints, builds, verifies and simulates the whole macro:
 - `lint-verilog-all`
 - `build-fpga`
 - `build-top`
+- `lec`
+- `lec-mutant`
 - `magic-pex` (currently disabled in the `Makefile`, see below)
 - `sim-all`
 
-Linting runs first to fail fast on structural RTL issues. The simulations run **after** the build, so `sim-gl-cocotb` and `sim-gl-sdf-cocotb` run on the netlist and the SDF files produced by this build, not on those of a previous one. `sim-gl-xschem` reads the XSPICE model, which `build-top` regenerates only when the RTL enables it and otherwise leaves as committed, see [Generate XSPICE File](#generate-xspice-file). `magic-pex` and `klayout-pex` are commented out in the recipe: a full-RC extraction of the whole RISC-V macro takes hours and no testbench in this macro consumes the result, so run it by hand when a post-layout netlist is needed (see [Parasitic Extraction (PEX)](#parasitic-extraction-pex)). The DRC and LVS verification is done within the LibreLane flow.
+Linting runs first to fail fast on structural RTL issues. `lec` proves the netlist of this build equivalent to the RTL, and `lec-mutant` checks that this proof can fail. The simulations run **after** the build, so `sim-gl-cocotb` and `sim-gl-sdf-cocotb` run on the netlist and the SDF files produced by this build, not on those of a previous one. `sim-gl-xschem` reads the XSPICE model, which `build-top` regenerates only when the RTL enables it and otherwise leaves as committed, see [Generate XSPICE File](#generate-xspice-file). `magic-pex` and `klayout-pex` are commented out in the recipe: a full-RC extraction of the whole RISC-V macro takes hours and no testbench in this macro consumes the result, so run it by hand when a post-layout netlist is needed (see [Parasitic Extraction (PEX)](#parasitic-extraction-pex)). The DRC and LVS verification is done within the LibreLane flow.
 
 ```sh
 make all
