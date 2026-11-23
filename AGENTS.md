@@ -57,7 +57,7 @@ make sim-rtl-cocotb                                 # chip RTL simulation (cocot
 make sim-gl-cocotb                                  # chip gate-level simulation
 make -C macros/riscv lint-verilog-all               # Verilator lint of the riscv RTL
 make -C macros/riscv sim-rtl-cocotb                 # riscv RTL simulation
-make -C macros/riscv lec                            # EQY proof of the committed riscv netlist against the RTL, about 20 min
+make -C macros/riscv lec                            # EQY proof of the committed riscv netlist against the RTL, about 10 min
 make -C macros/iqmod sim-xschem TB=iqmod_mfb_lpf_tb_ac_cl   # one Xschem/ngspice testbench
 make -C macros/iqmod klayout-verify CELL=iqmod_top  # KLayout DRC, LVS, PEX
 make -C macros/iqmod magic-verify CELL=iqmod_top    # Netgen LVS, Magic PEX, its DRC is commented out
