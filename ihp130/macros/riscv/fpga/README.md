@@ -13,7 +13,7 @@ The flow is driven by one shared Makefile fragment, [`fpga.mk`](fpga.mk), parame
 | pico-ice | [`pico-ice/`](pico-ice/) | Lattice iCE40UP5K, SG48 | Yosys -> nextpnr-ice40 -> icepack | `dfu-util` | Place-and-route overflows, see below |
 | iCEBreaker | [`icebreaker/`](icebreaker/) | Lattice iCE40UP5K, SG48 | Yosys -> nextpnr-ice40 -> icepack | `iceprog` | Place-and-route overflows, see below |
 
-The ULX3S is the default board, because the macro no longer fits an iCE40UP5K. Both iCE40 boards currently synthesize to 6132 ICESTORM_LCs against the 5280 the UP5K has, 116%, and nextpnr stops with `Failed to expand region`. The numbers are identical on the two boards, the overflow is in the RTL and not in a pin map. The same design takes 5751 of the 83640 TRELLIS_COMBs of the ECP5-85F, 6.9%, and closes timing at 51.0 MHz against the 25 MHz oscillator.
+The ULX3S is the default board, because the macro no longer fits an iCE40UP5K. Both iCE40 boards currently synthesize to 6119 ICESTORM_LCs against the 5280 the UP5K has, 115%, and nextpnr stops with `Failed to expand region`. The numbers are identical on the two boards, the overflow is in the RTL and not in a pin map. The same design takes 6050 of the 83640 TRELLIS_COMBs of the ECP5-85F, 7.2%, and closes timing at 52.4 MHz against the 25 MHz oscillator.
 
 So the iCE40 boards stay useful once the macro shrinks below 5280 LCs again, and until then `make all` in the macro builds the ULX3S bitstream.
 

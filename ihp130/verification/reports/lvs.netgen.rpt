@@ -615,9 +615,9 @@ Cell tinywhisper_top (1) disconnected node: jku_names/(no pins)
 Subcircuit summary:
 Circuit 1: tinywhisper_top                 |Circuit 2: tinywhisper_top                 
 -------------------------------------------|-------------------------------------------
-sg13g2_decap_8 (56084->1)                  |sg13g2_decap_8 (56084->1)                  
+sg13g2_decap_8 (56083->1)                  |sg13g2_decap_8 (56083->1)                  
 sg13g2_decap_4 (680->1)                    |sg13g2_decap_4 (680->1)                    
-sg13g2_fill_1 (566->1)                     |sg13g2_fill_1 (566->1)                     
+sg13g2_fill_1 (567->1)                     |sg13g2_fill_1 (567->1)                     
 sg13g2_Filler200 (60)                      |sg13g2_Filler200 (60)                      
 sg13g2_fill_2 (88->1)                      |sg13g2_fill_2 (88->1)                      
 sg13g2_ip__ce_names (1)                    |sg13g2_ip__ce_names (1)                    
@@ -625,7 +625,7 @@ sg13g2_IOPadInOut30mA (9)                  |sg13g2_IOPadInOut30mA (9)
 sg13g2_Filler2000 (60)                     |sg13g2_Filler2000 (60)                     
 sg13g2_ip__bondpad_70x70 (56)              |sg13g2_ip__bondpad_70x70 (56)              
 sg13g2_Filler1000 (60)                     |sg13g2_Filler1000 (60)                     
-sg13g2_dlygate4sd3_1 (24)                  |sg13g2_dlygate4sd3_1 (24)                  
+sg13g2_dlygate4sd3_1 (25)                  |sg13g2_dlygate4sd3_1 (25)                  
 sg13g2_IOPadVss (9)                        |sg13g2_IOPadVss (9)                        
 sg13g2_IOPadAnalog (8)                     |sg13g2_IOPadAnalog (8)                     
 sg13g2_IOPadOut30mA (9)                    |sg13g2_IOPadOut30mA (9)                    
@@ -639,9 +639,9 @@ sg13g2_ip__ce (1)                          |sg13g2_ip__ce (1)
 sg13g2_ip__jku_names (1)                   |sg13g2_ip__jku_names (1)                   
 sg13g2_IOPadIOVss (3)                      |sg13g2_IOPadIOVss (3)                      
 sg13g2_IOPadIOVdd (3)                      |sg13g2_IOPadIOVdd (3)                      
-sg13g2_antennanp (4)                       |sg13g2_antennanp (4)                       
+sg13g2_antennanp (3)                       |sg13g2_antennanp (3)                       
 Number of devices: 334                     |Number of devices: 334                     
-Number of nets: 121                        |Number of nets: 121                        
+Number of nets: 122                        |Number of nets: 122                        
 ---------------------------------------------------------------------------------------
 Resolving symmetries by property value.
 Resolving symmetries by pin name.
@@ -659,14 +659,14 @@ analog_PAD[6]                              |analog_PAD[6]
 analog_PAD[1]                              |analog_PAD[1]                              
 analog_PAD[0]                              |analog_PAD[0]                              
 analog_PAD[7]                              |analog_PAD[7]                              
-bidir_PAD[5]                               |bidir_PAD[5]                               
+bidir_PAD[4]                               |bidir_PAD[4]                               
 bidir_PAD[6]                               |bidir_PAD[6]                               
 bidir_PAD[0]                               |bidir_PAD[0]                               
 bidir_PAD[1]                               |bidir_PAD[1]                               
 bidir_PAD[2]                               |bidir_PAD[2]                               
 bidir_PAD[3]                               |bidir_PAD[3]                               
+bidir_PAD[5]                               |bidir_PAD[5]                               
 bidir_PAD[7]                               |bidir_PAD[7]                               
-bidir_PAD[4]                               |bidir_PAD[4]                               
 bidir_PAD[8]                               |bidir_PAD[8]                               
 output_PAD[6]                              |output_PAD[6]                              
 output_PAD[1]                              |output_PAD[1]                              
@@ -679,11 +679,11 @@ output_PAD[2]                              |output_PAD[2]
 output_PAD[4]                              |output_PAD[4]                              
 clk_PAD                                    |clk_PAD                                    
 rst_n_PAD                                  |rst_n_PAD                                  
-input_PAD[4]                               |input_PAD[4]                               
 input_PAD[0]                               |input_PAD[0]                               
 input_PAD[2]                               |input_PAD[2]                               
 input_PAD[1]                               |input_PAD[1]                               
 input_PAD[3]                               |input_PAD[3]                               
+input_PAD[4]                               |input_PAD[4]                               
 input_PAD[5]                               |input_PAD[5]                               
 IOVDD                                      |IOVDD                                      
 IOVSS                                      |IOVSS                                      

@@ -123,14 +123,14 @@ module freq_generator (
       .o_lo_qx(lo_qx)
   );
 
-  typedef enum {
+  typedef enum logic [1:0] {
     IDLE,
     CORDIC_ONLY,  // For first symbol only
     DSMOD_ONLY,   // First phase until last few cycles
     DSMOD_CORDIC  // Last few cycles. Both compute and finish simultaneously
   } transmit_state_t;
 
-  transmit_state_t transmit_state;
+  (* fsm_encoding = "none" *) transmit_state_t transmit_state;
   logic [7:0] transmit_counter;
 
   always_ff @(posedge clk) begin
