@@ -72,7 +72,7 @@ Two videos of about 70 seconds introduce TinyWhisper to a general audience, one 
 
 The full documentation of the TinyWhisper transmitter is available [here](https://iic-jku.github.io/TinyWhisper/index.html).
 
-Moreover, look into the [`presentations/`](https://github.com/iic-jku/TinyWhisper/tree/main/presentations) folder for further information.
+Moreover, look into the [`publications/`](https://github.com/iic-jku/TinyWhisper/tree/main/publications) folder for further information.
 
 
 ## Purpose
@@ -134,7 +134,7 @@ TinyWhisper demonstrates what is possible with current open-source tools and ope
 
 ## Description
 
-TinyWhisper is a compact WSPR transmitter realized with the ihp-sg13cmos PDK. The 2 mm x 2 mm chip operates at a core supply voltage of 1.5 V and an I/O supply voltage of 3.3 V. The chip is [packaged](https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/packaging) in a QFN-48 package. The chip has 56 pads, and its 9 VSS and 3 IOVSS pads are downbonded to the exposed pad of the package. All documentation, presentations, design files, and future updates are publicly available [here](https://github.com/iic-jku/TinyWhisper/tree/main/presentations). The block diagram is shown below. A render of the final chip layout is shown above, with the digital part placed on the left side of the chip and the analog part on the right. A custom logo on the topmost metal layer, generated with the tool [ArtistIC](https://arxiv.org/abs/2502.02626), is also shown above. The die photo at the top shows a fabricated chip of the March 2026 tapeout (`SoC4219`), with the TopMetal2 logo on top of the core.
+TinyWhisper is a compact WSPR transmitter realized with the ihp-sg13cmos PDK. The 2 mm x 2 mm chip operates at a core supply voltage of 1.5 V and an I/O supply voltage of 3.3 V. The chip is [packaged](https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/packaging) in a QFN-48 package. The chip has 56 pads, and its 9 VSS and 3 IOVSS pads are downbonded to the exposed pad of the package. All documentation, presentations, design files, and future updates are publicly available [here](https://github.com/iic-jku/TinyWhisper/tree/main/publications). The block diagram is shown below. A render of the final chip layout is shown above, with the digital part placed on the left side of the chip and the analog part on the right. A custom logo on the topmost metal layer, generated with the tool [ArtistIC](https://arxiv.org/abs/2502.02626), is also shown above. The die photo at the top shows a fabricated chip of the March 2026 tapeout (`SoC4219`), with the TopMetal2 logo on top of the core.
 
 <p align="center">
   <a href="doc/fig/tinywhisper_blockdiagramm.png">
@@ -337,8 +337,9 @@ The chip design itself lives in [`ihp130/`](https://github.com/iic-jku/TinyWhisp
 │  └─ README.md
 ├─ 📁 pcb/
 │  └─ README.md
-├─ 📁 presentations/
+├─ 📁 publications/
 │  ├─ EasterHegg_04042026.pdf
+│  ├─ QSP100_Open-Source-Chip-Design.pdf
 │  └─ README.md
 ├─ 📁 sky130/
 │  └─ 📁 macros/

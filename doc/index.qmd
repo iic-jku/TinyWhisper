@@ -296,7 +296,7 @@ Most build outputs are committed: GDS files, netlists, reports, renders, simulat
 | `ihp130/doc/` | specifications, floorplan, pinout notes, the errata sheet and tool cheatsheets |
 | `software/` | the C toolchain for the CPU and the Python WSPR reference |
 | `doc/` | this documentation and the chip dashboard |
-| `pcb/`, `enclosure/`, `measurements/`, `presentations/` | the application board, the enclosure, lab plans and talks |
+| `pcb/`, `enclosure/`, `measurements/`, `publications/` | the application board, the enclosure, lab plans, talks and articles |
 | `sky130/` | the earlier sky130 test chip, kept for reference and not maintained |
 
 : Repository structure. {#tbl-repo tbl-colwidths="[30,70]"}
@@ -888,12 +888,12 @@ The repository keeps the [errata sheet](https://github.com/iic-jku/TinyWhisper/b
 
 | Event | Talk |
 | :--- | :--- |
-| EasterHegg #23, Koblenz, April 2026 | Matthias Jung (DL9MJ), "Open-Source Chip Design: A New Playground for Ham Radio?", [slides](https://github.com/iic-jku/TinyWhisper/blob/main/presentations/EasterHegg_04042026.pdf) and [video](https://media.ccc.de/v/eh23-open-source-chip-design-a-new-playground-for-ham-radio) |
+| EasterHegg #23, Koblenz, April 2026 | Matthias Jung (DL9MJ), "Open-Source Chip Design: A New Playground for Ham Radio?", [slides](https://github.com/iic-jku/TinyWhisper/blob/main/publications/EasterHegg_04042026.pdf) and [video](https://media.ccc.de/v/eh23-open-source-chip-design-a-new-playground-for-ham-radio) |
 | CERN, May 2026 | Harald Pretl, "From Schematic to Silicon: Mixed-Signal IC Design in Open-Source Flows", [slides and video](https://indico.cern.ch/event/1680490/) |
 | FSiC 2026, Ljubljana, July 2026 | Simon Dorrer (OE3SDE), "From Idea to Tapeout: An Open-Source Analog Mixed-Signal Design Flow with the IHP Open-PDK", [talk page](https://wiki.f-si.org/index.php?title=From_idea_to_tapeout:_an_open-source_analog_mixed-signal_design_flow_with_the_IHP_Open-PDK) |
 | QSP, August 2026 | Simon Dorrer (OE3SDE), article in German for the 100th anniversary of the Austrian amateur radio society ÖVSV |
 
-: Talks and articles about TinyWhisper, see [`presentations/`](https://github.com/iic-jku/TinyWhisper/tree/main/presentations). {#tbl-talks tbl-colwidths="[30,70]"}
+: Talks and articles about TinyWhisper, see [`publications/`](https://github.com/iic-jku/TinyWhisper/tree/main/publications). {#tbl-talks tbl-colwidths="[30,70]"}
 
 # Related Projects
 
