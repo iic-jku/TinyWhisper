@@ -186,7 +186,7 @@ sim-cace: ## Run CACE simulations and collect result plots
 	\
 	cace iqmod_mfb_lpf.yaml -p ac_params && \
 	cp _runs/RUN_*/parameters/ac_params/Adc_cl_dB_vs_vdd.png results/iqmod_mfb_lpf/ && \
-	cp _runs/RUN_*/parameters/ac_params/CMRR_dc_dB_vs_vdd.png results/iqmod_mfb_lpf/ && \
+	cp _runs/RUN_*/parameters/ac_params/CMRR_vs_vdd.png results/iqmod_mfb_lpf/ && \
 	cp _runs/RUN_*/parameters/ac_params/fcu_vs_vdd.png results/iqmod_mfb_lpf/ && \
 	rm -rf _runs/RUN_* && \
 	\
@@ -204,7 +204,7 @@ sim-cace: ## Run CACE simulations and collect result plots
 	\
 	cace iqmod_mfb_lpf_ota_core.yaml -p ac_params && \
 	cp _runs/RUN_*/parameters/ac_params/Adc_ol_dB_vs_vdd.png results/iqmod_mfb_lpf_ota_core/ && \
-	cp _runs/RUN_*/parameters/ac_params/CMRR_dc_dB_vs_vdd.png results/iqmod_mfb_lpf_ota_core/ && \
+	cp _runs/RUN_*/parameters/ac_params/CMRR_vs_vdd.png results/iqmod_mfb_lpf_ota_core/ && \
 	cp _runs/RUN_*/parameters/ac_params/fcu_vs_vdd.png results/iqmod_mfb_lpf_ota_core/ && \
 	rm -rf _runs/RUN_* && \
 	\
