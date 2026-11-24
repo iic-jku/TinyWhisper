@@ -115,7 +115,7 @@ All numbers are simulated, at the typical corner and 1.5 V unless the table says
 | Filter corner, 3 dB below the dc gain, post-layout | 401 kHz, target 400 kHz | @sec-iqmod-results |
 | Filter dc gain, post-layout | -0.45 dB | @sec-iqmod-results |
 | Filter attenuation at 56 MHz, post-layout | 130 dB | @sec-iqmod-results |
-| Filter corner over 200 process Monte Carlo samples, schematic | 345 kHz to 528 kHz | @sec-iqmod-results |
+| Filter corner over 200 process Monte Carlo samples, schematic | 358 kHz to 519 kHz | @sec-iqmod-results |
 | Filter output noise, 1 Hz to 400 kHz, schematic | 229 $\mu$V~rms~ | @sec-iqmod-results |
 | OTA open-loop gain and unity-gain frequency, post-layout | 27.4 dB and 93 MHz | @sec-iqmod-ota |
 | Mixer switch on-resistance, 0 V to 1.5 V, post-layout | 4.6 $\Omega$ to 12.4 $\Omega$ | @sec-iqmod-mixer |
@@ -551,9 +551,9 @@ The analog benches run headless with `ngspice -b` and export their results with 
 
 | Filter parameter | Nominal | View | 200 process Monte Carlo samples, schematic | CACE limit |
 | :--- | :--- | :--- | :--- | :--- |
-| dc gain | -0.45 dB | post-layout | -0.68 dB to -0.49 dB | -1 dB to +1 dB |
-| Corner frequency | 401 kHz | post-layout | 345 kHz to 528 kHz | 350 kHz or more |
-| CMRR at dc | 45.9 dB | post-layout | 35.9 dB to 79.6 dB | 25 dB or more |
+| dc gain | -0.45 dB | post-layout | -0.60 dB to -0.39 dB | -1 dB to +1 dB |
+| Corner frequency | 401 kHz | post-layout | 358 kHz to 519 kHz | 350 kHz or more |
+| CMRR at dc | 45.9 dB | post-layout | 31.0 dB to 82.8 dB | 25 dB or more |
 | Attenuation at 56 MHz | 130 dB | post-layout | | |
 | Output noise, 1 Hz to 400 kHz | 229 $\mu$V~rms~ | schematic | | |
 
@@ -563,7 +563,7 @@ The analog benches run headless with `ngspice -b` and export their results with 
 
 ![Closed-loop response of the MFB filter on the Magic post-layout netlist, simulated with ngspice, against the analytical prototype (`iqmod_mfb_lpf_tb_ac_cl`).](fig/sim/iqmod_mfb_lpf_tb_ac_cl.svg){#fig-lpf-ac width=90%}
 
-3 of the 200 Monte Carlo samples fall below the 350 kHz limit of the corner frequency, at 345 kHz to 350 kHz, which still passes the 126 kHz baseband. The OTA core has its own datasheet: over 200 process Monte Carlo samples its open-loop gain stays between 25.6 dB and 28.3 dB and its CMRR above 56 dB. `make -C macros/iqmod sim-cace` runs both datasheets, and their histograms are in `verification/cace/results/` [@CACE].
+All 200 Monte Carlo samples meet the 350 kHz limit of the corner frequency, the lowest at 358 kHz. The OTA core has its own datasheet: over 200 process Monte Carlo samples its open-loop gain stays between 25.6 dB and 28.1 dB and its CMRR above 51 dB. `make -C macros/iqmod sim-cace` runs both datasheets, and their histograms are in `verification/cace/results/` [@CACE].
 
 The system bench `iqmod_mfb_lpf_riscv_tb_tran` feeds the schematic of the filter with the 1-bit streams of the CPU's XSPICE model, a 125 kHz tone, and shows the reconstructed baseband (@fig-lpf-riscv).
 

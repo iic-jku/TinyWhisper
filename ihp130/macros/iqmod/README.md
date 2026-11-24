@@ -295,18 +295,18 @@ make sim-view-xschem SCRIPT=plot_iqmod_mfb_lpf
 
 ### CACE Simulations
 
-Runs [CACE](https://github.com/fossi-foundation/cace) characterization simulations for the LPF and OTA core, collecting result plots into `verification/cace/results/`. Each CACE YAML
+Runs [CACE](https://github.com/fossi-foundation/cace) characterization simulations for the LPF and OTA core, collecting the summaries and result plots into `verification/cace/results/`. Each CACE YAML
 - `iqmod_mfb_lpf.yaml`: characterization of the 3rd-order MFB low-pass filter
 - `iqmod_mfb_lpf_ota_core.yaml`: characterization of the inverter-based OTA core
-is invoked with its AC parameter sets (`ac_mm_params`, `ac_mc_params`, and `ac_params`), the generated plots are copied, and temporary run artifacts are cleaned up:
+is invoked once with its AC parameter sets (`ac_mm_params`, `ac_mc_params`, and `ac_params`, in sequence), the summary of the run and the generated plots are copied, and temporary run artifacts are cleaned up:
 
 ```sh
 make sim-cace
 ```
 
-Result plots are saved to:
-- `verification/cace/results/iqmod_mfb_lpf/`: closed-loop gain, CMRR, and unity-gain frequency plots
-- `verification/cace/results/iqmod_mfb_lpf_ota_core/`: open-loop gain, CMRR, and unity-gain frequency plots
+Results are saved to:
+- `verification/cace/results/iqmod_mfb_lpf/`: `summary.md` (every parameter with its limits, values, and pass/fail status) and the closed-loop gain, CMRR, and unity-gain frequency plots
+- `verification/cace/results/iqmod_mfb_lpf_ota_core/`: `summary.md` and the open-loop gain, CMRR, and unity-gain frequency plots
 
 
 ### Simulate All

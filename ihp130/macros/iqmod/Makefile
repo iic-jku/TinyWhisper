@@ -168,43 +168,35 @@ sim-view-xschem: ## Plot Xschem simulation results (usage: make sim-view-xschem 
 	SHOW_PLOTS=1 python3 $(SIM_PLOT_DIR)/$(SCRIPT).py
 .PHONY: sim-view-xschem
 
-sim-cace: ## Run CACE simulations and collect result plots
+# One CACE run per datasheet for all its parameters, so that its summary.md lists every result.
+# One parameter at a time in this order, so that the CSV in scripts/, which ac_mm_params and ac_mc_params of a datasheet both write, keeps the Monte Carlo data.
+sim-cace: ## Run CACE simulations and collect the summaries and result plots
 	cd $(CACE_DIR) && \
 	mkdir -p results/iqmod_mfb_lpf results/iqmod_mfb_lpf_ota_core && \
 	\
-	cace iqmod_mfb_lpf.yaml -p ac_mm_params && \
+	cace iqmod_mfb_lpf.yaml -p ac_mm_params ac_mc_params ac_params --parallel-parameters 1 && \
+	cp _runs/RUN_*/summary.md results/iqmod_mfb_lpf/ && \
 	cp _runs/RUN_*/parameters/ac_mm_params/Adc_cl_dB_mm.png results/iqmod_mfb_lpf/ && \
 	cp _runs/RUN_*/parameters/ac_mm_params/CMRR_dc_dB_mm.png results/iqmod_mfb_lpf/ && \
 	cp _runs/RUN_*/parameters/ac_mm_params/fcu_mm.png results/iqmod_mfb_lpf/ && \
-	rm -rf _runs/RUN_* && \
-	\
-	cace iqmod_mfb_lpf.yaml -p ac_mc_params && \
 	cp _runs/RUN_*/parameters/ac_mc_params/Adc_cl_dB_mc.png results/iqmod_mfb_lpf/ && \
 	cp _runs/RUN_*/parameters/ac_mc_params/CMRR_dc_dB_mc.png results/iqmod_mfb_lpf/ && \
 	cp _runs/RUN_*/parameters/ac_mc_params/fcu_mc.png results/iqmod_mfb_lpf/ && \
-	rm -rf _runs/RUN_* && \
-	\
-	cace iqmod_mfb_lpf.yaml -p ac_params && \
 	cp _runs/RUN_*/parameters/ac_params/Adc_cl_dB_vs_vdd.png results/iqmod_mfb_lpf/ && \
-	cp _runs/RUN_*/parameters/ac_params/CMRR_dc_dB_vs_vdd.png results/iqmod_mfb_lpf/ && \
+	cp _runs/RUN_*/parameters/ac_params/CMRR_vs_vdd.png results/iqmod_mfb_lpf/ && \
 	cp _runs/RUN_*/parameters/ac_params/fcu_vs_vdd.png results/iqmod_mfb_lpf/ && \
 	rm -rf _runs/RUN_* && \
 	\
-	cace iqmod_mfb_lpf_ota_core.yaml -p ac_mm_params && \
+	cace iqmod_mfb_lpf_ota_core.yaml -p ac_mm_params ac_mc_params ac_params --parallel-parameters 1 && \
+	cp _runs/RUN_*/summary.md results/iqmod_mfb_lpf_ota_core/ && \
 	cp _runs/RUN_*/parameters/ac_mm_params/Adc_ol_dB_mm.png results/iqmod_mfb_lpf_ota_core/ && \
 	cp _runs/RUN_*/parameters/ac_mm_params/CMRR_dc_dB_mm.png results/iqmod_mfb_lpf_ota_core/ && \
 	cp _runs/RUN_*/parameters/ac_mm_params/fcu_mm.png results/iqmod_mfb_lpf_ota_core/ && \
-	rm -rf _runs/RUN_* && \
-	\
-	cace iqmod_mfb_lpf_ota_core.yaml -p ac_mc_params && \
 	cp _runs/RUN_*/parameters/ac_mc_params/Adc_ol_dB_mc.png results/iqmod_mfb_lpf_ota_core/ && \
 	cp _runs/RUN_*/parameters/ac_mc_params/CMRR_dc_dB_mc.png results/iqmod_mfb_lpf_ota_core/ && \
 	cp _runs/RUN_*/parameters/ac_mc_params/fcu_mc.png results/iqmod_mfb_lpf_ota_core/ && \
-	rm -rf _runs/RUN_* && \
-	\
-	cace iqmod_mfb_lpf_ota_core.yaml -p ac_params && \
 	cp _runs/RUN_*/parameters/ac_params/Adc_ol_dB_vs_vdd.png results/iqmod_mfb_lpf_ota_core/ && \
-	cp _runs/RUN_*/parameters/ac_params/CMRR_dc_dB_vs_vdd.png results/iqmod_mfb_lpf_ota_core/ && \
+	cp _runs/RUN_*/parameters/ac_params/CMRR_vs_vdd.png results/iqmod_mfb_lpf_ota_core/ && \
 	cp _runs/RUN_*/parameters/ac_params/fcu_vs_vdd.png results/iqmod_mfb_lpf_ota_core/ && \
 	rm -rf _runs/RUN_* && \
 	\
