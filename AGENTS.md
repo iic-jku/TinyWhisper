@@ -24,7 +24,8 @@ When adding or reorganizing a macro, mirror the template layout and its per-macr
 | `software/` | C toolchain for the RISC-V core and the Python WSPR reference (`software/README.md`) |
 | `doc/` | Quarto documentation site |
 | `sky130/` | Legacy sky130 test chip, kept for reference and not maintained |
-| `pcb/`, `enclosure/`, `measurements/`, `publications/` | Board, enclosure, lab material, talks and articles |
+| `pcb/` | KiCad 10 project of the dev board: SoC4219 in its QFN-48, Pico host, PSRAM, RF debug output (`pcb/README.md`) |
+| `enclosure/`, `measurements/`, `publications/` | Enclosure, lab material, talks and articles |
 
 Inside a macro, folders exist only where the macro kind needs them:
 

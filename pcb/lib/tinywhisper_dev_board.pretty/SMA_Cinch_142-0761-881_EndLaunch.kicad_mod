@@ -1,0 +1,211 @@
+(footprint "SMA_Cinch_142-0761-881_EndLaunch"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "SMA end-launch jack, Cinch 142-0761-881, 26.5 GHz, PC mount posts, 0.25 mm pin; signal pad and gaps for a 0.21 mm GCPW with 0.15 mm gaps on a 0.138 mm prepreg; origin on the board edge")
+	(tags "SMA end launch 26.5GHz Cinch")
+	(property "Reference" "REF**"
+		(at 0 -8.6 0)
+		(layer "F.SilkS")
+		(uuid "2512ee22-af91-57f6-8f30-8c57446018cf")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "SMA_Cinch_142-0761-881_EndLaunch"
+		(at 0 11 0)
+		(layer "F.Fab")
+		(uuid "82b3729c-128d-5a6a-850a-0611821be54b")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" "https://www.cinch.com/media/drawings/products/rf-microwave/connectors/dr-ccs-john-142-0761-881.pdf"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c61d6639-70aa-5fd1-ad8e-816130fceb2a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c420d17c-e580-584e-a762-93efb0fcf194")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr through_hole)
+	(duplicate_pad_numbers_are_jumpers no)
+	(pad "1" smd rect
+		(at 0 -0.95)
+		(size 0.3 1.3)
+		(layers "F.Cu" "F.Mask")
+		(uuid "c59f0973-d5d7-5731-bc92-7fa31cdc2be1")
+	)
+	(pad "2" smd rect
+		(at -2.1825 -3.85)
+		(size 3.765 7.1)
+		(layers "F.Cu" "F.Mask")
+		(uuid "afa33cd0-5e4f-565d-9595-cd167532222a")
+	)
+	(pad "2" smd rect
+		(at -2.1825 -3.85)
+		(size 3.765 7.1)
+		(layers "B.Cu" "B.Mask")
+		(uuid "afa33cd0-5e4f-565d-9595-cd167532222a")
+	)
+	(pad "2" thru_hole circle
+		(at -1.22 -1.75)
+		(size 1.75 1.75)
+		(drill 1.14)
+		(layers "*.Cu" "*.Mask")
+		(uuid "6a974b6f-154c-5b95-9f15-5ed5c35fc2d8")
+	)
+	(pad "2" thru_hole circle
+		(at -1.22 -5.71)
+		(size 1.75 1.75)
+		(drill 1.14)
+		(layers "*.Cu" "*.Mask")
+		(uuid "1a1332ac-6efe-5840-bf63-4d88accc5f9e")
+	)
+	(pad "2" smd rect
+		(at 2.1825 -3.85)
+		(size 3.765 7.1)
+		(layers "F.Cu" "F.Mask")
+		(uuid "eaef5e6c-fd66-577c-9c1d-d8627ef56abc")
+	)
+	(pad "2" smd rect
+		(at 2.1825 -3.85)
+		(size 3.765 7.1)
+		(layers "B.Cu" "B.Mask")
+		(uuid "eaef5e6c-fd66-577c-9c1d-d8627ef56abc")
+	)
+	(pad "2" thru_hole circle
+		(at 1.22 -1.75)
+		(size 1.75 1.75)
+		(drill 1.14)
+		(layers "*.Cu" "*.Mask")
+		(uuid "c628d465-7166-5ca2-9227-88e32cba7e26")
+	)
+	(pad "2" thru_hole circle
+		(at 1.22 -5.71)
+		(size 1.75 1.75)
+		(drill 1.14)
+		(layers "*.Cu" "*.Mask")
+		(uuid "1543df57-70c0-521c-95f5-132cedeef370")
+	)
+	(fp_rect
+		(start -3.14 0)
+		(end 3.14 9.53)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "07e25a93-f918-5e3b-aa00-3a72a2f9646c")
+	)
+	(fp_rect
+		(start -2.78 -4.55)
+		(end 2.78 0)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "9cf4c92f-7661-5285-9ac0-ff44da8e16fa")
+	)
+	(fp_line
+		(start -5 0)
+		(end 5 0)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Dwgs.User")
+		(uuid "93c711d7-fbb0-57a8-a4b0-c1bbed866924")
+	)
+	(fp_text user "board edge"
+		(at 0 0.8 0)
+		(layer "Dwgs.User")
+		(uuid "0d84dff7-72f7-5444-9d7b-b2e576079a43")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.09)
+			)
+		)
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 4.5 0)
+		(layer "F.Fab")
+		(uuid "b6e3989a-d911-555e-92cb-05a90522c682")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(fp_line
+		(start -4.3 -7.6)
+		(end -4.3 -0.5)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "fa885df1-f4da-5d4d-80f6-2afc6af9c9a9")
+	)
+	(fp_line
+		(start 4.3 -7.6)
+		(end 4.3 -0.5)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "6bb2eb46-33e8-5b0c-bc6e-0ebe5bf41ae2")
+	)
+	(fp_rect
+		(start -4.5 -7.65)
+		(end 4.5 10.2)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "44a13bbd-2554-5308-b0bd-2ccf2a3372e7")
+	)
+	(embedded_fonts no)
+	(model "${KICAD10_3DMODEL_DIR}/Connector_Coaxial.3dshapes/SMA_Samtec_SMA-J-P-H-ST-EM1_EdgeMount.step"
+		(offset
+			(xyz 0 2.1 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 90)
+		)
+	)
+)
