@@ -77,7 +77,7 @@ Solder `U1` with the straps of step 1. Both chip supplies come from the current-
 | Rail | Condition | Expected | Source |
 | --- | --- | --- | --- |
 | `VDD` | Transmitting on 10 m | 29.5 mA | 19.8 mW of `riscv_top` at `nom_typ_1p50V_25C` plus 24.4 mW of the IQ modulator (schematic, 10 m) at 1.5 V, `doc/index.qmd` |
-| `IOVDD` | Transmitting on 10 m | About 10 mA, estimate | C·V²·f with 10 pF per pin: `sclk` and the eight monitor pads at 28 MHz give 9 × 0.92 mA = 8.3 mA, plus the board pulls |
+| `IOVDD` | Transmitting on 10 m | About 10 mA, estimate | C·V·f with 10 pF per pin at 3.3 V: `sclk` and the eight monitor pads at 28 MHz give 9 × 0.92 mA = 8.3 mA, plus the board pulls |
 | Both | In reset | No prediction | Record it |
 
 The limits sit at 1.7 times (`VDD`) and 3 times (`IOVDD`) the expected values. Once the currents are recorded, refit the jumpers and use the board's regulators for the steps below. For a later current reading replace a jumper by an ammeter.
