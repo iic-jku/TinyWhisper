@@ -1,4 +1,5 @@
 top-level LVS of tinywhisper_top_logo_fill, klayout: PASS
 circuit pairs: 76 Match
-expected port mismatches: 165, the wrapper tinywhisper_top_logo_fill has no labels, so KLayout names no net of the chip flattened into it
+expected port mismatches: 130, nets inside the chip, which the wrapper tinywhisper_top_logo_fill gives no name
+expected port mismatches: 35, pad nets that the wrapper tinywhisper_top_logo_fill names <instance>.<label>, with the label of the reference
 devices in the reference, counted flat: 425490
