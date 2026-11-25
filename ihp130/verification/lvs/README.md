@@ -1,17 +1,9 @@
-# Top-Level LVS
+# Top-Level LVS Reports
 
-Custom top-level LVS flow of `tinywhisper_top`, plus the per-cell LVS run folders written by `make klayout-lvs` (`tinywhisper_top.klayout.lvs/`) and `make magic-lvs` (`tinywhisper_top.magic.lvs/`).
+Run folders of the top-level LVS, written by `make klayout-lvs` (`<CELL>.klayout.lvs/`) and by `make magic-lvs` (`<CELL>.magic.lvs/`) for `CELL=tinywhisper_top` or `CELL=tinywhisper_top_logo_fill`. Each folder is wiped at the start of its run, so it always reflects the latest run only.
 
-The custom flow extracts a SPICE netlist from the released GDS and compares it hierarchically against the schematic netlists with Netgen:
+- `<CELL>.lvs.summary`: the verdict of `scripts/lvs_top.py check`, the circuit pairs and device counts, and every circuit that did not match.
+- KLayout: `<CELL>.lvsdb`, to open in the KLayout netlist browser together with the GDS, and the extracted netlist `<CELL>_extracted.cir`, neither committed (the database has 190 to 300 MB).
+- Magic + Netgen: the Netgen report `<CELL>.lvs.out`, the setup Netgen ran with (`netgen_setup_<CELL>.tcl`) and the extracted netlist `<CELL>.ext.spc`, which is not committed.
 
-| File | Purpose |
-|------|---------|
-| `run_lvs.sh` | Main entry point: GDS extraction + Netgen LVS of the whole chip |
-| `run_lvs_se2diff.sh` | LVS variant for the single-ended-to-differential mixer cells |
-| `gds2spice.sh` | Extract a SPICE netlist from the GDS with Magic |
-| `merge_spice.py` | Merge the macro netlists (`riscv_top.spice`, `iqmod_top.spice`) into the top-level netlist |
-| `normalize_analog.py` | Normalize analog device parameters before comparison |
-| `check_floating_nets.py` | Report floating nets in the extracted netlist |
-| `remove_dollar1.sh` | Strip `$1` suffixes Magic appends to some net names |
-| `sg13g2_io.spi`, `sg13g2_stdcell.spice` | IO cell and standard-cell reference netlists |
-| `lvs.out` | Netgen result of the last full run |
+See [Top-Level Layout Versus Schematic (LVS)](../../README.md#top-level-layout-versus-schematic-lvs) in the top-level README.

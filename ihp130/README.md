@@ -43,8 +43,10 @@
 │  │  ├─ config.yaml
 │  │  ├─ pdn_cfg.tcl
 │  │  └─ tinywhisper_top.sdc
-│  └─ 📁 logo/
-│     └─ tinywhisper_logo_mono.png
+│  ├─ 📁 logo/
+│  │  └─ tinywhisper_logo_mono.png
+│  └─ 📁 lvs/
+│     └─ config.yaml
 ├─ 📁 ip/
 │  ├─ 📁 sg13g2_io_custom/
 │  ├─ 📁 sg13g2_ip__bondpad_70x70/
@@ -128,7 +130,6 @@
 │  └─ README.md
 ├─ 📁 netlist/
 │  ├─ 📁 layout/
-│  │  └─ tinywhisper_top.spice
 │  ├─ 📁 nl/
 │  │  └─ tinywhisper_top.nl.v
 │  ├─ 📁 pex/
@@ -181,7 +182,8 @@
 ├─ 📁 scripts/
 │  ├─ add_logo_fill.sh
 │  ├─ add_rectangle.py
-│  └─ check_pex_ports.py
+│  ├─ check_pex_ports.py
+│  └─ lvs_top.py
 ├─ 📁 testbenches/
 │  ├─ 📁 cocotb/
 │  │  ├─ tinywhisper_top_tb.gtkw
@@ -199,10 +201,10 @@
 │  │  ├─ 📁 tinywhisper_top.magic.drc/
 │  │  └─ 📁 tinywhisper_top_logo_fill.magic.drc/
 │  ├─ 📁 lvs/
-│  │  ├─ run_lvs.sh
-│  │  ├─ gds2spice.sh
-│  │  ├─ merge_spice.py
-│  │  ├─ lvs.out
+│  │  ├─ 📁 tinywhisper_top.klayout.lvs/
+│  │  ├─ 📁 tinywhisper_top.magic.lvs/
+│  │  ├─ 📁 tinywhisper_top_logo_fill.klayout.lvs/
+│  │  ├─ 📁 tinywhisper_top_logo_fill.magic.lvs/
 │  │  └─ README.md
 │  └─ 📁 reports/
 ├─ Makefile
@@ -296,12 +298,13 @@ All `simulations/` folders are generated and git-ignored.
 
 The whole flow is driven by Makefiles. The top-level `Makefile` builds the chip, and every component under [`macros/`](macros/) and [`ip/`](ip/) has its own `Makefile` and `README.md` following the same conventions (`make help`, `make all`, and so on). You can run each component from the top level or directly from inside its own folder. The `macros/` folder also has a `Makefile` of its own with one target, `make macro FROM=<macro> NAME=<name>`, which starts a new macro as a renamed copy of an existing one, see [macros/README.md](macros/README.md#start-a-new-macro-from-an-existing-one).
 
-At the top level, `make all` runs four steps in this order:
+At the top level, `make all` runs five steps in this order:
 
 1. `build-all` initialises the submodules and builds every component by calling its own `all` target: bondpad, RF pad, logos, macros, and finally the chip assembly with `build-top` (LibreLane, copy-back of all artifacts, logo and fill insertion, final GDS render).
 2. `klayout-drc-regular` (the sign-off deck) and `gdscheck-drc-regular` run the DRC of the final `tinywhisper_top_logo_fill` GDS. A violation stops `make all`, and gdscheck reports violations on this chip (see [Design Rule Check (DRC)](#design-rule-check-drc)). `magic-drc` is left out until IHP's IO pads are clean in Magic.
-3. `sim-all` runs the top-level RTL and gate-level simulations on the netlists produced by this build.
-4. `bondplan` generates the bonding diagram, the bondwires, and the pin table.
+3. `klayout-lvs` and `magic-lvs` run the top-level LVS of the final `tinywhisper_top_logo_fill` GDS at transistor level (see [Top-Level Layout Versus Schematic (LVS)](#top-level-layout-versus-schematic-lvs)). A mismatch stops `make all`.
+4. `sim-all` runs the top-level RTL and gate-level simulations on the netlists produced by this build. Its line in `make all` is commented out at the moment, so run it on its own.
+5. `bondplan` generates the bonding diagram, the bondwires, and the pin table.
 
 Every component follows the same principle. The simulations always run last, so they use the artifacts that the same invocation has just produced.
 
@@ -766,48 +769,60 @@ make gdscheck-drc CELL=tinywhisper_top_logo_fill GDSCHECK_DECKS=metal1,via1
 > A flow stops on a violation of any engine it calls, so the flows leave the Magic DRC out until the fixes are in the container: its lines are commented out in `magic-verify`, in the IP `all` and in `make all`, and `magic-drc` still runs it on its own. gdscheck stays in, so it stops `make all` at the chip hits above, and the `make all` of `iqmod` at its cells. To continue meanwhile, run the later steps directly (`bondplan`). Upstream calls gdscheck experimental, so a clean gdscheck run is no sign-off on its own.
 
 
-### Export Schematic Netlist for LVS
+### Top-Level Layout Versus Schematic (LVS)
 
-Exports the schematic netlist for LVS from Xschem and places it in `netlist/schematic/`.
-
-The `EV_PRECISION` parameter sets the number of significant digits used by Xschem's `ev` function when calculating device properties (default: 5). Increase this to avoid LVS mismatches caused by floating-point rounding differences between Xschem and KLayout (see [xschem#465](https://github.com/StefanSchippers/xschem/issues/465)).
-
-The `ntap` and `ptap` substrate contacts are ignored during LVS in both flows. `sak-lvs.sh` runs KLayout LVS with the `--disable_tap_extraction` option so it does not extract `ntap` and `ptap` devices from the layout (matching Magic + Netgen LVS). The schematic uses `lvs_ignore = short` for these devices and conditional net labels (see [xschem#474](https://github.com/StefanSchippers/xschem/issues/474)), which takes effect during schematic netlist export via `set lvs_ignore 1`.
-
-KLayout uses CDL netlists, while Magic uses SPICE netlists. Accordingly, `klayout-lvs-netlist` uses the Xschem commands `set spiceprefix 1`, `set lvs_netlist 1`, `set top_is_subckt 1`, and `set lvs_ignore 1`, while `magic-lvs-netlist` uses `set spiceprefix 1`, `set lvs_netlist 0`, `set top_is_subckt 1`, and `set lvs_ignore 1`. Hence, switching between CDL and SPICE netlists can be done with `lvs_netlist`.
-
-To extract a CDL schematic netlist for KLayout LVS, use:
-```sh
-make klayout-lvs-netlist
-make klayout-lvs-netlist CELL=tinywhisper_top
-make klayout-lvs-netlist EV_PRECISION=5
-```
-
-To extract a SPICE schematic netlist for Magic + Netgen LVS, use:
-```sh
-make magic-lvs-netlist
-make magic-lvs-netlist CELL=tinywhisper_top
-make magic-lvs-netlist EV_PRECISION=5
-```
-
-
-### Layout Versus Schematic (LVS)
-
-Exports the schematic netlist from Xschem, then runs LVS. Compares the GDS layout in `layout/` against the schematic netlist in `netlist/schematic/`. Both flows use `sak-lvs.sh` and write their reports into per-cell run folders: `verification/lvs/<CELL>.magic.lvs/` (Magic + Netgen) and `verification/lvs/<CELL>.klayout.lvs/` (KLayout, `.lvsdb`). The run folders are wiped at the start of each run, so they always reflect the latest run only. The extracted layout netlist is moved to `netlist/layout/`.
-
-**KLayout LVS** uses `sak-lvs.sh` (KLayout mode `-k`), which wraps `run_lvs.py` from the IHP Open-PDK:
+LibreLane's own LVS ([`verification/reports/lvs.netgen.rpt`](verification/reports/lvs.netgen.rpt)) extracts the DEF with every standard cell, pad and macro as its LEF abstract and compares it with the powered Verilog. It never reads the GDS, and it compares no transistor of any macro. The top-level LVS compares the GDS itself with a transistor-level reference netlist of the whole chip, once with KLayout and once with Magic + Netgen:
 
 ```sh
-make klayout-lvs
-make klayout-lvs CELL=tinywhisper_top
+make klayout-lvs                                 # KLayout LVS of layout/tinywhisper_top.gds.gz
+make magic-lvs                                   # Magic + Netgen LVS of layout/tinywhisper_top.gds.gz
+make klayout-lvs CELL=tinywhisper_top_logo_fill  # the same on the delivery GDS with logos and fill
+make magic-lvs CELL=tinywhisper_top_logo_fill
 ```
 
-**Magic + Netgen LVS** uses `sak-lvs.sh` (Magic + Netgen mode `-m`, the default), which extracts the layout netlist with Magic and compares it against the schematic netlist with Netgen, using the Netgen setup from the IHP Open-PDK:
+`make all` runs both on `tinywhisper_top_logo_fill` after the DRC. On a laptop with the `2026.11` image and other runs in parallel, KLayout took 8 min at 1.4 GB on `tinywhisper_top` and 59 min at 2.8 GB on `tinywhisper_top_logo_fill`, Magic + Netgen 33 min at 1.8 GB and 35 min at 3.1 GB.
+
+**Reference netlist.** `klayout-lvs-netlist` and `magic-lvs-netlist` build it with [`scripts/lvs_top.py`](scripts/lvs_top.py) from the netlists the GDS was made from, listed in [`flow/lvs/config.yaml`](flow/lvs/config.yaml), and write it to `netlist/schematic/<CELL>_klayout.cdl` and `netlist/schematic/<CELL>_magic.spice`:
+
+| Part of the chip | Netlist (KLayout / Netgen) |
+| --- | --- |
+| Pad ring, glue logic, macro instances | [`netlist/pnl/tinywhisper_top.pnl.v`](netlist/pnl/tinywhisper_top.pnl.v), the powered netlist LibreLane wrote |
+| Digital macro `riscv_top` | [`macros/riscv/final/pnl/riscv_top.pnl.v`](macros/riscv/final/pnl/riscv_top.pnl.v) |
+| Analog macro `iqmod_top` | [`iqmod_top_klayout.cdl`](macros/iqmod/netlist/schematic/iqmod_top_klayout.cdl) / [`iqmod_top_magic.spice`](macros/iqmod/netlist/schematic/iqmod_top_magic.spice), the netlists its own LVS matched |
+| Standard cells | PDK `sg13g2_stdcell.cdl` / `sg13g2_stdcell.spice` |
+| IO cells | PDK `sg13g2_io.cdl` / `sg13g2_io.spice` |
+
+The script turns the Verilog into subcircuit calls with the pins mapped by name and applies the changes `config.yaml` lists. Each one is a fact of the input files, not of the layout:
+
+- `no_devices`: the bondpads and the logos `sg13g2_ip__ce`, `sg13g2_ip__ce_names`, `sg13g2_ip__jku` and `sg13g2_ip__jku_names` hold metal, passivation openings and labels only, so they are left out by their exact name.
+- Taps: the IO cells tie their wells with `ptap1` cards to a global `sub!`. KLayout runs with `--disable_tap_extraction` and Magic extracts no tap devices, so the script removes each tap card and merges its two nets.
+- `pin_alias`: `padbare` of `sg13g2_IOPadAnalog` is the bond pad metal of `pad` and is missing from the PDK netlists.
+- `join`: `VSS` and `IOVSS` are one net in the layout, joined through the substrate.
+- `flatten`: the IO clamps, diodes and three pad types split a net into pieces that only their parent joins. These cells are expanded into their callers, so that the comparer flattens their layout twins too.
+- `magic_flatten`, Netgen only: five small cells inside the IO cells get the implant of a shared diffusion from a neighboring cell. Magic extracts each cell on its own and would short the output enable of the bidir pads to `vdd`, so it reads these cells flat.
+- `diode_wl` and `netgen_setup`, Netgen only: Magic writes W and L of a diode in the order of its orientation, and the IO SPICE writes `R` next to W and L of a poly resistor.
+- The CPU macro's GDS carries its own copy of each standard cell, renamed to `sg13g2_a21o_1$1` and so on when LibreLane merged the GDS, and the GDS of `iqmod_top` names one OTA `iqmod_mfb_lpf_ota_core_hybrid_bm$1`. The reference calls these names where the GDS uses them.
+- KLayout gives a layout cell a pin only for a net that leaves the cell. A port that no instance connects, such as the output of the clock tree's load inverters in the CPU, is therefore left out of that cell for KLayout.
+
+The header of each reference netlist lists every change and the MD5 of every input, so the netlist can be read and checked on its own.
+
+**KLayout** runs `sak-lvs.sh -k`, the PDK's `run_lvs.py` in deep mode with `--disable_tap_extraction`. **Magic + Netgen** runs `lvs_top.py magic`: Magic extracts the GDS hierarchically, because a flat comparison of the chip does not finish, and Netgen compares it with the PDK setup plus the lines `lvs_top.py` adds (`mm_ok` deleted, layout cells without devices ignored by their exact name, `netgen_setup` from `config.yaml`).
+
+**Delivery GDS.** `tinywhisper_top_logo_fill` holds `tinywhisper_top` next to the fill cells and has no labels of its own. KLayout gives `tinywhisper_top` no pins there, because no net leaves it, so the KLayout reference writes the chip under the wrapper's name and the comparer flattens the layout `tinywhisper_top` into the wrapper. Magic gives `tinywhisper_top` its pins from its labels, so the Netgen reference calls `tinywhisper_top` from a wrapper without pins.
+
+**Verdict.** `lvs_top.py check` decides, not the exit code of the engine. Every circuit pair of the `.lvsdb` has to match (a child that fails turns all its parents `Skipped` without naming a mismatch there). Every error KLayout records inside a matched pair fails the run as well, except two kinds of port mismatch that follow from the reference fixes: on `tinywhisper_top` the net of the joined `VSS` and `IOVSS` keeps both labels where the reference has one port, and on `tinywhisper_top_logo_fill` no net of the chip has a name, because the wrapper has no labels and KLayout flattens the chip into it. The KLayout deck counts these as a failed comparison, which is why its exit code is not used. The Netgen report has to end with `Circuits match uniquely.` without property errors and without failed pin matching. The result goes to `verification/lvs/<CELL>.klayout.lvs/<CELL>.lvs.summary` and `verification/lvs/<CELL>.magic.lvs/<CELL>.lvs.summary`. The KLayout database (`<CELL>.lvsdb`, 190 to 300 MB) and both extracted netlists stay in the run folders and are not committed. To see a mismatch, open the `.lvsdb` in KLayout (`Tools > Netlist Browser`, `File > Open`) together with the GDS.
+
+**Negative control.** A pass only counts if a wrong reference fails. `--plant <cell>/<instance>:<pin>,<pin>` swaps two nets in the reference, `--plant <cell>/<instance>:<param>=<value>` changes a device parameter, for example `D` and `RESET_B` of a flip-flop inside the CPU macro:
 
 ```sh
-make magic-lvs
-make magic-lvs CELL=tinywhisper_top
+python3 scripts/lvs_top.py netlist --engine klayout --top tinywhisper_top --cell tinywhisper_top --plant riscv_top/_42997_:D,RESET_B -o /tmp/planted.cdl
+sak-lvs.sh -k -w /tmp/planted -s /tmp/planted.cdl -l layout/tinywhisper_top.gds.gz -c tinywhisper_top
+python3 scripts/lvs_top.py check --engine klayout --cell tinywhisper_top --work /tmp/planted/tinywhisper_top.klayout.lvs   # must report FAIL
 ```
+
+**Adding a macro.** Add its powered netlist (digital) or its LVS netlists (analog) to `config.yaml`. A cell the chip instantiates that no listed netlist defines stops the script with its name.
+
+**Limits.** Since `VSS` and `IOVSS` are one net here, a metal short between them is invisible to the top-level LVS. LibreLane's DEF-based LVS keeps them apart and sees it. On `tinywhisper_top_logo_fill`, KLayout cannot check pin names, the run on `tinywhisper_top` and Netgen do. The top-level LVS checks the chip in `layout/`, the rebuild with the re-hardened CPU, not the `SoC4219` GDS of the March 2026 tapeout.
 
 
 ### Build Xschem PEX Symbol
@@ -903,7 +918,7 @@ make klayout-pex CELL=tinywhisper_top EXT_MODE=3
 
 On top of the extraction the target does four things:
 
-- It passes the CDL netlist of `klayout-lvs-netlist` as schematic (`sak-pex.sh -S`), so that kpex checks its own LVS netlist against the device classes and totals of the schematic. A mismatch fails the target in full-RC (`EXT_MODE=3`) and is only a warning in `EXT_MODE=1` and `2`. A cell without a schematic gets a dummy one.
+- It passes the CDL netlist of `klayout-lvs-netlist`, the reference netlist of the top-level LVS, as schematic (`sak-pex.sh -S`), so that kpex checks its own LVS netlist against the device classes and totals of the schematic. A mismatch fails the target in full-RC (`EXT_MODE=3`) and is only a warning in `EXT_MODE=1` and `2`. A cell without a schematic gets a dummy one.
 - It keeps MIM and MOM capacitors as devices with their models (`--blackbox y`), which kpex would otherwise replace by the extracted capacitance of their plates.
 - It reduces the full-RC netlist with TICER (`KPEX_REDUCE`, default `ticer`), which leaves far fewer elements and a faster simulation, and ngspice with `klu` can lose the operating point of an unreduced netlist (resistors below 1 mOhm).
 - It ties the substrate port `sub!` of the 2.5D netlist to `PEX_SUB_NET` (default `VSS`, `sak-pex.sh -g`), as Magic ties the substrate to `VSS`, so the netlist keeps the pins of `<CELL>_pex.sym`.
@@ -996,7 +1011,7 @@ make dashboard
 
 ### Build, Verify and Simulate All
 
-Runs `build-all` first, followed by the regular KLayout and gdscheck DRC of the final `tinywhisper_top_logo_fill`, then the chip simulations (`sim-all`) and finally generates the bondplan (`bondplan`). A violation in the DRC stops the flow, see [Design Rule Check (DRC)](#design-rule-check-drc):
+Runs `build-all` first, followed by the regular KLayout and gdscheck DRC of the final `tinywhisper_top_logo_fill`, then its top-level LVS with KLayout and with Magic + Netgen, then the chip simulations (`sim-all`, commented out at the moment) and finally generates the bondplan (`bondplan`). A violation in the DRC or a mismatch in the LVS stops the flow, see [Design Rule Check (DRC)](#design-rule-check-drc) and [Top-Level Layout Versus Schematic (LVS)](#top-level-layout-versus-schematic-lvs):
 
 ```sh
 make all
@@ -1060,9 +1075,10 @@ To keep the runtime low while still covering the full toolchain, the regression 
 - Magic DRC (`sak-drc.sh -m`) runs once, as `magic-drc` of the bondpad, which passes it, so a broken Magic fails the regression. gdscheck DRC (`sak-drc.sh -g`) runs in the bondpad, RF pad and logo IP builds.
 - Only **one** logo (`sg13g2_ip__jku`) is regenerated. It is the only step that exercises the PNG to GDS flow. The other logos (`sg13g2_ip__jku_names`, `sg13g2_ip__ce`, `sg13g2_ip__ce_names`) use an identical toolchain and reuse their committed views.
 - Exactly **one** Xschem testbench (`iqmod_mfb_lpf_tb_ac_cl`) and **one** CACE parameter set (the AC VDD sweep `ac_params` of `iqmod_mfb_lpf.yaml`, no Monte Carlo) are run. Swap `ac_params` for `ac_mc_params` / `ac_mm_params` in the target to also exercise the Monte Carlo flow.
+- The top-level LVS runs once, with KLayout on `tinywhisper_top`, and before the macros, so it compares the committed GDS with the committed netlists. Magic + Netgen and the delivery GDS `tinywhisper_top_logo_fill` are left to `make all`.
 - In the default `regression` the riscv macro is **not re-hardened**: `librelane-magicdrc` (the full RTL-to-GDS of the CPU, ≈2 h wall clock), the flows that depend on its fresh outputs (`copy-final`, the logic equivalence check `lec` with ≈10 min, the gate-level cocotb simulations `sim-gl-cocotb` and `sim-gl-sdf-cocotb` of the test `test_cpu_fibonacci_fast` (`GL_TESTS`), `generate-xspice`, which is called for consistency with the template but skips itself while the riscv RTL carries its stock settings, and the gate-level Xschem simulation `sim-gl-xschem`) and the Icarus RTL testbench (`sim-rtl-verilog`) only run in `regression-full` (`FULL_REGRESSION=1`). In the default variant the riscv macro is covered at RTL (lint + cocotb, which also exercises Icarus as its simulator), and the LibreLane flow itself is still exercised by the chip top-level `librelane-nodrc` run. `make -C macros/riscv sim-gl-cocotb GL_TESTS=` runs all eight tests on the netlist, 1 h 51 min on a laptop.
 
-The regression runs bottom-up: first the script tests, then the iqmod and riscv macros, then the top-level assembly (submodules, bondpad, RF pad, logo) and finally the chip top-level LibreLane run that integrates the macros and IP. In `regression-full`, `copy-final` copies the freshly hardened `flow/final/` views into `macros/riscv/final/`, so the logic equivalence check (`lec`), the gate-level flows and the chip top-level use the freshly built outputs. In the default `regression` the chip top-level integrates the committed views in `macros/riscv/final/` instead.
+The regression runs bottom-up: first the script tests and the top-level LVS, then the iqmod and riscv macros, then the top-level assembly (submodules, bondpad, RF pad, logo) and finally the chip top-level LibreLane run that integrates the macros and IP. In `regression-full`, `copy-final` copies the freshly hardened `flow/final/` views into `macros/riscv/final/`, so the logic equivalence check (`lec`), the gate-level flows and the chip top-level use the freshly built outputs. In the default `regression` the chip top-level integrates the committed views in `macros/riscv/final/` instead.
 
 The following tools and flows are checked by both variants:
 
@@ -1078,6 +1094,7 @@ The following tools and flows are checked by both variants:
 | CACE (+ ngspice) | iqmod CACE, single parameter set (`ac_params`) |
 | KLayout DRC (`sak-drc.sh`) + KLayout LVS (`sak-lvs.sh`) + KLayout PEX (`kpex`) | iqmod `klayout-verify CELL=iqmod_top EXT_MODE=2` |
 | Magic extract + Netgen LVS (`sak-lvs.sh`) + Magic PEX (`sak-pex.sh`) | iqmod `magic-verify CELL=iqmod_top` |
+| Top-level KLayout LVS (`scripts/lvs_top.py` + `sak-lvs.sh -k`) | `klayout-lvs` |
 | Magic LEF export + LIB + Verilog stub + `sak-render.py` render | iqmod `build-top` |
 | Verilator lint | riscv `lint-verilog-all` |
 | cocotb (RTL, Icarus as simulator) | riscv `sim-rtl-cocotb` |
@@ -1099,13 +1116,13 @@ The FPGA flow (Yosys + nextpnr-ice40 + icepack, riscv `build-fpga`) is not part 
 
 ### Clean
 
-`make clean` deletes everything the chip top-level targets generate. The sources stay untouched: the RTL, the schematics, symbols and testbenches, the scripts, the LibreLane and packaging configurations, the custom top-level LVS flow in [`verification/lvs/`](verification/lvs/) (its scripts, reference netlists and `lvs.out`), the EUROPRACTICE package library `packaging/layout/EP_PACKAGES_08022018.gds`, and `render/blender/`. Deleted are:
+`make clean` deletes everything the chip top-level targets generate. The sources stay untouched: the RTL, the schematics, symbols and testbenches, the scripts, the LibreLane, LVS and packaging configurations, the EUROPRACTICE package library `packaging/layout/EP_PACKAGES_08022018.gds`, and `render/blender/`. Deleted are:
 
 - `flow/librelane/runs/` and `flow/final/` (LibreLane run directories and the saved views)
 - `layout/` (`tinywhisper_top.gds.gz` and `tinywhisper_top_logo_fill.gds.gz`)
 - `netlist/` (schematic, layout, PEX, PnL, NL and SPICE netlists)
 - `render/img/` (the chip renders)
-- `verification/drc/`, `verification/reports/` and the per-cell `klayout-lvs` and `magic-lvs` run folders in `verification/lvs/`
+- `verification/drc/`, `verification/lvs/` (the top-level LVS run folders) and `verification/reports/`
 - `schematic/xschem/simulations/`, `testbenches/xschem/simulations/` and the `plot_simulations/` outputs (`data/`, `figures/`, `__pycache__/`)
 - `testbenches/cocotb/sim_build/` and the `__pycache__` folders under `scripts/`, `packaging/scripts/` and `testbenches/cocotb/`
 - the bondplan outputs in `packaging/` (`render/`, `result.md`, and in `layout/` the generated `tinywhisper_bondplan.gds`, `tinywhisper_top_logo_TM2.gds.gz` and the extracted package footprint `OP_QFN48_A4_FIT.gds`)

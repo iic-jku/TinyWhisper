@@ -1,0 +1,92 @@
+# SPDX-FileCopyrightText: 2026 The TinyWhisper Team
+# SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
+
+# Inputs of the top-level LVS and the changes scripts/lvs_top.py makes to them, see "Top-Level Layout Versus Schematic (LVS)" in README.md.
+# Paths are relative to ihp130/, pdk_dir:: paths relative to $PDK_ROOT/$PDK.
+# Each change states why the input netlists cannot match the layout without it.
+
+# Powered gate-level netlists of the chip top and of every digital macro, as LibreLane wrote them.
+verilog:
+  - netlist/pnl/tinywhisper_top.pnl.v
+  - macros/riscv/final/pnl/riscv_top.pnl.v
+
+# Netlists of every other cell, one list per engine: KLayout reads CDL, Netgen reads SPICE.
+# An analog macro enters with the netlists its own klayout-lvs and magic-lvs matched.
+cells:
+  klayout:
+    - pdk_dir::libs.ref/sg13g2_stdcell/cdl/sg13g2_stdcell.cdl
+    - pdk_dir::libs.ref/sg13g2_io/cdl/sg13g2_io.cdl
+    - macros/iqmod/netlist/schematic/iqmod_top_klayout.cdl
+  magic:
+    - pdk_dir::libs.ref/sg13g2_stdcell/spice/sg13g2_stdcell.spice
+    - pdk_dir::libs.ref/sg13g2_io/spice/sg13g2_io.spice
+    - macros/iqmod/netlist/schematic/iqmod_top_magic.spice
+
+# Cells without devices, metal, passivation openings and labels only, left out by their exact name.
+no_devices:
+  - sg13g2_ip__bondpad_70x70
+  - sg13g2_ip__ce
+  - sg13g2_ip__ce_names
+  - sg13g2_ip__jku
+  - sg13g2_ip__jku_names
+
+# padbare of the analog pad is the bond pad metal of pad and is missing from the PDK netlists.
+pin_alias:
+  sg13g2_IOPadAnalog: {padbare: pad}
+
+# VSS and IOVSS are one net in the layout, joined through the substrate.
+join:
+  - [VSS, IOVSS]
+
+# Cells expanded into their callers, so that the comparer flattens their layout twins too.
+flatten:
+  klayout:
+    # The pad, gate and cathode fingers of the clamps, diodes and clamp resistor are pieces that only the pad cell joins.
+    - sg13g2_Clamp_N15N15D
+    - sg13g2_Clamp_N20N0D
+    - sg13g2_Clamp_N43N43D4R
+    - sg13g2_Clamp_P15N15D
+    - sg13g2_Clamp_P20N0D
+    - sg13g2_DCNDiode
+    - sg13g2_DCPDiode
+    - sg13g2_RCClampResistor
+    # The iovdd of these pads is two pieces that only the chip top joins.
+    - sg13g2_IOPadAnalog
+    - sg13g2_IOPadInOut30mA
+    - sg13g2_IOPadOut30mA
+  magic:
+    # As for KLayout.
+    - sg13g2_Clamp_N15N15D
+    - sg13g2_Clamp_N20N0D
+    - sg13g2_Clamp_N43N43D4R
+    - sg13g2_Clamp_P15N15D
+    - sg13g2_Clamp_P20N0D
+    - sg13g2_DCNDiode
+    - sg13g2_DCPDiode
+    - sg13g2_RCClampResistor
+    - sg13g2_IOPadAnalog
+    - sg13g2_IOPadInOut30mA
+    - sg13g2_IOPadOut30mA
+    # The cells Magic flattens when it reads the GDS, see magic_flatten.
+    - sg13g2_LevelUp
+    - sg13g2_io_inv_x1
+    - sg13g2_io_nand2_x1
+    - sg13g2_io_nor2_x1
+    - sg13g2_io_tie
+
+# Magic only: cells Magic flattens when it reads the GDS.
+# The small cells inside the IO cells' GateDecode get the pSD implant of a shared diffusion from a neighboring cell.
+# Magic extracts each cell on its own, reads that diffusion as an N-well tap and so shorts the input of sg13g2_io_inv_x1, the output enable of the bidir pads, to vdd.
+magic_flatten:
+  - sg13g2_LevelUp
+  - sg13g2_io_inv_x1
+  - sg13g2_io_nand2_x1
+  - sg13g2_io_nor2_x1
+  - sg13g2_io_tie
+
+# Netgen only: Magic writes w and l of a diode in the order of its orientation in the layout, so both netlists get the longer side as w.
+diode_wl: [dantenna, dpantenna]
+
+# Netgen only: setup lines after the PDK setup. The IO SPICE writes R next to w and l of a poly resistor, Magic writes w and l only.
+netgen_setup:
+  - 'foreach d {rppd rsil rhigh} { catch {property "-circuit2 $d" delete r} }'

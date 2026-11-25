@@ -75,7 +75,7 @@ SPDX-License-Identifier = "Apache-2.0 WITH SHL-2.1"
 # Third-party files keep their original copyright and license.
 
 [[annotations]]
-path = ["ihp130/ip/sg13g2_io_custom/**", "ihp130/testbenches/xschem/models/**", "ihp130/verification/lvs/sg13g2_io.spi", "ihp130/verification/lvs/sg13g2_io.spi.orig", "ihp130/verification/lvs/sg13g2_stdcell.spice"]
+path = ["ihp130/ip/sg13g2_io_custom/**", "ihp130/testbenches/xschem/models/**"]
 SPDX-FileCopyrightText = "2024-2025 IHP PDK Authors"
 SPDX-License-Identifier = "Apache-2.0"
 
