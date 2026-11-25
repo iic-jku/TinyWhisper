@@ -26,6 +26,8 @@ CURATED = {
         # block, check, tool, result, status, source
         ("Chip top", "DRC", "gdscheck 0.2.1", "175 hits in iqmod_top and the east pad ring", "warn", "ihp130/README.md"),
         ("Chip top", "LVS", "Netgen", "Match, 334 devices", "pass", "ihp130/verification/reports/lvs.netgen.rpt"),
+        ("Chip top", "Top-level LVS", "KLayout", "76 circuit pairs match, 425,490 devices", "pass", "ihp130/verification/lvs/tinywhisper_top_logo_fill.klayout.lvs/tinywhisper_top_logo_fill.lvs.summary"),
+        ("Chip top", "Top-level LVS", "Netgen", "Circuits match uniquely, 425,490 devices", "pass", "ihp130/verification/lvs/tinywhisper_top_logo_fill.magic.lvs/tinywhisper_top_logo_fill.lvs.summary"),
         ("Chip top", "Antenna", "OpenROAD", "0 violations", "pass", "ihp130/verification/reports/"),
         ("Chip top", "Setup / hold", "OpenSTA", "+1.188 ns / +0.076 ns", "pass", "ihp130/verification/reports/"),
         ("Chip top", "Max slew", "OpenSTA", "18 violations (slow)", "warn", "ihp130/verification/reports/"),

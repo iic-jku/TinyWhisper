@@ -18,7 +18,7 @@ When adding or reorganizing a macro, mirror the template layout and its per-macr
 
 | Path | Contents |
 | --- | --- |
-| `ihp130/` | The chip: `Makefile`, `README.md` (documents every target), `rtl/` (pad ring `tinywhisper_top.sv`, `tinywhisper_core.sv`), `flow/librelane/`, `layout/`, `netlist/`, `schematic/xschem/`, `testbenches/`, `verification/`, `packaging/` (bondplan), `release/v.<version>/` |
+| `ihp130/` | The chip: `Makefile`, `README.md` (documents every target), `rtl/` (pad ring `tinywhisper_top.sv`, `tinywhisper_core.sv`), `flow/librelane/`, `flow/lvs/` (inputs of the top-level LVS), `layout/`, `netlist/`, `schematic/xschem/`, `testbenches/`, `verification/`, `packaging/` (bondplan), `release/v.<version>/` |
 | `ihp130/macros/<name>/` | One macro per folder: `riscv` (digital), `iqmod` (analog), `coupled_resonator_lc_bpf` (schematic-only). `ihp130/macros/README.md` compares them. |
 | `ihp130/ip/<name>/` | Bondpad, RF pad and logo blocks, each with `Makefile` and `README.md`, plus the third-party pad cells in `sg13g2_io_custom/` |
 | `software/` | C toolchain for the RISC-V core and the Python WSPR reference (`software/README.md`) |
@@ -63,6 +63,8 @@ make -C macros/iqmod klayout-verify CELL=iqmod_top  # KLayout DRC, LVS, PEX
 make -C macros/iqmod magic-verify CELL=iqmod_top    # Netgen LVS, Magic PEX, its DRC is commented out
 make -C macros/iqmod gdscheck-drc CELL=iqmod_top    # gdscheck DRC
 make build-top                                      # chip LibreLane run, copy-back, logo and fill, render
+make klayout-lvs CELL=tinywhisper_top_logo_fill     # top-level KLayout LVS of the delivery GDS, up to an hour
+make magic-lvs CELL=tinywhisper_top_logo_fill       # the same with Magic + Netgen, about 35 min
 make regression                                     # tool/flow smoke test, reuses the committed riscv views
 ```
 
@@ -89,9 +91,10 @@ make regression                                     # tool/flow smoke test, reus
 - `ihp130/macros/riscv/netlist/xspice/riscv_top.xspice` is a committed source that no target rebuilds from the stock RTL. `generate-xspice` skips itself while `freq_status[1:0] <= 2'b11;` is commented out in `rtl/memory.sv`. Leave that guard alone.
 - `build-top` runs `librelane-nodrc` on purpose: IHP's `metal1_pin_offgrid` rule fails on the pad ring (TODO in `ihp130/Makefile`). Run DRC separately with `make magic-drc`, `make klayout-drc-regular` or the matching `gdscheck-drc-*` targets. `DRC_JOBS=<n>` caps the KLayout processes and sets the gdscheck threads (default 4 and every CPU). More than 4 only pays off for the full chip on a server.
 - KLayout is the sign-off DRC. Magic and gdscheck flag IHP's own cells (the nBuLay ring of the `pmos` guard ring PCell, IHP-Open-PDK#954, fixed in gdscheck after 0.2.0, and, for Magic, the IO pads read hierarchically), so the flows leave the Magic DRC out until the upstream fixes are in the image: its lines are commented out in `magic-verify`, in the IP `all` and in `make all`. gdscheck stays in and stops `make build-all` and `make all`. Fix such a report upstream, not with make's `-` prefix in a flow. Keep `-f` patterns for Magic away from the top cell: `sak-drc.sh` refuses one that matches it, because Magic would check an empty cell.
+- In `ihp130/`, `klayout-lvs` and `magic-lvs` are the top-level LVS: `scripts/lvs_top.py` builds the reference netlist from the netlists in `flow/lvs/config.yaml`, and `lvs_top.py check` gives the verdict from the `.lvsdb` or the Netgen report, not from the exit code, which the KLayout deck sets to a failure also for the port mismatches of `join` and of the wrapper that `check` accepts. A failing circuit turns its parents `Skipped`, so read the summary in `verification/lvs/<CELL>.<engine>.lvs/`. Change `config.yaml`, never the reference netlist, and give each new entry its reason in a comment.
 - `build-all` does not rebuild the macros. The chip integrates the committed views in `macros/riscv/final/` and `macros/iqmod/final/`.
 - `klayout-pex` runs the 2.5D engine of `kpex` through `sak-pex.sh -k`, which the image ships from `2026.11` on (with kpex 0.10.0). A full-RC extraction of `iqmod_mixer_tg` takes about 1 min and `EXT_MODE=2` on `iqmod_top` 8 min, where Magic takes seconds, so use `magic-pex` for a quick netlist. On `riscv_top` even a C-coupled extraction had not finished after 5 h, so verify `riscv_top` with its gate-level simulations and the LibreLane STA, not with a PEX netlist.
-- Third-party files keep their own license (see `REUSE.toml`): `ihp130/ip/sg13g2_io_custom/`, `ihp130/testbenches/xschem/models/`, the IHP cell netlists `sg13g2_io.spi` and `sg13g2_stdcell.spice` in `ihp130/verification/lvs/`, and the EUROPRACTICE package GDS in `ihp130/packaging/layout/`.
+- Third-party files keep their own license (see `REUSE.toml`): `ihp130/ip/sg13g2_io_custom/`, `ihp130/testbenches/xschem/models/`, and the EUROPRACTICE package GDS in `ihp130/packaging/layout/`.
 
 ## License headers
 

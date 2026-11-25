@@ -717,14 +717,14 @@ The current verdicts:
 
 ## LVS
 
-LVS compares the layout against a netlist exported from Xschem: CDL for KLayout (`klayout-lvs`) and SPICE for Magic with Netgen (`magic-lvs`). Both ignore the `ntap` and `ptap` substrate contacts. `EV_PRECISION` sets the significant digits of Xschem's device-parameter evaluation, to avoid rounding mismatches between Xschem and KLayout.
+The LVS of the IQ modulator compares its layout against a netlist exported from Xschem: CDL for KLayout (`klayout-lvs`) and SPICE for Magic with Netgen (`magic-lvs`). Both ignore the `ntap` and `ptap` substrate contacts. `EV_PRECISION` sets the significant digits of Xschem's device-parameter evaluation, to avoid rounding mismatches between Xschem and KLayout.
 
 - `iqmod_top` passes the KLayout LVS. Netgen matches it uniquely and reports only the `mm_ok` property of the `rhigh` resistors, which the schematic carries and the extracted layout does not.
 - `riscv_top` passes the Netgen LVS inside its LibreLane run.
-- The chip passes the Netgen LVS of the LibreLane chip flow, which compares the connectivity of the pads and the macros.
-- The custom flow in [`verification/lvs/`](https://github.com/iic-jku/TinyWhisper/tree/main/ihp130/verification/lvs) extracts the shipped `SoC4219` GDS with Magic, merges the macro netlists into the chip netlist and compares the whole chip with Netgen. Its last result, `lvs.out`, is a unique match, but it treats every device class (MOS transistors, resistors, MIM capacitors and diodes) as a black box, so it checks the connections of the devices and not their sizes.
+- The chip passes the Netgen LVS of the LibreLane chip flow, which compares the DEF with every cell and macro as its LEF abstract and never reads the GDS.
+- The top-level LVS compares the chip GDS at transistor level, with KLayout (`make klayout-lvs`) and with Magic and Netgen (`make magic-lvs`). [`scripts/lvs_top.py`](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/scripts/lvs_top.py) assembles the reference netlist from the powered netlists of the chip and the CPU, the LVS netlists of `iqmod_top` and the PDK netlists of the standard and IO cells, with every change it makes listed in [`flow/lvs/config.yaml`](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/flow/lvs/config.yaml) and in the netlist header. Both engines pass on `tinywhisper_top` and on the delivery GDS `tinywhisper_top_logo_fill`, and planted defects make them fail: a swapped flip-flop pin in the CPU and a changed transistor width in the IQ modulator with both engines, swapped pad pins with KLayout, as the [chip README](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/README.md#top-level-layout-versus-schematic-lvs) describes.
 
-Harald's first rule of tapeout, from the [lessons of March 2026](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/release/v.1.0.0/doc/README.md), is: no tapeout without top-level LVS on transistor level. A transistor-level top-level LVS of the chip is still open.
+Harald's first rule of tapeout, from the [lessons of March 2026](https://github.com/iic-jku/TinyWhisper/blob/main/ihp130/release/v.1.0.0/doc/README.md), is: no tapeout without top-level LVS on transistor level. The top-level LVS checks the chip in `layout/`, the rebuild with the re-hardened CPU, not the `SoC4219` GDS.
 
 ## PEX
 
@@ -862,7 +862,7 @@ The documentation errata TW-D01 and TW-D02 concern an earlier version of this do
 
 - **First silicon.** The errata of @sec-errata apply to `SoC4219`, and none of them is measured yet.
 - **`v.2.0.0` does not run firmware.** The chip of `release/v.2.0.0/` is the build of August 2026, which differs from `SoC4219` in routing and fill. Its CPU netlist decodes `addi` and seven other instructions as illegal (@sec-traps), so a program traps at its first `addi`. The chip in `layout/` is rebuilt with the re-hardened CPU of `macros/riscv/final/`, ready for a release under a new `VERSION`. The CPU netlist of `SoC4219`, on branch `IHP-TO-2026-03`, passes the gate-level `test_cpu_fibonacci_fast`, whose program has seven `addi`, so the silicon is not affected. The RTL is logically equivalent to the silicon.
-- **Top-level LVS.** The custom top-level LVS compares every device class as a black box, so a transistor-level LVS of the whole chip is still open.
+- **Top-level LVS.** The transistor-level top-level LVS checks the rebuilt chip in `layout/`, not the `SoC4219` GDS. With `VSS` and `IOVSS` joined through the substrate, it cannot see a metal short between them, which the LibreLane LVS does see.
 - **DRC in the flows.** `build-top` runs LibreLane without DRC because of the `metal1_pin_offgrid` rule on the pad ring ([IHP-Open-PDK#683](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/683)). The Magic DRC is out of the flows until [IHP-Open-PDK#954](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/954) and the IO pad findings are fixed, and gdscheck stops `make all` at its hits on the chip, see @sec-verification.
 - **Macro builds.** `build-all` and `make all` do not rebuild the macros, which are built in their own folders.
 - **Chip post-layout simulation.** The extracted chip with its pad ring does not converge in ngspice ([IHP-Open-PDK#921](https://github.com/IHP-GmbH/IHP-Open-PDK/issues/921)).

@@ -45,6 +45,10 @@ tb/a.out
 /ihp130/macros/*/flow/final
 /ihp130/macros/*/flow/eqy
 /ihp130/flow/artistic
+# Top-level LVS: the KLayout database (190 to 300 MB) and both extracted netlists, rebuilt by make klayout-lvs and magic-lvs
+/ihp130/verification/lvs/*.klayout.lvs/*.lvsdb
+/ihp130/verification/lvs/*.klayout.lvs/*_extracted.cir
+/ihp130/verification/lvs/*.magic.lvs/*.ext.spc
 /ihp130/doc/AMS
 /ihp130/doc/klayout/pex.zip
 /ihp130/doc/klayout/ue_dcic_part2_v12.pdf
