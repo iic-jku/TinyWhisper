@@ -1,0 +1,167 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 890" width="1400" height="890" font-family="Helvetica, Arial, sans-serif" role="img" aria-label="Block diagram of the TinyWhisper dev board rev 0.1">
+<defs>
+<marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker>
+<marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L10,5 L0,10 z" fill="#b42318"/></marker>
+</defs>
+<rect width="1400" height="890" fill="#ffffff"/>
+<rect x="120" y="36" width="160" height="48" rx="6" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.5"/>
+<text x="200.0" y="56.0" font-size="13" text-anchor="middle" fill="#1f2328" font-weight="600">U201 AP2112K-3.3</text>
+<text x="200.0" y="72.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">3.3 V LDO, 600 mA</text>
+<polyline points="70,290 70,60 120,60" fill="none" stroke="#b42318" stroke-width="1.5" marker-end="url(#ap)"/>
+<text x="78" y="170" font-size="12" text-anchor="start" fill="#b42318" font-weight="400">+5V</text>
+<text x="78" y="186" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">Pico VBUS, FB201</text>
+<polyline points="280,60 950,60" fill="none" stroke="#b42318" stroke-width="1.5" marker-end="url(#ap)"/>
+<text x="292" y="52" font-size="12" text-anchor="start" fill="#b42318" font-weight="400">+3V3</text>
+<text x="292" y="78" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">also PSRAM, buffers, X301, U301, J501</text>
+<circle cx="750" cy="60" r="3.5" fill="#b42318"/>
+<polyline points="750,60 750,108" fill="none" stroke="#b42318" stroke-width="1.5"/>
+<rect x="700" y="108" width="100" height="40" rx="6" fill="#fff" stroke="#1f2328" stroke-width="1.5"/>
+<text x="750.0" y="124.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">JP201 (I)</text>
+<text x="750.0" y="140.0" font-size="11" text-anchor="middle" fill="#59636e" font-weight="400">J201 (U)</text>
+<polyline points="750,148 750,290" fill="none" stroke="#b42318" stroke-width="1.5" marker-end="url(#ap)"/>
+<text x="758" y="272" font-size="12" text-anchor="start" fill="#b42318" font-weight="400">IOVDD 3.3 V</text>
+<circle cx="750" cy="200" r="3.5" fill="#b42318"/>
+<polyline points="750,200 780,200" fill="none" stroke="#b42318" stroke-width="1.5" marker-end="url(#ap)"/>
+<rect x="780" y="176" width="190" height="48" rx="6" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.5"/>
+<text x="875.0" y="196.0" font-size="13" text-anchor="middle" fill="#1f2328" font-weight="600">U202 TPS3839K33</text>
+<text x="875.0" y="212.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">IOVDD above 2.93 V, +200 ms</text>
+<polyline points="970,200 990,200 990,84" fill="none" stroke="#1f2328" stroke-width="1.5" marker-end="url(#a)"/>
+<text x="998" y="196" font-size="12" text-anchor="start" fill="#1f2328" font-weight="400">PG_IO</text>
+<text x="998" y="100" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">EN</text>
+<rect x="950" y="36" width="160" height="48" rx="6" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.5"/>
+<text x="1030.0" y="56.0" font-size="13" text-anchor="middle" fill="#1f2328" font-weight="600">U203 LP5907-1.5</text>
+<text x="1030.0" y="72.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">1.5 V LDO, discharge</text>
+<polyline points="1070,84 1070,108" fill="none" stroke="#b42318" stroke-width="1.5"/>
+<rect x="1020" y="108" width="100" height="40" rx="6" fill="#fff" stroke="#1f2328" stroke-width="1.5"/>
+<text x="1070.0" y="124.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">JP202 (I)</text>
+<text x="1070.0" y="140.0" font-size="11" text-anchor="middle" fill="#59636e" font-weight="400">J202 (U)</text>
+<polyline points="1070,148 1070,255 890,255 890,290" fill="none" stroke="#b42318" stroke-width="1.5" marker-end="url(#ap)"/>
+<text x="1080" y="236" font-size="12" text-anchor="start" fill="#b42318" font-weight="400">VDD 1.5 V after IOVDD (E31)</text>
+<rect x="30" y="290" width="180" height="430" rx="6" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.5"/>
+<text x="120.0" y="445.0" font-size="13" text-anchor="middle" fill="#1f2328" font-weight="600">Raspberry Pi Pico H</text>
+<text x="120.0" y="461.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">RP2040 on sockets</text>
+<text x="120.0" y="477.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400"></text>
+<text x="120.0" y="493.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">loads the PSRAM</text>
+<text x="120.0" y="509.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">owns reset and the bus</text>
+<text x="120.0" y="525.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">bridges USB and UART</text>
+<text x="120.0" y="541.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400"></text>
+<text x="120.0" y="557.0" font-size="11" text-anchor="middle" fill="#59636e" font-weight="400">ADC: VDD on GP26,</text>
+<text x="120.0" y="573.0" font-size="11" text-anchor="middle" fill="#59636e" font-weight="400">IOVDD / 2 on GP27</text>
+<polyline points="60,800 60,720" fill="none" stroke="#1f2328" stroke-width="1.5" marker-end="url(#a)"/>
+<text x="60" y="816" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">USB</text>
+<rect x="310" y="290" width="300" height="60" rx="6" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.5"/>
+<text x="460.0" y="308.0" font-size="13" text-anchor="middle" fill="#1f2328" font-weight="600">X301 SiT8008, 56 MHz</text>
+<text x="460.0" y="324.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">or J301 SMA, fit R305</text>
+<text x="460.0" y="340.0" font-size="11" text-anchor="middle" fill="#59636e" font-weight="400">duty trim through J301 (E27)</text>
+<polyline points="210,320 310,320" fill="none" stroke="#1f2328" stroke-width="1.5" marker-end="url(#a)"/>
+<text x="220" y="314" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">GP14 CLK_OE</text>
+<polyline points="610,320 700,320" fill="none" stroke="#1f2328" stroke-width="1.5" marker-end="url(#a)"/>
+<text x="618" y="314" font-size="12" text-anchor="start" fill="#1f2328" font-weight="400">clk</text>
+<circle cx="655" cy="320" r="3.5" fill="#1f2328"/>
+<polyline points="655,320 655,362 540,362 540,375" fill="none" stroke="#1f2328" stroke-width="1.5" marker-end="url(#a)"/>
+<rect x="310" y="375" width="300" height="60" rx="6" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.5"/>
+<text x="460.0" y="393.0" font-size="13" text-anchor="middle" fill="#1f2328" font-weight="600">U301 74AUP1G74 reset flip-flop</text>
+<text x="460.0" y="409.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">rst_n on a clock edge (E25)</text>
+<text x="460.0" y="425.0" font-size="11" text-anchor="middle" fill="#59636e" font-weight="400">cleared by PG_IO (E31), SW302 RESET</text>
+<polyline points="210,405 310,405" fill="none" stroke="#1f2328" stroke-width="1.5" marker-end="url(#a)"/>
+<text x="220" y="399" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">GP3</text>
+<text x="220" y="421" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">RST_REQ_N</text>
+<polyline points="610,405 700,405" fill="none" stroke="#1f2328" stroke-width="1.5" marker-end="url(#a)"/>
+<text x="618" y="399" font-size="12" text-anchor="start" fill="#1f2328" font-weight="400">rst_n</text>
+<rect x="310" y="460" width="135" height="60" rx="6" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.5"/>
+<text x="377.5" y="478.0" font-size="13" text-anchor="middle" fill="#1f2328" font-weight="600">U401</text>
+<text x="377.5" y="494.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">APS6404L</text>
+<text x="377.5" y="510.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">8 MB PSRAM</text>
+<rect x="475" y="460" width="135" height="60" rx="6" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.5"/>
+<text x="542.5" y="478.0" font-size="13" text-anchor="middle" fill="#1f2328" font-weight="600">U402 to U404</text>
+<text x="542.5" y="494.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">bus buffers</text>
+<text x="542.5" y="510.0" font-size="11" text-anchor="middle" fill="#59636e" font-weight="400">CE inverted (E01, E02)</text>
+<polyline points="210,490 310,490" fill="none" stroke="#1f2328" stroke-width="3.5" marker-end="url(#a)" marker-start="url(#a)"/>
+<text x="220" y="484" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">GP16 to GP19</text>
+<polyline points="445,490 475,490" fill="none" stroke="#1f2328" stroke-width="3.5" marker-end="url(#a)" marker-start="url(#a)"/>
+<polyline points="610,490 700,490" fill="none" stroke="#1f2328" stroke-width="3.5" marker-end="url(#a)" marker-start="url(#a)"/>
+<text x="618" y="484" font-size="12" text-anchor="start" fill="#1f2328" font-weight="400">SPI</text>
+<polyline points="210,535 542,535 542,520" fill="none" stroke="#1f2328" stroke-width="1.5" marker-end="url(#a)"/>
+<text x="220" y="529" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">GP2 BUS_PICO</text>
+<rect x="310" y="555" width="300" height="50" rx="6" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.5"/>
+<text x="460.0" y="576.0" font-size="13" text-anchor="middle" fill="#1f2328" font-weight="600">J501 I2C display</text>
+<text x="460.0" y="592.0" font-size="11" text-anchor="middle" fill="#59636e" font-weight="400">100 Ω series, 4.7 kΩ pull-ups (E14)</text>
+<polyline points="700,580 610,580" fill="none" stroke="#1f2328" stroke-width="1.5" marker-end="url(#a)" marker-start="url(#a)"/>
+<text x="618" y="574" font-size="12" text-anchor="start" fill="#1f2328" font-weight="400">sda, scl</text>
+<polyline points="210,580 310,580" fill="none" stroke="#1f2328" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#a)" marker-start="url(#a)"/>
+<text x="220" y="574" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">GP4, GP5</text>
+<text x="220" y="596" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">not fitted</text>
+<polyline points="700,650 210,650" fill="none" stroke="#1f2328" stroke-width="1.5" marker-end="url(#a)" marker-start="url(#a)"/>
+<text x="236" y="644" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">rx, tx to GP0, GP1 through 1 kΩ (E29)</text>
+<circle cx="460" cy="650" r="3.5" fill="#1f2328"/>
+<polyline points="460,650 460,668" fill="none" stroke="#1f2328" stroke-width="1.5" marker-end="url(#a)"/>
+<rect x="400" y="668" width="120" height="34" rx="6" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.5"/>
+<text x="460.0" y="689.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">J302 UART</text>
+<rect x="700" y="290" width="240" height="430" rx="6" fill="#ddf4ff" stroke="#1f2328" stroke-width="2.5"/>
+<text x="820.0" y="461.0" font-size="13" text-anchor="middle" fill="#1f2328" font-weight="600">U1 SoC4219</text>
+<text x="820.0" y="477.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">TinyWhisper, QFN-48</text>
+<text x="820.0" y="493.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400"></text>
+<text x="820.0" y="509.0" font-size="11" text-anchor="middle" fill="#59636e" font-weight="400">IOVDD: 7, 13, 48</text>
+<text x="820.0" y="525.0" font-size="11" text-anchor="middle" fill="#59636e" font-weight="400">VDD: 8, 14, 20, 28, 33, 41, 47</text>
+<text x="820.0" y="541.0" font-size="11" text-anchor="middle" fill="#59636e" font-weight="400">GND: exposed pad only</text>
+<text x="820.0" y="557.0" font-size="11" text-anchor="middle" fill="#59636e" font-weight="400">14, 15: straps R101 to R104</text>
+<text x="708" y="324" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">1</text>
+<text x="708" y="409" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">2</text>
+<text x="708" y="494" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">3 to 6</text>
+<text x="708" y="584" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">9, 10</text>
+<text x="708" y="654" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">11, 12</text>
+<text x="932" y="334" font-size="11" text-anchor="end" fill="#59636e" font-weight="400">21 to 24, 37 to 40</text>
+<text x="932" y="444" font-size="11" text-anchor="end" fill="#59636e" font-weight="400">25, 26, 35, 36</text>
+<text x="932" y="594" font-size="11" text-anchor="end" fill="#59636e" font-weight="400">29 to 32</text>
+<text x="820" y="710" font-size="11" text-anchor="middle" fill="#59636e" font-weight="400">16 to 19, 42 to 45</text>
+<rect x="1050" y="300" width="200" height="60" rx="6" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.5"/>
+<text x="1150.0" y="318.0" font-size="13" text-anchor="middle" fill="#1f2328" font-weight="600">J503 monitor header</text>
+<text x="1150.0" y="334.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">lo, ds pads through 100 Ω</text>
+<text x="1150.0" y="350.0" font-size="11" text-anchor="middle" fill="#59636e" font-weight="400">100 kΩ pull-downs (E04, E26)</text>
+<polyline points="940,330 1050,330" fill="none" stroke="#1f2328" stroke-width="1.5" marker-end="url(#a)" marker-start="url(#a)"/>
+<text x="950" y="324" font-size="12" text-anchor="start" fill="#1f2328" font-weight="400">monitors</text>
+<rect x="1050" y="410" width="200" height="60" rx="6" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.5"/>
+<text x="1150.0" y="428.0" font-size="13" text-anchor="middle" fill="#1f2328" font-weight="600">J601 analog inputs</text>
+<text x="1150.0" y="444.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">1 kΩ, biased to 0.75 V</text>
+<text x="1150.0" y="460.0" font-size="11" text-anchor="middle" fill="#59636e" font-weight="400">0 to 1.5 V only (E30)</text>
+<polyline points="1050,440 940,440" fill="none" stroke="#1f2328" stroke-width="1.5" marker-end="url(#a)"/>
+<text x="950" y="434" font-size="12" text-anchor="start" fill="#1f2328" font-weight="400">vin I, Q</text>
+<rect x="1050" y="560" width="200" height="60" rx="6" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.5"/>
+<text x="1150.0" y="578.0" font-size="13" text-anchor="middle" fill="#1f2328" font-weight="600">R611 to R614, 0 Ω</text>
+<text x="1150.0" y="594.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">join the 4 outputs (E03)</text>
+<text x="1150.0" y="610.0" font-size="11" text-anchor="middle" fill="#59636e" font-weight="400">RF_SUM, TP601</text>
+<polyline points="940,590 1050,590" fill="none" stroke="#1f2328" stroke-width="1.5" marker-end="url(#a)"/>
+<text x="950" y="584" font-size="12" text-anchor="start" fill="#1f2328" font-weight="400">vout RF</text>
+<polyline points="1150,620 1150,660" fill="none" stroke="#1f2328" stroke-width="1.5" marker-end="url(#a)"/>
+<rect x="1050" y="660" width="200" height="60" rx="6" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.5"/>
+<text x="1150.0" y="678.0" font-size="13" text-anchor="middle" fill="#1f2328" font-weight="600">C602 100 nF, R615 953 Ω</text>
+<text x="1150.0" y="694.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">DC block, 1003 Ω load</text>
+<text x="1150.0" y="710.0" font-size="11" text-anchor="middle" fill="#59636e" font-weight="400">analyzer reads 26.0 dB below RF_SUM</text>
+<polyline points="1250,690 1290,690" fill="none" stroke="#1f2328" stroke-width="1.5" marker-end="url(#a)"/>
+<rect x="1290" y="660" width="90" height="60" rx="6" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.5"/>
+<text x="1335.0" y="686.0" font-size="13" text-anchor="middle" fill="#1f2328" font-weight="600">J602</text>
+<text x="1335.0" y="702.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">SMA</text>
+<polyline points="1335,720 1335,760" fill="none" stroke="#1f2328" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#a)"/>
+<rect x="1270" y="760" width="120" height="50" rx="6" fill="#fff" stroke="#1f2328" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="1330.0" y="781.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">spectrum</text>
+<text x="1330.0" y="797.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">analyzer, 50 Ω</text>
+<polyline points="820,720 820,790" fill="none" stroke="#1f2328" stroke-width="3.5" marker-end="url(#a)" marker-start="url(#a)"/>
+<text x="830" y="748" font-size="12" text-anchor="start" fill="#1f2328" font-weight="400">gpio_in, gpio_out</text>
+<polyline points="120,720 120,755 816,755" fill="none" stroke="#1f2328" stroke-width="3.5"/>
+<circle cx="820" cy="755" r="3.5" fill="#1f2328"/>
+<text x="132" y="749" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">GP6 to GP13 through 1 kΩ</text>
+<rect x="650" y="790" width="340" height="80" rx="6" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.5"/>
+<text x="820.0" y="810.0" font-size="13" text-anchor="middle" fill="#1f2328" font-weight="600">User I/O</text>
+<text x="820.0" y="826.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">SW501 to SW504 buttons on gpio_in (E29)</text>
+<text x="820.0" y="842.0" font-size="12" text-anchor="middle" fill="#1f2328" font-weight="400">D501 to D504 LEDs on gpio_out</text>
+<text x="820.0" y="858.0" font-size="11" text-anchor="middle" fill="#59636e" font-weight="400">J502 header: all eight lines</text>
+<polyline points="200,820 236,820" fill="none" stroke="#1f2328" stroke-width="1.5"/>
+<text x="244" y="824" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">signal</text>
+<polyline points="300,820 336,820" fill="none" stroke="#1f2328" stroke-width="3.5"/>
+<text x="344" y="824" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">bus</text>
+<polyline points="390,820 426,820" fill="none" stroke="#b42318" stroke-width="1.5"/>
+<text x="434" y="824" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">supply</text>
+<polyline points="500,820 536,820" fill="none" stroke="#1f2328" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="544" y="824" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">not fitted, external</text>
+<text x="200" y="848" font-size="11" text-anchor="start" fill="#59636e" font-weight="400">Exx: entry TW-Exx of ihp130/doc/errata.md</text>
+</svg>

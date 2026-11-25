@@ -336,7 +336,12 @@ The chip design itself lives in [`ihp130/`](https://github.com/iic-jku/TinyWhisp
 ├─ 📁 measurements/
 │  └─ README.md
 ├─ 📁 pcb/
-│  └─ README.md
+│  ├─ 📁 lib/
+│  ├─ 📁 render/
+│  ├─ README.md
+│  ├─ tinywhisper_dev_board.kicad_pcb
+│  ├─ tinywhisper_dev_board.kicad_pro
+│  └─ tinywhisper_dev_board.kicad_sch
 ├─ 📁 publications/
 │  ├─ EasterHegg_04042026.pdf
 │  ├─ QSP100_Open-Source-Chip-Design.pdf

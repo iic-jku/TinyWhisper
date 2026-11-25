@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "tinywhisper_dev_board")(type "KiCad")(uri "${KIPRJMOD}/lib/tinywhisper_dev_board.pretty")(options "")(descr "TinyWhisper dev board footprints"))
+)
