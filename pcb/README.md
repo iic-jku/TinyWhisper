@@ -13,6 +13,12 @@ Every board condition of [`ihp130/doc/errata.md`](../ihp130/doc/errata.md) is bu
   <img src="render/board_bottom.png" alt="Bottom view of the TinyWhisper dev board" width="48%">
 </p>
 
+## Block diagram
+
+![Block diagram of the TinyWhisper dev board](block_diagram.svg)
+
+The sections below give each block's parts and values. `Exx` in the diagram is the errata entry `TW-Exx`.
+
 ## Files
 
 | File | Contents |
@@ -28,6 +34,7 @@ Every board condition of [`ihp130/doc/errata.md`](../ihp130/doc/errata.md) is bu
 | `tinywhisper_dev_board.kicad_dru` | Custom rules: the stricter value of JLCPCB and Aisler per rule, plus house rules |
 | `lib/` | Chip symbol, Pico H symbol, QFN-48 land pattern, Pico socket, SMA and the board-only logos |
 | `render/` | Renders of the board |
+| `block_diagram.svg` | Block diagram of revision 0.1, drawn separately from the schematic: update it when a block changes |
 
 Stock parts use the KiCad 10 libraries, and their 3D models resolve through `${KICAD10_3DMODEL_DIR}`.
 
