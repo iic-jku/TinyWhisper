@@ -137,6 +137,10 @@
 │  ├─ 📁 pnl/
 │  │  └─ tinywhisper_top.pnl.v
 │  ├─ 📁 schematic/
+│  ├─ 📁 sdc/
+│  │  └─ tinywhisper_top.sdc
+│  ├─ 📁 spef/
+│  │  └─ tinywhisper_top.nom.spef
 │  └─ 📁 spice/
 │     └─ tinywhisper_top.spice
 ├─ 📁 packaging/
@@ -181,7 +185,8 @@
 ├─ 📁 scripts/
 │  ├─ add_logo_fill.sh
 │  ├─ add_rectangle.py
-│  └─ check_pex_ports.py
+│  ├─ check_pex_ports.py
+│  └─ sim_gl_power.tcl
 ├─ 📁 testbenches/
 │  ├─ 📁 cocotb/
 │  │  ├─ tinywhisper_top_tb.gtkw
@@ -421,6 +426,14 @@ make sim-gl-cocotb GL_TESTS=      # all eight tests
 
 `GL_TESTS` selects the gate-level tests by a regular expression, as in the riscv macro. The runner simulates the unpowered netlist with `USE_POWER_PINS` undefined, since defining it, also as `False`, makes every cell output X. It drives every input pad to its idle level and fails when a test fails, which cocotb does not do on its own outside pytest.
 
+To estimate the power of the chip from the switching activity of the gate-level cocotb simulation, use:
+
+```sh
+make sim-gl-power-cocotb
+```
+
+It runs `sim-gl-cocotb`, converts the waveform to `testbenches/cocotb/sim_build/tinywhisper_top.vcd` with `fst2vcd`, and runs OpenSTA with `scripts/sim_gl_power.tcl` at the default corner `nom_typ_1p50V_25C`. OpenSTA reads the Liberty files of the standard cells and the IO cells, the chip netlist `netlist/nl/tinywhisper_top.nl.v` with the SPEF `netlist/spef/tinywhisper_top.nom.spef` and the SDC `netlist/sdc/tinywhisper_top.sdc` that `copy-netlist` copies from the LibreLane run, and the final netlist and SPEF of the `riscv_top` macro. The CPU thus counts with its cells and wires, while the Liberty model of the macro has no power data. The report `verification/reports/sim_gl_power_cocotb.rpt` lists the power per group (`Pad` holds the IO cells) and for the `riscv_top` instance, and the target fails if a pin gets no activity from the simulation. The estimate is the mean over the tests of `GL_TESTS`, by default the Fibonacci program of `test_cpu_fibonacci_fast`. The `iqmod_top` macro has no Liberty file and counts as 0 W, and the outputs drive the 6 fF of `OUTPUT_CAP_LOAD` in the SDC instead of a board. The SDC creates the clock on the pin `clk_pad/p2c` of the clock pad, not on a port, so OpenSTA takes the clock activity from the waveform as well: the estimate holds for the 56 MHz of the testbench, although `CLOCK_PERIOD` in `flow/librelane/config.yaml` is 17 ns (58.8 MHz). The other limits, the mean over the run and no glitches, are those of the riscv macro, see [`macros/riscv/README.md`](macros/riscv/README.md#gate-level-power-estimation).
+
 To run the gate-level simulation with Xschem, use:
 
 ```sh
@@ -463,7 +476,7 @@ make sim-view-cocotb WAVEFORM_VIEWER=surfer                   # use Surfer inste
 Each cocotb simulation folder contains a pre-configured waveform layout file (`<CELL>_tb.gtkw` for GTKWave, `<CELL>_tb.surf.ron` for Surfer).
 The view target loads it automatically together with the current `.fst`, so signal formatting is preserved across runs.
 
-To run all non-interactive simulation targets in sequence (RTL cocotb, GL cocotb, and GL Xschem), use:
+To run all non-interactive simulation targets in sequence (RTL cocotb, GL cocotb, the power estimate from GL cocotb, and GL Xschem), use:
 
 ```sh
 make sim-all
@@ -531,7 +544,7 @@ make copy-gds
 
 ### Copy the Final Netlist
 
-To copy the latest SPICE, PnL, and NL netlists from `flow/final/spice/` into `netlist/spice/`, from `flow/final/pnl/` into `netlist/pnl/`, and from `flow/final/nl/` into `netlist/nl/`, run:
+To copy the latest SPICE, PnL, and NL netlists from `flow/final/spice/` into `netlist/spice/`, from `flow/final/pnl/` into `netlist/pnl/`, and from `flow/final/nl/` into `netlist/nl/`, the SPEF of the nominal corner from `flow/final/spef/nom/` into `netlist/spef/`, and the SDC from `flow/final/sdc/` into `netlist/sdc/`, run:
 
 ```sh
 make copy-netlist
@@ -1060,7 +1073,7 @@ To keep the runtime low while still covering the full toolchain, the regression 
 - Magic DRC (`sak-drc.sh -m`) runs once, as `magic-drc` of the bondpad, which passes it, so a broken Magic fails the regression. gdscheck DRC (`sak-drc.sh -g`) runs in the bondpad, RF pad and logo IP builds.
 - Only **one** logo (`sg13g2_ip__jku`) is regenerated. It is the only step that exercises the PNG to GDS flow. The other logos (`sg13g2_ip__jku_names`, `sg13g2_ip__ce`, `sg13g2_ip__ce_names`) use an identical toolchain and reuse their committed views.
 - Exactly **one** Xschem testbench (`iqmod_mfb_lpf_tb_ac_cl`) and **one** CACE parameter set (the AC VDD sweep `ac_params` of `iqmod_mfb_lpf.yaml`, no Monte Carlo) are run. Swap `ac_params` for `ac_mc_params` / `ac_mm_params` in the target to also exercise the Monte Carlo flow.
-- In the default `regression` the riscv macro is **not re-hardened**: `librelane-magicdrc` (the full RTL-to-GDS of the CPU, ≈2 h wall clock), the flows that depend on its fresh outputs (`copy-final`, the logic equivalence check `lec` with ≈10 min, the gate-level cocotb simulations `sim-gl-cocotb` and `sim-gl-sdf-cocotb` of the test `test_cpu_fibonacci_fast` (`GL_TESTS`), `generate-xspice`, which is called for consistency with the template but skips itself while the riscv RTL carries its stock settings, and the gate-level Xschem simulation `sim-gl-xschem`) and the Icarus RTL testbench (`sim-rtl-verilog`) only run in `regression-full` (`FULL_REGRESSION=1`). In the default variant the riscv macro is covered at RTL (lint + cocotb, which also exercises Icarus as its simulator), and the LibreLane flow itself is still exercised by the chip top-level `librelane-nodrc` run. `make -C macros/riscv sim-gl-cocotb GL_TESTS=` runs all eight tests on the netlist, 1 h 51 min on a laptop.
+- In the default `regression` the riscv macro is **not re-hardened**: `librelane-magicdrc` (the full RTL-to-GDS of the CPU, ≈2 h wall clock), the flows that depend on its fresh outputs (`copy-final`, the logic equivalence check `lec` with ≈10 min, the gate-level cocotb simulations `sim-gl-cocotb` and `sim-gl-sdf-cocotb` and the power estimate `sim-gl-power-cocotb` of the test `test_cpu_fibonacci_fast` (`GL_TESTS`), `generate-xspice`, which is called for consistency with the template but skips itself while the riscv RTL carries its stock settings, and the gate-level Xschem simulation `sim-gl-xschem`) and the Icarus RTL testbench (`sim-rtl-verilog`) only run in `regression-full` (`FULL_REGRESSION=1`). In the default variant the riscv macro is covered at RTL (lint + cocotb, which also exercises Icarus as its simulator), and the LibreLane flow itself is still exercised by the chip top-level `librelane-nodrc` run. `make -C macros/riscv sim-gl-cocotb GL_TESTS=` runs all eight tests on the netlist, 1 h 51 min on a laptop.
 
 The regression runs bottom-up: first the script tests, then the iqmod and riscv macros, then the top-level assembly (submodules, bondpad, RF pad, logo) and finally the chip top-level LibreLane run that integrates the macros and IP. In `regression-full`, `copy-final` copies the freshly hardened `flow/final/` views into `macros/riscv/final/`, so the logic equivalence check (`lec`), the gate-level flows and the chip top-level use the freshly built outputs. In the default `regression` the chip top-level integrates the committed views in `macros/riscv/final/` instead.
 
@@ -1091,6 +1104,7 @@ The following flows are only covered by `regression-full`:
 | LibreLane macro hardening + Magic sign-off DRC (≈2 h) | `librelane-magicdrc` + `copy-final` |
 | EQY + yosys-slang (logic equivalence check of the fresh netlist against the RTL, ≈10 min) | `lec` |
 | cocotb gate-level, without and with the SDF delays | `sim-gl-cocotb`, `sim-gl-sdf-cocotb` (the test `test_cpu_fibonacci_fast`, `GL_TESTS`) |
+| `fst2vcd` + OpenSTA power from the gate-level waveform (`read_vcd`, `report_power`) | `sim-gl-power-cocotb` (the same test) |
 | `verilog2sym.py` (Xschem symbol check) + `spi2xspice.py` + `sak-pin-reorder.py` (XSPICE model) | `generate-xspice`, **skipped by its guard** while `macros/riscv/rtl/memory.sv` carries its stock settings, so these three are only exercised when the model is regenerated on purpose |
 | Xschem gate-level (ngspice + xspice) | `sim-gl-xschem` |
 
@@ -1103,7 +1117,7 @@ The FPGA flow (Yosys + nextpnr-ice40 + icepack, riscv `build-fpga`) is not part 
 
 - `flow/librelane/runs/` and `flow/final/` (LibreLane run directories and the saved views)
 - `layout/` (`tinywhisper_top.gds.gz` and `tinywhisper_top_logo_fill.gds.gz`)
-- `netlist/` (schematic, layout, PEX, PnL, NL and SPICE netlists)
+- `netlist/` (schematic, layout, PEX, PnL, NL and SPICE netlists, SPEF and SDC)
 - `render/img/` (the chip renders)
 - `verification/drc/`, `verification/reports/` and the per-cell `klayout-lvs` and `magic-lvs` run folders in `verification/lvs/`
 - `schematic/xschem/simulations/`, `testbenches/xschem/simulations/` and the `plot_simulations/` outputs (`data/`, `figures/`, `__pycache__/`)

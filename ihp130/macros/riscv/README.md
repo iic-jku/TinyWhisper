@@ -31,6 +31,8 @@
 │  │  └─ riscv_top.nl.v
 │  ├─ 📁 pnl/
 │  │  └─ riscv_top.pnl.v
+│  ├─ 📁 sdc/
+│  │  └─ riscv_top.sdc
 │  ├─ 📁 sdf/
 │  │  ├─ 📁 nom_fast_1p32V_m40C/
 │  │  ├─ 📁 nom_fast_1p65V_m40C/
@@ -110,6 +112,7 @@
 │     └─ xschemrc
 ├─ 📁 scripts/
 │  ├─ check_pex_ports.py
+│  ├─ sim_gl_power.tcl
 │  ├─ spi2xspice.py
 │  └─ verilog2sym.py
 ├─ 📁 testbenches/
@@ -331,6 +334,22 @@ A clean log does not prove that the delays arrived. Check one path in the wavefo
 
 In the netlist the clock tree delays the clock at every flip-flop, and an output follows the clock edge only after its clock-to-output delay. An input that changes at the rising edge of `clk` can reach a flip-flop before its clock does and be captured one cycle early, and an output sampled shortly after the edge can still show its old value, which the RTL never shows. The tests therefore release `reset` and step the bus models at the falling edge.
 
+#### Gate-Level Power Estimation
+
+`sim-gl-power-cocotb` estimates the power of the final netlist from the switching activity of the gate-level cocotb simulation. It runs `sim-gl-cocotb`, converts the waveform to `testbenches/cocotb/riscv_top/sim_build/riscv_top.vcd` with `fst2vcd`, and runs OpenSTA with `scripts/sim_gl_power.tcl` on the final views of the default corner `nom_typ_1p50V_25C`: the Liberty file of the standard cells, `final/nl/riscv_top.nl.v`, `final/spef/nom/riscv_top.nom.spef` and `final/sdc/riscv_top.sdc`, which LibreLane writes from `flow/librelane/impl.sdc` (`PNR_SDC_FILE`) with every variable resolved. `GL_TESTS` selects the tests as for `sim-gl-cocotb`. The report goes to `verification/sim_gl_power_cocotb.rpt`:
+
+```sh
+make sim-gl-power-cocotb
+```
+
+The waveform holds every pin of the netlist under its instance name, so `read_vcd` gives each pin the toggle rate and duty cycle of the simulation, and the target fails if a pin gets none (a waveform of another netlist or a wrong scope). The LibreLane reports `verification/stapostpnr_<corner>_power.rpt` run the same `report_power` without a simulation: OpenSTA assumes an activity of 0.1 per clock cycle on every input and propagates it through the logic.
+
+The estimate has three limits:
+
+- It is the mean over the whole testbench run, by default the Fibonacci program of `test_cpu_fibonacci_fast`. To estimate one operating mode, run a test that stays in that mode.
+- The gate-level simulation has no delays, so glitches cost no power.
+- The testbench clocks at 56 MHz, while the SDC constrains the `CLOCK_PERIOD` of 17 ns (58.8 MHz) from `flow/librelane/config.yaml`. OpenSTA takes the clock activity from the SDC, so the clock tree and the clock pins of the flip-flops count about 5 % high.
+
 #### Gate-Level Xschem Simulation
 
 Runs the mixed-signal gate-level transient simulation testbench in `testbenches/xschem/<CELL>_tb_tran.sch`:
@@ -367,7 +386,8 @@ This executes the following targets in order:
 4. `sim-rtl-cocotb` (default: `riscv_top`)
 5. `sim-gl-cocotb` (default: `riscv_top`)
 6. `sim-gl-sdf-cocotb` (default: `riscv_top`)
-7. `sim-gl-xschem` (default: `riscv_top`)
+7. `sim-gl-power-cocotb` (`riscv_top`)
+8. `sim-gl-xschem` (default: `riscv_top`)
 
 > [!NOTE]
 > The `sim-view-verilog` and `sim-view-cocotb` targets are intentionally **not** called by `sim-all`.
@@ -420,13 +440,13 @@ This only works if at least one LibreLane run exists in `flow/librelane/runs/` a
 
 ### Copy the Final Views
 
-To copy the final `gds`, `lef`, `lib`, `nl`, `pnl`, `sdf`, `spef`, and `vh` view folders from `flow/final/` into `final/`, run:
+To copy the final `gds`, `lef`, `lib`, `nl`, `pnl`, `sdc`, `sdf`, `spef`, and `vh` view folders from `flow/final/` into `final/`, run:
 
 ```sh
 make copy-final
 ```
 
-This refreshes the committed views in `final/` after a LibreLane run, so that the gate-level simulations (`sim-gl-cocotb` and `sim-gl-sdf-cocotb` read `final/nl/riscv_top.nl.v`, the latter also `final/sdf/`) and the chip top-level integration use the freshly built outputs. It assumes the required views exist under `flow/final/`.
+This refreshes the committed views in `final/` after a LibreLane run, so that the gate-level simulations (`sim-gl-cocotb`, `sim-gl-sdf-cocotb` and `sim-gl-power-cocotb` read `final/nl/riscv_top.nl.v`, `sim-gl-sdf-cocotb` also `final/sdf/` and `sim-gl-power-cocotb` also `final/spef/` and `final/sdc/`) and the chip top-level integration use the freshly built outputs. It assumes the required views exist under `flow/final/`.
 
 
 ### Copy the Final Netlist
@@ -718,7 +738,7 @@ Lints, builds, verifies and simulates the whole macro:
 - `magic-pex` (currently disabled in the `Makefile`, see below)
 - `sim-all`
 
-Linting runs first to fail fast on structural RTL issues. `lec` proves the netlist of this build equivalent to the RTL, and `lec-mutant` checks that this proof can fail. The simulations run **after** the build, so `sim-gl-cocotb` and `sim-gl-sdf-cocotb` run on the netlist and the SDF files produced by this build, not on those of a previous one. `sim-gl-xschem` reads the XSPICE model, which `build-top` regenerates only when the RTL enables it and otherwise leaves as committed, see [Generate XSPICE File](#generate-xspice-file). `magic-pex` and `klayout-pex` are commented out in the recipe: a full-RC extraction of the whole RISC-V macro takes hours and no testbench in this macro consumes the result, so run it by hand when a post-layout netlist is needed (see [Parasitic Extraction (PEX)](#parasitic-extraction-pex)). The DRC and LVS verification is done within the LibreLane flow.
+Linting runs first to fail fast on structural RTL issues. `lec` proves the netlist of this build equivalent to the RTL, and `lec-mutant` checks that this proof can fail. The simulations run **after** the build, so `sim-gl-cocotb`, `sim-gl-sdf-cocotb` and `sim-gl-power-cocotb` run on the netlist and the SDF, SPEF and SDC files produced by this build, not on those of a previous one. `sim-gl-xschem` reads the XSPICE model, which `build-top` regenerates only when the RTL enables it and otherwise leaves as committed, see [Generate XSPICE File](#generate-xspice-file). `magic-pex` and `klayout-pex` are commented out in the recipe: a full-RC extraction of the whole RISC-V macro takes hours and no testbench in this macro consumes the result, so run it by hand when a post-layout netlist is needed (see [Parasitic Extraction (PEX)](#parasitic-extraction-pex)). The DRC and LVS verification is done within the LibreLane flow.
 
 ```sh
 make all

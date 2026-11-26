@@ -55,9 +55,11 @@ Run from `ihp130/`. These are the narrow targets for checking a change. The risc
 make help                                           # targets of the chip Makefile
 make sim-rtl-cocotb                                 # chip RTL simulation (cocotb, Icarus)
 make sim-gl-cocotb                                  # chip gate-level simulation
+make sim-gl-power-cocotb                            # OpenSTA power of the chip from the gate-level cocotb waveform
 make -C macros/riscv lint-verilog-all               # Verilator lint of the riscv RTL
 make -C macros/riscv sim-rtl-cocotb                 # riscv RTL simulation
 make -C macros/riscv lec                            # EQY proof of the committed riscv netlist against the RTL, about 10 min
+make -C macros/riscv sim-gl-power-cocotb            # OpenSTA power of the final riscv netlist from the gate-level cocotb waveform
 make -C macros/iqmod sim-xschem TB=iqmod_mfb_lpf_tb_ac_cl   # one Xschem/ngspice testbench
 make -C macros/iqmod klayout-verify CELL=iqmod_top  # KLayout DRC, LVS, PEX
 make -C macros/iqmod magic-verify CELL=iqmod_top    # Netgen LVS, Magic PEX, its DRC is commented out
