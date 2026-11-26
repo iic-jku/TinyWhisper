@@ -172,7 +172,7 @@ help: ## Show this help message
 	@echo 'KPEX_REDUCE defaults to ticer. Sets the RC network reduction of klayout-pex in EXT_MODE=3 (none|floating|ticer).'
 	@echo 'WAVEFORM_VIEWER defaults to gtkwave. Use surfer to launch Surfer instead.'
 	@echo 'SIM selects the simulator of sim-rtl-cocotb, icarus (default) or verilator, and the waveform that sim-view-cocotb opens. The gate-level runs need icarus.'
-	@echo 'GL_TESTS selects the cocotb tests of sim-gl-cocotb and sim-gl-sdf-cocotb by a regular expression (default: $(GL_TESTS)).'
+	@echo 'GL_TESTS selects the cocotb tests of sim-gl-cocotb, sim-gl-sdf-cocotb and sim-gl-power-cocotb by a regular expression (default: $(GL_TESTS)).'
 	@echo 'SDF_CORNER selects the LibreLane corner of the SDF file for sim-gl-sdf-cocotb (default: $(SDF_CORNER)).'
 	@echo 'SDF_TRIPLE selects the min, typ or max value of each SDF delay for sim-gl-sdf-cocotb (default: typ).'
 	@echo 'TB selects the Xschem testbench for sim-gl-xschem (default: <CELL>_tb_tran).'
@@ -261,6 +261,28 @@ sim-gl-sdf-cocotb: ## Run timed gate-level simulation of CELL cell with cocotb a
 	cd $(COCOTB_DIR)/$(CELL) && GL=1 SDF=1 SDF_CORNER=$(SDF_CORNER) SDF_TRIPLE=$(SDF_TRIPLE) COCOTB_TEST_FILTER='$(GL_TESTS)' python3 $(CELL)_tb.py
 .PHONY: sim-gl-sdf-cocotb
 
+# Inputs of sim-gl-power-cocotb: the final views at DEFAULT_CORNER of flow/librelane/config.yaml (nom_typ_1p50V_25C)
+POWER_LIBS        := $(PDK_ROOT)/$(PDK)/libs.ref/sg13g2_stdcell/lib/sg13g2_stdcell_typ_1p50V_25C.lib.gz
+POWER_NETLISTS    := $(FINAL_DIR)/nl/$(TOP).nl.v
+POWER_MACRO_SPEFS :=
+POWER_SPEF        := $(FINAL_DIR)/spef/nom/$(TOP).nom.spef
+POWER_SDC         := $(FINAL_DIR)/sdc/$(TOP).sdc
+POWER_RPT         := $(REPORT_DIR)/sim_gl_power_cocotb.rpt
+
+sim-gl-power-cocotb: ## Estimate the power of the final netlist with OpenSTA from the switching activity of the gate-level cocotb simulation (usage: make sim-gl-power-cocotb [GL_TESTS=<regex>])
+	@if [ ! -f $(POWER_SDC) ]; then \
+		echo "No SDC $(POWER_SDC) found. Run 'make build-top' (or 'make copy-final') first."; \
+		exit 1; \
+	fi
+	$(MAKE) sim-gl-cocotb CELL=$(TOP)
+	fst2vcd -f $(COCOTB_DIR)/$(TOP)/sim_build/$(TOP).fst -o $(COCOTB_DIR)/$(TOP)/sim_build/$(TOP).vcd
+	mkdir -p $(REPORT_DIR)
+	POWER_TOP=$(TOP) POWER_LIBS="$(POWER_LIBS)" POWER_NETLISTS="$(POWER_NETLISTS)" POWER_MACRO_SPEFS="$(POWER_MACRO_SPEFS)" \
+	POWER_SPEF=$(POWER_SPEF) POWER_SDC=$(POWER_SDC) POWER_VCD=$(COCOTB_DIR)/$(TOP)/sim_build/$(TOP).vcd POWER_RPT=$(POWER_RPT) \
+		sta -no_init -no_splash -exit $(SCRIPTS_DIR)/sim_gl_power.tcl
+	cat $(POWER_RPT)
+.PHONY: sim-gl-power-cocotb
+
 sim-view-cocotb: ## View CELL cell cocotb simulation waveforms (usage: make sim-view-cocotb [CELL=<cellname>] [WAVEFORM_VIEWER=<gtkwave|surfer>] [SIM=<icarus|verilator>])
 	@if [ "$(WAVEFORM_VIEWER)" = "gtkwave" ]; then \
 		$(WAVEFORM_VIEWER) $(_COCOTB_FST) $(COCOTB_DIR)/$(CELL)/$(CELL)_tb.gtkw; \
@@ -283,13 +305,14 @@ sim-gl-xschem: ## Run gate-level simulation of CELL cell with Xschem in batch mo
 	cd $(XSCHEM_TB_DIR)/simulations && ngspice -b $(TB).spice
 .PHONY: sim-gl-xschem
 
-sim-all: ## Simulate the macro (RTL Verilog + RTL/GL/timed GL cocotb + GL Xschem for riscv_top)
+sim-all: ## Simulate the macro (RTL Verilog + RTL/GL/timed GL cocotb + GL cocotb power + GL Xschem for riscv_top)
 	$(MAKE) sim-rtl-verilog CELL=dsmod
 	$(MAKE) sim-rtl-cocotb CELL=dsmod DSMOD_TARGET=$(DSMOD_TARGET_SIM_ALL)
 	$(MAKE) sim-rtl-verilog
 	$(MAKE) sim-rtl-cocotb
 	$(MAKE) sim-gl-cocotb
 	$(MAKE) sim-gl-sdf-cocotb
+	$(MAKE) sim-gl-power-cocotb
 	$(MAKE) sim-gl-xschem
 .PHONY: sim-all
 # ================================================================================================
@@ -348,7 +371,7 @@ copy-reports: ## Copy yosys, antenna, STA, power, IR-drop, DRC, LVS and manufact
 	cp $(LIBRELANE_DIR)/runs/${RUN_TAG}/*-misc-reportmanufacturability/manufacturability.rpt $(REPORT_DIR)/manufacturability.rpt
 .PHONY: copy-reports
 
-copy-final: ## Copy final output gds, lef, lib, nl, pnl, sdf, spef, and vh folders from the last LibreLane run to final/
+copy-final: ## Copy final output gds, lef, lib, nl, pnl, sdc, sdf, spef, and vh folders from the last LibreLane run to final/
 	rm -rf $(FINAL_DIR)/
 	mkdir -p $(FINAL_DIR)/
 	cp -r $(FLOW_FINAL_DIR)/gds  $(FINAL_DIR)/gds
@@ -356,6 +379,7 @@ copy-final: ## Copy final output gds, lef, lib, nl, pnl, sdf, spef, and vh folde
 	cp -r $(FLOW_FINAL_DIR)/lib  $(FINAL_DIR)/lib
 	cp -r $(FLOW_FINAL_DIR)/nl   $(FINAL_DIR)/nl
 	cp -r $(FLOW_FINAL_DIR)/pnl  $(FINAL_DIR)/pnl
+	cp -r $(FLOW_FINAL_DIR)/sdc  $(FINAL_DIR)/sdc
 	cp -r $(FLOW_FINAL_DIR)/sdf  $(FINAL_DIR)/sdf
 	cp -r $(FLOW_FINAL_DIR)/spef $(FINAL_DIR)/spef
 	cp -r $(FLOW_FINAL_DIR)/vh   $(FINAL_DIR)/vh
